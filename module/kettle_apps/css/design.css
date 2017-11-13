@@ -1,0 +1,19 @@
+body {
+	font-family: 'Lato', sans-serif;
+	font-size: 16px;
+	background-color: #F5F5F5;
+}
+
+.marge {
+	padding-left: 100px;
+	padding-top: 20px;
+}
+
+.pad-top {
+	padding-top: 40px;
+}
+
+.container-title {
+	border-radius: 12px;
+	opacity: 0.8;
+}

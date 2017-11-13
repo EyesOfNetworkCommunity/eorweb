@@ -1,0 +1,28 @@
+/* 1st level */
+.well > ul > label {
+        margin-left:25px;
+}
+
+/* BP Layer 1 */
+.tree > ul {
+  margin-left:35px;
+}
+
+
+/* X bp level */
+.tree > ul > ul > label {
+  margin-left:35px;
+}
+
+/* X service level */
+.tree > li > ul > label {
+  margin-left:35px;
+}
+
+.condition_presentation {
+        border-radius: 5px;
+        color: #FFFFFF;
+        background: #0055A0;
+        font-size: 11px;
+        border: 3px solid #0055A0;
+}

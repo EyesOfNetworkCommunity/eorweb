@@ -1,0 +1,127 @@
+<?php
+header('Access-Control-Allow-Origin: *');  
+header('Access-Control-Allow-Methods: GET, PUT, POST, DELETE, OPTIONS');
+header('Access-Control-Allow-Headers: Content-Type, Content-Range, Content-Disposition, Content-Description');
+ 
+?>
+<!DOCTYPE html>
+
+<html lang="fr">
+
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="description" content="Generate or view contracts">
+		<meta name="author" content="Stacy Maillot">
+		<title>Contrats</title>
+
+		<link href="../../bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+		<link href="../../bower_components/jquery-ui/themes/base/jquery-ui.min.css" rel="stylesheet">
+    <link href="css/design.css" rel="stylesheet">
+
+		<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+		<!--[if lt IE 9]>
+		  <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+		  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+    </br>
+    <div class="container container-title bg-primary">
+      <h3>Eyes Of Report data loader</h3>
+    </div>
+    
+    <div class="text-primary container pad-top">
+      <h4>Main workflow</h4>
+    </div>
+    
+    <form class="form-horizontal col-md-7 marge" id="global">
+    
+      <div class="row form-group">
+		    <label style="font-weight:normal;" for="date_debut" class="col-md-8 control-label"><b>Start date (AAAAMMJJ) :</b></label>
+		    <div class="col-md-4 input-name">
+			    <input type="text" maxlength="8" class="form-control" id="date_debut" onkeyup="this.value=this.value.replace(/[^0-9]/g,'')">
+		    </div>
+      </div>
+      
+      <div class="row form-group">
+        <label style="font-weight:normal;" for="date_fin" class="col-md-8 control-label"><b>End date (AAAAMMJJ) :</b></label>
+		    <div class="col-md-4 input-name">
+			    <input type="text" maxlength="8" class="form-control" id="date_fin" onkeyup="this.value=this.value.replace(/[^0-9]/g,'')">
+		    </div>
+	    </div>
+      </br>
+      <div class="row col-md-6 pull-right">
+				<button class="form-group btn btn-primary" type="submit" id="launch">Launch WorkFlow
+					<span class="glyphicon glyphicon-ok" style="color:#4f4;"></span>
+				</button>
+			</div>
+    </form>
+
+<!--
+     onclick="window.open('http://192.168.26.128:8181/kettle/runJob/?job=/Alimentation/JOB_MAIN_DATE&amp;datebeg=' + document.getElementById('extractbeg').value + '&amp;dateend=' + document.getElementById('extractend').value)" type="button" value="Exécuter le workflow" /></p>
+  
+    <p>&nbsp; Visualiser ex&eacute;cution ETL&nbsp;: <input id="etlid" name="DateDebut" size="50" type="text" value="Entrer ID ETL" />&nbsp; &nbsp;<input name="visualizeetl" onclick="window.open('http://192.168.26.128:8181/kettle/jobStatus/?name=JOB_MAIN_DATE&amp;id='+ document.getElementById('etlid').value)" type="button" value="Go" /></p>
+-->    
+    
+    <script src="../../bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="../../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    
+    <script>
+    $(document).ready(function() {
+      $('#launch').click(function(event){
+        event.preventDefault();
+        if($('#date_debut') == "" || $('#date_fin') == ""){
+          return false;
+        }
+        $('#global').load('http://152.34.133.50:8181/kettle/runJob/?job=/Alimentation/JOB_MAIN_DATE&amp;datebeg=' + $('#date_debut').val() + '&amp;dateend=' + $('#date_fin').val(), '', function(response, status, xhr) {
+          console.log(response);
+          console.log(status);
+          console.log(xhr);
+        });
+         // window.open('http://152.34.133.50:8181/kettle/runJob/?job=/Alimentation/JOB_MAIN_DATE&amp;datebeg=' + $('#date_debut').val() + '&amp;dateend=' + $('#date_fin').val());
+        // window.open('http://192.168.26.128:8181/kettle/jobStatus/?name=JOB_MAIN_DATE&amp;id='+ document.getElementById('etlid').value);
+
+          // {'Access-Control-Allow-Origin': 'http://sma6206'},
+
+        /*$.ajax({
+
+          url: 'http://cluster:root66@sma6206:8181/kettle/runJob/?job=/Alimentation/JOB_MAIN_DATE&amp;datebeg=' + $('#date_debut').val() + '&amp;dateend=' + $('#date_fin').val(),
+          type: 'GET',
+          crossDomain: true,
+          dataType: 'xml',
+          //jsonpCallback: "toto",
+          success: function() { alert("Success"); },
+          error: function(val1,val2,val3) {},
+        });
+        
+        var req = new XMLHttpRequest();
+        req.open('GET', 'http://www.mozilla.org/', false); 
+        req.send(null);
+        if(req.status == 200)
+          dump(req.responseText);*/
+        
+       /*$.get(
+         'http://cluster:root66@sma6206:8181/kettle/runJob/',
+        {
+         job: '/Alimentation/JOB_MAIN_DATE',
+         datebeg: $('#date_debut').val(),
+        dateend: $('#date_fin').val()
+         },
+         function Return(values){
+          },
+          'jsonp'
+       );*/
+          
+        
+      });
+    });
+    
+    </script>
+
+  </body>
+
+</html>
+

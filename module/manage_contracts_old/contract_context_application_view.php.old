@@ -1,0 +1,139 @@
+<?php include('./php/common.inc.php'); ?>
+
+<div class="container container-title bg-primary">
+	<h3>Liste Applications/Contrats</h3>
+</div>
+
+<div class="row col-md-7 marge form-group">
+	<div class="col-md-5">
+	<button class="btn btn-default btn-block dropdown-toggle" type="button" data-toggle="dropdown" id="column_search">Sélectionner une colonne
+	<span class="caret"></span></button>
+	<ul class="dropdown-menu btn-block">
+		<li><a class="dropdown-item" id="Applications" href="javascript:void(0);" onclick="ChangeValue(id);">Applications</a></li>
+		<li><a class="dropdown-item" id="Contrats" href="javascript:void(0);" onclick="ChangeValue(id);">Contrats</a></li>
+		<li><a class="dropdown-item" id="Période de temps" href="javascript:void(0);" onclick="ChangeValue(id);">Période de temps"</a></li>
+		<li><a class="dropdown-item" id="Indicateurs" href="javascript:void(0);" onclick="ChangeValue(id);">Indicateurs</a></li>
+		<li><a class="dropdown-item" id="Seuils" href="javascript:void(0);" onclick="ChangeValue(id);">Seuils</a></li>
+	</ul>
+	</div>
+	<div class="col-md-4">
+	<input type="text" class="form-control" id="search" onkeyup="this.value=this.value.replace(/[^éèàêâç0-9a-zA-Z-_ \/\*]/g,'')">
+	</div>
+</div>
+
+<div class="container pad-top col-md-10 marge">
+	<table class="tablesorter" id="myTable">
+	    <thead>
+		    <tr>
+				<th class="sortDisabled"></th>
+            	<th value="Applications">Applications</th>
+              <th>Contrats</th>
+            	<th>Période de temps</th>
+              <th>Indicateurs</th>
+              <th>Seuils</th>
+			        <th class="sortDisabled">Suppression</th>
+		    </tr>
+	    </thead>
+		<tbody id="body_table">
+		</tbody>
+	</table>
+</div>
+
+<script src="../../bower_components/jquery/dist/jquery.min.js"></script>
+<script src="../../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="../../bower_components/jquery-ui/jquery-ui.min.js"></script>
+<script src="../../bower_components/datatables/media/js/dataTables.bootstrap.min.js"></script>
+<script src="./js/jquery.tablesorter.js"></script>
+<script src="./js/library.js"></script>
+
+<script>
+$(document).ready(function() {
+  $global_array = {};
+	$counter = 0;
+
+	$.get(
+		'./php/display_entry.php',
+		{
+			table_name: 'contract_context_application'
+		},
+		function return_values(values){
+			$.each(values, function(v, k){
+				$id = k['ID_CONTRACT_CONTEXT'];
+				$name_application =k['APPLICATION_NAME'];
+        
+        			$global_array[$counter] = [$id,$name_application];
+				$counter++;
+      			});
+      
+      			$count = 0;
+			for(var i = 0; i < $counter; i++){
+				$.get(
+					'./php/get_values_contract_context_application_view.php',
+					{
+						table_name: 'contract_context',
+						id_number: $global_array[i+''][0]
+					},
+					function return_names(names){
+                				$contract_name = names['0'];
+                    				$time_period_name = names['1'];
+                        			$kpi_name = names['2'];
+                        			$step_group_name = names['3'];
+
+                        			$id = $global_array[$count+''][0];
+            					$name_application = $global_array[$count+''][1];
+        
+				                $('#body_table').append('<tr><td><span class="glyphicon glyphicon-share-alt text-warning"></span></td><td>' + $name_application + '</td><td>' + $contract_name + '</td><td>' + $time_period_name + '</td><td>' + $kpi_name + '</td><td>' + $step_group_name + '</td><td><button type="button" class="btn btn-danger" id="'+$name_application+'" onclick=RemoveSelection(id)><span class="glyphicon glyphicon-trash"></span></button></td></tr>');
+
+                        			$count++;
+			    		},
+          				'json'
+        			);
+      			}
+		},
+		'json'
+	);
+	setTimeout(function(){
+	 $('#myTable').tablesorter();	
+		},
+		2000
+	);
+
+	$("#search").on("keyup", function() {
+		var value = $(this).val();
+
+    		$("table tr").each(function(index) {
+			if (index != 0) {
+
+       				$row = $(this);
+				var id_column = $('#column_search').val();
+				console.log(id_column);
+
+            			// var id = $row.find("td[value='" + id_column + "']").next().text();
+				var id = $('#myTable\\:td').filter(function(){return this.value==id_column}).text();
+            			// var id = $row.find("td:first").next().text();
+				console.log(id);
+
+            			if (id.indexOf(value) != 0) {
+                			$(this).hide();
+            			}
+            			else {
+                			$(this).show();
+            			}
+        		}
+    		});
+	});
+});
+
+function RemoveSelection(application_name){
+	DisplayPopupRemove("Supprimer l'application sélectionnée ?", "contract_context_application", application_name);
+}
+
+function ChangeValue(column_name){
+	$('#column_search').html(column_name+'  <span class="caret"></span></button>');
+	$('#column_search').val(column_name);
+}
+
+</script>
+
+</body>
+</html>

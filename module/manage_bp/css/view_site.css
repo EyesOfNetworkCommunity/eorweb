@@ -1,0 +1,38 @@
+body{
+   padding-top:0px;
+   margin-top: 0px;
+   padding-bottom: 1px;
+   margin-bottom: 1px;
+}
+
+.panel-heading {
+	padding-top:0px;
+	margin-top: 5px;
+  min-height: 20;
+  max-height: 20;
+}
+
+.panel-body {
+	padding-top:0px;
+	margin-top: 5px;
+  min-height: 30;
+  max-height: 30;
+  padding-bottom: 1px;
+  margin-bottom: 1px;
+  /* overflow-y: scroll; */
+}
+.well {
+	padding-top:0px;
+	margin-top: 0px;
+	margin-left: 2px;
+  min-height: 65;
+  max-height: 65;
+  padding-bottom: 1px;
+  margin-bottom: 1px;
+}
+}
+
+.col-sm-11 {
+	padding-top:0px;
+	padding-left:20px;
+}

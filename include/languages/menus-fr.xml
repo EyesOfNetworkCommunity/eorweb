@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<eonweb lang="us_US">
+
+  <login login="login" logout="you are logged out" yet="already connected in" password="password" connect="connection">Dashboard and Repporting Monitoring solution</login>
+
+  <header user="User" logout="logout"></header>
+  <footer>product under GPL2 sponsorized by Axians Cloud Builder, a company of Vinci Energies</footer>
+
+  <search>Search ...</search>
+
+  <menutab id="1" name="project">
+    <menusubtab name="about">
+      <link name="eyesofnetwork" url="./module/home_about/" target="main"></link>
+      <link name="web site" url="http://www.eyesofnetwork.com" target="_blank"></link>
+    </menusubtab>
+    <menusubtab name="embedded projects">
+      <link name="centos" url="http://www.centos.org/" target="_blank"></link>
+      <link name="ged" url="http://generic-ed.sourceforge.net/" target="_blank"></link>
+      <link name="thruk" url="http://www.thruk.org/" target="_blank"></link>
+      <link name="nagios" url="http://www.nagios.org/" target="_blank"></link>
+      <link name="nagiosbp" url="http://bp-addon.monitoringexchange.org/" target="_blank"></link>
+      <link name="cacti" url="http://www.cacti.net/" target="_blank"></link>
+      <link name="snmptt" url="http://www.snmptt.org/" target="_blank"></link>
+      <link name="nagvis" url="http://www.nagvis.org/" target="_blank"></link>
+      <link name="weathermap" url="http://www.network-weathermap.com/" target="_blank"></link>
+      <link name="ntop" url="http://www.ntop.org/" target="_blank"></link>
+      <link name="pnp4nagios" url="http://www.pnp4nagios.org/" target="_blank"></link>
+      <link name="glpi" url="http://www.glpi-project.org/" target="_blank"></link>
+      <link name="ocsinventory-ng" url="http://www.ocsinventory-ng.org/" target="_blank"></link>
+      <link name="fusioninventory" url="http://fusioninventory.org/" target="_blank"></link>
+    </menusubtab>
+  </menutab>
+
+  <menutab id="2" name="Administration">
+    <menusubtab name="main settings">
+      <link name="authentification" url="./module/admin_auth/" target="main"></link>
+      <link name="groups" url="./module/admin_group" target="main"></link>
+      <link name="users" url="./module/admin_user" target="main"></link>
+    </menusubtab>
+  </menutab>
+
+  <menutab id="3" name="Reporting">
+    <menusubtab name="Reports">
+      <link name="Your reports" url="./module/birt_apps/index.php" target="main"></link>
+    </menusubtab>
+  </menutab>
+
+  <menutab id="4" name="Management">
+    <menusubtab name="Business Process">
+      <link name="Business Process Settings" url="./module/manage_bp/" target="main"></link>
+    </menusubtab>
+    <menusubtab name="Reports">
+      <link name="Define Reports" url="./module/manage_report/" target="main"></link>
+      <link name="Upload Report" url="./module/manage_import_report" target="main"></link>
+      <link name="Define Credential" url="./module/manage_cred_report/" target="main"></link>
+    </menusubtab>
+    <menusubtab name="Contracts">
+      <link name="Service Contracts" url="./module/manage_contracts/" target="main"></link>
+    </menusubtab>
+  </menutab>
+  
+  <menutab id="5" name="ETL">
+    <menusubtab name="Data Load">
+      <link name="Launch Data Load" url="./module/kettle_apps/" target="main"></link>
+      <link name="Pentaho status" url="./module/kettle_apps/status.php" target="main"></link>
+    </menusubtab>
+    <menusubtab name="Reports">
+      <link name="Your reports" url="./module/birt_apps/index.php" target="main"></link>
+    </menusubtab>
+  </menutab>
+</eonweb>
