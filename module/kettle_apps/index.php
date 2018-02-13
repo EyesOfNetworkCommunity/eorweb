@@ -11,6 +11,8 @@ include ("../../header.php");
 	</div>
 </div>
 
+<div id="message"></div>
+
 <form class="form-horizontal col-md-6 col-md-offset-3" id="global">
 	<div class="row form-group">
 		<div class="col-lg-12">
@@ -48,7 +50,7 @@ include ("../../header.php");
 		$('#validity_date').daterangepicker(
 		{
 			dateLimit: {
-				days: 29
+				days: 30
 			},
 		    locale: {
 		    	firstDay: 1,
@@ -56,10 +58,13 @@ include ("../../header.php");
 		    }
 		}, function(start, end) {
 			if ( (start.format('MM') == end.format('MM')) && (start.format('YYYY') == end.format('YYYY')) ){
+				document.getElementById('message').innerHTML = "";
+				document.getElementById('launch').removeAttribute("disabled");
 				$('#startDate').val(start.format('YYYYMMDD'));
 				$('#endDate').val(end.format('YYYYMMDD'));
 			} else {
-				document.getElementById('startDate').innerHTML = "<?php message(0, "selectionnez deux dates du meme mois", "critical"); ?>";
+				document.getElementById('message').innerHTML = "<?php message(0, "selectionnez deux dates du meme mois", "critical"); ?>";
+				document.getElementById('launch').setAttribute("disabled", true);
 			}
 		});
 
