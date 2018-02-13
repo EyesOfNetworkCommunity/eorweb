@@ -1,0 +1,30 @@
+{
+  "name": "eonweb-5.2",
+  "description": "EyesOfNetwork web interface 5.2",
+  "main": "index.php",
+  "moduleType": [],
+  "authors": [
+    "Jean-Philippe LEVY <jeanphilippe.levy@gmail.com>"
+  ],
+  "license": "GPL2",
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "startbootstrap-sb-admin-2": "BlackrockDigital/startbootstrap-sb-admin-2#^3.3.7",
+    "font-awesome": "^4.7.0",
+    "highcharts": "^5.0.12",
+    "jquery-ui": "^1.12.1",
+    "bootstrap-daterangepicker": "^2.1.25",
+    "bootstrap-select": "^1.12.4"
+  },
+  "resolutions": {
+    "font-awesome": "^4.7.0"
+  }
+}
