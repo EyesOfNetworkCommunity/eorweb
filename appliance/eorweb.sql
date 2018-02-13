@@ -64,7 +64,7 @@ CREATE TABLE `auth_settings` (
 
 LOCK TABLES `auth_settings` WRITE;
 /*!40000 ALTER TABLE `auth_settings` DISABLE KEYS */;
-INSERT INTO `auth_settings` VALUES (0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+INSERT INTO `auth_settings` VALUES (1,'ldapma',389,'OU=People,,DC=axians,DC=com','cn=svc-eon,ou=Admin,ou=People,dc=axians,dc=com','Wm9iaV9sYV9tb3VjaGU=','samaccountname','(& (objectClass=user) (objectClass=person))',NULL);
 /*!40000 ALTER TABLE `auth_settings` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -102,11 +102,9 @@ CREATE TABLE `groupright` (
   `group_id` int(11) NOT NULL,
   `tab_1` enum('0','1') NOT NULL DEFAULT '0',
   `tab_2` enum('0','1') NOT NULL DEFAULT '0',
-  `tab_3` enum('0','1') NOT NULL DEFAULT '0',
-  `tab_4` enum('0','1') NOT NULL DEFAULT '0',
-  `tab_5` enum('0','1') NOT NULL DEFAULT '0',
-  `tab_6` enum('0','1') NOT NULL DEFAULT '0',
-  `tab_7` enum('0','1') NOT NULL DEFAULT '0',
+  `tab_3` enum('0','1') NOT NULL,
+  `tab_4` enum('0','1') NOT NULL,
+  `tab_5` enum('0','1') NOT NULL,
   PRIMARY KEY (`group_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -117,7 +115,7 @@ CREATE TABLE `groupright` (
 
 LOCK TABLES `groupright` WRITE;
 /*!40000 ALTER TABLE `groupright` DISABLE KEYS */;
-INSERT INTO `groupright` VALUES (1,'1','1','1','1','1','1','1');
+INSERT INTO `groupright` VALUES (1,'1','1','1','1','1'),(9,'1','0','1','0','1'),(10,'1','0','1','1','1');
 /*!40000 ALTER TABLE `groupright` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -132,10 +130,10 @@ CREATE TABLE `groups` (
   `group_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `group_name` varchar(255) NOT NULL,
   `group_descr` text,
-  `group_dn` varchar(255) DEFAULT NULL,
   `group_type` tinyint(1) DEFAULT NULL,
+  `group_dn` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`group_id`,`group_name`)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -144,7 +142,7 @@ CREATE TABLE `groups` (
 
 LOCK TABLES `groups` WRITE;
 /*!40000 ALTER TABLE `groups` DISABLE KEYS */;
-INSERT INTO `groups` VALUES (1,'admins','Administrator group',NULL,NULL);
+INSERT INTO `groups` VALUES (1,'admins','Administrator group',NULL,NULL),(9,'Users','Users',0,''),(10,'Managers','Contract Managers',0,'');
 /*!40000 ALTER TABLE `groups` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -306,7 +304,7 @@ CREATE TABLE `logs` (
   `description` varchar(255) NOT NULL,
   `source` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=56 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=184813 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -315,7 +313,6 @@ CREATE TABLE `logs` (
 
 LOCK TABLES `logs` WRITE;
 /*!40000 ALTER TABLE `logs` DISABLE KEYS */;
-INSERT INTO `logs` VALUES (1,'1507291330','admin','logout','User logged out','10.23.10.42'),(2,'1507291339','admin','logout','User logged out','10.23.10.42'),(3,'1507291346','admin','logout','User logged out','10.23.10.42'),(4,'1507291520','admin','logout','User logged out','10.23.10.42'),(5,'1507291521','admin','logout','User logged out','10.23.10.42'),(6,'1507291521','admin','logout','User logged out','10.23.10.42'),(7,'1507291522','admin','logout','User logged out','10.23.10.42'),(8,'1507291524','admin','logout','User logged out','10.23.10.42'),(9,'1507291525','admin','logout','User logged out','10.23.10.42'),(10,'1507291525','admin','logout','User logged out','10.23.10.42'),(11,'1507291525','admin','logout','User logged out','10.23.10.42'),(12,'1507291525','admin','logout','User logged out','10.23.10.42'),(13,'1507291526','admin','logout','User logged out','10.23.10.42'),(14,'1507291526','admin','logout','User logged out','10.23.10.42'),(15,'1507291526','admin','logout','User logged out','10.23.10.42'),(16,'1507291526','admin','logout','User logged out','10.23.10.42'),(17,'1507291527','admin','logout','User logged out','10.23.10.42'),(18,'1507291527','admin','logout','User logged out','10.23.10.42'),(19,'1507291527','admin','logout','User logged out','10.23.10.42'),(20,'1507291527','admin','logout','User logged out','10.23.10.42'),(21,'1507291528','admin','logout','User logged out','10.23.10.42'),(22,'1507291529','admin','logout','User logged out','10.23.10.42'),(23,'1507291529','admin','logout','User logged out','10.23.10.42'),(24,'1507291630','admin','logout','User logged out','10.23.10.42'),(25,'1507291631','admin','logout','User logged out','10.23.10.42'),(26,'1507291631','admin','logout','User logged out','10.23.10.42'),(27,'1507291631','admin','logout','User logged out','10.23.10.42'),(28,'1507291632','admin','logout','User logged out','10.23.10.42'),(29,'1507291632','admin','logout','User logged out','10.23.10.42'),(30,'1507291632','admin','logout','User logged out','10.23.10.42'),(31,'1507291758','admin','login','User logged in','10.23.10.42'),(32,'1507291818','admin','logout','User logged out','10.23.10.42'),(33,'1507291874','admin','logout','User logged out','10.23.10.42'),(34,'1507291874','admin','logout','User logged out','10.23.10.42'),(35,'1507291875','admin','logout','User logged out','10.23.10.42'),(36,'1507291881','admin','logout','User logged out','10.23.10.42'),(37,'1507291881','admin','logout','User logged out','10.23.10.42'),(38,'1507291882','admin','logout','User logged out','10.23.10.42'),(39,'1507291882','admin','logout','User logged out','10.23.10.42'),(40,'1507291896','admin','login','User logged in','10.23.10.42'),(41,'1507291927','admin','logout','User logged out','10.23.10.42'),(42,'1507291928','admin','logout','User logged out','10.23.10.42'),(43,'1507291928','admin','logout','User logged out','10.23.10.42'),(44,'1507291941','admin','login','User logged in','10.23.10.42'),(45,'1507292037','admin','logout','User logged out','10.23.10.42'),(46,'1507292122','admin','logout','User logged out','10.23.10.42'),(47,'1507292698','admin','logout','User logged out','10.23.10.42'),(48,'1507292701','admin','logout','User logged out','10.23.10.42'),(49,'1507292715','admin','logout','User logged out','10.23.10.42'),(50,'1507292719','admin','login','User logged in','10.23.10.42'),(51,'1507292723','admin','logout','User logged out','10.23.10.42'),(52,'1507292732','admin','login','User logged in','10.23.10.42'),(53,'1507292889','admin','logout','User logged out','10.23.10.42'),(54,'1507292893','admin','login','User logged in','10.23.10.42'),(55,'1507292904','admin','logout','User logged out','10.23.10.42');
 /*!40000 ALTER TABLE `logs` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -432,7 +429,7 @@ CREATE TABLE `users` (
   `user_limitation` tinyint(1) NOT NULL,
   `user_language` char(2) DEFAULT '0',
   PRIMARY KEY (`user_id`,`user_name`)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=143 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -441,7 +438,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,1,'admin','21232f297a57a5a743894a0e4a801fc3','default user',0,'',0,'0');
+INSERT INTO `users` VALUES (1,1,'admin','21232f297a57a5a743894a0e4a801fc3','default user',0,'',0,'0'),(142,10,'manager','1d0258c2440a8d19e716292b231e3190','manager',0,'',0,'0');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -454,6 +451,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-10-06 14:34:34
-
-GRANT ALL ON eorweb.* TO eyesofreport@localhost IDENTIFIED BY 'SaintThomas,2014';
+-- Dump completed on 2018-02-13 11:23:02
