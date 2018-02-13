@@ -45,7 +45,7 @@
                     "target":"main"
                 },
                 {
-                    "name":"menu.link.define_reports",
+                    "name":"label.manage_report.report_declaration",
                     "url":"/module/manage_report/",
                     "target":"main"
                 },

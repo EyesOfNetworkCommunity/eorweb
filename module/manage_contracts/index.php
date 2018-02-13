@@ -6,7 +6,9 @@ include("../../side.php");
 
 <div id="page-wrapper">
 	<div class="row">
-		<h1 class="page-header"><?php echo getLabel("label.manage_contracts.title"); ?></h1>
+		<div class="col-md-12">
+			<h1 class="page-header"><?php echo getLabel("label.manage_contracts.title"); ?></h1>
+		</div>
 	</div>
 	<div id="welcome" class="row" style="display: none; text-align: center">
 		<h3><?php echo getLabel("label.manage_contract.welcome"); ?></h3>
