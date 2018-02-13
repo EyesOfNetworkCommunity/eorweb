@@ -153,20 +153,6 @@ if( strpos($_SERVER["PHP_SELF"], "/module/module_frame") !== false ){
 		<div class="navbar-default sidebar masked" role="navigation">
 			<div class="sidebar-nav navbar-collapse">
 				<ul id="side-menu" class="nav in">
-					<?php if($_COOKIE['user_limitation'] == 0) : ?>
-					<li class="sidebar-search">
-						<form id="sideMenuSearch" method="get" action="<?php echo $path_frame; ?>" style="margin-bottom: 0;">
-							<div class="input-group custom-search-form">
-								<input name="s0_value" id="s0_value" class="form-control" type="text" placeholder="<?php echo getLabel("label.input.placeholder.search"); ?>" autocomplete="off" onFocus="my_ajax_search();">
-								<span class="input-group-btn">
-									<button class="btn btn-default" type="submit">
-										<i class="fa fa-search"></i>
-									</button>
-								</span>
-							</div>
-						</form>
-					</li>
-					<?php endif; ?>
 					<?php 
 					// check if there's menutabs (user not limited)
 					if(isset($menus['menutab'])){

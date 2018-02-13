@@ -426,9 +426,9 @@ CREATE TABLE `users` (
   `user_descr` varchar(255) DEFAULT NULL,
   `user_type` tinyint(1) NOT NULL,
   `user_location` varchar(255) DEFAULT NULL,
-  `user_email` varchar(255) DEFAULT NULL,
   `user_limitation` tinyint(1) NOT NULL,
   `user_language` char(2) DEFAULT '0',
+  `user_email` varchar(255) DEFAULT NULL
   PRIMARY KEY (`user_id`,`user_name`)
 ) ENGINE=MyISAM AUTO_INCREMENT=143 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
