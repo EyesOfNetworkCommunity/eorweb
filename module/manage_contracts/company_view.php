@@ -19,6 +19,9 @@ include("../../side.php");
 			<tbody id="body_table">
 			</tbody>
 		</table>
+		<div class="col-md-12">
+			<input type="button" class="btn btn-primary" value="Add" onclick="location.href='./company.php';">
+		</div>
 	</div>
 </div>
 

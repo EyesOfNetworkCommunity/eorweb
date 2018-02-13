@@ -21,6 +21,9 @@ include("../../side.php");
 			</tbody>
 		</table>
 	</div>
+	<div class="col-md-12">
+		<input type="button" class="btn btn-primary" value="Add" onclick="location.href='./kpi.php';">
+	</div>
 </div>
 
 <script src="../../bower_components/jquery/dist/jquery.min.js"></script>
