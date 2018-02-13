@@ -115,7 +115,7 @@ CREATE TABLE `groupright` (
 
 LOCK TABLES `groupright` WRITE;
 /*!40000 ALTER TABLE `groupright` DISABLE KEYS */;
-INSERT INTO `groupright` VALUES (1,'1','1','1','1','1'),(9,'1','0','1','0','1'),(10,'1','0','1','1','1');
+INSERT INTO `groupright` VALUES (1,'1','1','1','1','1'),(9,'1','0','1','0','1'),(10,'1','1','1','0','1');
 /*!40000 ALTER TABLE `groupright` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -426,6 +426,7 @@ CREATE TABLE `users` (
   `user_descr` varchar(255) DEFAULT NULL,
   `user_type` tinyint(1) NOT NULL,
   `user_location` varchar(255) DEFAULT NULL,
+  `user_email` varchar(255) DEFAULT NULL,
   `user_limitation` tinyint(1) NOT NULL,
   `user_language` char(2) DEFAULT '0',
   PRIMARY KEY (`user_id`,`user_name`)
@@ -438,7 +439,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,1,'admin','21232f297a57a5a743894a0e4a801fc3','default user',0,'',0,'0'),(142,10,'manager','1d0258c2440a8d19e716292b231e3190','manager',0,'',0,'0');
+INSERT INTO `users` VALUES (1,1,'admin','21232f297a57a5a743894a0e4a801fc3','default user',0,'','',0,'0'),(142,10,'manager','1d0258c2440a8d19e716292b231e3190','manager',0,'','',0,'0');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;

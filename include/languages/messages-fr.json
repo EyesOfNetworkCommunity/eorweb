@@ -284,6 +284,7 @@
 	"label.day": "Jour",
 	"label.description": "Description",
 	"label.edit": "Edition",
+        "label.entries": "éléments",
 	"label.etl.title_top_page": "ETL",
 	"label.footer.message": "produit sous GPL2 sponsorisé par AXIANS",
 	"label.form_edit_cred.change_name": "Changer le nom",

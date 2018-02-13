@@ -279,6 +279,7 @@
 	"label.day": "Day",
 	"label.description": "Description",
 	"label.edit": "Edit",
+        "label.entries": "entries",
 	"label.etl.title_top_page": "ETL",
 	"label.footer.message": "product under GPL2 license, sponsored by AXIANS",
 	"label.form_edit_cred.change_name": "Change report name",
