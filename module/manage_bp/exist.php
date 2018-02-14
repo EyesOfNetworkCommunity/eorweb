@@ -1,9 +1,7 @@
 <?php
 	include("../../include/config.php");
 	include("../../include/arrays.php");
-
-	include("../../include/function.php"); 
-	include("./old_function.php");
+	include("../../include/function.php");
 	//Read the file to get the informations.
 	$Source = $_POST[source]; //var_dump($_POST["source"]);
 	$Valeur = $_POST[valeur]; //var_dump($_POST["valeur"]);
@@ -12,7 +10,7 @@
 	// print ("Source: $Source, Valeur: $Valeur\nSQLRequest: $SQLRequest\n\n\n");
 
 	$result = sqlrequest($Source,$SQLRequest);
-	$metier = mysqli_fetch_assoc($result);
+	$metier = mysql_fetch_assoc($result);
 	
 	// var_dump($metier);
 	if ( $metier ){

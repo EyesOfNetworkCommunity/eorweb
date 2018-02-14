@@ -48,7 +48,7 @@ function getThrukId($source_name) {
 function sqlArrayDatabase($database,$request) {
         $result = sqlrequest($database,$request);
         $values = array();
-        for ($i=0; $i<mysqli_num_rows($result); ++$i) {
+        	for ($i=0; $i<mysqli_num_rows($result); ++$i) {
         	$values[] = mysqli_fetch_assoc($result);
         }
         return $values ;

@@ -26,17 +26,18 @@ include("./function.php");
 ?>
 
 <script src="./js/jquery.js"></script>
-<script src="function.js"></script>
-<link href="./design.css" rel="stylesheet" type="text/css">
+<script src="./function.js"></script>
+<script src="../../bower_components/jquery/dist/jquery.min.js"></script>
 
 <div id="page-wrapper">
 	<div class="row">
-		<div class="col-lg-12">
+		<div class="col-md-12">
 			<h1 class="page-header"><?php echo getLabel("label.business.title"); ?></h1>
 		</div>
 	</div>
+	
+<?php
 
-	<?php
 	global $max_display;
 	global $display_zero;
 	$action=retrieve_form_data("action",null);
@@ -47,18 +48,11 @@ include("./function.php");
 	global $path_nagiosbpcfg_lock ;
 	global $database_vanillabp;
 	global $max_bu_file;
-	global $database_host;
-	global $database_username;
-	global $database_password;
-	 $t_bp_racine = array();
-	
 
-	if ($build == "Apply Config") {
-		buildFile();
-	}
-	if ($action == "submit") {
-		switch($bp_mgt_list) {
-
+	if ($build == "Apply Config") buildFile();
+	if ($action == "submit"){
+		switch($bp_mgt_list)
+		{
 			case "add_process" : 
 				echo "<META HTTP-EQUIV=refresh CONTENT='0;URL=add_process.php'>";
 				break ;
@@ -66,146 +60,136 @@ include("./function.php");
 				$bp_selected = array();
 				for ( $i = 0 ; $i < $max_display+2 ; $i++){
 					$bps = retrieve_form_data("bp_selected$i",null);
-					if ( $bps ) {
-						$bp_selected = array_merge($bp_selected,$bps);
-					}
-				}
+					if ( $bps ) $bp_selected = array_merge($bp_selected,$bps);
+				} 
+
 				$notDeleted = array();
 				$deleted= "";
-				foreach($bp_selected as $bp) {	
+				foreach($bp_selected as $bp)
+				{	
 					$bp_parts = explode("::", $bp);
 					$bp_name = $bp_parts[0];
 					$Source = $bp_parts[1];
-
-					// Get the db_sources_from_nickname //
-					$resultsource=sqlrequest("global_nagiosbp","SELECT db_names FROM bp_sources WHERE nick_name='$Source'");
-					while ($db_line = mysqli_fetch_array($resultsource)){
-						$Source = $db_line['db_names'];
-					}       
+					
+           // Get the db_sources_from_nickname //
+          	$resultsource=sqlrequest("global_nagiosbp","SELECT db_names FROM bp_sources WHERE nick_name='$Source'");
+          
+            while ($db_line = mysql_fetch_array($resultsource))
+            {
+                    $Source = $db_line[db_names];
+            }       
 					$result = sqlArrayDatabase($Source,"SELECT bp_name FROM bp_links WHERE bp_link='$bp_name'");
-					if ( $result ) {
+					if ( $result ){
 						foreach($result as $i=>$r){
 							if ( !in_array($r['bp_name'],$bp_selected) ){
-								if ( isset($strDep) ) {
-									$strDep .= ",$r[bp_name]";
-								} else {
-									$strDep = "$r[bp_name]";
-								}
+								if ( isset($strDep) ) $strDep .= ",$r[bp_name]";
+								else $strDep = "$r[bp_name]";
 							}
 						}
-						if (isset($strDep))	{
-							$notDeleted[] = $bp_name." has dependencies with ".$strDep.".";
-						} else {
-							$deleted = deleteOne($bp_name, $deleted, $Source);
-						}
-					} else {
+						if (isset($strDep))	$notDeleted[] = $bp_name." has dependencies with ".$strDep.".";
+						else $deleted = deleteOne($bp_name, $deleted, $Source);
+					}
+					else {
 						$deleted = deleteOne($bp_name, $deleted, $Source);
 					}
 				}
-				if ( $deleted != "") {
-					message(6," : $deleted deleted","ok");
-				}
+
+				if ( $deleted != "") message(6," : $deleted deleted","ok");
 				foreach($notDeleted as $del){
 					message(0," : $del","warning");
 				}
 				break ;
-
 			case "cascade_delete" :
 				$bp_selected = array();
 				for ( $i = 0 ; $i < $max_display+2 ; $i++){
 					$bps = retrieve_form_data("bp_selected$i",null);
-					if ( $bps ) {
-						$bp_selected = array_merge($bp_selected,$bps);
-					}
+					if ( $bps ) $bp_selected = array_merge($bp_selected,$bps);
 				}
-				foreach ($bp_selected as $bp) {
+				foreach ($bp_selected as $bp)
+				{
 					$bp_parts = explode("::", $bp);
 					$bp_name = $bp_parts[0];
 					$Source = $bp_parts[1];
-
-					// Get the db_sources_from_nickname //
-					$resultsource=sqlrequest("global_nagiosbp","SELECT db_names FROM bp_sources WHERE nick_name='$Source'");
-
-					while ($db_line = mysqli_fetch_array($resultsource)) {
-						$Source = $db_line['db_names'];
-					}
+                  
+           // Get the db_sources_from_nickname //
+        	$resultsource=sqlrequest("global_nagiosbp","SELECT db_names FROM bp_sources WHERE nick_name='$Source'");
+        
+          while ($db_line = mysql_fetch_array($resultsource))
+          {
+                  $Source = $db_line[db_names];
+          }
+          
 					$result = sqlArrayDatabase($Source,"SELECT bp_name FROM bp_links WHERE bp_link='$bp_name'");
 					sqlrequest($Source,"DELETE FROM bp_links WHERE bp_name='$bp_name'");
 					sqlrequest($Source,"DELETE FROM bp_services WHERE bp_name='$bp_name'");
 					sqlrequest($Source,"DELETE FROM bp WHERE name='$bp_name'");
+					
 					deleteAll($result, $Source);
 				}
 				break ;
-
 			case "backup" :
 				$option = retrieve_form_data("bu_list",null);
-				switch ($option) {
+				switch ($option){
 					case "clean" :
 						for ( $i = 1 ; $i < $max_bu_file+1 ; $i++){
-							if ( file_exists($path_nagiosbpcfg_bu.$i)) {
-								unlink($path_nagiosbpcfg_bu.$i);
-							} else {
-								break;
-							}
+							if ( file_exists($path_nagiosbpcfg_bu.$i)) unlink($path_nagiosbpcfg_bu.$i);
+							else break;
 						}
 						break;
-					
 					default :
 						wait($path_nagiosbpcfg_lock);	//Wait for the file to not be in use.
 						$fp=@fopen($path_nagiosbpcfg_lock,"w");	//Lock the file.
 						fputs($fp,getmypid());
 						fclose($fp);
+
 						rename($path_nagiosbpcfg_bu.$option,$path_nagiosbpcfg_bu.'temp');
 						backup_file($option);
 						copy($path_nagiosbpcfg_bu.'temp',$path_nagiosbpcfg);
+
 						$lines = file($path_nagiosbpcfg);
 						unset($lines[0]);
 						write_file($path_nagiosbpcfg,$lines,"w");
+
 						unlink($path_nagiosbpcfg_bu.'temp');
 						unlink($path_nagiosbpcfg_lock);
 						break ;
-					}
+				}
 				break;
-
 			case "duplicate" :
 				global $min_dup;
 				global $max_dup;
 				$bp_selected = array();
 				for ( $i = 0 ; $i < $max_display+2 ; $i++){
 					$bps = retrieve_form_data("bp_selected$i",null);
-					if ( $bps ) {
-						$bp_selected = array_merge($bp_selected,$bps);
-					}
+					if ( $bps ) $bp_selected = array_merge($bp_selected,$bps);
 				}
 				$notDuplicate = array() ;
-				foreach ( $bp_selected as $bp) {
+				foreach ( $bp_selected as $bp)
+				{
 					$bp_parts = explode("::", $bp);
-					$bp_name = $bp_parts[0];		
+					$bp_name = $bp_parts[0];
 					$Source = $bp_parts[1];
-					if ($Source == "global") {
-						$Source = "global_nagiosbp";
-					}
+					
 					$count = sqlArrayDatabase($Source,"SELECT COUNT(name) AS nbr FROM bp WHERE name REGEXP '$bp_name-([0-9]){".strlen($min_dup).",".strlen($max_dup)."}$'");
 					if ( $count[0]['nbr'] == $max_dup-$min_dup+1 ) {
 						$notDuplicate[] = $bp ;
-					} else {
+					}
+					else {
 						$rand_num = mt_rand($min_dup,$max_dup);
 
 						while ( sqlArrayDatabase($Source,"SELECT * FROM bp WHERE name='$bp_name-$rand_num'") ) {
 							$rand_num++;
-							if ($rand_num > $max_dup) {
-								$rand_num = $min_dup;
-							}
+							if ($rand_num > $max_dup) $rand_num = $min_dup;
 						}
+
 						$infos = sqlArrayDatabase($Source,"SELECT * FROM bp WHERE name='$bp_name'");
 						foreach ($infos as $info){
 							$request = "INSERT INTO bp VALUES ('$info[name]-$rand_num','";
-							if ( $info['description'] != "") {
-								$request .= "$info[description]-$rand_num";
-							}
+							if ( $info['description'] != "")	$request .= "$info[description]-$rand_num";
 							$request .=	"','$info[priority]','$info[type]','$info[command]','$info[url]','$info[min_value]','$info[is_define]')";
 							sqlrequest($Source,$request);
 						}
+
 						$infos = sqlArrayDatabase($Source,"SELECT * FROM bp_services WHERE bp_name='$bp_name'");
 						foreach ( $infos as $info){
 							sqlrequest($Source,"INSERT INTO bp_services VALUES('','$info[bp_name]-$rand_num','$info[host]','$info[service]')");
@@ -216,50 +200,62 @@ include("./function.php");
 						}
 					}
 				}
-
+				
 				if ( !empty($notDuplicate) ){
 					foreach ($notDuplicate as $dup) {
-						if ( !isset($str) ) {
-							$str = "$dup";
-						} else {
-							$str .= ",$dup";
-						}
+						if ( !isset($str) ) $str = "$dup";
+						else $str .= ",$dup";
 					}
+
 					message(0," : Can not duplicate $str","warning");
 				}
 				break;
-
 			case "delete_all" :
+
 				$result=sqlrequest($database_vanillabp,"SELECT db_names FROM bp_sources");
 				sqlrequest($database_vanillabp,"DELETE FROM bp");
 				sqlrequest($database_vanillabp,"DELETE FROM bp_services");
 				sqlrequest($database_vanillabp,"DELETE FROM bp_links");
 
-				while ($db_line = mysqli_fetch_array($result)) {
-					sqlrequest($db_line['db_names'],"DELETE FROM bp");
-					sqlrequest($db_line['db_names'],"DELETE FROM bp_services");
-					sqlrequest($db_line['db_names'],"DELETE FROM bp_links");
+			    while ($db_line = mysql_fetch_array($result))
+			    {
+			    		sqlrequest($db_line[db_names],"DELETE FROM bp");
+						sqlrequest($db_line[db_names],"DELETE FROM bp_services");
+						sqlrequest($db_line[db_names],"DELETE FROM bp_links");
 				}
+
 				message(6,"","ok");
 				break;
 		}
 	}
 
 	//Check for inconvenient in the process.
-	if (isset($_GET['del'])) {
+	if (isset($_GET['del'])){
 		unlink($_GET['del']);
 	}
 
-	$tabMetier = array();
-	$result=sqlrequest("global_nagiosbp","SELECT db_names, nick_name FROM bp_sources");
-	while ($db_line = mysqli_fetch_array($result)) {
-		$tabMetier = array_merge($tabMetier,sqlArrayDatabase($db_line['db_names'],"SELECT '$db_line[nick_name]' as nick_name, '$db_line[db_names]' as db_names, name, description, priority, type,command,url,min_value,is_define FROM bp ORDER BY name ASC"));
-	} ?>
+	if ( file_exists($path_nagiosbpcfg_lock)){
+		sleep(1);
+		if ( file_exists($path_nagiosbpcfg_lock)){
+			echo $xmlmodules->getElementsByTagName("manage_bp")->item(0)->getAttribute("check");
+			echo "   <a href=index.php?del=$path_nagiosbpcfg_lock>yes</a> | <a href=index.php>No</a>";
+			exit;
+		}
+	}
 
-	<form action='./index.php' method='GET'>
+	//Read the file to get the informations.
+	formatFile();
+    $tabMetier = array();
+	$result=sqlrequest($database_vanillabp,"SELECT db_names, nick_name FROM bp_sources");
+
+    while ($db_line = mysqli_fetch_array($result))
+    {
+	    $tabMetier = array_merge($tabMetier,sqlArrayDatabase($db_line['db_names'],"SELECT nick_name as".$db_line['nick_name'].", db_names as".$db_line['db_names'].", bp.name, bp.description, priority, type,command,url,min_value,is_define FROM bp,bp_sources ORDER BY name ASC"));
+    }
+?>
+<form action='./index.php' method='GET'>
 		<div class="row form-group">
-			<label style="font-weight:normal;" class="col-md-2 control-label"><?php echo getLabel("action.display"); ?> :</label>
-			<div class="col-md-3">
+			<div class="col-md-2">
 				<select class="form-control" id='prio' onChange='javascript:show(this.value)'>
 					<option value='all'><?php echo getLabel("label.business.list_display"); ?></option>
 				</select>
@@ -267,8 +263,7 @@ include("./function.php");
 		</div>
 		
 		<div class="row form-group">
-			<label style="font-weight:normal;" class="col-md-2 control-label"><?php echo getLabel("action.action"); ?> :</label>
-			<div class="col-md-3">
+			<div class="col-md-2">
 				<select class="form-control" id="bp_mgt_list" name="bp_mgt_list" size="1" onchange="setVisible(this.value)">
 					<option value="add_process"><?php echo getLabel("action.add"); ?></option>
 					<option value="delete_process"><?php echo getLabel("action.delete"); ?></option>
@@ -278,14 +273,13 @@ include("./function.php");
 					<option value="back-up"><?php echo getLabel("label.business.back-up"); ?></option>
 				</select>
 			</div>
-			<div class="col-md-3">
+			<div class="col-md-2">
 				<input class="btn btn-primary" type="submit" name="action" value="submit" onclick="javascript:return getConfirm(this.value);">
 			</div>
 		</div>
 
 		<div class="row form-group" id="setVis" style="display: none">
-			<label style="font-weight:normal;" class="col-md-2 control-label"><?php echo getLabel("label.business.back-up"); ?> :</label>
-			<div class="col-md-3">
+			<div class="col-md-2">
 				<select class="form-control" id="bu_list" name="bu_list" size="1" onchange="showSurvey(this.value)">
 					<option value='clean'><?php echo getLabel("label.business.clean"); ?></option>
 					<?php
@@ -303,94 +297,56 @@ include("./function.php");
 		</div>
 		
 		<div class="row">
-			<div class="col-lg-12">
-				<br><br><a href="./admin_category_CI.php"><?php echo getLabel("label.business.infrastructure_category"); ?></a>
-				<br><a href="./admin_category_CA.php"><?php echo getLabel("label.business.acces_category"); ?></a>
-			</div>
+			<br><br><a href="./admin_category_CI.php"><?php echo getLabel("label.business.infrastructure_category"); ?></a>
+			<br><a href="./admin_category_CA.php"><?php echo getLabel("label.business.acces_category"); ?></a>
 		</div>
-		<br>
-		
-	    <div class="row">
-			<div class="col-lg-12">
-				<div class="panel panel-default">
-					<div class="panel-heading">
-						Business process tree
-					</div>
-					<div class="panel-body">
-					<?php
-					// $HTMLTREE ="";
-					// $db = new mysqli($database_host, $database_username, $database_password, $database_vanillabp);
-					// if($db->connect_errno > 0){
-					// 	die('Unable to connect to database 4 [' . $db->connect_error . ']');
-					// }
 
-					// // Note pour Benoit BP devra ici etre changé pour la base global.
-					// // Je filtre sur les 2 derniers layers d'apps pour des raisons de rapidité d'affichage et de sens fonctionnel.
-					// $sql = "SELECT name FROM bp WHERE name NOT IN (SELECT bp_link FROM bp_links) ORDER BY priority DESC";
-
-					//  Block commented by Benoit Village 2016-04-05
-					// $sql = "	
-					//   SELECT name 
-					//   FROM bp 
-					//   WHERE name 
-					//   NOT IN (SELECT bp_link FROM bp_links) 
-					//   AND ( priority = (select MAX(priority) from bp) OR priority = (select (MAX(priority)-1) from bp))
-					//   ORDER BY priority DESC
-					// ";
-					// if(!$result = $db->query($sql)){
-					// 	die('There was an error running the query 5 [' . $db->error . ']');
-					// }
-					// while($row = $result->fetch_assoc()){   
-					// 	array_push($t_bp_racine,$row['name']);
-					// } 
-					// $result->free();
-					// mysqli_close($db);
-					// for ($i = 0; $i < sizeof($t_bp_racine); $i++) {
-		//                 echo "<div class=\"well well-sm\">";
-		//                 echo "<ul class=\"nav nav-list tree\">";
-		//                 display_bp($t_bp_racine[$i],$t_bp_racine[$i],'global_nagiosbp');
-		//                 display_global_son($t_bp_racine[$i]);
-		//                 echo "</ul>";
-		//                 echo "</div>";
-
-		//             }
-					display_by_source(); ?>
-					</div>
+		<div class="col-md-3">
+			<div class="panel panel-default table" id="0" style="display: none;">
+				<div class="panel-heading">
+					Source  Name  Select
+				</div>
+				<div class="panel-body">
+					No display      <a href='#' onclick='javascript:selectAll(0)'>ALL</a>
 				</div>
 			</div>
 		</div>
-		<textarea cols="90" rows="25" id="survey" readonly style="display:none;margin-top:10px;resize:none;"></textarea>
-	</form>
-</div>
-
-<script src="../../bower_components/jquery/dist/jquery.min.js"></script>
+		
+		<?php
+			for ($i = 1 ; $i < $max_display+2 ; $i++){
+				echo "<div class=\"col-md-3\">
+					<div class=\"panel panel-default table\" id=\"$i\" >
+						<div class=\"panel-heading\">
+							Source  Name  Select
+						</div>
+						<div class=\"panel-body\">
+							Display ".($i-$display_zero)."       <a href='#' onclick='javascript:selectAll($i)'>ALL</a>
+						</div>
+					</div>
+				</div>";
+		} ?>
+	<textarea cols='90' rows='25' id='survey' readonly scrolling='no' style='display:none;margin-top:10px;resize:none;'></textarea>
+</form>
 
 <script>
-	$(document).ready(function () {
-		$('.tree-toggle').hover(function() {
-	    	$(this).css('cursor','pointer');
-		});
-
-		$('.tree-toggle').parent().children('ul.tree').toggle(300);
-		$('.tree-toggle').click(function () {
-			$(this).parent().children('ul.tree').toggle(200);
-		});
-		$("[data-toggle=tooltip]").tooltip();
-	});
-
 	$("#survey").css("margin-left",$("#getWidth").width()+20);
 	setDisplay(<?php echo $max_display;?>);
 	<?php
 	foreach( $tabMetier as $metier) {
 		if (array_key_exists('nick_name', $metier)) {
-    		echo "makeTable(\"$metier[nick_name]\",\"$metier[priority]\",\"$metier[name]\");";
-		} else {
-			echo "makeTable(\"global_nagiosbp\",\"$metier[priority]\",\"$metier[name]\");";
+    		echo "makeTable(\"$metier[nick_name]\",\"$metier[priority]\",\"$metier[name]\");\n";
+		}
+		else
+		{
+			echo "makeTable(".$database_vanillabp.",\"$metier[priority]\",\"$metier[name]\");\n";
 		}
 	}?>
+	resizeAll();
+	appendDisplay();
 	show("all");
-	setVisible($("#bp_mgt_list").val());
+	setVisible($("select[name=bp_mgt_list]").val());
 </script>
+
 <?php
 include("../../footer.php");
 ?>
