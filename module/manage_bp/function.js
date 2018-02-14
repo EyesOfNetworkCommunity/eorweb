@@ -17,32 +17,45 @@ Uname = nbr = delElem = -1;
 deletedProc = Array(); indProc = 0;
 deletedServices = Array();
 tableMetier = timer = null ;
+//db_source = null;
 
 function selectValue(option,valeur) {
+	//alert ("selectValue");
 	action = option;
+	//alert(action +" --- "+ valeur);
 	var source_name = $("#definitionSource").html();
 	var actual_host = $("#select").val();
 	var choosen_source = $("#selectsource").val();
+	//alert(actual_host);
 	params = "valeur="+valeur+"&option="+option+"&definedSource="+source_name+"&actualHost="+actual_host+"&choosenSource="+choosen_source;
 	$.post("file.php", params, result2, "html");
 }
 
 function selectValueSource(option,valeur) {
+	//alert ("selectValueSource");
+	//alert("blablablablabla");
 	action = option;
+	//console.log(action); console.log(valeur);
 	var source_name = $("#definitionSource").html();
 	var choosen_source = $("#selectsource").val();
 	params = "valeur="+valeur+"&option="+option+"&definedSource="+source_name+"&choosenSource="+choosen_source;
+	//alert(params);
 	$.post("file.php", params, resultSource, "html");
 }
 
 function resultSource(data) {
+	//alert ("ResultSource");
+	//console.log(data);
 	if (action == "selectsource") {
 		if ( data == "error"){
+			//alert ("Result2: Select error");
 			state("#add",0,"add");
 			$("input[name=sourcedb]").css("background","yellow");
 			response = data;
 		}
 		else {
+			//alert ("Result2: Select NOT error");
+			//alert("HIHIHIHIHIHI");
 			state("#add",1,"add");
 			objet = $("input[name=sourcedb]")[0];
 			if (objet) objet.style.background="white";
@@ -53,6 +66,7 @@ function resultSource(data) {
 				if ( name != objet.value) objet.value = name +" - "+objet.value;
 				else objet.value = name ;
 			}
+			//alert('HOHOHOHOHOHO');
 			for (key in deletedServices){
 				if( key == name) {
 					taille = options.length-1;
@@ -68,10 +82,12 @@ function resultSource(data) {
 			response = "";
 			for (ind = 0 ; ind < options.length ; ind++) response += options[ind];
 		}
+		//alert("Invoke Change");
 		$("#select").html(response);
 		hasChild("#change","#add");
 	}
 	else {
+		//alert ("Result2: Not Select Source");
 		name = data.substring(data.indexOf("<option "),data.indexOf("</option>"));
 		name = name.substring(name.indexOf("'")+1,name.lastIndexOf("'"));
 		$("#sourcedb").html(data);
@@ -155,7 +171,7 @@ function setServ(tabServ){
 		$("#change").append("<option value='"+val+"'>"+val+"</option>");	//Append a true fake option. To detach it as an objet.
 		if(!deletedServices[key]) deletedServices[key] = Array();
 		deletedServices[key][deletedServices[key].length] = $('#change option[value="'+val+'"]:first').detach();
-		$('#sum').append("<tr><td>"+name+"</td><td><input name='del[]' type='checkbox' class='checkbox'/></td></tr>");
+		$('#sum').append("<tr><td>"+name+"</td><td><center><input name='del[]' type='checkbox' class='checkbox'/></center></td></tr>");
 	};
 }
 
@@ -166,7 +182,7 @@ function setProc(tabProc){
 		$("#proc").append("<option value='"+name+"'>"+name+"</option>");	//Append a true fake option. To detach it as an objet.
 		deletedProc[indProc++] = $('#proc option[value="'+name+'"]').detach();
 		//alert(name);
-		$('#sum').append("<tr><td>"+name+"</td><td><input name='del[]' type='checkbox' class='checkbox'/></td></tr>");
+		$('#sum').append("<tr><td>"+name+"</td><td><center><input name='del[]' type='checkbox' class='checkbox'/></center></td></tr>");
 	}
 }
 
@@ -215,7 +231,7 @@ function checkUpdate(data){
 				name = $("#selectsource").val()+"::"+objets.proc.value;
 				deletedProc[indProc++] = $('#proc option[value="'+name+'"]:first').detach();
 				hasChild("#proc","#addProc");
-				$('#sum').append("<tr><td>"+name+"</td><td><input name='del[]' type='checkbox' class='checkbox'/></td></tr>");
+				$('#sum').append("<tr><td>"+name+"</td><td><center><input name='del[]' type='checkbox' class='checkbox'/></center></td></tr>");
 			}
 			else {
 				if ( objets.select)	key = objets.select.value;
@@ -228,7 +244,7 @@ function checkUpdate(data){
 				if(!deletedServices[key]) deletedServices[key] = Array();
 				deletedServices[key][deletedServices[key].length] = $('#change option[value="'+objets.change.value+'"]:first').detach();
 				hasChild("#change","#add");
-				$('#sum').append("<tr><td>"+name+"</td><td><input name='del[]' type='checkbox'/></td></tr>");
+				$('#sum').append("<tr><td>"+name+"</td><td><center><input name='del[]' type='checkbox'/></center></td></tr>");
 			}
 		}
 		else {
@@ -284,6 +300,7 @@ function checkUpdate(data){
 }
 
 function delValue() {
+	//alert("delValue");
 	objets = document.getElementsByTagName("select");
 	upordel = "delete";
 	if ( nbrSer > 0){
@@ -333,12 +350,44 @@ function chooseDisplay(display)
 			display: display
 		},
 		success: function(response){
+			console.log(response);
 			$("#proc").html(response);
 		},
 		error: function(){
+			console.log("ERRORRRRRR chooseDisplay");
 		}
 	});
 }
+/*function chooseDisplay(display){
+	//alert("chooseDisplay");
+	tableNom = Array();
+	j = 0;
+	for ( index = indProc-1 ; index >= 0 ; index--){
+		tableNom[j++] = deletedProc[index][0].value
+	}
+
+	for (i = 0 ; i < $("select[id=proc]").children().length ; i++){
+		$("select[id=proc] option:nth-child").remove();
+	}
+
+	if (display == "all"){
+		for (i = 0 ; i < tableMetier.length ; i++ ){
+			if (tableMetier[i].name != Uname)
+				if ( $.inArray( tableMetier[i].name,tableNom) == -1 )
+					$("select[id=proc]").append("<option value='"+tableMetier[i].name+"'>"+tableMetier[i].name+"</option>");
+		};
+	}
+	else {
+		for (i = 0 ; i < tableMetier.length ; i++ ){
+			if (tableMetier[i].priority == display)
+				if (tableMetier[i].name != Uname)
+					if ( $.inArray( tableMetier[i].name,tableNom) == -1 )
+						$("select[id=proc]").append("<option value='"+tableMetier[i].name+"'>"+tableMetier[i].name+"</option>");
+		};
+	}
+
+	hasChild("#proc","#addProc");
+}*/
 
 //---------------------------------------- add_process.php
 function checkURL(objet) {
@@ -439,7 +488,7 @@ function loadData(datas){
 	document.form_bp.process_type.value = datas[4];
 	document.form_bp.process_cmd.value = datas[5];
 	document.form_bp.process_url.value = datas[6];
-	if ( datas[4] == "minimum") {
+	if ( datas[4] == "MIN") {
 		document.form_bp.process_type_min.disabled = false;
 		document.form_bp.process_type_min.value = datas[7];
 	}
@@ -450,7 +499,7 @@ function loadData(datas){
 
 function ismin(objet) {
 	//alert ("ismin");
-	if ( objet.value == "minimum") 
+	if ( objet.value == "MIN") 
 		document.form_bp.process_type_min.disabled=false;
 	else 
 		document.form_bp.process_type_min.disabled=true;
@@ -487,11 +536,50 @@ function makeTable(source,prio,name,url,cmd){
 	table = $("table[id="+prio+"]");
 
 	if(table.css("display") == "none") {
-		table.css("display","value");
+		table.css("display","inline");
 		existingTable[prio] = true;
 	}
 
-	table.append("<tr><td nowrap><span name=\"source_name\">"+source+"</span></td><td nowrap><a href='add_process.php?name="+name+"&source="+source+"'>"+name+"</a></td><td><input type='checkbox' class='checkbox' name='bp_selected"+prio+"[]' value='"+name+"::"+source+"'></td></tr>");
+	table.append("<tr><td nowrap><span name=\"source_name\">"+source+"</span></td><td nowrap><a href='add_process.php?name="+name+"&source="+source+"'>"+name+"</a></td><td><center><input type='checkbox' class='checkbox' name='bp_selected"+prio+"[]' value='"+name+"::"+source+"'></center></td></tr>");
+}
+
+function resizeAll(){
+	//Size the table
+	//alert("resizeAll");
+	maxsize = 0;
+
+	for (i = 0 ; i < max_display+2 ; i++) {
+		taille = $("table[id="+i+"]").width();	//With the inline display, we get the real width
+		if ( taille > maxsize) maxsize = taille ;
+	}
+
+	for (i = 0 ; i < max_display+2 ; i++) {
+		table = $("table[id="+i+"]");
+		table.css("display","table");	//Change the display, then we can change the width. Else it do nothing.
+		table.width(maxsize+5);	//Some problems with IE. May need more than "+5"px
+	}
+
+	//Size the columns
+	size = maxsize-35;	//Size of the table less the last column size (40px)
+	size = 33*size/100 ; // 1/3 of table width. (Or more with nowrap attribut)
+	for (i = 0 ; i < max_display+2 ; i++) {
+		//Get the table, then the thead child of the table, then the tr childs, then the td childs
+		child = $("table[id="+i+"]").children("thead").children().children() ;
+		for ( j = 0 ; j < 3 ; j++) child[j].style.width=size;
+	}
+
+	//Size the checkbox
+	maxsize = 0;
+	tab = $("select");
+
+	for ( i = 0 ; i < tab.length ; i++ ) {
+		taille = tab[i].offsetWidth;
+		if ( taille > maxsize) maxsize = taille ;
+	}
+
+	for ( i = 0 ; i < tab.length ; i++ ) {
+		tab[i].style.width = maxsize;
+	}
 }
 
 function show(display){
@@ -506,13 +594,15 @@ function show(display){
 		for (i = 0 ; i < max_display+2 ; i++) {
 			if ( existingTable[i]) $("table[id="+i+"]").css("display","table");	//Show existing
 		}
-	} else {
+	}
+	else {
 		if ( display == "survey"){
 			for (i = 0 ; i < max_display+2 ; i++) {
 				$("table[id="+i+"]").css("display","none");	//hide all
 			}
 			$("#survey").css("display","block");
-		} else {
+		}
+		else {
 			$("#survey").css("display","none");
 			for (i = 0 ; i < max_display+2 ; i++) {
 				if (i == display ) $("table[id="+i+"]").css("display","table");
@@ -522,7 +612,16 @@ function show(display){
 	}
 }
 
+function appendDisplay(){
+	//alert("appendDisplay");
+	for (i = 0 ; i < max_display+2 ; i++) {
+		if ( (i != 0) && existingTable[i]) $("select[id=prio]").append("<option value='"+i+"'>Display "+(i-1)+"</option>");
+		else if ( (i == 0) && existingTable[i]) $("select[id=prio]").append("<option value='"+i+"'>No Display</option>");
+	}
+}
+
 function setDisplay(value){
+	//alert("setDisplay");
 	max_display = value;
 
 	existingTable = Array(max_display+2);
@@ -534,9 +633,10 @@ function setDisplay(value){
 }
 
 function setVisible(value){
-	if ( value == "back-up") {
-		$("#setVis").css("display","block");
-		showSurvey($("#bu_list").val());
+	//alert("setVisible");
+	if ( value == "backup") {
+		$("#setVis").css("display","table-row");
+		showSurvey($("select[name=bu_list]").val());
 	}
 	else {
 		$("#setVis").css("display","none");
@@ -545,19 +645,19 @@ function setVisible(value){
 }
 
 function showSurvey(value){
-	if ( value == "clean") {
-		$("input[name=survey]").css("visibility","hidden");
-	} else {
-		$("input[name=survey]").css("visibility","visible");
-	}
+	//alert("showSurvey");
+	if ( value == "clean") $("input[name=survey]").css("visibility","hidden");
+	else $("input[name=survey]").css("visibility","visible");
 }
 
 function preview(){
+	//alert("preview");
 	params ="option=survey&valeur="+$("select[name=bu_list]").val();
 	$.post("file.php", params, resultSurvey, "html");
 }
 
 function resultSurvey(datas){
+	//alert("resultSurvey");
 	for (i = 0 ; i < max_display+2 ; i++) {
 		$("table[id="+i+"]").css("display","none");	//hide all
 	}
@@ -570,13 +670,12 @@ function resultSurvey(datas){
 	$("#prio").val("survey");
 }
 
-function selectAll (source){
-	tab = $("input[id='"+source+"']");
-	val = tabChecked[source] ;
-	tabChecked[source] = !val ;
-	for ( i = 0 ; i < tab.length ; i++) {
-		tab[i].checked = val;
-	} 
+function selectAll (value){
+	//alert("selectAll");
+	tab = $("input[name='bp_selected"+value+"[]']");
+	val = tabChecked[value] ;
+	tabChecked[value] = !val ;
+	for ( i = 0 ; i < tab.length ; i++) tab[i].checked = val; 
 }
 
 function getConfirm(value){

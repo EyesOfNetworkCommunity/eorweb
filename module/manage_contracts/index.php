@@ -84,8 +84,8 @@ include("../../side.php");
 					</div>
 				</div>
 				<div class="panel panel-body">					
-					<div class="col-md-12">
-						<table class="table">
+					<div class="col-md-12 table-responsive">
+						<table class="table table-responsive">
 							<thead>
 								<tr>
 									<th><?php echo getLabel("label.status"); ?></th>

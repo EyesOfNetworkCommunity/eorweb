@@ -110,4 +110,7 @@ $path_reports="$path_eonweb/include/reports";
 $default_minport=1;
 $default_maxport=1024;
 
+// # nagios
+$path_nagiosbpcfg="/srv/eyesofnetwork/eorweb/module/manage_bp/compat/nagios-bp.conf";
+$path_nagiosbpcfg_lock="/tmp/nagios_bp";
 ?>
