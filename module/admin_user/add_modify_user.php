@@ -80,107 +80,65 @@ include("../../side.php");
 		
 		//--------------------------------------------------------
 
-		// // Update User Information & Right
-		// function update_user($user_id, $user_name, $user_descr, $user_group, $user_password1, $user_password2 ,$user_type, $user_location, $user_limitation, $old_group_id, $old_name, $create_user_in_nagvis, $create_user_in_cacti, $nagvis_role_id, $user_language)
-		// {
-		// 	global $database_host;
-		// 	global $database_cacti;
-		// 	global $database_username;
-		// 	global $database_password;
+		// Update User Information & Right
+		function update_user($user_id, $user_name, $user_descr, $user_group, $user_password1, $user_password2 ,$user_type, $user_location, $user_email, $user_limitation, $old_group_id, $old_name, $create_user_in_nagvis, $create_user_in_cacti, $nagvis_role_id, $user_language)
+		{
+			global $database_host;
+			global $database_cacti;
+			global $database_username;
+			global $database_password;
 
-		// 	global $database_eonweb;
-		// 	global $path_eonweb;
-		// 	global $dir_imgcache;
+			global $database_eonweb;
+			global $database_lilac;
+			global $path_eonweb;
+			global $dir_imgcache;
 
-		// 	// Check if user exist
-		// 	if($user_name!=$old_name)	
-		// 		$user_exist=mysqli_result(sqlrequest("$database_eonweb","SELECT count('user_name') from users where user_name='$user_name';"),0);
-		// 	else
-		// 		$user_exist=0;
+			// Check if user exist
+			if($user_name!=$old_name)	
+				$user_exist=mysqli_result(sqlrequest("$database_eonweb","SELECT count('user_name') from users where user_name='$user_name';"),0);
+			else
+				$user_exist=0;
 
-		// 	// Check user_descr
-		// 	if($user_descr=="")
-		// 		$user_descr=$user_name;
+			// Check user_descr
+			if($user_descr=="")
+				$user_descr=$user_name;
 
-		// 	if (($user_name != "") && ($user_name != null) && ($user_id != null) && ($user_id != "") && ($user_exist == 0)) {
-		// 		if (($user_password1 != "") && ($user_password1 != null) && ($user_password1 == $user_password2)) {
+			if (($user_name != "") && ($user_name != null) && ($user_id != null) && ($user_id != "") && ($user_exist == 0)) {
+				if (($user_password1 != "") && ($user_password1 != null) && ($user_password1 == $user_password2)) {
 
-		// 			$eonweb_groupname=mysqli_result(sqlrequest("$database_eonweb","SELECT group_name FROM groups WHERE group_id='$user_group'"),0,"group_name");			
-		// 			$eonweb_oldgroupname=mysqli_result(sqlrequest("$database_eonweb","SELECT group_name FROM groups WHERE group_id='$old_group_id'"),0,"group_name");			
-		// 			if ($user_password1 != "abcdefghijklmnopqrstuvwxyz") {
-		// 				$passwd_temp = md5($user_password1);
-		// 				// Update into eonweb
-		// 				sqlrequest("$database_eonweb","UPDATE users set user_name='$user_name', user_descr='$user_descr',group_id='$user_group',user_passwd='$passwd_temp',user_type='$user_type',user_location='$user_location',user_limitation='$user_limitation',user_language='$user_language' WHERE user_id ='$user_id'");
-		// 			}
-		// 			else {
-		// 				// Update into eonweb
-		// 				sqlrequest("$database_eonweb","UPDATE users set user_name='$user_name', user_descr='$user_descr',group_id='$user_group',user_type='$user_type',user_location='$user_location',user_limitation='$user_limitation',user_language='$user_language' WHERE user_id ='$user_id'");
-		// 			}
+					$eonweb_groupname=mysqli_result(sqlrequest("$database_eonweb","SELECT group_name FROM groups WHERE group_id='$user_group'"),0,"group_name");			
+					$eonweb_oldgroupname=mysqli_result(sqlrequest("$database_eonweb","SELECT group_name FROM groups WHERE group_id='$old_group_id'"),0,"group_name");			
+					if ($user_password1 != "abcdefghijklmnopqrstuvwxyz") {
+						$passwd_temp = md5($user_password1);
+						// Update into eonweb
+						sqlrequest("$database_eonweb","UPDATE users set user_name='$user_name', user_descr='$user_descr',group_id='$user_group',user_passwd='$passwd_temp',user_type='$user_type',user_location='$user_location',user_email='$user_email',user_limitation='$user_limitation',user_language='$user_language' WHERE user_id ='$user_id'");
+					}
+					else {
+						// Update into eonweb
+						sqlrequest("$database_eonweb","UPDATE users set user_name='$user_name', user_descr='$user_descr',group_id='$user_group',user_type='$user_type',user_location='$user_location',user_email='$user_email',user_limitation='$user_limitation',user_language='$user_language' WHERE user_id ='$user_id'");
+					}
+
+                    // this is nagvis default salt for password encryption security
+					$nagvis_salt = '29d58ead6a65f5c00342ae03cdc6d26565e20954';
 					
-		// 			// update user into nagvis :
-		// 			$bdd = new PDO('sqlite:/srv/eyesofnetwork/nagvis/etc/auth.db');
-		// 			$req = $bdd->query("SELECT userId, name FROM users WHERE name='".$_POST["user_name_old"]."'");
-  //                   $nagvis_user_exist = $req->fetch();
+					// logging action
+					logging("admin_user","UPDATE : $user_id $user_name $user_descr $user_limitation $user_group $user_type $user_location");
 
-  //                   // this is nagvis default salt for password encryption security
-		// 			$nagvis_salt = '29d58ead6a65f5c00342ae03cdc6d26565e20954';
-
-		// 			if($nagvis_user_exist["userId"] > 0){
-		// 				// update in nagvis
-		// 				if($create_user_in_nagvis=="yes"){
-		// 					$nagvis_id = $nagvis_user_exist["userId"];
-		// 					$bdd->exec("UPDATE users SET name = '$user_name', password = '".sha1($nagvis_salt.$passwd_temp)."' WHERE userId = $nagvis_id");
-		// 					$bdd->exec("UPDATE users2roles SET roleId = $nagvis_role_id WHERE userId = $nagvis_id");
-		// 				} else { // delete in nagvis
-		// 					$bdd->exec("DELETE FROM users WHERE userId = ".$nagvis_user_exist["userId"]);
-		// 					$bdd->exec("DELETE FROM users2roles WHERE userId = ".$nagvis_user_exist["userId"]);
-		// 				}
-		// 			} else{ // no user found in nagvis, so if checkbox is checked, we create
-		// 				if($create_user_in_nagvis=="yes"){
-		// 					$bdd->exec("INSERT INTO users (name, password) VALUES ('$user_name', '".sha1($nagvis_salt.$passwd_temp)."')");
-		// 					$nagvis_id = $bdd->lastInsertId();
-		// 					$bdd->exec("INSERT INTO users2roles (userId, roleId) VALUES ('$nagvis_id', $nagvis_role_id)");
-		// 				}
-		// 			}
-
-  //                    // Update user into cacti
-  //                   $bdd = new PDO('mysql:host='.$database_host.';dbname='.$database_cacti, $database_username, $database_password);
-  //                   $req = $bdd->query("SELECT id FROM user_auth WHERE username='".$_POST["user_name_old"]."'");
-  //                   $cacti_user_exist = $req->fetch();
-
-  //                   if($cacti_user_exist["id"] > 0){
-  //                   	$cacti_id = $cacti_user_exist["id"];
-  //                   	if($create_user_in_cacti == "yes"){
-  //                   		$bdd->exec("UPDATE user_auth SET username = '$user_name' WHERE id = $cacti_id");
-  //                   	} else {
-  //                   		$bdd->exec("DELETE FROM user_auth WHERE id = $cacti_id");
-  //                   	}
-  //                   } else {
-  //                   	if($create_user_in_cacti == "yes"){
-  //       					$bdd->exec("INSERT INTO user_auth (username,realm,full_name,show_tree,show_list,show_preview,graph_settings,login_opts,policy_graphs,policy_trees,policy_hosts,policy_graph_templates,enabled) VALUES ('$user_name',2,'$user_descr','on','on','on','on',3,2,2,2,2,'on')");
-  //                   	}
-  //                   }
-					
-		// 			// logging action
-		// 			logging("admin_user","UPDATE : $user_id $user_name $user_descr $user_limitation $user_group $user_type $user_location");
-
-		// 			// renaming files
-		// 			if($user_name!=$old_name){
-		// 				foreach (glob("$path_eonweb/$dir_imgcache/$old_name*.png") as $filename)
-		// 					unlink($filename);
-		// 				if(file_exists("$path_eonweb/$dir_imgcache/$old_name-ged.xml"))
-		// 					rename("$path_eonweb/$dir_imgcache/$old_name-ged.xml","$path_eonweb/$dir_imgcache/$user_name-ged.xml");
-		// 			}
-		// 			message(8," : User updated",'ok');
-		// 			}
-		// 			else
-		// 				message(8," : Passwords do not match or are empty",'warning');
-		// 	}
-		// 	elseif($user_exist != 0 && $user_name!=$old_name)
-		// 		message(8," : User $user_name already exists",'warning');
-		// 	else
-		// 		message(8," : User name can not be empty",'warning');
-		// }
+					// renaming files
+					if($user_name!=$old_name){
+						if(file_exists("$path_eonweb/$dir_imgcache/".strtolower($old_name)."-ged.xml"))
+							rename("$path_eonweb/$dir_imgcache/".strtolower($old_name)."-ged.xml","$path_eonweb/$dir_imgcache/".strtolower($user_name)."-ged.xml");
+					}
+					message(8," : User updated",'ok');
+					}
+					else
+						message(8," : Passwords do not match or are empty",'warning');
+			}
+			elseif($user_exist != 0 && $user_name!=$old_name)
+				message(8," : User $user_name already exists",'warning');
+			else
+				message(8," : User name can not be empty",'warning');
+		}
 
 		/********************************************************
 		*		END OF FUNCTIONS DECLARATIONS		*
@@ -215,7 +173,7 @@ include("../../side.php");
 		$nagvis_role_id = retrieve_form_data("nagvis_group","");
 		$create_user_in_cacti = retrieve_form_data("create_user_in_cacti","");
 
-		if($user_type=="1"){
+		/*if($user_type=="1"){
 			$result = sqlrequest($database_eonweb,"select login from ldap_users_extended where dn='$user_location'");
 			$username = mysqli_result($result,0,"login");
 			$user_name = strtolower($username);
@@ -224,11 +182,11 @@ include("../../side.php");
 			$user_password1 = "abcdefghijklmnopqrstuvwxyz";
 			$user_password2 = "abcdefghijklmnopqrstuvwxyz";		
 		}
-		else{
+		else{*/
 			$user_name = retrieve_form_data("user_name",null);
 			$user_password1 = retrieve_form_data("user_password1","");
 			$user_password2 = retrieve_form_data("user_password2","");
-		}
+		//}
 
 		if ($user_id == null) 
 		{
@@ -250,7 +208,7 @@ include("../../side.php");
 				
 				$user_group = retrieve_form_data("user_group","");
 				$nagvis_grp = retrieve_form_data("nagvis_group", "");
-				$user_id=insert_user(stripAccents($user_name), $user_descr, $user_group, $user_password1, $user_password2, $user_type, $user_location,$user_limitation, true, $create_user_in_nagvis, $create_user_in_cacti, $nagvis_grp, $user_language);
+				$user_id=insert_user(stripAccents($user_name), $user_descr, $user_group, $user_password1, $user_password2, $user_type, $user_location, $user_email, $user_limitation, true, $create_user_in_nagvis, $create_user_in_cacti, $nagvis_grp, $user_language);
 				//message(8,"User location: $user_location",'ok');	// For debug pupose, to be removed
 
 				// Retrieve Group Information from database
@@ -259,7 +217,7 @@ include("../../side.php");
 					$user_name=mysqli_result($user_name_descr,0,"user_name");
 					$user_descr=mysqli_result($user_name_descr,0,"user_descr");
 					$user_group=mysqli_result($user_name_descr,0,"group_id");
-					$user_email=mysqli_result($user_name_email,0,"user_email");
+					$user_email=mysqli_result($user_name_descr,0,"user_email");
 					$user_type=mysqli_result($user_name_descr,0,"user_type");
 					$user_limitation = retrieve_form_data("user_limitation","");
 					$user_language = retrieve_form_data("user_language","");
@@ -280,7 +238,7 @@ include("../../side.php");
 						// ACCOUNT UPDATE (and retrieve parameters)
 						//------------------------------------------------------------------------------------------------
 			if (isset($_POST['update'])){
-				update_user($user_id, stripAccents($user_name), $user_descr, $user_group, $user_password1, $user_password2, $user_type, $user_location, $user_limitation, $old_group_id, $old_name, $create_user_in_nagvis, $create_user_in_cacti, $nagvis_role_id, $user_language);	
+				update_user($user_id, stripAccents($user_name), $user_descr, $user_group, $user_password1, $user_password2, $user_type, $user_location, $user_email, $user_limitation, $old_group_id, $old_name, $create_user_in_nagvis, $create_user_in_cacti, $nagvis_role_id, $user_language);	
 				//message(8,"Update: User location = $user_location",'ok');	// For debug pupose, to be removed
 				//message(8,"Update: User name =  $user_name",'ok');			// For debug pupose, to be removed
 			}
@@ -290,7 +248,7 @@ include("../../side.php");
 			$user_name=mysqli_result($user_name_descr,0,"user_name");
 			$user_descr=mysqli_result($user_name_descr,0,"user_descr");
 			$user_group=mysqli_result($user_name_descr,0,"group_id");
-			$user_email=mysqli_result($user_name_email,0,"user_email");
+			$user_email=mysqli_result($user_name_descr,0,"user_email");
 			$user_type=mysqli_result($user_name_descr,0,"user_type");
 			$user_limitation=mysqli_result($user_name_descr,0,"user_limitation");
 			$user_location=mysqli_result($user_name_descr,0,"user_location");
