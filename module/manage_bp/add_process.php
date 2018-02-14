@@ -85,9 +85,9 @@ if(isset($_GET["source"])){
 }
 
 if(isset($_GET["name"])) {
-	echo "<div id=\"page-wrapper\"><div class=\"row\"><h1 class=\"page-header\">Modify</h1></div>";
+	echo "<div id=\"page-wrapper\"><div class=\"row\"><div class='col-lg-12'><h1 class=\"page-header\">Modify</h1></div></div>";
 } else {
-	echo "<div id=\"page-wrapper\"><div class=\"row\"><h1 class=\"page-header\">Add</h1></div>";
+	echo "<div id=\"page-wrapper\"><div class=\"row\"><div class='col-lg-12'><h1 class=\"page-header\">Add</h1></div></div>";
 }
 
 ?>

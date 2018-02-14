@@ -31,7 +31,9 @@ include("./function.php");
 
 <div id="page-wrapper">
 	<div class="row">
-		<h1 class="page-header"><?php echo getLabel("label.business.title"); ?></h1>
+		<div class="col-lg-12">
+			<h1 class="page-header"><?php echo getLabel("label.business.title"); ?></h1>
+		</div>
 	</div>
 
 	<?php
@@ -301,55 +303,59 @@ include("./function.php");
 		</div>
 		
 		<div class="row">
-			<br><br><a href="./admin_category_CI.php"><?php echo getLabel("label.business.infrastructure_category"); ?></a>
-			<br><a href="./admin_category_CA.php"><?php echo getLabel("label.business.acces_category"); ?></a>
+			<div class="col-lg-12">
+				<br><br><a href="./admin_category_CI.php"><?php echo getLabel("label.business.infrastructure_category"); ?></a>
+				<br><a href="./admin_category_CA.php"><?php echo getLabel("label.business.acces_category"); ?></a>
+			</div>
 		</div>
 		<br>
 		
 	    <div class="row">
-			<div class="panel panel-default">
-				<div class="panel-heading">
-					Business process tree
-				</div>
-				<div class="panel-body">
-				<?php
-				// $HTMLTREE ="";
-				// $db = new mysqli($database_host, $database_username, $database_password, $database_vanillabp);
-				// if($db->connect_errno > 0){
-				// 	die('Unable to connect to database 4 [' . $db->connect_error . ']');
-				// }
+			<div class="col-lg-12">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						Business process tree
+					</div>
+					<div class="panel-body">
+					<?php
+					// $HTMLTREE ="";
+					// $db = new mysqli($database_host, $database_username, $database_password, $database_vanillabp);
+					// if($db->connect_errno > 0){
+					// 	die('Unable to connect to database 4 [' . $db->connect_error . ']');
+					// }
 
-				// // Note pour Benoit BP devra ici etre changé pour la base global.
-				// // Je filtre sur les 2 derniers layers d'apps pour des raisons de rapidité d'affichage et de sens fonctionnel.
-				// $sql = "SELECT name FROM bp WHERE name NOT IN (SELECT bp_link FROM bp_links) ORDER BY priority DESC";
+					// // Note pour Benoit BP devra ici etre changé pour la base global.
+					// // Je filtre sur les 2 derniers layers d'apps pour des raisons de rapidité d'affichage et de sens fonctionnel.
+					// $sql = "SELECT name FROM bp WHERE name NOT IN (SELECT bp_link FROM bp_links) ORDER BY priority DESC";
 
-				//  Block commented by Benoit Village 2016-04-05
-				// $sql = "	
-				//   SELECT name 
-				//   FROM bp 
-				//   WHERE name 
-				//   NOT IN (SELECT bp_link FROM bp_links) 
-				//   AND ( priority = (select MAX(priority) from bp) OR priority = (select (MAX(priority)-1) from bp))
-				//   ORDER BY priority DESC
-				// ";
-				// if(!$result = $db->query($sql)){
-				// 	die('There was an error running the query 5 [' . $db->error . ']');
-				// }
-				// while($row = $result->fetch_assoc()){   
-				// 	array_push($t_bp_racine,$row['name']);
-				// } 
-				// $result->free();
-				// mysqli_close($db);
-				// for ($i = 0; $i < sizeof($t_bp_racine); $i++) {
-    //                 echo "<div class=\"well well-sm\">";
-    //                 echo "<ul class=\"nav nav-list tree\">";
-    //                 display_bp($t_bp_racine[$i],$t_bp_racine[$i],'global_nagiosbp');
-    //                 display_global_son($t_bp_racine[$i]);
-    //                 echo "</ul>";
-    //                 echo "</div>";
+					//  Block commented by Benoit Village 2016-04-05
+					// $sql = "	
+					//   SELECT name 
+					//   FROM bp 
+					//   WHERE name 
+					//   NOT IN (SELECT bp_link FROM bp_links) 
+					//   AND ( priority = (select MAX(priority) from bp) OR priority = (select (MAX(priority)-1) from bp))
+					//   ORDER BY priority DESC
+					// ";
+					// if(!$result = $db->query($sql)){
+					// 	die('There was an error running the query 5 [' . $db->error . ']');
+					// }
+					// while($row = $result->fetch_assoc()){   
+					// 	array_push($t_bp_racine,$row['name']);
+					// } 
+					// $result->free();
+					// mysqli_close($db);
+					// for ($i = 0; $i < sizeof($t_bp_racine); $i++) {
+		//                 echo "<div class=\"well well-sm\">";
+		//                 echo "<ul class=\"nav nav-list tree\">";
+		//                 display_bp($t_bp_racine[$i],$t_bp_racine[$i],'global_nagiosbp');
+		//                 display_global_son($t_bp_racine[$i]);
+		//                 echo "</ul>";
+		//                 echo "</div>";
 
-    //             }
-                display_by_source(); ?>
+		//             }
+					display_by_source(); ?>
+					</div>
 				</div>
 			</div>
 		</div>

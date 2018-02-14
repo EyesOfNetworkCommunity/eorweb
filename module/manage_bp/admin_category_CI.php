@@ -36,7 +36,9 @@ if($db->connect_errno > 0){
 
 <div id="page-wrapper">
     <div class="row">
-        <h1 class="page-header">Category Core Infrastructure</h1>
+		<div class="col-lg-12">
+			<h1 class="page-header">Category Core Infrastructure</h1>
+		</div>
     </div>
 
     <h5 style="color:#FFA500"> <span class="glyphicon glyphicon-info-sign" style='font-size: 1.2em'> </span> Only business processes used by at least one global business process can be set as category.</h5>
