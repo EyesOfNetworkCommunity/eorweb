@@ -10,21 +10,25 @@ include("../../side.php");
 		</div>
 	</div>
 	<div class="container pad-top col-md-12" id="container_table">
-		<table class="table table-striped table-hover" id="myTable">
-		    <thead>
-			    <tr>
-					<th class="radius_th"></th>
-	            	<th><?php echo getLabel("menu.link.app"); ?></th>
-	              	<th><?php echo getLabel("menu.subtad.contracts"); ?></th>
-	            	<th><?php echo getLabel("label.time_period"); ?></th>
-	              	<th><?php echo getLabel("label.contracts_menu.indicator"); ?></th>
-	              	<th><?php echo getLabel("label.sla"); ?></th>
-				    <th class="radius_th"><?php echo getLabel("label.suppress"); ?></th>
-			    </tr>
-		    </thead>
-			<tbody id="body_table">
-			</tbody>
-		</table>
+		<div class="dataTable_wrapper">
+			<div class="table-responsive">
+				<table class="table table-striped datatable-eonweb" id="myTable">
+					<thead>
+						<tr>
+							<th class="radius_th"></th>
+							<th><?php echo getLabel("menu.link.app"); ?></th>
+							<th><?php echo getLabel("menu.subtad.contracts"); ?></th>
+							<th><?php echo getLabel("label.time_period"); ?></th>
+							<th><?php echo getLabel("label.contracts_menu.indicator"); ?></th>
+							<th><?php echo getLabel("label.sla"); ?></th>
+							<th class="radius_th"><?php echo getLabel("label.suppress"); ?></th>
+						</tr>
+					</thead>
+					<tbody id="body_table">
+					</tbody>
+				</table>
+			</div>
+		</div>
 	</div>
 	<div class="col-md-12">
 		<input type="button" class="btn btn-primary" value="Add" onclick="location.href='./contract_context_application.php';">
