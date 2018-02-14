@@ -282,7 +282,7 @@ include("./function.php");
 		<div class="row form-group" id="setVis" style="display: none">
 			<div class="col-md-2">
 				<select class="form-control" id="bu_list" name="bu_list" size="1" onchange="showSurvey(this.value)">
-					<option value='clean'><?php echo getLabel("label.business.clean"); ?></option>
+					<option value="clean"><?php echo getLabel("label.business.clean"); ?></option>
 					<?php
 					for ($i=1;$i < $max_bu_file+1 ; $i++) {
 						if ( file_exists($path_nagiosbpcfg_bu.$i) ){
@@ -297,11 +297,6 @@ include("./function.php");
 					<input class="btn btn-primary" type="button" name="survey" value="survey" onclick="preview()"/>
 				</div>
 			</div>
-		</div>
-		
-		<div class="row">
-			<br><br><a href="./admin_category_CI.php"><?php echo getLabel("label.business.infrastructure_category"); ?></a>
-			<br><a href="./admin_category_CA.php"><?php echo getLabel("label.business.acces_category"); ?></a>
 		</div>
 
 		<div class="col-md-3">

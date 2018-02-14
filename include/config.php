@@ -65,9 +65,6 @@ $max_display=5;
 // Display 0 or not ; Use it like a boolean with values 0/1
 $display_zero=1;
  
-// Number of back-up file to use for nagios configuration file.
-$max_bu_file = 5;
- 
 // Minimun and maximun number for duplicate process.
 $min_dup = 1000;
 $max_dup = 9999;
@@ -113,4 +110,6 @@ $default_maxport=1024;
 // # nagios
 $path_nagiosbpcfg="/srv/eyesofnetwork/eorweb/module/manage_bp/compat/nagios-bp.conf";
 $path_nagiosbpcfg_lock="/tmp/nagios_bp";
+$path_nagiosbpcfg_bu="/tmp/nagios-bp.conf";
+
 ?>

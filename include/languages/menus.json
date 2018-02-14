@@ -49,7 +49,7 @@
                         },
                         {
                             "name":"menu.link.business_tree",
-                            "url":"/module/manage_bp/viewer.php",
+                            "url":"/module/manage_bp/process_tree.php",
                             "target":"main"
                         }
                     ]

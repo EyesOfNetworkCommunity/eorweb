@@ -644,7 +644,7 @@ function setDisplay(value){
 
 function setVisible(value){
 	//alert("setVisible");
-	if ( value == "backup") {
+	if ( value == "back-up") {
 		$("#setVis").css("display","table-row");
 		showSurvey($("select[name=bu_list]").val());
 	}
@@ -656,8 +656,11 @@ function setVisible(value){
 
 function showSurvey(value){
 	//alert("showSurvey");
-	if ( value == "clean") $("input[name=survey]").css("visibility","hidden");
-	else $("input[name=survey]").css("visibility","visible");
+	if ( value == "clean") {
+		$("input[name=survey]").css("visibility","hidden");
+	} else {
+		$("input[name=survey]").css("visibility","visible");
+	}
 }
 
 function preview(){
