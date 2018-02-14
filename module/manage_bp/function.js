@@ -533,14 +533,19 @@ function makeTable(source,prio,name,url,cmd){
 	if( prio == "null") prio = 0;
 	else prio++;
 
-	table = $("table[id="+prio+"]");
+	table = $(".panel[id="+prio+"]");
 
 	if(table.css("display") == "none") {
-		table.css("display","inline");
+		table.css("display","block");
 		existingTable[prio] = true;
 	}
 
-	table.append("<tr><td nowrap><span name=\"source_name\">"+source+"</span></td><td nowrap><a href='add_process.php?name="+name+"&source="+source+"'>"+name+"</a></td><td><center><input type='checkbox' class='checkbox' name='bp_selected"+prio+"[]' value='"+name+"::"+source+"'></center></td></tr>");
+	insertion = $("#insert-"+prio);
+	insertion.append("<div class=\"row\">\
+		<div class=\"col-xs-4 col-md-4\" name=\"source_name\">"+source+"</div>\
+		<div class=\"col-xs-4 col-md-4\"><a href='add_process.php?name="+name+"&source="+source+"'>"+name+"</a></div>\
+		<div class=\"col-xs-4 col-md-4\"><input type='checkbox' class='checkbox' name='bp_selected"+prio+"[]' value='"+name+"::"+source+"'></div>\
+		</div>");
 }
 
 function resizeAll(){
@@ -615,8 +620,13 @@ function show(display){
 function appendDisplay(){
 	//alert("appendDisplay");
 	for (i = 0 ; i < max_display+2 ; i++) {
-		if ( (i != 0) && existingTable[i]) $("select[id=prio]").append("<option value='"+i+"'>Display "+(i-1)+"</option>");
-		else if ( (i == 0) && existingTable[i]) $("select[id=prio]").append("<option value='"+i+"'>No Display</option>");
+		if ( (i != 0) && existingTable[i]) {
+			$("select[id=prio]").append("<option value='"+i+"'>Display "+(i-1)+"</option>");
+		} else {
+			if ( (i == 0) && existingTable[i]) {
+				$("select[id=prio]").append("<option value='"+i+"'>No Display</option>");
+			}
+		}
 	}
 }
 

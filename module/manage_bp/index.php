@@ -25,7 +25,6 @@ include("../../side.php");
 include("./function.php");
 ?>
 
-<script src="./js/jquery.js"></script>
 <script src="./function.js"></script>
 <script src="../../bower_components/jquery/dist/jquery.min.js"></script>
 
@@ -273,6 +272,8 @@ include("./function.php");
 					<option value="back-up"><?php echo getLabel("label.business.back-up"); ?></option>
 				</select>
 			</div>
+		</div>
+		<div class="row form-group">
 			<div class="col-md-2">
 				<input class="btn btn-primary" type="submit" name="action" value="submit" onclick="javascript:return getConfirm(this.value);">
 			</div>
@@ -291,8 +292,10 @@ include("./function.php");
 					?>
 				</select>
 			</div>
-			<div class="col-md-3">
-				<input class="btn btn-primary" type="button" name="survey" value="survey" onclick="preview()"/>
+			<div class="row form-group">
+				<div class="col-md-2">
+					<input class="btn btn-primary" type="button" name="survey" value="survey" onclick="preview()"/>
+				</div>
 			</div>
 		</div>
 		
@@ -302,29 +305,46 @@ include("./function.php");
 		</div>
 
 		<div class="col-md-3">
-			<div class="panel panel-default table" id="0" style="display: none;">
+			<div class="panel panel-default" id="0" style="display: none;">
 				<div class="panel-heading">
-					Source  Name  Select
+					<div class="row">
+						<div class="col-xs-4 col-md-4">Source</div>
+						<div class="col-xs-4 col-md-4">Name</div>
+						<div class="col-xs-4 col-md-4">Select</div>
+					</div>
 				</div>
 				<div class="panel-body">
-					No display      <a href='#' onclick='javascript:selectAll(0)'>ALL</a>
+					<div class="col-xs-8 col-md-8">Display ".($i-$display_zero)."</div>
+					<div class="col-xs-4 col-md-4"><a href='#' onclick='javascript:selectAll($i)'>ALL</a></div>
 				</div>
 			</div>
 		</div>
 		
 		<?php
 			for ($i = 1 ; $i < $max_display+2 ; $i++){
-				echo "<div class=\"col-md-3\">
-					<div class=\"panel panel-default table\" id=\"$i\" >
-						<div class=\"panel-heading\">
-							Source  Name  Select
+				echo "<div class=\"row\">
+						<div class=\"col-md-4\">
+							<div class=\"panel panel-default\" id=\"$i\" style=\"display: none\">
+								<div class=\"panel-heading\">
+									<div class=\"row\">
+										<div class=\"col-xs-4 col-md-4\">Source</div>
+										<div class=\"col-xs-4 col-md-4\">Name</div>
+										<div class=\"col-xs-4 col-md-4\">Select</div>
+									</div>
+								</div>
+								<div class=\"panel-body\">
+									<div class=\"row\">
+										<div class=\"col-xs-8 col-md-8\">Display ".($i-$display_zero)."</div>
+										<div class=\"col-xs-4 col-md-4\"><a href='#' onclick='javascript:selectAll($i)'>ALL</a></div>
+									</div>
+									<div id=\"insert-".$i."\">
+									</div>
+								</div>
+							</div>
 						</div>
-						<div class=\"panel-body\">
-							Display ".($i-$display_zero)."       <a href='#' onclick='javascript:selectAll($i)'>ALL</a>
-						</div>
-					</div>
-				</div>";
+					</div>";
 		} ?>
+		</table>
 	<textarea cols='90' rows='25' id='survey' readonly scrolling='no' style='display:none;margin-top:10px;resize:none;'></textarea>
 </form>
 
@@ -338,10 +358,10 @@ include("./function.php");
 		}
 		else
 		{
-			echo "makeTable(".$database_vanillabp.",\"$metier[priority]\",\"$metier[name]\");\n";
+			echo "makeTable(\"".$database_vanillabp."\",\"$metier[priority]\",\"$metier[name]\");\n";
 		}
 	}?>
-	resizeAll();
+	//resizeAll();
 	appendDisplay();
 	show("all");
 	setVisible($("select[name=bp_mgt_list]").val());
