@@ -193,9 +193,9 @@ if(isset($_GET["name"])) {
 					<label style="font-weight:normal;" class="col-md-4 control-label">Type</label>
 					<div class="col-md-7">
 						<select class="form-control" size="1" name="process_type" onchange="javascript:ismin(this);">
-							<option value="et" selected>et</option>
-							<option value="ou">ou</option>
-							<option value="minimum">minimum</option>
+							<option value="ET" selected>et</option>
+							<option value="OU">ou</option>
+							<option value="MIN">minimum</option>
 						</select>
 					</div>
 				</div>
