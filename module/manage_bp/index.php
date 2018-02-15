@@ -279,6 +279,26 @@ include("./function.php");
 			</div>
 		</div>
 
+		<div class="row form-group" id="setVis" style="display: none">
+			<div class="col-md-2">
+				<select class="form-control" id="bu_list" name="bu_list" size="1" onchange="showSurvey(this.value)">
+					<option value="clean"><?php echo getLabel("label.business.clean"); ?></option>
+					<?php
+					for ($i=1;$i < $max_bu_file+1 ; $i++) {
+						if ( file_exists($path_nagiosbpcfg_bu.$i) ){
+							echo "<option value=\"$i\">Get $i</option>";
+						}
+					}
+					?>
+				</select>
+			</div>
+			<div class="row form-group">
+				<div class="col-md-2">
+					<input class="btn btn-primary" type="button" name="survey" value="survey" onclick="preview()"/>
+				</div>
+			</div>
+		</div>
+
 		<div class="row">
 			<div class="col-md-5">
 				<div class="panel panel-default" id="0" style="display: none;">

@@ -9,19 +9,23 @@ include("../../side.php");
 			<h1 class="page-header"><?php echo getLabel("label.manage_contracts.time_period_view_title"); ?></h1>
 		</div>
 	</div>
-	<div class="container pad-top col-md-12" id="container_table">
-	        <table class="table table-striped table-hover" id="myTable">
-		    <thead>
-			    <tr>
-					<th></th>
-			        <th><?php echo getLabel("label.name"); ?></th>
-	            	<th><?php echo getLabel("label.time_period_defined"); ?></th>
-					<th><?php echo getLabel("label.edit"); ?></th>
-			    </tr>
-		    </thead>
-			<tbody id="body_table">
-			</tbody>
-		</table>
+	<div class="Table_wrapper">
+		<div class="table-responsive">
+			<div class="container pad-top col-md-12" id="container_table">
+					<table class="table table-striped table-hover" id="myTable">
+					<thead>
+						<tr>
+							<th></th>
+							<th><?php echo getLabel("label.name"); ?></th>
+							<th><?php echo getLabel("label.time_period_defined"); ?></th>
+							<th><?php echo getLabel("label.edit"); ?></th>
+						</tr>
+					</thead>
+					<tbody id="body_table">
+					</tbody>
+				</table>
+			</div>
+		</div>
 	</div>
 	<div class="col-md-12">
 		<input type="button" class="btn btn-primary" value="Add" onclick="location.href='./time_period.php';">

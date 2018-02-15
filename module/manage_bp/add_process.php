@@ -28,23 +28,7 @@ include("./function.php");
 <script src="./function.js"></script>
 <script src="../../bower_components/jquery/dist/jquery.min.js"></script>
 
-<div id="page-wrapper">
-
 <?php
-if(isset($_GET["name"])) {
-	echo "<div class=\"row\">
-			<div class=\"col-md-12\">
-				<h1 class=\"page-header\">Modify</h1>
-			</div>
-		</div>";
-} else {
-	echo "<div class=\"row\">
-			<div class=\"col-md-12\">
-				<h1 class=\"page-header\">Add</h1>
-			</div>
-		</div>";
-}
-
 	//Escape special chars (",',etc..)
 	//Encode for the URL. (&,+,etc..)
 	$bp_source=retrieve_form_data("source_name",null);
@@ -62,8 +46,8 @@ if(isset($_GET["name"])) {
 	switch ($action){
 		case "add" :
 			if ($bp_uname == "") {
-				echo "<div class=\"row\">";
-				message(7,": Unique name not set !", "critical");
+				echo "<div id=\"message\"class=\"row\">";
+				message(11,"Unique name not set !", "critical");
 				echo "</div>";
 			} else {
 				$current_request = "INSERT INTO bp VALUES('$bp_uname','$bp_name','$bp_prio','$bp_type','$bp_cmd','$bp_url','$bp_type_min','')";
@@ -72,10 +56,10 @@ if(isset($_GET["name"])) {
 				}
 				$return = sqlrequest($bp_source,$current_request);
 				if ( $return ) {
-					echo "<script>document.location.replace(\"add_mod_bp.php?uname=$bp_uname&source=$bp_source\");</script>";
+					//echo "<script>document.location.replace(\"add_mod_bp.php?uname=$bp_uname&source=$bp_source\");</script>";
 				} else {
-					echo "<div class=\"row\">";
-					message(7,$current_request ,"critical");
+					echo "<div id=\"message\"class=\"row\">";
+					message(0,$current_request ,"critical");
 					echo "</div>";
 				}
 			}
@@ -83,7 +67,7 @@ if(isset($_GET["name"])) {
 		case "modify" :
 			if ($bp_uname == "") {
 				echo "<div id=\"message\"class=\"row\">";
-				message(7,": Unique name not set !", "critical");
+				message(11,"Unique name not set !", "critical");
 				echo "</div>";
 			} else {
 				$sqlrequest="UPDATE bp SET name='$bp_uname',description='$bp_name',priority='$bp_prio',type='$bp_type',command='$bp_cmd',url='$bp_url',min_value='$bp_type_min' WHERE name='$bp_uname'";
@@ -92,12 +76,29 @@ if(isset($_GET["name"])) {
 					echo "<script>document.location.replace(\"add_mod_bp.php?uname=$bp_uname&source=$bp_source\");</script>";
 				} else {
 					echo "<div id=\"message\"class=\"row\">";
-					message(7,": Could not update Database $bp_source","critical");
+					message(0,": Could not update Database $bp_source","critical");
 					echo "</div>";
 				}
 			}
 			break ;
 	}
+
+
+if(isset($_GET["name"])) {
+	echo "<div id=\"page-wrapper\">
+			<div class=\"row\">
+				<div class=\"col-md-12\">
+					<h1 class=\"page-header\">Modify</h1>
+				</div>
+			</div>";
+} else {
+	echo "<<div id=\"page-wrapper\">
+			<div class=\"row\">
+				<div class=\"col-md-12\">
+					<h1 class=\"page-header\">Add</h1>
+				</div>
+			</div>";
+}
 
 	global $max_display;
 	global $display_zero;
@@ -193,9 +194,9 @@ if(isset($_GET["name"])) {
 					<label style="font-weight:normal;" class="col-md-4 control-label">Type</label>
 					<div class="col-md-7">
 						<select class="form-control" size="1" name="process_type" onchange="javascript:ismin(this);">
-							<option value="ET" selected>et</option>
-							<option value="OU">ou</option>
-							<option value="MIN">minimum</option>
+							<option value="et" selected>et</option>
+							<option value="ou">ou</option>
+							<option value="minimum">minimum</option>
 						</select>
 					</div>
 				</div>

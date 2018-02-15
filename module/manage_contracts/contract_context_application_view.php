@@ -12,7 +12,7 @@ include("../../side.php");
 	<div class="container pad-top col-md-12" id="container_table">
 		<div class="dataTable_wrapper">
 			<div class="table-responsive">
-				<table class="table table-striped datatable-eonweb" id="myTable">
+				<table class="table table-striped" id="myTable">
 					<thead>
 						<tr>
 							<th class="radius_th"></th>
