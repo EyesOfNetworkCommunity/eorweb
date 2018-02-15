@@ -19,16 +19,10 @@
 #
 #########################################
 */
+include("../../header.php");
+include("../../side.php");
 ?>
-<html>
-<head>
-        <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-        <?php
-			include("../../include/include_module.php");
-		?>
-        
-
-</head>
+<div id="page-wrapper">
 <?php
 /* ~~~~~~~~~~ FUNCTIONS ~~~~~~~~~~ */
 	/**
@@ -91,7 +85,12 @@
 	$result = sqlrequest($_GET[source],"SELECT '$_GET[source]' as source, name, description, priority, type,command,url,min_value,is_define FROM bp WHERE name='$_GET[uname]'");
 	$metier = mysql_fetch_assoc($result);
 ?>
-<body id="main">
+
+	<div class="row">
+		<div class="col-md-12">
+			<h1 class="page-header"><?php ?></h1>
+		</div>
+	</div>
 	<form action='./add_mod_bp.php' method='POST' name='form_bp'>
 		<span id="output"></span>
 		<center>
@@ -174,74 +173,73 @@
 			</table>
 		</center>
 	</form>
-	<?php 
-		$nbrServ = 0;
-		$tabMetier = sqlArrayDatabase($_GET["source"],"SELECT '$_GET[source]' as source, name, description, priority, type,command,url,min_value,is_define FROM bp WHERE name NOT IN (SELECT bp_name FROM bp_links WHERE bp_link='$_GET[uname]')");
-		$result = sqlArrayDatabase($_GET["source"],"SELECT '$_GET[source]' as source,id, bp_name, host, service FROM bp_services WHERE `bp_name`='$_GET[uname]'");
-		$nbrServ += count($result)."<br>";
-		
-		$result = sqlArrayDatabase($_GET["source"],"SELECT '$_GET[source]' as source,id, bp_name, bp_link FROM bp_links WHERE `bp_name`='$_GET[uname]'");
-		$nbrServ += count($result)."<br>";
-	?>
+<?php 
+	$nbrServ = 0;
+	$tabMetier = sqlArrayDatabase($_GET["source"],"SELECT '$_GET[source]' as source, name, description, priority, type,command,url,min_value,is_define FROM bp WHERE name NOT IN (SELECT bp_name FROM bp_links WHERE bp_link='$_GET[uname]')");
+	$result = sqlArrayDatabase($_GET["source"],"SELECT '$_GET[source]' as source,id, bp_name, host, service FROM bp_services WHERE `bp_name`='$_GET[uname]'");
+	$nbrServ += count($result)."<br>";
+	
+	$result = sqlArrayDatabase($_GET["source"],"SELECT '$_GET[source]' as source,id, bp_name, bp_link FROM bp_links WHERE `bp_name`='$_GET[uname]'");
+	$nbrServ += count($result)."<br>";
+?>
 
-	<script type="text/javascript" src="function.js"></script>
-	<script type="text/javascript" src="../../js/jquery.js"></script>
-	<script type="text/javascript" src="../../js/jquery.autocomplete.js"></script>
-	<script type="text/javascript">
-		$("input[name=equip]").attr("disabled", true);
-		$("#sourceinput").attr("checked", true);
+<script type="text/javascript" src="function.js"></script>
+<script type="text/javascript" src="../../js/jquery.js"></script>
+<script type="text/javascript" src="../../js/jquery.autocomplete.js"></script>
+<script type="text/javascript">
+	$("input[name=equip]").attr("disabled", true);
+	$("#sourceinput").attr("checked", true);
+	
+	$("#check").attr("checked", true);
+	selectValueSource("changesource", true);
+	selectValue("change", true);
 		
-		$("#check").attr("checked", true);
-		selectValueSource("changesource", true);
-		selectValue("change", true);
-			
-		setValues("<?php echo $_GET['uname']?>", <?php echo json_encode($tabMetier) ?>,"<?php echo $_GET['source']?>","<?php echo $nbrServ?>","<?php echo $metier['min_value'];?>");
-		
-		<?php 
-		if ( $metier['is_define']){
-			$result = sqlArrayDatabase($_GET[source],"SELECT '$_GET[source]' as source,id, bp_name, host, service FROM bp_services WHERE bp_name='$_GET[uname]'");
-        // DEBUG
-          //echo "\n\n/* SQLREQUEST Serv is:SELECT '".$_GET[source]."' as source,id, bp_name, host, service FROM bp_services WHERE bp_name='".$_GET[uname]."'\n";
-          //echo "\n Result:".var_dump($result)."\n";
-          //echo "\n*/\n";
-        // FIN DEBUG
-			echo "setServ(".json_encode($result).");";
-      
-      
-      if ( $_GET[source] == "global_nagiosbp" ) {
-			  $result = sqlArrayDatabase($_GET[source],"SELECT '$_GET[source]' as source,id, bp_name, bp_link, bp_source FROM bp_links WHERE bp_name='$_GET[uname]'");
-        // DEBUG
-          //echo "\n\n/* SQLREQUEST Proc is:SELECT '".$_GET[source]."' as source,id, bp_name, bp_link, bp_source FROM bp_links WHERE bp_name='".$_GET[uname]."'\n";
-          //echo "\n Result:".var_dump($result)."\n";
-          //echo "\n*/\n";
-        // FIN DEBUG
-      }
-      else {
-        $result = sqlArrayDatabase($_GET[source],"SELECT '$_GET[source]' as source,id, bp_name, bp_link, '$_GET[source]' as bp_source  FROM bp_links WHERE bp_name='$_GET[uname]'");
-      }
-        
-			echo "setProc(".json_encode($result).");";
-		} 
-		?>
-		
-		/* ~~~~~~~~~~ griser les champs quand SOURCE = vide ~~~~~~~~~~ */
-		// les 2 champs sont disabled de base (tout en bas du code)
-		$('body').bind("change", "input[name=source]", function(){
-			var source_value = $("input[name=source]").val();
-			if(source_value != "")
-			{
-				$("input[name=equip]").attr("disabled", false);
-				$("#change").attr("disabled", false);
-				$("#check").attr("disabled", false);
-			}
-			else
-			{
-				$("input[name=equip]").attr("disabled", true);
-				$("#change").attr("disabled", true);
-				$("#check").attr("disabled", true);
-			}
-		});
-		/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
-	</script>
-</body>
-</html>
+	setValues("<?php echo $_GET['uname']?>", <?php echo json_encode($tabMetier) ?>,"<?php echo $_GET['source']?>","<?php echo $nbrServ?>","<?php echo $metier['min_value'];?>");
+	
+	<?php 
+	if ( $metier['is_define']){
+		$result = sqlArrayDatabase($_GET[source],"SELECT '$_GET[source]' as source,id, bp_name, host, service FROM bp_services WHERE bp_name='$_GET[uname]'");
+	// DEBUG
+	  //echo "\n\n/* SQLREQUEST Serv is:SELECT '".$_GET[source]."' as source,id, bp_name, host, service FROM bp_services WHERE bp_name='".$_GET[uname]."'\n";
+	  //echo "\n Result:".var_dump($result)."\n";
+	  //echo "\n*/\n";
+	// FIN DEBUG
+		echo "setServ(".json_encode($result).");";
+  
+  
+  if ( $_GET[source] == "global_nagiosbp" ) {
+		  $result = sqlArrayDatabase($_GET[source],"SELECT '$_GET[source]' as source,id, bp_name, bp_link, bp_source FROM bp_links WHERE bp_name='$_GET[uname]'");
+	// DEBUG
+	  //echo "\n\n/* SQLREQUEST Proc is:SELECT '".$_GET[source]."' as source,id, bp_name, bp_link, bp_source FROM bp_links WHERE bp_name='".$_GET[uname]."'\n";
+	  //echo "\n Result:".var_dump($result)."\n";
+	  //echo "\n*/\n";
+	// FIN DEBUG
+  }
+  else {
+	$result = sqlArrayDatabase($_GET[source],"SELECT '$_GET[source]' as source,id, bp_name, bp_link, '$_GET[source]' as bp_source  FROM bp_links WHERE bp_name='$_GET[uname]'");
+  }
+	
+		echo "setProc(".json_encode($result).");";
+	} 
+	?>
+	
+	/* ~~~~~~~~~~ griser les champs quand SOURCE = vide ~~~~~~~~~~ */
+	// les 2 champs sont disabled de base (tout en bas du code)
+	$('body').bind("change", "input[name=source]", function(){
+		var source_value = $("input[name=source]").val();
+		if(source_value != "")
+		{
+			$("input[name=equip]").attr("disabled", false);
+			$("#change").attr("disabled", false);
+			$("#check").attr("disabled", false);
+		}
+		else
+		{
+			$("input[name=equip]").attr("disabled", true);
+			$("#change").attr("disabled", true);
+			$("#check").attr("disabled", true);
+		}
+	});
+	/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+</script>
+</div>
