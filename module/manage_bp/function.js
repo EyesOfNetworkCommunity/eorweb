@@ -182,7 +182,10 @@ function setProc(tabProc){
 		$("#proc").append("<option value='"+name+"'>"+name+"</option>");	//Append a true fake option. To detach it as an objet.
 		deletedProc[indProc++] = $('#proc option[value="'+name+'"]').detach();
 		//alert(name);
-		$('#sum').append("<tr><td>"+name+"</td><td><center><input name='del[]' type='checkbox' class='checkbox'/></center></td></tr>");
+		$('#sum').append("<div class=\"row\">\
+							<div class=\"col-md-12\">\
+							"+name+" <input name='del[]' type='checkbox'/>\
+							</div></div>");
 	}
 }
 
@@ -554,12 +557,12 @@ function resizeAll(){
 	maxsize = 0;
 
 	for (i = 0 ; i < max_display+2 ; i++) {
-		taille = $("table[id="+i+"]").width();	//With the inline display, we get the real width
+		taille = $("panel[id="+i+"]").width();	//With the inline display, we get the real width
 		if ( taille > maxsize) maxsize = taille ;
 	}
 
 	for (i = 0 ; i < max_display+2 ; i++) {
-		table = $("table[id="+i+"]");
+		table = $("panel[id="+i+"]");
 		table.css("display","table");	//Change the display, then we can change the width. Else it do nothing.
 		table.width(maxsize+5);	//Some problems with IE. May need more than "+5"px
 	}
@@ -569,7 +572,7 @@ function resizeAll(){
 	size = 33*size/100 ; // 1/3 of table width. (Or more with nowrap attribut)
 	for (i = 0 ; i < max_display+2 ; i++) {
 		//Get the table, then the thead child of the table, then the tr childs, then the td childs
-		child = $("table[id="+i+"]").children("thead").children().children() ;
+		child = $("panel[id="+i+"]").children("thead").children().children() ;
 		for ( j = 0 ; j < 3 ; j++) child[j].style.width=size;
 	}
 
@@ -592,26 +595,26 @@ function show(display){
 
 	if ( display == "all"){
 		for (i = 0 ; i < max_display+2 ; i++) {
-			$("table[id="+i+"]").css("display","none");	//hide all
+			$("panel[id="+i+"]").css("display","none");	//hide all
 		}
 		$("#survey").css("display","none");
 
 		for (i = 0 ; i < max_display+2 ; i++) {
-			if ( existingTable[i]) $("table[id="+i+"]").css("display","table");	//Show existing
+			if ( existingTable[i]) $("panel[id="+i+"]").css("display","table");	//Show existing
 		}
 	}
 	else {
 		if ( display == "survey"){
 			for (i = 0 ; i < max_display+2 ; i++) {
-				$("table[id="+i+"]").css("display","none");	//hide all
+				$("panel[id="+i+"]").css("display","none");	//hide all
 			}
 			$("#survey").css("display","block");
 		}
 		else {
 			$("#survey").css("display","none");
 			for (i = 0 ; i < max_display+2 ; i++) {
-				if (i == display ) $("table[id="+i+"]").css("display","table");
-				else $("table[id="+i+"]").css("display","none");
+				if (i == display ) $("panel[id="+i+"]").css("display","table");
+				else $("panel[id="+i+"]").css("display","none");
 			}
 		}
 	}
@@ -672,7 +675,7 @@ function preview(){
 function resultSurvey(datas){
 	//alert("resultSurvey");
 	for (i = 0 ; i < max_display+2 ; i++) {
-		$("table[id="+i+"]").css("display","none");	//hide all
+		$("panel[id="+i+"]").css("display","none");	//hide all
 	}
 
 	$("select[id=prio] option[value='survey']").detach();

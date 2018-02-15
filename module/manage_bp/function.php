@@ -308,4 +308,6 @@ function create_infra_access($bp_uname, $bp_source) {
     sqlrequest($database_vanillabp, "INSERT INTO bp (name,description, priority, type, command, url, min_value, is_define) VALUES ('".$name."_CA','".$name."_CA',5,'ET','','','',1)");
     sqlrequest($database_vanillabp, "INSERT INTO bp_links (bp_name,bp_link, bp_source) VALUES ('".$name."','".$name."_CI','".$bp_source."')");
     sqlrequest($database_vanillabp, "INSERT INTO bp_links (bp_name,bp_link, bp_source) VALUES ('".$name."','".$name."_CA','".$bp_source."')");
+    sqlrequest($database_vanillabp, "INSERT INTO bp_services (bp_name,bp_link, bp_source) VALUES ('".$name."','".$name."_CI','".$bp_source."')");
+    sqlrequest($database_vanillabp, "INSERT INTO bp_services (bp_name,bp_link, bp_source) VALUES ('".$name."','".$name."_CA','".$bp_source."')");
 }

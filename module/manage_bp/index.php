@@ -112,9 +112,9 @@ include("./function.php");
 		           // Get the db_sources_from_nickname //
 		        	$resultsource=sqlrequest($database_vanillabp,"SELECT db_names FROM bp_sources WHERE nick_name='$Source'");
         
-		          while ($db_line = mysql_fetch_array($resultsource))
+		          while ($db_line = mysqli_fetch_array($resultsource))
 		          {
-		                  $Source = $db_line[db_names];
+		                  $Source = $db_line['db_names'];
 		          }
           
 					$result = sqlArrayDatabase($Source,"SELECT bp_name FROM bp_links WHERE bp_link='$bp_name'");
@@ -215,11 +215,11 @@ include("./function.php");
 				sqlrequest($database_vanillabp,"DELETE FROM bp_services");
 				sqlrequest($database_vanillabp,"DELETE FROM bp_links");
 
-			    while ($db_line = mysql_fetch_array($result))
+			    while ($db_line = mysqli_fetch_array($result))
 			    {
-			    		sqlrequest($db_line[db_names],"DELETE FROM bp");
-						sqlrequest($db_line[db_names],"DELETE FROM bp_services");
-						sqlrequest($db_line[db_names],"DELETE FROM bp_links");
+			    		sqlrequest($db_line['db_names'],"DELETE FROM bp");
+						sqlrequest($db_line['db_names'],"DELETE FROM bp_services");
+						sqlrequest($db_line['db_names'],"DELETE FROM bp_links");
 				}
 
 				message(6,"","ok");
@@ -235,7 +235,7 @@ include("./function.php");
 	if ( file_exists($path_nagiosbpcfg_lock)){
 		sleep(1);
 		if ( file_exists($path_nagiosbpcfg_lock)){
-			echo $xmlmodules->getElementsByTagName("manage_bp")->item(0)->getAttribute("check");
+			//echo $xmlmodules->getElementsByTagName("manage_bp")->item(0)->getAttribute("check");
 			echo "   <a href=index.php?del=$path_nagiosbpcfg_lock>yes</a> | <a href=index.php>No</a>";
 			exit;
 		}
@@ -246,8 +246,7 @@ include("./function.php");
     $tabMetier = array();
 	$result=sqlrequest($database_vanillabp,"SELECT db_names, nick_name FROM bp_sources");
 
-    while ($db_line = mysqli_fetch_array($result))
-    {
+    while ($db_line = mysqli_fetch_array($result)) {
 	    $tabMetier = array_merge($tabMetier,sqlArrayDatabase($db_line['db_names'],"SELECT '$db_line[nick_name]' as nick_name, '$db_line[db_names]' as db_names, name, description, priority, type,command,url,min_value,is_define FROM bp ORDER BY name ASC"));
     }
 ?>
@@ -289,8 +288,11 @@ include("./function.php");
 						</div>
 					</div>
 					<div class="panel-body">
-						<div class="col-xs-8 col-md-8">No display</div>
-						<div class="col-xs-4 col-md-4"><a href='#' onclick='javascript:selectAll(0)'>ALL</a></div>
+						<div class="row">
+							<div class="col-xs-8 col-md-8">No display</div>
+							<div class="col-xs-4 col-md-4"><a href='#' onclick='javascript:selectAll(0)'>ALL</a></div>
+						</div>
+						<div id="insert-0"></div>
 					</div>
 				</div>
 			</div>
@@ -337,10 +339,9 @@ include("./function.php");
 			echo "makeTable(\"".$database_vanillabp."\",\"$metier[priority]\",\"$metier[name]\");\n";
 		}
 	}?>
-	//resizeAll();
-	appendDisplay();
-	show("all");
-	setVisible($("select[name=bp_mgt_list]").val());
+	//appendDisplay();
+	//show("all");
+	//setVisible($("select[name=bp_mgt_list]").val());
 </script>
 
 <?php
