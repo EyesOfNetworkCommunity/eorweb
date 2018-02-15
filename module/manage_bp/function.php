@@ -301,6 +301,7 @@ function create_infra_access($bp_uname, $bp_source) {
     if ($bp_source == "global_nagiosbp") {
         $bp_source = "global"; 
     }
+<<<<<<< HEAD
 
     sqlrequest($database_vanillabp, "INSERT INTO bp_category (bp_name,bp_source,category) VALUES ('".$name."_CI','".$bp_source."','Core Infrastructure')");
     sqlrequest($database_vanillabp, "INSERT INTO bp_category (bp_name,bp_source,category) VALUES ('".$name."_CA','".$bp_source."','Customer Access')");
@@ -310,4 +311,20 @@ function create_infra_access($bp_uname, $bp_source) {
     sqlrequest($database_vanillabp, "INSERT INTO bp_links (bp_name,bp_link, bp_source) VALUES ('".$name."','".$name."_CA','".$bp_source."')");
     sqlrequest($database_vanillabp, "INSERT INTO bp_services (bp_name,bp_link, bp_source) VALUES ('".$name."','".$name."_CI','".$bp_source."')");
     sqlrequest($database_vanillabp, "INSERT INTO bp_services (bp_name,bp_link, bp_source) VALUES ('".$name."','".$name."_CA','".$bp_source."')");
+=======
+    $current_request = "INSERT INTO bp_category (bp_name,bp_source,category) VALUES ('".$bp_uname."_CI','".$bp_source."','Core Infrastructure')";
+    $return =  sqlrequest($database_vanillabp, $current_request);
+    if (! $return ) {
+        echo "<div id=\"message\"class=\"row\">";
+        message(0,$current_request ,"critical");
+        echo "</div>";
+    }
+    $current_request2 = "INSERT INTO bp_category (bp_name,bp_source,category) VALUES ('".$bp_uname."_CA','".$bp_source."','Customer Access')";
+    $return2 =  sqlrequest($database_vanillabp, $current_request2);
+    if (! $return2 ) {
+        echo "<div id=\"message\"class=\"row\">";
+        message(0,$current_request2 ,"critical");
+        echo "</div>";
+    }
+>>>>>>> 536d4335876dd7286b9929d1b8a750c6d650a739
 }

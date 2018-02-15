@@ -231,7 +231,9 @@ include("../../side.php");
 		else
 		{
 			echo '<div class="row">
+					<div class="col-lg-12">
 						<h1 class="page-header">'.getLabel("label.admin_user.title_upd").'</h1>
+					</div>
 				</div>';
 
 			//------------------------------------------------------------------------------------------------

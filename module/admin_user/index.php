@@ -27,7 +27,9 @@ include("../../side.php");
 <div id="page-wrapper">
 
 	<div class="row">
-		<h1 class="page-header"><?php echo getLabel("label.admin_user.title"); ?></h1>
+		<div class="col-lg-12">
+			<h1 class="page-header"><?php echo getLabel("label.admin_user.title"); ?></h1>
+		</div>
 	</div>
 
 	<?php 
@@ -71,7 +73,6 @@ include("../../side.php");
 	$user_name_descr=sqlrequest("$database_eonweb"," SELECT user_name,user_descr,user_id,group_name,user_type,user_email,user_limitation FROM users LEFT OUTER JOIN groups ON groups.group_id = users.group_id ORDER BY user_name");
 	 ?>
 
-	<div class="row">
 		<form action="./index.php" method="GET" class="form-inline">
 			<div class="dataTable_wrapper">
 				<table class="table table-striped datatable-eonweb table-condensed">
@@ -146,7 +147,7 @@ include("../../side.php");
 			</div>
 			<button class="btn btn-primary" type="submit" name="action" value="submit"><?php echo getLabel("action.submit"); ?></button>
 		</form>
-	</div>
+
 </div>
 
 <?php include("../../footer.php"); ?>

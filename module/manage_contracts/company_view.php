@@ -10,17 +10,21 @@ include("../../side.php");
 		</div>
 	</div>
 	<div class="row">
-        <table class="table table-striped table-hover" id="myTable">
-		    <thead class="altTop">
-			    <tr>
-					<th></th>
-			        <th><?php echo getLabel("label.name"); ?></th>
-					<th><?php echo getLabel("label.edit"); ?></th>
-			    </tr>
-		    </thead>
-			<tbody id="body_table">
-			</tbody>
-		</table>
+		<div class="Table_wrapper">
+			<div class="table-responsive">
+				<table class="table table-striped table-hover" id="myTable">
+					<thead class="altTop">
+						<tr>
+							<th></th>
+							<th><?php echo getLabel("label.name"); ?></th>
+							<th><?php echo getLabel("label.edit"); ?></th>
+						</tr>
+					</thead>
+					<tbody id="body_table">
+					</tbody>
+				</table>
+			</div>
+		</div>
 		<div class="col-md-12">
 			<input type="button" class="btn btn-primary" value="Add" onclick="location.href='./company.php';">
 		</div>
