@@ -19,10 +19,13 @@
 #
 #########################################
 */
+
 include("../../header.php");
 include("../../side.php");
 include("./function.php");
+
 global $database_vanillabp;
+
 $nick_name = getNickName($_GET["source"]);
 	
 	// ~~~~~~~~~~~~ TEST ~~~~~~~~~~~~ // 
