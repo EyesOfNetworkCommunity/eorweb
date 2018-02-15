@@ -499,7 +499,7 @@ function loadData(datas){
 
 function ismin(objet) {
 	//alert ("ismin");
-	if ( objet.value == "MIN") 
+	if ( objet.value == "minimum") 
 		document.form_bp.process_type_min.disabled=false;
 	else 
 		document.form_bp.process_type_min.disabled=true;
@@ -708,4 +708,24 @@ function getConfirm(value){
 		}
 	}
 	else return confirm("Are you sure?");
+}
+
+function set_display_number() {
+	if (document.form_bp.source_name.value == "global_nagiosbp") {
+		document.form_bp.process_prio.innerHTML = "<option value=\"null\">None</option>\
+			<option value=\"1\">1</option>\
+			<option value=\"2\">2</option>\
+			<option value=\"3\">3</option>\
+			<option value=\"4\">4</option>\
+			<option value=\"5\">5</option>";
+	} else {
+		document.form_bp.process_prio.innerHTML = "<option value=\"null\">None</option>\
+			<option value=\"0\">0</option>\
+			<option value=\"1\">1</option>\
+			<option value=\"2\">2</option>\
+			<option value=\"3\">3</option>\
+			<option value=\"4\">4</option>\
+			<option value=\"5\">5</option>";
+	}
+	
 }

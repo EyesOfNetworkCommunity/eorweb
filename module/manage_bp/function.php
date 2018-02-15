@@ -294,3 +294,24 @@ function display_bp_linked($bp_name, $bp_source) {
 function display_service($host_service,$name,$source_global,$source,$prio) {
     print "<ul><span class=\"nav-header glyphicon glyphicon-cog\" style=\"display: inline;\"> ".$host_service."</span></ul>";
 }
+
+function create_infra_access($bp_uname, $bp_source) {
+    global $database_vanillabp;
+    if ($bp_source == "global_nagiosbp") {
+        $bp_source = "global"; 
+    }
+    $current_request = "INSERT INTO bp_category (bp_name,bp_source,category) VALUES ('".$bp_uname."_CI','".$bp_source."','Core Infrastructure')";
+    $return =  sqlrequest($database_vanillabp, $current_request);
+    if (! $return ) {
+        echo "<div id=\"message\"class=\"row\">";
+        message(0,$current_request ,"critical");
+        echo "</div>";
+    }
+    $current_request2 = "INSERT INTO bp_category (bp_name,bp_source,category) VALUES ('".$bp_uname."_CA','".$bp_source."','Customer Access')";
+    $return2 =  sqlrequest($database_vanillabp, $current_request2);
+    if (! $return2 ) {
+        echo "<div id=\"message\"class=\"row\">";
+        message(0,$current_request2 ,"critical");
+        echo "</div>";
+    }
+}

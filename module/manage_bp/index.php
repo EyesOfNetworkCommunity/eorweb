@@ -310,8 +310,8 @@ include("./function.php");
 						</div>
 					</div>
 					<div class="panel-body">
-						<div class="col-xs-8 col-md-8">Display ".($i-$display_zero)."</div>
-						<div class="col-xs-4 col-md-4"><a href='#' onclick='javascript:selectAll($i)'>ALL</a></div>
+						<div class="col-xs-8 col-md-8">No display</div>
+						<div class="col-xs-4 col-md-4"><a href='#' onclick='javascript:selectAll(0)'>ALL</a></div>
 					</div>
 				</div>
 			</div>
