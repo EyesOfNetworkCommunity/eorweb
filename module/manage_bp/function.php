@@ -297,12 +297,15 @@ function display_service($host_service,$name,$source_global,$source,$prio) {
 
 function create_infra_access($bp_uname, $bp_source) {
     global $database_vanillabp;
+    $name = $bp_uname;
     if ($bp_source == "global_nagiosbp") {
         $bp_source = "global"; 
     }
 
-    sqlrequest($database_vanillabp, "INSERT INTO bp_category (bp_name,bp_source,category) VALUES ('".$bp_uname."_CI','".$bp_source."','Core Infrastructure')");
-    sqlrequest($database_vanillabp, "INSERT INTO bp_category (bp_name,bp_source,category) VALUES ('".$bp_uname."_CA','".$bp_source."','Customer Access')");
-    sqlrequest($database_vanillabp, "INSERT INTO bp (name,description, priority, type, command, url,min_value,is_define) VALUES()");
-    sqlrequest($database_vanillabp, "");
+    sqlrequest($database_vanillabp, "INSERT INTO bp_category (bp_name,bp_source,category) VALUES ('".$name."_CI','".$bp_source."','Core Infrastructure')");
+    sqlrequest($database_vanillabp, "INSERT INTO bp_category (bp_name,bp_source,category) VALUES ('".$name."_CA','".$bp_source."','Customer Access')");
+    sqlrequest($database_vanillabp, "INSERT INTO bp (name,description, priority, type, command, url, min_value, is_define) VALUES ('".$name."_CI','".$name."_CI',5,'ET','','','',1)");
+    sqlrequest($database_vanillabp, "INSERT INTO bp (name,description, priority, type, command, url, min_value, is_define) VALUES ('".$name."_CA','".$name."_CA',5,'ET','','','',1)");
+    sqlrequest($database_vanillabp, "INSERT INTO bp_links (bp_name,bp_link, bp_source) VALUES ('".$name."','".$name."_CI','".$bp_source."')");
+    sqlrequest($database_vanillabp, "INSERT INTO bp_links (bp_name,bp_link, bp_source) VALUES ('".$name."','".$name."_CA','".$bp_source."')");
 }

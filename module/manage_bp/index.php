@@ -71,11 +71,10 @@ include("./function.php");
 					$Source = $bp_parts[1];
 					
            // Get the db_sources_from_nickname //
-          	$resultsource=sqlrequest("global_nagiosbp","SELECT db_names FROM bp_sources WHERE nick_name='$Source'");
-          
-            while ($db_line = mysql_fetch_array($resultsource))
-            {
-                    $Source = $db_line[db_names];
+          	$resultsource=sqlrequest($database_vanillabp,"SELECT db_names FROM bp_sources WHERE nick_name='$Source'");
+          	
+            while ($db_line = mysqli_fetch_array($resultsource)) {
+                    $Source = $db_line['db_names'];
             }       
 					$result = sqlArrayDatabase($Source,"SELECT bp_name FROM bp_links WHERE bp_link='$bp_name'");
 					if ( $result ){
@@ -110,13 +109,13 @@ include("./function.php");
 					$bp_name = $bp_parts[0];
 					$Source = $bp_parts[1];
                   
-           // Get the db_sources_from_nickname //
-        	$resultsource=sqlrequest("global_nagiosbp","SELECT db_names FROM bp_sources WHERE nick_name='$Source'");
+		           // Get the db_sources_from_nickname //
+		        	$resultsource=sqlrequest($database_vanillabp,"SELECT db_names FROM bp_sources WHERE nick_name='$Source'");
         
-          while ($db_line = mysql_fetch_array($resultsource))
-          {
-                  $Source = $db_line[db_names];
-          }
+		          while ($db_line = mysql_fetch_array($resultsource))
+		          {
+		                  $Source = $db_line[db_names];
+		          }
           
 					$result = sqlArrayDatabase($Source,"SELECT bp_name FROM bp_links WHERE bp_link='$bp_name'");
 					sqlrequest($Source,"DELETE FROM bp_links WHERE bp_name='$bp_name'");
