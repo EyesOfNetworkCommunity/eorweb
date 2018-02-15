@@ -249,7 +249,7 @@ include("./function.php");
 
     while ($db_line = mysqli_fetch_array($result))
     {
-	    $tabMetier = array_merge($tabMetier,sqlArrayDatabase($db_line['db_names'],"SELECT nick_name as".$db_line['nick_name'].", db_names as".$db_line['db_names'].", bp.name, bp.description, priority, type,command,url,min_value,is_define FROM bp,bp_sources ORDER BY name ASC"));
+	    $tabMetier = array_merge($tabMetier,sqlArrayDatabase($db_line['db_names'],"SELECT '$db_line[nick_name]' as nick_name, '$db_line[db_names]' as db_names, name, description, priority, type,command,url,min_value,is_define FROM bp ORDER BY name ASC"));
     }
 ?>
 <form action='./index.php' method='GET'>
@@ -299,26 +299,28 @@ include("./function.php");
 			</div>
 		</div>
 
-		<div class="col-md-3">
-			<div class="panel panel-default" id="0" style="display: none;">
-				<div class="panel-heading">
-					<div class="row">
-						<div class="col-xs-4 col-md-4">Source</div>
-						<div class="col-xs-4 col-md-4">Name</div>
-						<div class="col-xs-4 col-md-4">Select</div>
+		<div class="row">
+			<div class="col-md-5">
+				<div class="panel panel-default" id="0" style="display: none;">
+					<div class="panel-heading">
+						<div class="row">
+							<div class="col-xs-4 col-md-4">Source</div>
+							<div class="col-xs-4 col-md-4">Name</div>
+							<div class="col-xs-4 col-md-4">Select</div>
+						</div>
 					</div>
-				</div>
-				<div class="panel-body">
-					<div class="col-xs-8 col-md-8">Display ".($i-$display_zero)."</div>
-					<div class="col-xs-4 col-md-4"><a href='#' onclick='javascript:selectAll($i)'>ALL</a></div>
+					<div class="panel-body">
+						<div class="col-xs-8 col-md-8">Display ".($i-$display_zero)."</div>
+						<div class="col-xs-4 col-md-4"><a href='#' onclick='javascript:selectAll($i)'>ALL</a></div>
+					</div>
 				</div>
 			</div>
 		</div>
-		
+
 		<?php
 			for ($i = 1 ; $i < $max_display+2 ; $i++){
 				echo "<div class=\"row\">
-						<div class=\"col-md-4\">
+						<div class=\"col-md-5\">
 							<div class=\"panel panel-default\" id=\"$i\" style=\"display: none\">
 								<div class=\"panel-heading\">
 									<div class=\"row\">
