@@ -19,11 +19,10 @@
 #
 #########################################
 */
-?>
 
-<?php
-
-  include("../../include/include_module.php");  
+include("../../header.php");
+include("../../side.php");
+  
   global $database_vanillabp;
   global $database_host;
   global $database_username;
@@ -133,7 +132,7 @@
           die('There was an error running the query 3 [' . $db->error . ']');
       }
 	  
-	  print_r(mysql_num_rows($result_service));
+	  print_r(mysqli_num_rows($result_service));
 
       while($row = $result_service->fetch_assoc()){   
         array_push($t_service_son,$row['host'].";".$row['service']);
@@ -260,55 +259,28 @@ function display_global_son($bp_racine)
 
 ?>
 
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta http-equiv="refresh" content="10800">
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link rel="icon" href="../../favicon.ico">
+<div id="page-wrapper">
+		<div class="row">
+			<div class="col-md-12">
+				<h2 class="page-header"><?php echo getLabel("label.manage_contracts.contract_context_view_title"); ?></h2>
+			</div>
+		</div>
+		<!--  <h2 class="form-signin-heading">Business process tree</h2>          -->
+		<div class="row" id="body">
+			<?php 
+				for ($i = 0; $i < sizeof($t_bp_racine); $i++) {
 
-    <title>Application Tree</title>
+					echo "<div class=\"well well-sm\">";
+					echo "<ul class=\"nav nav-list tree\">";
+					display_bp($t_bp_racine[$i],$t_bp_racine[$i],'global_nagiosbp');
+					display_global_son($t_bp_racine[$i]);
+					echo "</ul>";
+					echo "</div>";
 
-    <!-- Core CSS -->
-    <!-- <link href='https://fonts.googleapis.com/css?family=Raleway' rel='stylesheet' type='text/css'> -->
-    <link href="./css/mike_tree.css" rel="stylesheet" type="text/css">
-    <link href="../../bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="../../bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet">
-
-  </head>
-
-  <body>
-    <div class="container">
-          <h2 class="form-signin-heading">Business process tree</h2>          
-                    <div id="body">
-
-                     
-
-                                <?php 
-                                    for ($i = 0; $i < sizeof($t_bp_racine); $i++) {
- 
-                                        echo "<div class=\"well well-sm\">";
-                                        echo "<ul class=\"nav nav-list tree\">";
-                                        display_bp($t_bp_racine[$i],$t_bp_racine[$i],'global_nagiosbp');
-                                        display_global_son($t_bp_racine[$i]);
-                                        echo "</ul>";
-                                        echo "</div>";
- 
-                                    }
-                                ?>
-
-
-                      
-                  <!--  </div> -->
-              		</div>
-  	</div> <!-- /container -->
-</body>
-
+				}
+			?>
+		</div>
+</div>
 
 
 <!-- Bootstrap core JavaScript
@@ -316,7 +288,7 @@ function display_global_son($bp_racine)
 <!-- Placed at the end of the document so the pages load faster -->
 <script src="../../bower_components/jquery/dist/jquery.min.js"></script>
 <script src="../../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-<script src="../../bower_components/jqueryui/jquery-ui.min.js"></script>
+<script src="../../bower_components/jquery-ui/jquery-ui.min.js"></script>
 
 
 <script type="text/javascript">
@@ -335,6 +307,6 @@ $('#FindIt').on('click', function (e) {
 
 </script>
 
-</html>
-
-
+<?php
+include("../../footer.php");
+?>
