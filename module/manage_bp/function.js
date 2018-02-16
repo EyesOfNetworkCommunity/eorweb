@@ -732,3 +732,13 @@ function set_display_number() {
 	}
 	
 }
+
+function disabled_type() {
+	console.log(document.form_bp.application.value);
+	if (document.form_bp.application.checked) {
+		document.form_bp.process_type.setAttribute("disabled", true);
+		document.form_bp.process_type.value = "ET";
+	} else {
+		document.form_bp.process_type.removeAttribute("disabled");
+	}
+}
