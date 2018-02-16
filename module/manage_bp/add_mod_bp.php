@@ -19,6 +19,7 @@
 #
 #########################################
 */
+<<<<<<< HEAD
 include("../../header.php");
 include("../../side.php");
 ?>
@@ -43,136 +44,158 @@ include("../../side.php");
 
 		return $nick_name;
 	}
+=======
+>>>>>>> a1d12c7f3ea7975686bb8cc4b2e9e49bf4ec492f
 
-	/**
-	 * Récupère le thruk_idx d'une source.
-	 *
-	 * @param $source_name (String) -> Nom de la source choisie.
-	 *
-	 * @return (String) -> Le thruk_idx associé à la source.
-	 */
-	function getThrukId($source_name)
-	{
-		global $database_vanillabp;
+include("../../header.php");
+include("../../side.php");
+include("./function.php");
 
-		$result = sqlrequest($database_vanillabp, "SELECT thruk_idx FROM bp_sources WHERE db_names='$source_name'");
-		while ($line = mysql_fetch_array($result)){
-			$thruk_idx=$line[0];
-        }
+global $database_vanillabp;
 
-		return $thruk_idx;
-	}
-/* ~~~~~~~~~~ ! FUNCTIONS ~~~~~~~~~~ */
-	
-	$nick_name = getNickName($_GET["source"]);
+$nick_name = getNickName($_GET["source"]);
 	
 	// ~~~~~~~~~~~~ TEST ~~~~~~~~~~~~ // 
-	$type = mysql_fetch_assoc(sqlrequest($_GET["source"],"SELECT type,min_value FROM bp WHERE name='$_GET[uname]'"));
+	$type = mysqli_fetch_assoc(sqlrequest($_GET["source"],"SELECT type,min_value FROM bp WHERE name='$_GET[uname]'"));
 	if ( $type['type'] == "MIN") {
 		$return = sqlArrayDatabase($_GET["source"], "SELECT COUNT(bp_name) as nbr FROM bp_services WHERE bp_name='$_GET[uname]' UNION select COUNT(bp_name) FROM bp_links WHERE bp_name='$_GET[uname]'");
 		if ( ($return[0]['nbr']+$return[1]['nbr']) >= $type['min_value']){
-			$result = sqlrequest($_GET["source"],"UPDATE bp SET `is_define`='1' WHERE `name`='$_GET[uname]'");
+			$result = sqlrequest($_GET["source"],"UPDATE bp SET is_define='1' WHERE name='$_GET[uname]'");
 		}
 		else {
-			$result = sqlrequest($_GET["source"],"UPDATE bp SET `is_define`='0' WHERE `name`='$_GET[uname]'");
+			$result = sqlrequest($_GET["source"],"UPDATE bp SET is_define='0' WHERE name='$_GET[uname]'");
 		}
 	}
 	else {
-		$result = sqlrequest($_GET["source"],"UPDATE bp SET `is_define`='1' WHERE `name`='$_GET[uname]'");
+		$result = sqlrequest($_GET["source"],"UPDATE bp SET is_define='1' WHERE name='$_GET[uname]'");
 	}
 	// ~~~~~~~~~~~~ TEST ~~~~~~~~~~~~ //
 	
-	$result = sqlrequest($_GET[source],"SELECT '$_GET[source]' as source, name, description, priority, type,command,url,min_value,is_define FROM bp WHERE name='$_GET[uname]'");
-	$metier = mysql_fetch_assoc($result);
+	$result = sqlrequest($_GET['source'],"SELECT '$_GET[source]' as source, name, description, priority, type,command,url,min_value,is_define FROM bp WHERE name='$_GET[uname]'");
+	$metier = mysqli_fetch_assoc($result);
 ?>
 
+<<<<<<< HEAD
 	<div class="row">
 		<div class="col-md-12">
 			<h1 class="page-header"><?php ?></h1>
+=======
+<div id="page-wrapper">
+	<div class="row">
+		<div class="col-md-12">
+			<h1 class="page-header"><?php echo getLabel("label.business.title"); ?></h1>
+>>>>>>> a1d12c7f3ea7975686bb8cc4b2e9e49bf4ec492f
 		</div>
 	</div>
 	<form action='./add_mod_bp.php' method='POST' name='form_bp'>
 		<span id="output"></span>
-		<center>
-			<table>
-				<tr>
-					<td valign="top">
-						<h1><?php echo $xmlmodules->getElementsByTagName("manage_bp")->item(0)->getAttribute("prop")?></h1>
-						<table class="table">
-							<tr rowspan="3">
-								<td><h2>Source</h2></td>
-								<td id="sourcedb"></td>
-								<td>
-									<center>Use a list? <input type='checkbox' id='sourceinput' onclick='javascript:selectValueSource("changesource",this.checked);'></center>
-								</td>
-							</tr>
-							<?php if($_GET["source"] != "global_nagiosbp") : ?>
-							<tr>
-								<td><h2>Equipment</h2></td>
-								<td id="td"></td>
-								<td>
-									<center>Use a list? <input type='checkbox' id='check' onclick='javascript:selectValue("change",this.checked);'></center>
-								</td>
-							</tr>
-							<tr>
-								<td><h2>Service</h2></td>
-								<td>
-									<select size='1' name='service[]' id="change" style='width:360px;'></select>
-								</td>
-								<td>
-									<center><input class='button' type='button' id='add' name='add' value='add' onclick='javascript:addValue("nobp");'></center>
-								</td>
-							</tr>
-							<?php endif; ?>
-							<tr>
-								<td><h2>Process</h2></td>
-								<td>
-									<select size='1' name='prio' id='prio' style='50px;' onChange="javascript:chooseDisplay(this.value);">
-										<option value='all'>Display All</option>
-										<option value='null'>No Display</option>
-										<?php 
-											global $max_display;
-											global $display_zero;
-											for ($i=((int)!$display_zero); $i < $max_display+1 ; $i++) { 
-												echo "<option value='$i'>Display $i</option>";
-											}
-										?>
-									</select>
-									<select size='1' name='proc[]' id='proc' style='width:276px;'></select>
-								</td>
-								<td>
-									<center><input class='button' type='button' id='addProc' name='add' value='add' onclick='javascript:addValue("bp");'></center>
-								</td>
-							</tr>
-							<tr>
-								<td class="blanc" align="center" colspan="3">
-									<input class='button' type='button' name='back' value='back' onclick='location.href="index.php"'>
-								</td>
-							</tr>
-						</table>
-					</td>
-					<td valign="top">
-						<h1>Definition of : <?php echo "<span id=\"definitionNickName\">$nick_name</span><span id=\"definitionSource\" style=\"display: none;\">$metier[source]</span>::$metier[name] ; type : $metier[type]"; if( $metier['min_value'] != "") echo " $metier[min_value]";?></h1>
-						<table class='table'>
-						<thead>
-							<tr>
-								<th>Source::Name;Service<br/>Source::Process</th>
-								<th>Select</th>
-							</tr>
-						</thead>
-						<tbody id="sum">
-						</tbody>
-						<tr>
-							<td class="blanc" colspan="9" align="center">
-								<input class='button' type='button' name='del' value='delete' onclick='javascript:delValue();'>
-							</td>
-						</tr>
-						</table>
-					</td>
-				</tr>
-			</table>
-		</center>
+		<div class="row">
+			<div class="col-md-7">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<?php echo getLabel("Define BP"); ?>
+					</div>
+					<div class="panel-body">
+						<div class="row form-group">
+							<div class="form-group">
+								<label style="font-weight:normal;" class="col-md-2 control-label">Source: </label>
+								<div id="sourcedb" class="col-md-8"></div>
+								<div class="col-md-2">
+									<span>Use a list?</span>
+									<input type="checkbox" id="sourceinput" onclick='javascript:selectValueSource("changesource",this.checked);'>
+								</div>
+							</div>
+						</div>
+						<?php if($_GET['source'] != $database_vanillabp) { ?>
+						<div class="row form-group">
+							<div class="form-group">
+								<label style="font-weight:normal;" class="col-md-2 control-label">Equipment: </label>
+								<div id="td" class="col-md-8"></div>
+								<div class="col-md-2">
+									<span>Use a list?</span>
+									<input type='checkbox' id='check' onclick='javascript:selectValue("change",this.checked);'>
+								</div>
+							</div>
+						</div>
+						<div class="row form-group">
+							<div class="form-group">
+								<label style="font-weight:normal;" class="col-md-2 control-label">Service: </label>
+								<div class="col-md-8">
+									<select class="form-control" name='service[]' id="change"></select>
+								</div>
+								<div class="col-md-2">
+									<input class='btn btn-primary' type='button' id='add' name='add' value='add' onclick='javascript:addValue("nobp");'>
+								</div>
+							</div>
+						</div>
+						<?php } ?>
+						<div class="row form-group">
+							<div class="form-group">
+								<label style="font-weight:normal;" class="col-md-2 control-label">Process: </label>
+								<div class="col-md-8">
+									<div class="row">
+										<div class="col-md-5 form-group">
+											<select class="form-control" name="prio" id="prio" value="all" onChange="javascript:chooseDisplay(this.value);">
+												<option value="all">Display All</option>
+												<option value="null">No Display</option>
+												<?php 
+												global $max_display;
+												global $display_zero;
+												for ($i=((int)!$display_zero); $i < $max_display+1 ; $i++) { 
+													echo "<option value='$i'>Display $i</option>";
+												}
+												?>
+											</select>
+										</div>
+										<div class="col-md-7 form-group">
+											<select class="form-control" name="proc[]" id="proc"></select>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-2">
+									<input class='btn btn-primary' type='button' id='addProc' name='add' value='add' onclick='javascript:addValue("bp");'>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-7">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						Definition of : <?php echo "<span id=\"definitionNickName\">$nick_name</span><span id=\"definitionSource\" style=\"display: none;\">$metier[source]</span>::$metier[name] ; type : $metier[type]"; if( $metier['min_value'] != "") echo " $metier[min_value]";?>
+					</div>
+					<div class="panel-body">
+						<div class="row form-group">
+							<div class="col-md-6">
+								<span>Source::Name;Service<br>Source::Process</span>
+							</div>
+							<div class="col-md-6">
+								<span>Select</span>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								<div id="sum"></div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-offset-9 col-md-1">
+								<input class='btn btn-primary' type='button' name='del' value='delete' onclick='javascript:delValue();'>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
 	</form>
+<<<<<<< HEAD
+=======
+</div>
+
+>>>>>>> a1d12c7f3ea7975686bb8cc4b2e9e49bf4ec492f
 <?php 
 	$nbrServ = 0;
 	$tabMetier = sqlArrayDatabase($_GET["source"],"SELECT '$_GET[source]' as source, name, description, priority, type,command,url,min_value,is_define FROM bp WHERE name NOT IN (SELECT bp_name FROM bp_links WHERE bp_link='$_GET[uname]')");
@@ -182,6 +205,7 @@ include("../../side.php");
 	$result = sqlArrayDatabase($_GET["source"],"SELECT '$_GET[source]' as source,id, bp_name, bp_link FROM bp_links WHERE `bp_name`='$_GET[uname]'");
 	$nbrServ += count($result)."<br>";
 ?>
+<<<<<<< HEAD
 
 <script type="text/javascript" src="function.js"></script>
 <script type="text/javascript" src="../../js/jquery.js"></script>
@@ -243,3 +267,53 @@ include("../../side.php");
 	/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 </script>
 </div>
+=======
+
+<script src="./function.js"></script>
+<script src="../../bower_components/jquery/dist/jquery.min.js"></script>
+	
+<script>
+	$("input[name=equip]").attr("disabled", true);
+	$("#sourceinput").attr("checked", true);
+	$("#check").attr("checked", true);
+	selectValueSource("changesource", true);
+	selectValue("change", true);
+	setValues("<?php echo $_GET['uname']?>", <?php echo json_encode($tabMetier) ?>,"<?php echo $_GET['source']?>","<?php echo $nbrServ?>","<?php echo $metier['min_value'];?>");
+	
+	<?php 
+	if ( $metier['is_define']){
+		$result = sqlArrayDatabase($_GET['source'],"SELECT '$_GET[source]' as source,id, bp_name, host, service FROM bp_services WHERE bp_name='$_GET[uname]'");
+		echo "setServ(".json_encode($result).");";
+		if ( $_GET['source'] == $database_vanillabp ) {
+			$result = sqlArrayDatabase($_GET['source'],"SELECT '$_GET[source]' as source,id, bp_name, bp_link, bp_source FROM bp_links WHERE bp_name='$_GET[uname]'");
+		} else {
+			$result = sqlArrayDatabase($_GET['source'],"SELECT '$_GET[source]' as source,id, bp_name, bp_link, '$_GET[source]' as bp_source  FROM bp_links WHERE bp_name='$_GET[uname]'");
+		}
+		echo "setProc(".json_encode($result).");";
+	} 
+	?>
+	
+	/* ~~~~~~~~~~ griser les champs quand SOURCE = vide ~~~~~~~~~~ */
+	// les 2 champs sont disabled de base (tout en bas du code)
+	$('body').bind("change", "input[name=source]", function(){
+		var source_value = $("input[name=source]").val();
+		if(source_value != "")
+		{
+			$("input[name=equip]").attr("disabled", false);
+			$("#change").attr("disabled", false);
+			$("#check").attr("disabled", false);
+		}
+		else
+		{
+			$("input[name=equip]").attr("disabled", true);
+			$("#change").attr("disabled", true);
+			$("#check").attr("disabled", true);
+		}
+	});
+	/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+</script>
+
+<?php
+include("../../footer.php");
+?>
+>>>>>>> a1d12c7f3ea7975686bb8cc4b2e9e49bf4ec492f

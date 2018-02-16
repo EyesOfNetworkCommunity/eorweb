@@ -13,7 +13,7 @@
 
         $result=sqlrequest($database_vanillabp,"SELECT db_names FROM bp_sources");
 
-        while ($line = mysql_fetch_array($result)){
+        while ($line = mysqli_fetch_array($result)){
 			$sources[]=$line[0];
         }
         echo json_encode($sources);
@@ -32,8 +32,8 @@
 		$result = sqlrequest("thruk", "SELECT host_name, 'bobby' as bobby FROM ".$thruk_idx."_host");
 
 		$values = array();
-		for ($i=0; $i<mysql_num_rows($result); ++$i)
-			$values[] = mysql_fetch_assoc($result);
+		for ($i=0; $i<mysqli_num_rows($result); ++$i)
+			$values[] = mysqli_fetch_assoc($result);
 		return $values;
 	}
 
@@ -46,8 +46,8 @@
 		global $database_vanillabp;
 		$values = array();
 		$result = sqlrequest($database_vanillabp,"SELECT db_names, nick_name FROM bp_sources");
-		for ($i=0; $i<mysql_num_rows($result); ++$i)
-			$values[] = mysql_fetch_assoc($result);
+		for ($i=0; $i<mysqli_num_rows($result); ++$i)
+			$values[] = mysqli_fetch_assoc($result);
 		return $values;
 	}
 
@@ -63,7 +63,7 @@
 		global $database_vanillabp;
 
 		$result = sqlrequest($database_vanillabp, "SELECT nick_name FROM bp_sources WHERE db_names='$db_name'");
-		while ($line = mysql_fetch_array($result)){
+		while ($line = mysqli_fetch_array($result)){
 			$nick_name=$line[0];
         }
 
@@ -82,7 +82,7 @@
 		global $database_vanillabp;
 
 		$result = sqlrequest($database_vanillabp, "SELECT thruk_idx FROM bp_sources WHERE db_names='$source_name'");
-		while ($line = mysql_fetch_array($result)){
+		while ($line = mysqli_fetch_array($result)){
 			$thruk_idx=$line[0];
         }
 
@@ -104,19 +104,19 @@ switch($_POST['option']){
 		// on chope l'ID du host concerné
 		$id = 0;
 		$host_id = sqlrequest("thruk", "SELECT host_id FROM ".$thruk_idx."_host WHERE host_name='".$_POST["valeur"]."'");
-		while ($line = mysql_fetch_array($host_id)){
+		while ($line = mysqli_fetch_array($host_id)){
 			$id = $line[0];
         }
 		
 		// on utilise cet ID pour selectionner les bon services
 		$result = sqlrequest("thruk", "SELECT * FROM ".$thruk_idx."_service WHERE host_id=".$id." order by service_description" );
-		$nbr_row =  mysql_num_rows($result);
+		$nbr_row =  mysqli_num_rows($result);
 		
 		// s'il y a des services liés a cet host, on remplis le <select id="change">
 		if($nbr_row > 0)
 		{
 			 echo "<option value='Hoststatus'>Hoststatus</option>;";
-			while ($line = mysql_fetch_array($result)){
+			while ($line = mysqli_fetch_array($result)){
 				$service=$line[2];
 				echo "<option value='$service'>$service</option>";
 			}
@@ -133,12 +133,12 @@ switch($_POST['option']){
 		
 		// on établie la liste des hosts dans la table qui porte le bon thruk_idx
 		$host_list = sqlrequest("thruk", "SELECT host_name FROM ".$id."_host");
-		$nbr_host = mysql_num_rows($host_list);
+		$nbr_host = mysqli_num_rows($host_list);
 		
 		// s'il y a des résultats, on remplis le <select id="select">
 		if($nbr_host > 0)
 		{
-			while ($line = mysql_fetch_array($host_list)){
+			while ($line = mysqli_fetch_array($host_list)){
 				$host=$line[0];
 				echo "<option value='$host'>$host</option>";
 			}
@@ -147,44 +147,40 @@ switch($_POST['option']){
 	case "changesource" :
 		if ($_POST['valeur'] == "true"){
 			// on disable les champs qui doivent l'être
-			echo '<script type="text/javascript">'.
-						'$("input[name=equip]").attr("disabled", false);'.
-						'$("#change").attr("disabled", false);'.
-						'$("#check").attr("disabled", false);'.
-					'</script>';
+			echo '<script>
+						$("input[name=equip]").attr("disabled", false);
+						$("#change").attr("disabled", false);
+						$("#check").attr("disabled", false);
+				</script>';
 					
 			// on va utiliser la source pour différencier le GLOBAL des autres.
-			if( !empty($_POST["definedSource"]) )
-			{
-				if( $_POST["definedSource"] == "global_nagiosbp" )
-				{
-					echo "<select size='1' name='source[]' id='selectsource' style='width:360px;' onChange='javascript:selectValueSource(\"selectsource\",this.value);'>";
-							$results=mysql_evaluate_array_source() ;
-							foreach ($results as $result){
-								echo "<option value='$result[db_names]'>".$result["nick_name"]."</option>";
-							}
+			if( !empty($_POST["definedSource"]) ){
+				if( $_POST["definedSource"] == $database_vanillabp ){
+					echo "<select size='1' class=\"form-control\" name='source[]' id='selectsource' onChange='javascript:selectValueSource(\"selectsource\",this.value);'>";
+					$results=mysql_evaluate_array_source() ;
+					foreach ($results as $result){
+						echo "<option value='$result[db_names]'>".$result["nick_name"]."</option>";
+					}
 					echo "</select>";
-				}
-				else // dans les autres cas, on ne remplis qu'avec la source concernée
-				{
-					echo "<select size='1' name='source[]' id='selectsource' style='width:360px;' onChange='javascript:selectValueSource(\"selectsource\",this.value);'>";
-							$results=mysql_evaluate_array_source() ;
-							foreach ($results as $result){
-								if( $_POST["definedSource"] == $result["db_names"] ){
-									echo "<option value='$result[db_names]'>$result[nick_name]</option>";	
-								}
-							}
+				} else { // dans les autres cas, on ne remplis qu'avec la source concernée
+					echo "<select size='1' class=\"form-control\" name='source[]' id='selectsource' onChange='javascript:selectValueSource(\"selectsource\",this.value);'>";
+					$results=mysql_evaluate_array_source() ;
+					foreach ($results as $result){
+						if( $_POST["definedSource"] == $result["db_names"] ){
+							echo "<option value='$result[db_names]'>$result[nick_name]</option>";	
+						}
+					}
 					echo "</select>";	
 				}
 			}
 		}
 		else { // quand on décoche la premiere checkbox, on obtien un champs text
-			echo '<script type="text/javascript">'.
+			echo '<script>'.
 						'$("input[name=equip]").attr("disabled", true);'.
 						'$("#change").attr("disabled", true);'.
 						'$("#check").attr("disabled", true);'.
 					'</script>';
- 			echo "<input type='text' name='source' style='width:360px;' placeholder='Rechercher ...' onFocus='$(\"input[name]=source\").autocomplete(";
+ 			echo "<input type='text' class=\"form-control\" name='source' placeholder='Rechercher ...' onFocus='$(\"input[name]=source\").autocomplete(";
 			echo   get_Sources_list();	//Dotted notation doesn't concatenate the json return values.
 			echo ")' autocomplete='off' onBlur='javascript:selectValueSource(\"selectsource\",this.value)';/>";
 		}
@@ -192,7 +188,7 @@ switch($_POST['option']){
 	case "change" :
 		// ici on remplis le <select id="select"> avec tous les host qui appartiennent à la source concernée
 		if ($_POST['valeur'] == "true"){
-			echo "<select size='1' name='equip[]' id='select' style='width:360px;' onChange='javascript:selectValue(\"select\",this.value);'>";
+			echo "<select size='1' class=\"form-control\" name='equip[]' id='select' onChange='javascript:selectValue(\"select\",this.value);'>";
 					$results=mysql_evaluate_array($_POST["choosenSource"]);
 					foreach ($results as $result){
 						echo "<option value='$result[host_name]'>$result[host_name]</option>";
@@ -201,7 +197,7 @@ switch($_POST['option']){
 		}
 		else { // si on décoche la checkbox, on obtient un champs text
 			echo "<script type=\"text/javascript\">$(\"#change\").attr(\"disabled\", true);</script>";
-			echo "<input type='text' name='equip' style='width:360px;' placeholder='Rechercher ...' onFocus='$(\"input[name]=equip\").autocomplete(";
+			echo "<input type='text' name='equip' placeholder='Rechercher ...' onFocus='$(\"input[name]=equip\").autocomplete(";
 			echo	get_host_list();	//Dotted notation doesn't concatenate the json return values.
 			echo ")' autocomplete='off' onBlur='javascript:selectValue(\"select\",this.value);'/>";
 		}
@@ -220,14 +216,16 @@ switch($_POST['option']){
 				break;
 		}
 		if ( $result ) {
-			$type = mysql_fetch_assoc(sqlrequest($_POST["source"],"SELECT type,min_value FROM bp WHERE name='$_POST[bp]'"));
+			$type = mysqli_fetch_assoc(sqlrequest($_POST["source"],"SELECT type,min_value FROM bp WHERE name='$_POST[bp]'"));
 			if ( $type['type'] == "MIN") {
 				$return = sqlArrayVanillaBP("SELECT COUNT(bp_name) as nbr FROM bp_services WHERE bp_name='$_POST[bp]' UNION select COUNT(bp_name) FROM bp_links WHERE bp_name='$_POST[bp]'");
 				if ( ($return[0]['nbr']+$return[1]['nbr']) < $type['min_value']) $result = sqlrequest($_POST["source"],"UPDATE bp SET `is_define`='0' WHERE `name`='$_POST[bp]'");
 			}
 			else {
 				$return = sqlrequest($_POST["source"],"SELECT bp_name as name FROM bp_services WHERE bp_name='$_POST[bp]' UNION select bp_name FROM bp_links WHERE bp_name='$_POST[bp]'");
-				if ( !mysql_num_rows($return)) $result = sqlrequest($_POST["source"],"UPDATE bp SET `is_define`='0' WHERE `name`='$_POST[bp]'");
+				if ( !mysqli_num_rows($return)) {
+					$result = sqlrequest($_POST["source"],"UPDATE bp SET `is_define`='0' WHERE `name`='$_POST[bp]'");
+				}
 			}
 		}
 		else message(0,": Could not update Database","critical");
@@ -242,7 +240,7 @@ switch($_POST['option']){
 				$result = sqlrequest($_POST["source"],"INSERT INTO bp_services VALUES('','$_POST[bp]','$vals[0]','$vals[1]')");
 				break;
 			case "proc":
-				if ( $_POST["source"] == "global_nagiosbp" ) {
+				if ( $_POST["source"] == $database_vanillabp ) {
 					$chosen_source = str_replace("_nagiosbp","",$_POST["choosenSource"]);
 					$result = sqlrequest($_POST["source"],"INSERT INTO bp_links (bp_name, bp_link, bp_source) VALUES('$_POST[bp]','$_POST[name]', '$chosen_source')");
 				}
@@ -252,7 +250,7 @@ switch($_POST['option']){
 				break;
 		}
 		if ( $result ) {
-			$type = mysql_fetch_assoc(sqlrequest($_POST["source"],"SELECT type,min_value FROM bp WHERE name='$_POST[bp]'"));
+			$type = mysqli_fetch_assoc(sqlrequest($_POST["source"],"SELECT type,min_value FROM bp WHERE name='$_POST[bp]'"));
 			if ( $type['type'] == "MIN") {
 				$return = sqlArrayDatabase($_POST["source"], "SELECT COUNT(bp_name) as nbr FROM bp_services WHERE bp_name='$_POST[bp]' UNION select COUNT(bp_name) FROM bp_links WHERE bp_name='$_POST[bp]'");
 				if ( ($return[0]['nbr']+$return[1]['nbr']) >= $type['min_value']) $result = sqlrequest($_POST["source"],"UPDATE bp SET `is_define`='1' WHERE `name`='$_POST[bp]'");
@@ -281,7 +279,7 @@ switch($_POST['option']){
 		$results = sqlrequest($defined_source, $sql);
 		
 		// et on remplis le <select id="proc"> avec les bp obtenus
-		while ($line = mysql_fetch_array($results)){
+		while ($line = mysqli_fetch_array($results)){
 			$process=$line[0];
 			echo "<option value='$process'>$process</option>";
 		}
