@@ -30,7 +30,7 @@
 
 <?php
 
-if( isset($user_id) && isset($user_type) ){
+if( isset($user_id) || isset($user_type) ){
 	if($user_id!="1"){
 		echo "<script>disable_group();</script>";
 	}
