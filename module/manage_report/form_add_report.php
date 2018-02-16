@@ -37,13 +37,16 @@
 ?>
 
 <div id="page-wrapper">
-  <div class="row" id="message"></div>
-  <div class="col-md-5">
-      <div class="row">
-          <div>       
-              <h2 class="form-signin-heading"><?php echo getLabel("label.form_report.name");?></h2>
-          </div>
-      </div>       
+  <div class="col-md-12">
+    <div  id="message"></div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <h1 class="page-header"><?php echo getLabel("label.form_report.name");?></h1>
+    </div>
+  </div>
+  <div class="col-md-5">  
       <div class="form-group">
           <label for="rpt_name"><?php echo getLabel("label.form_report_name.name");?></label>
           <input type="text" class="form-control" id="rpt_name">
