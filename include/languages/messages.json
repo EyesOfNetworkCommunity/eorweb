@@ -400,6 +400,7 @@
     "label.input": "Input",
     "label.input.placeholder.search": "Search...",
     "label.input_name": "Input name",
+	"label.kettle_apps.launch": "Launch Workflow",
     "label.kettle_apps.loading_info": "(Don't load on the same month)",
     "label.kettle_apps.time_period_select": "Choose a period: ",
     "label.kettle_apps.title": "Eyes of report loader",

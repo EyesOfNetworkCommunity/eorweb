@@ -17,26 +17,26 @@ include("../../side.php");
 
 <form id="global">
 	<div class="row form-group">
-		<div class="form-group has-feedback div-validity-date">
-			<label class="col-md-3"><?php echo getLabel("label.kettle_apps.time_period_select"); ?></label>
-			<div class="col-md-9 input-validity-date">
-				<div class="form-group input-group">
-					<input type="text" class="form-control" readonly id="validity_date">
-					<span class="input-group-addon">
-						<span class="glyphicon glyphicon-calendar"></span>
-					</span>
-				</div>
+		<label class="col-md-3"><?php echo getLabel("label.kettle_apps.time_period_select"); ?></label>
+		<div class="col-md-9 input-validity-date">
+			<div class="form-group input-group">
+				<input type="text" class="form-control" readonly id="validity_date">
+				<span class="input-group-addon">
+					<span class="glyphicon glyphicon-calendar"></span>
+				</span>
 			</div>
 		</div>
 		<div id="startDate"></div>
 		<div id="endDate"></div>
 	</div>
 	<div class="row form-group">
-		<button class="form-group btn btn-primary center-block" type="submit" id="launch">Launch WorkFlow
+		<button class="form-group btn btn-primary center-block" type="submit" id="launch"><?php echo getLabel("label.kettle_apps.launch"); ?>
 			<span class="glyphicon glyphicon-ok" style="color:#4f4;"></span>
 		</button>
 	</div>
 </form>
+
+</div>
 
 <!-- jQuery -->
 <script src="/bower_components/jquery/dist/jquery.min.js"></script>
@@ -82,6 +82,5 @@ include("../../side.php");
 
 	
 </script>
-
 
 <?php include("./footer.php"); ?>
