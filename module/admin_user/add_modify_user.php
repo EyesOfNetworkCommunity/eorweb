@@ -36,7 +36,7 @@ include("../../side.php");
 		function retrieve_user_info($user_id)
 		{
 			global $database_eonweb;
-			return sqlrequest("$database_eonweb","SELECT user_name, user_descr, group_id, user_passwd, user_type,user_email, user_location, user_limitation, user_language  FROM users WHERE user_id='$user_id'");
+			return sqlrequest("$database_eonweb","SELECT user_name, user_descr, group_id, user_passwd, user_type,user_email, user_location, user_language  FROM users WHERE user_id='$user_id'");
 		}
 
 		// Display user language selection  
@@ -81,7 +81,7 @@ include("../../side.php");
 		//--------------------------------------------------------
 
 		// Update User Information & Right
-		function update_user($user_id, $user_name, $user_descr, $user_group, $user_password1, $user_password2 ,$user_type, $user_location, $user_email, $user_limitation, $old_group_id, $old_name, $create_user_in_nagvis, $create_user_in_cacti, $nagvis_role_id, $user_language)
+		function update_user($user_id, $user_name, $user_descr, $user_group, $user_password1, $user_password2 ,$user_type, $user_location, $user_email, $old_group_id, $old_name, $create_user_in_nagvis, $create_user_in_cacti, $nagvis_role_id, $user_language)
 		{
 			global $database_host;
 			global $database_cacti;
@@ -111,18 +111,18 @@ include("../../side.php");
 					if ($user_password1 != "abcdefghijklmnopqrstuvwxyz") {
 						$passwd_temp = md5($user_password1);
 						// Update into eonweb
-						sqlrequest("$database_eonweb","UPDATE users set user_name='$user_name', user_descr='$user_descr',group_id='$user_group',user_passwd='$passwd_temp',user_type='$user_type',user_location='$user_location',user_email='$user_email',user_limitation='$user_limitation',user_language='$user_language' WHERE user_id ='$user_id'");
+						sqlrequest("$database_eonweb","UPDATE users set user_name='$user_name', user_descr='$user_descr',group_id='$user_group',user_passwd='$passwd_temp',user_type='$user_type',user_location='$user_location',user_email='$user_email',user_language='$user_language' WHERE user_id ='$user_id'");
 					}
 					else {
 						// Update into eonweb
-						sqlrequest("$database_eonweb","UPDATE users set user_name='$user_name', user_descr='$user_descr',group_id='$user_group',user_type='$user_type',user_location='$user_location',user_email='$user_email',user_limitation='$user_limitation',user_language='$user_language' WHERE user_id ='$user_id'");
+						sqlrequest("$database_eonweb","UPDATE users set user_name='$user_name', user_descr='$user_descr',group_id='$user_group',user_type='$user_type',user_location='$user_location',user_email='$user_email',user_language='$user_language' WHERE user_id ='$user_id'");
 					}
 
                     // this is nagvis default salt for password encryption security
 					$nagvis_salt = '29d58ead6a65f5c00342ae03cdc6d26565e20954';
 					
 					// logging action
-					logging("admin_user","UPDATE : $user_id $user_name $user_descr $user_limitation $user_group $user_type $user_location");
+					logging("admin_user","UPDATE : $user_id $user_name $user_descr $user_group $user_type $user_location");
 
 					// renaming files
 					if($user_name!=$old_name){
@@ -163,7 +163,6 @@ include("../../side.php");
 		$user_group = retrieve_form_data("user_group","");
 		$user_email = retrieve_form_data("user_email","");
 		$user_type = retrieve_form_data("user_type","");
-		$user_limitation = retrieve_form_data("user_limitation","");
 		$user_language = retrieve_form_data("user_language","");
 		$old_group_id = mysqli_result(sqlrequest($database_eonweb,"select group_id from users where user_id='$user_id'"),0,"group_id");
 		$old_name = retrieve_form_data("user_name_old","");
@@ -208,7 +207,7 @@ include("../../side.php");
 				
 				$user_group = retrieve_form_data("user_group","");
 				$nagvis_grp = retrieve_form_data("nagvis_group", "");
-				$user_id=insert_user(stripAccents($user_name), $user_descr, $user_group, $user_password1, $user_password2, $user_type, $user_location, $user_email, $user_limitation, true, $create_user_in_nagvis, $create_user_in_cacti, $nagvis_grp, $user_language);
+				$user_id=insert_user(stripAccents($user_name), $user_descr, $user_group, $user_password1, $user_password2, $user_type, $user_location, $user_email, true, $create_user_in_nagvis, $create_user_in_cacti, $nagvis_grp, $user_language);
 				//message(8,"User location: $user_location",'ok');	// For debug pupose, to be removed
 
 				// Retrieve Group Information from database
@@ -219,7 +218,6 @@ include("../../side.php");
 					$user_group=mysqli_result($user_name_descr,0,"group_id");
 					$user_email=mysqli_result($user_name_descr,0,"user_email");
 					$user_type=mysqli_result($user_name_descr,0,"user_type");
-					$user_limitation = retrieve_form_data("user_limitation","");
 					$user_language = retrieve_form_data("user_language","");
 					$user_location=mysqli_result($user_name_descr,0,"user_location");
 					$user_password1= "abcdefghijklmnopqrstuvwxyz";
@@ -240,7 +238,7 @@ include("../../side.php");
 						// ACCOUNT UPDATE (and retrieve parameters)
 						//------------------------------------------------------------------------------------------------
 			if (isset($_POST['update'])){
-				update_user($user_id, stripAccents($user_name), $user_descr, $user_group, $user_password1, $user_password2, $user_type, $user_location, $user_email, $user_limitation, $old_group_id, $old_name, $create_user_in_nagvis, $create_user_in_cacti, $nagvis_role_id, $user_language);	
+				update_user($user_id, stripAccents($user_name), $user_descr, $user_group, $user_password1, $user_password2, $user_type, $user_location, $user_email, $old_group_id, $old_name, $create_user_in_nagvis, $create_user_in_cacti, $nagvis_role_id, $user_language);	
 				//message(8,"Update: User location = $user_location",'ok');	// For debug pupose, to be removed
 				//message(8,"Update: User name =  $user_name",'ok');			// For debug pupose, to be removed
 			}
@@ -252,7 +250,6 @@ include("../../side.php");
 			$user_group=mysqli_result($user_name_descr,0,"group_id");
 			$user_email=mysqli_result($user_name_descr,0,"user_email");
 			$user_type=mysqli_result($user_name_descr,0,"user_type");
-			$user_limitation=mysqli_result($user_name_descr,0,"user_limitation");
 			$user_location=mysqli_result($user_name_descr,0,"user_location");
 			$user_password1="abcdefghijklmnopqrstuvwxyz";
 			$user_password2="abcdefghijklmnopqrstuvwxyz";
@@ -276,17 +273,6 @@ include("../../side.php");
 		</div>
 			
 		<?php if($user_id!="1"){ ?>
-			<div class="row form-group">
-				<label class="col-md-3"><?php echo getLabel("label.admin_user.user_limit"); ?></label>
-				<div class="col-md-9">
-					<?php
-						if($user_limitation=="1") $checked="checked='yes'";
-						else $checked="";
-						echo "<input type='checkbox' class='checkbox' name='user_limitation' value='1' $checked onclick='disable_group()'>";
-					?>
-				</div>
-			</div>
-			
 			<div class="row form-group">
 				<label class="col-md-3"><?php echo getLabel("label.admin_user.user_ldap"); ?></label>
 				<div class="col-md-9">

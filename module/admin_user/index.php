@@ -70,7 +70,7 @@ include("../../side.php");
 	}
         
 	// Get the name user and description group
-	$user_name_descr=sqlrequest("$database_eonweb"," SELECT user_name,user_descr,user_id,group_name,user_type,user_email,user_limitation FROM users LEFT OUTER JOIN groups ON groups.group_id = users.group_id ORDER BY user_name");
+	$user_name_descr=sqlrequest("$database_eonweb"," SELECT user_name,user_descr,user_id,group_name,user_type,user_email FROM users LEFT OUTER JOIN groups ON groups.group_id = users.group_id ORDER BY user_name");
 	 ?>
 
 		<form action="./index.php" method="GET" class="form-inline">
@@ -80,7 +80,6 @@ include("../../side.php");
 						<tr>
 							<th class="col-md-2 text-center"><?php echo getLabel("label.admin_user.select"); ?></th>
 							<th><?php echo getLabel("label.admin_user.user_name"); ?></th>
-							<th><?php echo getLabel("label.admin_user.user_limit"); ?></th>
 							<th><?php echo getLabel("label.admin_user.user_type"); ?></th>
 							<th><?php echo getLabel("label.admin_user.user_desc"); ?></th>
 							<th><?php echo getLabel("label.admin_user.user_mail"); ?></th>
@@ -100,14 +99,6 @@ include("../../side.php");
 								echo "</td>
 								<td>
 									<a href='./add_modify_user.php?user_id=$line[2]'> $line[0] </a>
-								</td>
-								<td>";
-									if($line[5]=="0") {
-										$type="NO";
-									} else {
-										$type="<a href='../module_filters/index.php?user_id=$line[2]&user_name=$line[0]'>YES</a>";
-									}
-									echo "$type
 								</td>
 								<td>";
 									if($line[4]=="0") {
