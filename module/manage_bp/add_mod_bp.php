@@ -157,6 +157,11 @@ $nick_name = getNickName($_GET["source"]);
 				</div>
 			</div>
 		</div>
+		<div class="row">
+			<div class="col-md-12">
+				<input type="button" class="btn btn-primary" value="back" onclick="location.href='./index.php';">
+			</div>
+		</div>
 	</form>
 </div>
 

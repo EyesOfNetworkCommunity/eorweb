@@ -502,7 +502,7 @@ function loadData(datas){
 
 function ismin(objet) {
 	//alert ("ismin");
-	if ( objet.value == "minimum") 
+	if ( objet.value == "MIN") 
 		document.form_bp.process_type_min.disabled=false;
 	else 
 		document.form_bp.process_type_min.disabled=true;

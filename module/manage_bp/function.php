@@ -19,6 +19,7 @@
 #
 #########################################
 */
+
 // Récupère le nick_name d'une source.
 // @param $db_name (String) -> Nom de la source.
 // @return (String) -> Le nick_name de la source.
@@ -30,6 +31,7 @@ function getNickName($db_name) {
 	}
 	return $nick_name;
 }
+
 //
 // Récupère le thruk_idx d'une source.
 // @param $source_name (String) -> Nom de la source choisie.
@@ -42,6 +44,7 @@ function getThrukId($source_name) {
 	}
 	return $thruk_idx;
 }
+
 function sqlArrayDatabase($database,$request) {
         $result = sqlrequest($database,$request);
         $values = array();
@@ -50,6 +53,7 @@ function sqlArrayDatabase($database,$request) {
         }
         return $values ;
 }
+
 function deleteAll($tableBp,$Source){
 	foreach($tableBp as $bp){
 		$result = sqlArrayDatabase($Source,"SELECT bp_name FROM bp_links WHERE bp_link='$bp[bp_name]'");
@@ -59,6 +63,7 @@ function deleteAll($tableBp,$Source){
 		deleteAll($result, $Source);
 	}
 }
+
 function deleteOne($bp,$deleted,$Source){
 	if ( $deleted != "" ) {
 		$deleted .= ",$bp";
@@ -70,40 +75,50 @@ function deleteOne($bp,$deleted,$Source){
 	sqlrequest($Source,"DELETE FROM bp WHERE name='$bp'");
 	return $deleted;
 }
+
 function display_bp($bp,$bp_racine,$source_bp) {
     global $database_vanillabp;
     global $database_host;
     global $database_username;
     global $database_password;
     $db = new mysqli($database_host, $database_username, $database_password, $source_bp);
+
     if($db->connect_errno > 0){
         die('Unable to connect to database 1 [' . $db->connect_error . ']');
     }
+
     $rule_type = "";
     $desc_bp = "";
     $min_value = "";
     $priority = "";
+
     $sql_type = "SELECT type, description, min_value , priority FROM bp WHERE name='".$bp."'";
+
     if(!$result_type = $db->query($sql_type)){
         die('There was an error running the query 1 [' . $db->error . ']');
     }
+
     while($row = $result_type->fetch_assoc()){   
         $rule_type = $row['type'];
         $desc_bp = $row['description'];
         $min_value = $row['min_value'];
         $priority = $row['priority'];
     } 
+
     if ($min_value != "") {
         $min_value = " ".$min_value;
     }
+
     $result_type->free();
     mysqli_close($db);
+
     if ($bp != "") {
         print "<ul class=\"tree-toggle nav-header glyphicon-link glyphicon\">
                     <b class=\"condition_presentation\">".$desc_bp." ".$bp."</b> (".$rule_type."".$min_value.")
                 </ul>";
         }
     }
+
 function display_son($bp_racine,$bp_racine_source) {
     global $database_nagios;
     global $database_vanillabp;
@@ -111,29 +126,38 @@ function display_son($bp_racine,$bp_racine_source) {
     global $database_username;
     global $database_password;
     $db = new mysqli($database_host, $database_username, $database_password, $bp_racine_source);
+
     if($db->connect_errno > 0){
         die('Unable to connect to database 2 [' . $db->connect_error . ']');
     }
+
     $t_bp_son = array();
     $t_service_son = array();
     $sql_bp = "SELECT bp_link FROM bp_links WHERE bp_name = '".$bp_racine."'";
     $sql_service = "SELECT host,service FROM bp_services WHERE bp_name = '".$bp_racine."'";
+
     if(!$result_bp = $db->query($sql_bp)){
         die('There was an error running the query 2 [' . $db->error . ']');
     }
+
     while($row = $result_bp->fetch_assoc()){   
         array_push($t_bp_son,$row['bp_link']);
     } 
+
     $result_bp->free();
+
     if(!$result_service = $db->query($sql_service)){
         die('There was an error running the query 3 [' . $db->error . ']');
     }
+
     print_r(mysql_num_rows($result_service));
+
     while($row = $result_service->fetch_assoc()){   
         array_push($t_service_son,$row['host'].";".$row['service']);
     }
     $result_service->free();
     mysqli_close($db);
+
     if(sizeof($t_bp_son) > 0 ) {
         for ($i = 0; $i < sizeof($t_bp_son); $i++) {
             echo "<ul class=\"nav nav-list tree\">";
@@ -150,6 +174,7 @@ function display_son($bp_racine,$bp_racine_source) {
         }
     }
 }
+
 function display_global_son($bp_racine) {
     global $database_nagios;
     global $database_vanillabp;
@@ -157,20 +182,27 @@ function display_global_son($bp_racine) {
     global $database_username;
     global $database_password;
     $db = new mysqli($database_host, $database_username, $database_password, $database_vanillabp);
+
     if($db->connect_errno > 0){
         die('Unable to connect to database 3 [' . $db->connect_error . ']');
     }
+
     $t_bp_son = array();
     $t_bp_son_source = array();
+
     $sql_bp = "SELECT bp_link, bp_source FROM bp_links WHERE bp_name = '".$bp_racine."'";
+
     if(!$result_bp = $db->query($sql_bp)){
         die('There was an error running the query 4 [' . $db->error . ']');
     }
+
     while($row = $result_bp->fetch_assoc()){   
         array_push($t_bp_son,$row['bp_link']);
         array_push($t_bp_son_source,$row['bp_source']);
     } 
+
     $result_bp->free();
+
     if(sizeof($t_bp_son) > 0 ) {
         for ($i = 0; $i < sizeof($t_bp_son); $i++) {
             echo "<ul class=\"s tree\">\n";
@@ -181,10 +213,12 @@ function display_global_son($bp_racine) {
             else {
                 display_son($t_bp_son[$i],$t_bp_son_source[$i]."_nagiosbp");
             }
+
             echo "</ul>\n";
         }
     }
 }
+
 function display_by_source() {
     global $database_nagios;
     global $database_vanillabp;
@@ -216,6 +250,7 @@ function display_by_source() {
         echo "</ul></ul></div>";
     }
 }
+
 function display_bp_linked($bp_name, $bp_source) {
     global $database_nagios;
     global $database_vanillabp;
@@ -255,15 +290,18 @@ function display_bp_linked($bp_name, $bp_source) {
         echo "</ul>";
     }
 }
+
 function display_service($host_service,$name,$source_global,$source,$prio) {
     print "<ul><span class=\"nav-header glyphicon glyphicon-cog\" style=\"display: inline;\"> ".$host_service."</span></ul>";
 }
+
 function create_infra_access($bp_uname, $bp_source) {
     global $database_vanillabp;
     $name = $bp_uname;
     if ($bp_source == "global_nagiosbp") {
         $bp_source = "global"; 
     }
+
     sqlrequest($database_vanillabp, "INSERT INTO bp_category (bp_name,bp_source,category) VALUES ('".$name."_CI','".$bp_source."','Core Infrastructure')");
     sqlrequest($database_vanillabp, "INSERT INTO bp_category (bp_name,bp_source,category) VALUES ('".$name."_CA','".$bp_source."','Customer Access')");
     sqlrequest($database_vanillabp, "INSERT INTO bp (name,description, priority, type, command, url, min_value, is_define) VALUES ('".$name."_CI','".$name."_CI',5,'ET','','','',1)");

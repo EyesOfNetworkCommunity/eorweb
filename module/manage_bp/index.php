@@ -99,33 +99,30 @@ include("./function.php");
 				break ;
 			case "cascade_delete" :
 				$bp_selected = array();
+				// construction d'un array contenant les bps selectionnés
 				for ( $i = 0 ; $i < $max_display+2 ; $i++){
 					$bps = retrieve_form_data("bp_selected$i",null);
 					if ( $bps ) $bp_selected = array_merge($bp_selected,$bps);
 				}
-				foreach ($bp_selected as $bp)
-				{
+				foreach ($bp_selected as $bp) {
 					$bp_parts = explode("::", $bp);
 					$bp_name = $bp_parts[0];
 					$Source = $bp_parts[1];
                   
 		           // Get the db_sources_from_nickname //
 		        	$resultsource=sqlrequest($database_vanillabp,"SELECT db_names FROM bp_sources WHERE nick_name='$Source'");
-        
-		          while ($db_line = mysqli_fetch_array($resultsource))
-		          {
-		                  $Source = $db_line['db_names'];
-		          }
-          
+					while ($db_line = mysqli_fetch_array($resultsource)) {
+					      $Source = $db_line['db_names'];
+					}
+
 					$result = sqlArrayDatabase($Source,"SELECT bp_name FROM bp_links WHERE bp_link='$bp_name'");
 					sqlrequest($Source,"DELETE FROM bp_links WHERE bp_name='$bp_name'");
 					sqlrequest($Source,"DELETE FROM bp_services WHERE bp_name='$bp_name'");
 					sqlrequest($Source,"DELETE FROM bp WHERE name='$bp_name'");
-					
 					deleteAll($result, $Source);
 				}
 				break ;
-			case "backup" :
+			case "back-up" :
 				$option = retrieve_form_data("bu_list",null);
 				switch ($option){
 					case "clean" :
@@ -274,26 +271,6 @@ include("./function.php");
 		<div class="row form-group">
 			<div class="col-md-2">
 				<input class="btn btn-primary" type="submit" name="action" value="submit" onclick="javascript:return getConfirm(this.value);">
-			</div>
-		</div>
-
-		<div class="row form-group" id="setVis" style="display: none">
-			<div class="col-md-2">
-				<select class="form-control" id="bu_list" name="bu_list" size="1" onchange="showSurvey(this.value)">
-					<option value="clean"><?php echo getLabel("label.business.clean"); ?></option>
-					<?php
-					for ($i=1;$i < $max_bu_file+1 ; $i++) {
-						if ( file_exists($path_nagiosbpcfg_bu.$i) ){
-							echo "<option value=\"$i\">Get $i</option>";
-						}
-					}
-					?>
-				</select>
-			</div>
-			<div class="row form-group">
-				<div class="col-md-2">
-					<input class="btn btn-primary" type="button" name="survey" value="survey" onclick="preview()"/>
-				</div>
 			</div>
 		</div>
 
