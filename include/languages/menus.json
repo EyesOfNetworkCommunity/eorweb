@@ -20,7 +20,7 @@
                 {
                     "name":"menu.link.launch",
                     "url":"/module/kettle_apps/",
-                    "target":"frame"
+                    "target":"main"
                 },
                 {
                     "name":"menu.link.pentaho",

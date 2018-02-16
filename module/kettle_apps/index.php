@@ -1,8 +1,10 @@
 <?php 
 include ("../../header.php"); 
+include("../../side.php");
 ?>
 
-<link rel="stylesheet" type="text/css" href="./css/design.css" />
+<div id="page-wrapper">
+
 <link rel="stylesheet" type="text/css" href="../../bower_components/bootstrap-daterangepicker/daterangepicker.css" />
 
 <div class="row">
@@ -35,15 +37,11 @@ include ("../../header.php");
 				<span class="glyphicon glyphicon-ok" style="color:#4f4;"></span>
 			</button>
 		</div>
-	<div class="col-lg-12">
+	</div>
 </form>
 
+<!-- jQuery -->
 <script src="/bower_components/jquery/dist/jquery.min.js"></script>
-<script src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-<!-- DateRangePicker JavaScript -->
-<script src="/bower_components/moment/min/moment.min.js"></script>
-<script src="/bower_components/bootstrap-daterangepicker/daterangepicker.js"></script>
-
 
 <script>
 	$(document).ready(function() {
@@ -77,7 +75,7 @@ include ("../../header.php");
 					end_date: $('#endDate').val()
 				},
 				function ReturnID(id){
-					$(location).attr('href', 'http://<?php echo $_SERVER['SERVER_NAME'] ?>/kettle/jobStatus/?name=JOB_MAIN_DATE&id=' + id);	
+					$(location).attr('href', 'http://<?php echo $_SERVER['SERVER_NAME']."/module/module_frame/index.php?url=".urlencode("/kettle/jobStatus/?name=JOB_MAIN_DATE&id=")?>' + id);	
 				},
 				'text'
 			);
@@ -87,4 +85,5 @@ include ("../../header.php");
 	
 </script>
 
-</div>
+
+<?php include("./footer.php"); ?>
