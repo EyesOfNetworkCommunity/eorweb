@@ -15,28 +15,26 @@ include("../../side.php");
 
 <div id="message"></div>
 
-<form class="form-horizontal col-md-6 col-md-offset-3" id="global">
+<form id="global">
 	<div class="row form-group">
-		<div class="col-lg-12">
-			<div class="form-group has-feedback div-validity-date">
-				<label style="font-weight:normal;" class="col-md-4 control-label"><?php echo getLabel("label.kettle_apps.time_period_select"); ?></label>
-				<div class="col-md-7 input-validity-date input-group">
+		<div class="form-group has-feedback div-validity-date">
+			<label class="col-md-3"><?php echo getLabel("label.kettle_apps.time_period_select"); ?></label>
+			<div class="col-md-9 input-validity-date">
+				<div class="form-group input-group">
 					<input type="text" class="form-control" readonly id="validity_date">
 					<span class="input-group-addon">
 						<span class="glyphicon glyphicon-calendar"></span>
 					</span>
 				</div>
 			</div>
-			<div id="startDate"></div>
-			<div id="endDate"></div>
 		</div>
+		<div id="startDate"></div>
+		<div id="endDate"></div>
 	</div>
-	<div class="col-lg-12">
-		<div class="row col-md-4 col-md-offset-6">
-			<button class="form-group btn btn-primary" type="submit" id="launch">Launch WorkFlow
-				<span class="glyphicon glyphicon-ok" style="color:#4f4;"></span>
-			</button>
-		</div>
+	<div class="row form-group">
+		<button class="form-group btn btn-primary center-block" type="submit" id="launch">Launch WorkFlow
+			<span class="glyphicon glyphicon-ok" style="color:#4f4;"></span>
+		</button>
 	</div>
 </form>
 
