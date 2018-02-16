@@ -734,14 +734,12 @@ function ldap_escape($str, $login=false, $escape=false){
 }
 
 // User creation
-function insert_user($user_name, $user_descr, $user_group, $user_password1, $user_password2, $user_type, $user_location, $user_mail, $user_limitation, $message, $in_nagvis = false, $in_cacti = false, $nagvis_group = false, $user_language = false){
+function insert_user($user_name, $user_descr, $user_group, $user_password1, $user_password2, $user_type, $user_location, $user_email, $user_limitation, $message, $in_nagvis = false, $in_cacti = false, $nagvis_group = false, $user_language = false){
 	global $database_host;
-	global $database_cacti;
 	global $database_username;
 	global $database_password;
-
 	global $database_eonweb;
-	global $database_lilac;
+	
 	$user_id=null;
 
 	// Check if user exist
@@ -769,71 +767,13 @@ function insert_user($user_name, $user_descr, $user_group, $user_password1, $use
 			$user_password = md5($user_password1);
 			
 			// Insert into eonweb
-			sqlrequest("$database_eonweb","INSERT INTO users (user_name,user_descr,group_id,user_passwd,user_type,user_location,user_limitation,user_language) VALUES('$user_name', '$user_descr', '$user_group', '$user_password', '$user_type', '$user_location', '$user_limitation', '$user_language')");
+			sqlrequest("$database_eonweb","INSERT INTO users (user_name,user_descr,group_id,user_passwd,user_type,user_email,user_location,user_limitation,user_language) VALUES('$user_name', '$user_descr', '$user_group', '$user_password', '$user_type', '$user_email','$user_location', '0', '$user_language')");
 			$user_id=mysqli_result(sqlrequest("$database_eonweb","SELECT user_id FROM users WHERE user_name='$user_name'"),0,"user_id");
 			$group_name=mysqli_result(sqlrequest("$database_eonweb","SELECT group_name FROM groups WHERE group_id='$user_group'"),0,"group_name");
-
-			// Insert into lilac
-			$lilac_period=mysqli_result(sqlrequest("$database_lilac","SELECT id FROM nagios_timeperiod limit 1"),0,"id");
-			sqlrequest("$database_lilac","INSERT INTO nagios_contact (id,name,alias,email,host_notifications_enabled,service_notifications_enabled,host_notification_period,service_notification_period,host_notification_on_down,host_notification_on_unreachable,host_notification_on_recovery,host_notification_on_flapping,service_notification_on_warning,service_notification_on_unknown,service_notification_on_critical,service_notification_on_recovery,service_notification_on_flapping,can_submit_commands,retain_status_information,retain_nonstatus_information,host_notification_on_scheduled_downtime) VALUES('','$user_name','$user_descr','$user_mail', 1, 1, '$lilac_period', '$lilac_period', 1, 1, 1, 1, 1, 1, 1, 1, 1 ,1 ,1, 1, 1);");
-
-			// Lilac contact_group_member
-			$lilac_contactgroupid=mysqli_result(sqlrequest("$database_lilac","SELECT id FROM nagios_contact_group WHERE name='$group_name'"),0,"id");
-			$lilac_contactid=mysqli_result(sqlrequest("$database_lilac","SELECT id FROM nagios_contact where name='$user_name'"),0,"id");
-			if($lilac_contactgroupid!="" and $lilac_contactid!="" and $user_limitation!="1")
-				sqlrequest("$database_lilac","INSERT INTO nagios_contact_group_member (contactgroup, contact) VALUES ('$lilac_contactgroupid', '$lilac_contactid')");
-
-			// Insert into nagvis
-			if($in_nagvis == "yes"){
-				$bdd = new PDO('sqlite:/srv/eyesofnetwork/nagvis/etc/auth.db');
-
-				$req = $bdd->query("SELECT count(*) FROM users WHERE name = '$user_name'");
-				$nagvis_user_exist = $req->fetch();
-
-				if ($nagvis_user_exist["count(*)"] == 0){
-					// this is nagvis default salt for password encryption security
-					$nagvis_salt = '29d58ead6a65f5c00342ae03cdc6d26565e20954';
-					
-					// insert user in nagvis SQLite DB
-					$sql = "INSERT INTO users (name, password) VALUES ('$user_name', '".sha1($nagvis_salt.$user_password1)."')";
-					$bdd->exec($sql);
-
-					// insert user's right as "Guest" by default
-					$sql = "SELECT userId FROM users WHERE name = '$user_name'";
-					$req = $bdd->query($sql);
-					$result = $req->fetch();
-					$nagvis_id = $result['userId'];
-
-					$sql = "INSERT INTO users2roles (userId, roleId) VALUES ($nagvis_id, $nagvis_group)";
-					$bdd->exec($sql);
-				}
-			}
-
-			// Insert into cacti
-			if($in_cacti == "yes"){
-				$bdd = new PDO('mysql:host='.$database_host.';dbname='.$database_cacti, $database_username, $database_password);
-				$req = $bdd->query("SELECT count(*) FROM user_auth WHERE username='$user_name'");
-				$cacti_user_exist = $req->fetch();
-				if ($cacti_user_exist["count(*)"] == 0){
-					$bdd->exec("INSERT INTO user_auth (username,password,realm,full_name,show_tree,show_list,show_preview,graph_settings,login_opts,policy_graphs,policy_trees,policy_hosts,policy_graph_templates,enabled) VALUES ('$user_name','',2,'$user_descr','on','on','on','on',3,2,2,2,2,'on')");
-				}
-			}
 
 			// Messages
 			logging("admin_user","INSERT : $user_name $user_descr $user_limitation $user_group $user_type $user_location");
 			if($message){ message(8," : User Inserted",'ok'); }
-
-			// Lilac contact_commands
-			$lilac_contact_hcommand=mysqli_result(sqlrequest("$database_lilac","select id from nagios_command where name like 'notify-by-email-host'"),0,"id");
-			$lilac_contact_scommand=mysqli_result(sqlrequest("$database_lilac","select id from nagios_command where name like 'notify-by-email-service'"),0,"id");
-			if($lilac_contactid!="" and $lilac_contact_hcommand!="")
-				sqlrequest("$database_lilac","INSERT INTO nagios_contact_notification_command (contact_id,command,type) values ('$lilac_contactid','$lilac_contact_hcommand','host')");
-			elseif($lilac_contact_hcommand=="")
-				message(8," : Verify contact 'notify-by-email-host' command in nagios configurator",'warning');
-			if($lilac_contactid!="" and $lilac_contact_scommand!="")
-				sqlrequest("$database_lilac","INSERT INTO nagios_contact_notification_command (contact_id,command,type) values ('$lilac_contactid','$lilac_contact_scommand','service')");
-			elseif($lilac_contact_scommand=="")
-				message(8," : Verify contact 'notify-by-email-service' command in nagios configurator",'warning');
 		}
 		else
 			message(8," : Passwords do not match or are empty",'warning');

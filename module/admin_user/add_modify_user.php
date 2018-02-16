@@ -81,17 +81,14 @@ include("../../side.php");
 		//--------------------------------------------------------
 
 		// Update User Information & Right
-		function update_user($user_id, $user_name, $user_descr, $user_group, $user_password1, $user_password2 ,$user_type, $user_location, $user_email, $old_group_id, $old_name, $create_user_in_nagvis, $create_user_in_cacti, $nagvis_role_id, $user_language)
+		function update_user($user_id, $user_name, $user_descr, $user_group, $user_password1, $user_password2 ,$user_type, $user_email, $user_location, $old_group_id, $old_name, $create_user_in_nagvis, $create_user_in_cacti, $nagvis_role_id, $user_language)
 		{
 			global $database_host;
-			global $database_cacti;
 			global $database_username;
 			global $database_password;
 
 			global $database_eonweb;
-			global $database_lilac;
 			global $path_eonweb;
-			global $dir_imgcache;
 
 			// Check if user exist
 			if($user_name!=$old_name)	
@@ -124,11 +121,6 @@ include("../../side.php");
 					// logging action
 					logging("admin_user","UPDATE : $user_id $user_name $user_descr $user_group $user_type $user_location");
 
-					// renaming files
-					if($user_name!=$old_name){
-						if(file_exists("$path_eonweb/$dir_imgcache/".strtolower($old_name)."-ged.xml"))
-							rename("$path_eonweb/$dir_imgcache/".strtolower($old_name)."-ged.xml","$path_eonweb/$dir_imgcache/".strtolower($user_name)."-ged.xml");
-					}
 					message(8," : User updated",'ok');
 					}
 					else
@@ -238,7 +230,7 @@ include("../../side.php");
 						// ACCOUNT UPDATE (and retrieve parameters)
 						//------------------------------------------------------------------------------------------------
 			if (isset($_POST['update'])){
-				update_user($user_id, stripAccents($user_name), $user_descr, $user_group, $user_password1, $user_password2, $user_type, $user_location, $user_email, $old_group_id, $old_name, $create_user_in_nagvis, $create_user_in_cacti, $nagvis_role_id, $user_language);	
+				update_user($user_id, stripAccents($user_name), $user_descr, $user_group, $user_password1, $user_password2, $user_type, $user_email, $user_location, $old_group_id, $old_name, $create_user_in_nagvis, $create_user_in_cacti, $nagvis_role_id, $user_language);	
 				//message(8,"Update: User location = $user_location",'ok');	// For debug pupose, to be removed
 				//message(8,"Update: User name =  $user_name",'ok');			// For debug pupose, to be removed
 			}

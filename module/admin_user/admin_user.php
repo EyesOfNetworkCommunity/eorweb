@@ -33,9 +33,6 @@
 if( isset($user_id) || isset($user_type) ){
 	if($user_id!="1"){
 		echo "<script>disable_group();</script>";
-	}
-	elseif($user_id!="1"){
-		echo "<script>disable_group();</script>";
 		echo "<script>disable_group();</script>";
 	}
 	if($user_type=="1" && $user_id!="1"){
@@ -45,7 +42,6 @@ if( isset($user_id) || isset($user_type) ){
 		echo "<script>disable();</script>";
 		echo "<script>disable();</script>";
 	}
-
 }
 
 ?>
