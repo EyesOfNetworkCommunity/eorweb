@@ -68,7 +68,7 @@ if(isset($_GET["name"])) {
 			} else {
 				$current_request = "INSERT INTO bp VALUES('$bp_uname','$bp_name','$bp_prio','$bp_type','$bp_cmd','$bp_url','$bp_type_min','')";
 				if ($application != null) {
-					create_infra_access($bp_uname, $bp_source);
+					create_infra_access($bp_uname, $bp_source);				
 				}
 				$return = sqlrequest($bp_source,$current_request);
 				if ( $return ) {
@@ -156,7 +156,7 @@ if(isset($_GET["name"])) {
 				<div class="form-group">
 					<label style="font-weight:normal;" class="col-md-4 control-label">Application </label>
 					<div class="col-md-7">
-						<input class="checkbox" type="checkbox" name="application">
+						<input class="checkbox" type="checkbox" name="application" onChange="javascript:disabled_type();">
 					</div>
 				</div>
 			</div>
