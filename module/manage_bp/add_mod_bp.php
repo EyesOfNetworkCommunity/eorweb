@@ -19,40 +19,10 @@
 #
 #########################################
 */
-<<<<<<< HEAD
-include("../../header.php");
-include("../../side.php");
-?>
-<div id="page-wrapper">
-<?php
-/* ~~~~~~~~~~ FUNCTIONS ~~~~~~~~~~ */
-	/**
-	 * Récupère le nick_name d'une source.
-	 *
-	 * @param $db_name (String) -> Nom de la source.
-	 *
-	 * @return (String) -> Le nick_name de la source.
-	 */
-	function getNickName($db_name)
-	{
-		global $database_vanillabp;
-
-		$result = sqlrequest($database_vanillabp, "SELECT nick_name FROM bp_sources WHERE db_names='$db_name'");
-		while ($line = mysql_fetch_array($result)){
-			$nick_name=$line[0];
-        }
-
-		return $nick_name;
-	}
-=======
->>>>>>> a1d12c7f3ea7975686bb8cc4b2e9e49bf4ec492f
-
 include("../../header.php");
 include("../../side.php");
 include("./function.php");
-
 global $database_vanillabp;
-
 $nick_name = getNickName($_GET["source"]);
 	
 	// ~~~~~~~~~~~~ TEST ~~~~~~~~~~~~ // 
@@ -75,16 +45,10 @@ $nick_name = getNickName($_GET["source"]);
 	$metier = mysqli_fetch_assoc($result);
 ?>
 
-<<<<<<< HEAD
-	<div class="row">
-		<div class="col-md-12">
-			<h1 class="page-header"><?php ?></h1>
-=======
 <div id="page-wrapper">
 	<div class="row">
 		<div class="col-md-12">
 			<h1 class="page-header"><?php echo getLabel("label.business.title"); ?></h1>
->>>>>>> a1d12c7f3ea7975686bb8cc4b2e9e49bf4ec492f
 		</div>
 	</div>
 	<form action='./add_mod_bp.php' method='POST' name='form_bp'>
@@ -191,11 +155,8 @@ $nick_name = getNickName($_GET["source"]);
 			</div>
 		</div>
 	</form>
-<<<<<<< HEAD
-=======
 </div>
 
->>>>>>> a1d12c7f3ea7975686bb8cc4b2e9e49bf4ec492f
 <?php 
 	$nbrServ = 0;
 	$tabMetier = sqlArrayDatabase($_GET["source"],"SELECT '$_GET[source]' as source, name, description, priority, type,command,url,min_value,is_define FROM bp WHERE name NOT IN (SELECT bp_name FROM bp_links WHERE bp_link='$_GET[uname]')");
@@ -205,69 +166,6 @@ $nick_name = getNickName($_GET["source"]);
 	$result = sqlArrayDatabase($_GET["source"],"SELECT '$_GET[source]' as source,id, bp_name, bp_link FROM bp_links WHERE `bp_name`='$_GET[uname]'");
 	$nbrServ += count($result)."<br>";
 ?>
-<<<<<<< HEAD
-
-<script type="text/javascript" src="function.js"></script>
-<script type="text/javascript" src="../../js/jquery.js"></script>
-<script type="text/javascript" src="../../js/jquery.autocomplete.js"></script>
-<script type="text/javascript">
-	$("input[name=equip]").attr("disabled", true);
-	$("#sourceinput").attr("checked", true);
-	
-	$("#check").attr("checked", true);
-	selectValueSource("changesource", true);
-	selectValue("change", true);
-		
-	setValues("<?php echo $_GET['uname']?>", <?php echo json_encode($tabMetier) ?>,"<?php echo $_GET['source']?>","<?php echo $nbrServ?>","<?php echo $metier['min_value'];?>");
-	
-	<?php 
-	if ( $metier['is_define']){
-		$result = sqlArrayDatabase($_GET[source],"SELECT '$_GET[source]' as source,id, bp_name, host, service FROM bp_services WHERE bp_name='$_GET[uname]'");
-	// DEBUG
-	  //echo "\n\n/* SQLREQUEST Serv is:SELECT '".$_GET[source]."' as source,id, bp_name, host, service FROM bp_services WHERE bp_name='".$_GET[uname]."'\n";
-	  //echo "\n Result:".var_dump($result)."\n";
-	  //echo "\n*/\n";
-	// FIN DEBUG
-		echo "setServ(".json_encode($result).");";
-  
-  
-  if ( $_GET[source] == "global_nagiosbp" ) {
-		  $result = sqlArrayDatabase($_GET[source],"SELECT '$_GET[source]' as source,id, bp_name, bp_link, bp_source FROM bp_links WHERE bp_name='$_GET[uname]'");
-	// DEBUG
-	  //echo "\n\n/* SQLREQUEST Proc is:SELECT '".$_GET[source]."' as source,id, bp_name, bp_link, bp_source FROM bp_links WHERE bp_name='".$_GET[uname]."'\n";
-	  //echo "\n Result:".var_dump($result)."\n";
-	  //echo "\n*/\n";
-	// FIN DEBUG
-  }
-  else {
-	$result = sqlArrayDatabase($_GET[source],"SELECT '$_GET[source]' as source,id, bp_name, bp_link, '$_GET[source]' as bp_source  FROM bp_links WHERE bp_name='$_GET[uname]'");
-  }
-	
-		echo "setProc(".json_encode($result).");";
-	} 
-	?>
-	
-	/* ~~~~~~~~~~ griser les champs quand SOURCE = vide ~~~~~~~~~~ */
-	// les 2 champs sont disabled de base (tout en bas du code)
-	$('body').bind("change", "input[name=source]", function(){
-		var source_value = $("input[name=source]").val();
-		if(source_value != "")
-		{
-			$("input[name=equip]").attr("disabled", false);
-			$("#change").attr("disabled", false);
-			$("#check").attr("disabled", false);
-		}
-		else
-		{
-			$("input[name=equip]").attr("disabled", true);
-			$("#change").attr("disabled", true);
-			$("#check").attr("disabled", true);
-		}
-	});
-	/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
-</script>
-</div>
-=======
 
 <script src="./function.js"></script>
 <script src="../../bower_components/jquery/dist/jquery.min.js"></script>
@@ -316,4 +214,3 @@ $nick_name = getNickName($_GET["source"]);
 <?php
 include("../../footer.php");
 ?>
->>>>>>> a1d12c7f3ea7975686bb8cc4b2e9e49bf4ec492f
