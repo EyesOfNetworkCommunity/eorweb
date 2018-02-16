@@ -275,19 +275,19 @@ include("./function.php");
 		</div>
 
 		<div class="row">
-			<div class="col-md-5">
+			<div class="col-md-7">
 				<div class="panel panel-default" id="0" style="display: none;">
 					<div class="panel-heading">
 						<div class="row">
-							<div class="col-xs-4 col-md-4">Source</div>
-							<div class="col-xs-4 col-md-4">Name</div>
-							<div class="col-xs-4 col-md-4">Select</div>
+							<div class="col-xs-8 col-md-8">No display</div>
+							<div class="col-xs-4 col-md-4"><a href='#' onclick='javascript:selectAll(0)'>ALL</a></div>
 						</div>
 					</div>
 					<div class="panel-body">
 						<div class="row">
-							<div class="col-xs-8 col-md-8">No display</div>
-							<div class="col-xs-4 col-md-4"><a href='#' onclick='javascript:selectAll(0)'>ALL</a></div>
+							<div class="col-xs-4 col-md-4">Source</div>
+							<div class="col-xs-4 col-md-4">Name</div>
+							<div class="col-xs-4 col-md-4">Select</div>
 						</div>
 						<div id="insert-0"></div>
 					</div>
@@ -298,22 +298,21 @@ include("./function.php");
 		<?php
 			for ($i = 1 ; $i < $max_display+2 ; $i++){
 				echo "<div class=\"row\">
-						<div class=\"col-md-5\">
+						<div class=\"col-md-7\">
 							<div class=\"panel panel-default\" id=\"$i\" style=\"display: none\">
 								<div class=\"panel-heading\">
+									<div class=\"row\">
+										<div class=\"col-xs-8 col-md-8\">Display ".($i-$display_zero)."</div>
+										<div class=\"col-xs-4 col-md-4\"><a href='#' onclick='javascript:selectAll($i)'>ALL</a></div>
+									</div>
+								</div>
+								<div class=\"panel-body\">
 									<div class=\"row\">
 										<div class=\"col-xs-4 col-md-4\">Source</div>
 										<div class=\"col-xs-4 col-md-4\">Name</div>
 										<div class=\"col-xs-4 col-md-4\">Select</div>
 									</div>
-								</div>
-								<div class=\"panel-body\">
-									<div class=\"row\">
-										<div class=\"col-xs-8 col-md-8\">Display ".($i-$display_zero)."</div>
-										<div class=\"col-xs-4 col-md-4\"><a href='#' onclick='javascript:selectAll($i)'>ALL</a></div>
-									</div>
-									<div id=\"insert-".$i."\">
-									</div>
+									<div id=\"insert-".$i."\"></div>
 								</div>
 							</div>
 						</div>
