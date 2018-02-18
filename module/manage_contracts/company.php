@@ -9,20 +9,18 @@ include("../../side.php");
 			<h1 class="page-header"><?php echo getLabel("label.manage_contracts.company_title"); ?></h1>
 		</div>
 	</div>
+	<div class="row" id="global_form"></div>
 	<div class="container">
-		<form class="form-horizontal col-md-7 marge" id="global_form">
+		<form class="form-horizontal col-md-7">
 			<div class="row pad-top">
 				<div class="form-group has-feedback div-name">
 					<label style="font-weight:normal;" for="name" class="col-md-4 control-label"><?php echo getLabel("label.manage_contracts.company_name"); ?></label>
 					<div class="col-md-7 input-name">
 						<input type="text" class="form-control" id="name" onkeyup="this.value=this.value.replace(/[^éèàêâç0-9a-zA-Z-_ \/\*]/g,'')">
 					</div>
-					<div class="form-group col-md-1">
-						<span class="glyphicon glyphicon-asterisk" style="font-size:15px;"></span>
-					</div>
 				</div>	
 			</div>
-			<button class="form-group btn btn-primary pull-right" type="submit" id="submit">Envoyer
+			<button class="form-group btn btn-primary" type="submit" id="submit"><?php echo getLabel("action.submit"); ?>
 				<span class="glyphicon glyphicon-ok" style="color:#4f4;"></span>
 			</button>
 		</form>

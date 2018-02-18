@@ -24,7 +24,7 @@ include("../../side.php");
 		</table>
 	</div>
 	<div class="col-md-12">
-		<input type="button" class="btn btn-primary" value="Add" onclick="location.href='./kpi.php';">
+		<input type="button" class="btn btn-primary" value="<?php echo getLabel("action.add"); ?>" onclick="location.href='./kpi.php';">
 	</div>
 </div>
 

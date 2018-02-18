@@ -9,59 +9,60 @@ include("../../side.php");
 			<h1 class="page-header"><?php echo getLabel("label.manage_contracts.kpi_title"); ?></h1>
 		</div>
 	</div>
-	<form class="form-horizontal col-md-7 marge" id="global_form" style="display:none">
-		<div class="row pad-top">
-			<div class="form-group has-feedback div-name">
-				<label style="font-weight:normal;" for="name" class="col-md-4 control-label"><?php echo getLabel("label.contracts_menu.indicator_create_name"); ?> : </label>
-				<div class="col-md-7 input-name">
-					<input type="text" class="form-control" id="name" onkeyup="this.value=this.value.replace(/[^éèàêâç0-9a-zA-Z-_ \/\*]/g,'')">
-				</div>
-				<div class="form-group col-md-1">
-					<span class="glyphicon glyphicon-asterisk" style="font-size:15px;"></span>
-				</div>
-			</div>
-		</div>
-
-		<div class="row">
-			<div class="form-group has-feedback div-comput">
-				<label style="font-weight:normal;" for="name_unit_comput" class="col-md-4 control-label"><?php echo getLabel("label.contracts_menu.indicator_create_compute"); ?> : </label>
-				<div class="col-md-7 input-comput">
-					<button class="btn btn-default btn-block dropdown-toggle" type="button" data-toggle="dropdown" id="name_unit_comput"><?php echo getLabel("label.contracts_menu.indicator_create_compute_value_default"); ?>
-					<span class="caret"></span></button>
-					<ul class="dropdown-menu btn-block" id="ul_comput"></ul>
-				</div>
-				<div class="form-group col-md-1">
-					<span class="glyphicon glyphicon-asterisk" style="font-size:15px;"></span>
+	<div class="col-md-7">
+		<form class="form-horizontal" id="global_form" style="display:none">
+			<div class="row pad-top">
+				<div class="form-group has-feedback div-name">
+					<label style="font-weight:normal;" for="name" class="col-md-4 control-label"><?php echo getLabel("label.contracts_menu.indicator_create_name"); ?> : </label>
+					<div class="col-md-7 input-name">
+						<input type="text" class="form-control" id="name" onkeyup="this.value=this.value.replace(/[^éèàêâç0-9a-zA-Z-_ \/\*]/g,'')">
+					</div>
 				</div>
 			</div>
-		</div>
 
-		<div class="row">
-			<div class="form-group has-feedback div-presentation">
-				<label style="font-weight:normal;" for="name_unit_presentation" class="col-md-4 control-label"><?php echo getLabel("label.contracts_menu.indicator_create_presentation"); ?> : </label>
-				<div class="col-md-7 input-presentation">
-					<button class="btn btn-default btn-block dropdown-toggle" type="button" data-toggle="dropdown" id="name_unit_presentation"><?php echo getLabel("label.contracts_menu.indicator_create_presentation"); ?>
-					<span class="caret"></span></button>
-					<ul class="dropdown-menu btn-block" id="ul_presentation"></ul>
-				</div>
-				<div class="form-group col-md-1">
-					<span class="glyphicon glyphicon-asterisk" style="font-size:15px;"></span>
+			<div class="row">
+				<div class="form-group has-feedback div-comput">
+					<label style="font-weight:normal;" for="name_unit_comput" class="col-md-4 control-label"><?php echo getLabel("label.contracts_menu.indicator_create_compute"); ?> : </label>
+					<div class="col-md-7 input-comput">
+						<button class="btn btn-default btn-block dropdown-toggle" type="button" data-toggle="dropdown" id="name_unit_comput"><?php echo getLabel("label.contracts_menu.indicator_create_compute_value_default"); ?>
+						<span class="caret"></span></button>
+						<ul class="dropdown-menu btn-block" id="ul_comput"></ul>
+					</div>
 				</div>
 			</div>
-		</div>
 
-		<div class="col-md-7" style="display:none">
-			<input type="text" class="form-control" id="id_unit_comput">
-		</div>
+			<div class="row">
+				<div class="form-group has-feedback div-presentation">
+					<label style="font-weight:normal;" for="name_unit_presentation" class="col-md-4 control-label"><?php echo getLabel("label.contracts_menu.indicator_create_presentation"); ?> : </label>
+					<div class="col-md-7 input-presentation">
+						<button class="btn btn-default btn-block dropdown-toggle" type="button" data-toggle="dropdown" id="name_unit_presentation"><?php echo getLabel("label.contracts_menu.indicator_create_presentation"); ?>
+						<span class="caret"></span></button>
+						<ul class="dropdown-menu btn-block" id="ul_presentation"></ul>
+					</div>
+				</div>
+			</div>
 
-		<div class="col-md-7" style="display:none">
-			<input type="text" class="form-control" id="id_unit_presentation">
-		</div>
+			<div class="row" style="display:none">
+				<div class="form-group has-feedback div-presentation">
+					<div class="col-md-7">
+						<input type="text" class="form-control" id="id_unit_comput">
+					</div>
+				</div>
+			</div>
 
-		<button class="form-group btn btn-primary pull-right" type="submit" id="submit">Envoyer
-			<span class="glyphicon glyphicon-ok" style="color:#4f4;"></span>
-		</button>
-	</form>
+			<div class="row" style="display:none">
+				<div class="form-group has-feedback div-presentation">
+					<div class="col-md-7">
+						<input type="text" class="form-control" id="id_unit_presentation">
+					</div>
+				</div>
+			</div>
+
+			<button class="form-group btn btn-primary" type="submit" id="submit"><?php echo getLabel("action.submit"); ?>
+				<span class="glyphicon glyphicon-ok" style="color:#4f4;"></span>
+			</button>
+		</form>
+	</div>
 </div>
 
 <script src="../../bower_components/jquery/dist/jquery.min.js"></script>

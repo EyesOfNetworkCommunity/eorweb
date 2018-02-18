@@ -10,108 +10,84 @@ include("../../side.php");
 			<h1 class="page-header"><?php echo getLabel("label.manage_contracts.contract_context_title"); ?></h1>
 		</div>
 	</div>
-	<div class="row">
-		<form id="global_form" class="col-md-7">
-			<div class="row form-group">
-				<div class="form-group has-feedback div-name">
-					<label style="font-weight:normal;" for="name" class="col-md-4 control-label"><?php echo getLabel("label.manage_contracts.contract_context_name_descr"); ?></label>
-					<div class="col-md-7 input-name">
-						<input type="text" class="form-control" id="name" onkeyup="this.value=this.value.replace(/[^éèàêâç0-9a-zA-Z-_ \/\*]/g,'')">
-					</div>
-					<div class="control-label form-group col-md-1">
-						<span class="glyphicon glyphicon-asterisk" style="font-size:13px;color:#707070;"></span>
-					</div>
-				</div>	
-			</div>
-
-			<div class="row form-group">
-				<div class="form-group has-feedback div-desc">
-					<label style="font-weight:normal;" for="desc" class="col-md-4 control-label"><?php echo getLabel("label.manage_contracts.contract_context_descr"); ?></label>
-					<div class="col-md-7 input-desc">
-						<input type="text" class="form-control" id="desc" onkeyup="this.value=this.value.replace(/[^éèàêâç0-9a-zA-Z-_ \/\*]/g,'')">
-					</div>
-				</div>	
-			</div>
-
-			<div class="row form-group">
-				<div class="form-group has-feedback div-contract">
-					<label style="font-weight:normal;" for="name_contract" class="col-md-4 control-label"><?php echo getLabel("label.manage_contracts.contract_context_contract"); ?></label>
-					<div class="col-md-7 input-contract">
-						<button class="btn btn-default btn-block dropdown-toggle" type="button" data-toggle="dropdown" id="name_contract"><?php echo getLabel("label.manage_contracts.contract_view_title"); ?> <span class="caret"></span></button>
-						<ul class="dropdown-menu btn-block" id="ul_contract">
-						</ul>
-					</div>
-					<div class="control-label form-group col-md-1">
-						<span class="glyphicon glyphicon-asterisk" style="font-size:13px;color:#707070;"></span>
-					</div>
+	<form id="global_form" class="col-md-7">
+		<div class="row form-group">
+			<div class="form-group has-feedback div-name">
+				<label style="font-weight:normal;" for="name" class="col-md-4 control-label"><?php echo getLabel("label.manage_contracts.contract_context_name_descr"); ?></label>
+				<div class="col-md-7 input-name">
+					<input type="text" class="form-control" id="name" onkeyup="this.value=this.value.replace(/[^éèàêâç0-9a-zA-Z-_ \/\*]/g,'')">
+				</div>
+			</div>	
+		</div>
+		<div class="row form-group">
+			<div class="form-group has-feedback div-desc">
+				<label style="font-weight:normal;" for="desc" class="col-md-4 control-label"><?php echo getLabel("label.manage_contracts.contract_context_descr"); ?></label>
+				<div class="col-md-7 input-desc">
+					<input type="text" class="form-control" id="desc" onkeyup="this.value=this.value.replace(/[^éèàêâç0-9a-zA-Z-_ \/\*]/g,'')">
+				</div>
+			</div>	
+		</div>
+		<div class="row form-group">
+			<div class="form-group has-feedback div-contract">
+				<label style="font-weight:normal;" for="name_contract" class="col-md-4 control-label"><?php echo getLabel("label.manage_contracts.contract_context_contract"); ?></label>
+				<div class="col-md-7 input-contract">
+					<button class="btn btn-default btn-block dropdown-toggle" type="button" data-toggle="dropdown" id="name_contract"><?php echo getLabel("label.manage_contracts.contract_view_title"); ?> <span class="caret"></span></button>
+					<ul class="dropdown-menu btn-block" id="ul_contract">
+					</ul>
 				</div>
 			</div>
-
-			<div class="row form-group">
-				<div class="form-group has-feedback div-time">
-					<label style="font-weight:normal;" for="name_time_period" class="col-md-4 control-label"><?php echo getLabel("label.time_period"); ?> : </label>
-					<div class="col-md-7 input-time">
-						<button class="btn btn-default btn-block dropdown-toggle" type="button" data-toggle="dropdown" id="name_time_period"><?php echo getLabel("label.manage_contracts.time_period_view_title"); ?> <span class="caret"></span></button>
-						<ul class="dropdown-menu btn-block" id="ul_time">
-						</ul>
-					</div>
-					<div class="control-label form-group col-md-1">
-						<span class="glyphicon glyphicon-asterisk" style="font-size:13px;color:#707070;"></span>
-					</div>
+		</div>
+		<div class="row form-group">
+			<div class="form-group has-feedback div-time">
+				<label style="font-weight:normal;" for="name_time_period" class="col-md-4 control-label"><?php echo getLabel("label.time_period"); ?> : </label>
+				<div class="col-md-7 input-time">
+					<button class="btn btn-default btn-block dropdown-toggle" type="button" data-toggle="dropdown" id="name_time_period"><?php echo getLabel("label.manage_contracts.time_period_view_title"); ?> <span class="caret"></span></button>
+					<ul class="dropdown-menu btn-block" id="ul_time">
+					</ul>
 				</div>
 			</div>
-
-			<div class="row">
-				<div class="form-group has-feedback div-kpi">
-					<label style="font-weight:normal;" for="name_kpi" class="col-md-4 control-label"><?php echo getLabel("label.indicator"); ?> : </label>
-					<div class="col-md-7 input-kpi">
-						<button class="btn btn-default btn-block dropdown-toggle" type="button" data-toggle="dropdown" id="name_kpi"><?php echo getLabel("label.contracts_menu.context_contract_create_indicator_value_default"); ?> <span class="caret"></span></button>
-						<ul class="dropdown-menu btn-block" id="ul_kpi">
-						</ul>
-					</div>
-					<div class="control-label form-group col-md-1">
-						<span class="glyphicon glyphicon-asterisk" style="font-size:13px;color:#707070;"></span>
-					</div>
+		</div>
+		<div class="row">
+			<div class="form-group has-feedback div-kpi">
+				<label style="font-weight:normal;" for="name_kpi" class="col-md-4 control-label"><?php echo getLabel("label.indicator"); ?> : </label>
+				<div class="col-md-7 input-kpi">
+					<button class="btn btn-default btn-block dropdown-toggle" type="button" data-toggle="dropdown" id="name_kpi"><?php echo getLabel("label.contracts_menu.context_contract_create_indicator_value_default"); ?> <span class="caret"></span></button>
+					<ul class="dropdown-menu btn-block" id="ul_kpi">
+					</ul>
 				</div>
 			</div>
-
-			<div class="row" id="display_step_group" style="display:none">
-		                <div class="form-group has-feedback">
-		                        <label style="font-weight:normal;" for="name_step_group" class="col-md-4 control-label">Seuils associés à l'indicateur</label>
-		                        <div class="col-md-7">
-		                                <button class="btn btn-default btn-block dropdown-toggle" type="button" data-toggle="dropdown" id="name_step_group">Selectionner un groupe de seuil
-		                                <span class="caret"></span></button>
-		                                <ul class="dropdown-menu btn-block" id="ul_step_group">
-		                                </ul>
-		                        </div>
-		                        <div class="control-label form-group col-md-1">
-		                                <span class="glyphicon glyphicon-asterisk" style="font-size:13px;color:#707070;"></span>
-		                        </div>
-		                </div>
-		    </div>
-			<div class="col-md-7" style="display:none">
-				<input type="text" class="form-control" id="id_contract">
+		</div>
+		<div class="row form-group" id="display_step_group" style="display:none">
+            <div class="form-group has-feedback">
+                    <label style="font-weight:normal;" for="name_step_group" class="col-md-4 control-label">Seuils associés à l'indicateur</label>
+                    <div class="col-md-7">
+                            <button class="btn btn-default btn-block dropdown-toggle" type="button" data-toggle="dropdown" id="name_step_group">Selectionner un groupe de seuil
+                            <span class="caret"></span></button>
+                            <ul class="dropdown-menu btn-block" id="ul_step_group">
+                            </ul>
+                    </div>
+            </div>
+	    </div>
+		<div class="col-md-7" style="display:none">
+			<input type="text" class="form-control" id="id_contract">
+		</div>
+		<div class="col-md-7" style="display:none">
+			<input type="text" class="form-control" id="id_time_period">
+		</div>
+		<div class="col-md-7" style="display:none">
+			<input type="text" class="form-control" id="id_kpi">
+		</div>
+		<div class="col-md-7" style="display:none">
+	                <input type="text" class="form-control" id="id_step_group">
+	    </div>
+		<div class="row">
+			<div class="col-md-4">
+				<button class="form-group btn btn-primary" type="submit" id="submit"><?php echo getLabel("action.submit"); ?>
+					<span class="glyphicon glyphicon-ok" style="color:#4f4;"></span>
+				</button>
 			</div>
-			<div class="col-md-7" style="display:none">
-				<input type="text" class="form-control" id="id_time_period">
-			</div>
-			<div class="col-md-7" style="display:none">
-				<input type="text" class="form-control" id="id_kpi">
-			</div>
-			<div class="col-md-7" style="display:none">
-		                <input type="text" class="form-control" id="id_step_group">
-		    </div>
-			<div class="row" style="text-align: center;">
-				<label style="font-weight:lighter;" class="control-label"><?php echo getLabel("label.manage_contracts.required_field"); ?></label>
-				<span class="glyphicon glyphicon-asterisk" style="font-size:10px;color:#707070;"></span>
-				<label style="font-weight:lighter;" class="control-label"><?php echo getLabel("label.manage_contracts.required_field_2"); ?></label>
-			</div>
-			<button class="form-group btn btn-primary pull-right" type="submit" id="submit"><?php echo getLabel("action.submit"); ?>
-				<span class="glyphicon glyphicon-ok" style="color:#4f4;"></span>
-			</button>
-
-		</form>
-	</div>
+		</div>
+	</form>
 </div>
 
 <script src="../../bower_components/jquery/dist/jquery.min.js"></script>

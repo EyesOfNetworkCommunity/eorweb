@@ -15,9 +15,6 @@ include("../../side.php");
 				<div class="col-md-7 input-name">
 					<input type="text" class="form-control" id="name" onkeyup="this.value=this.value.replace(/[^éèàêâç0-9a-zA-Z-_ \/\*]/g,'')">
 				</div>
-				<div class="col-md-1 full-left">
-					<span class="glyphicon glyphicon-asterisk"></span>
-				</div>
 			</div>	
 		</div>
 
@@ -26,9 +23,6 @@ include("../../side.php");
 				<label style="font-weight:normal;" for="short_name" class="col-md-4 control-label">Nom court : </label>
 				<div class="col-md-7 input-short-name">
 					<input type="text" class="form-control" id="short_name" onkeyup="this.value=this.value.replace(/[^éèàêâç0-9a-zA-Z-_ \/\*]/g,'')">
-				</div>
-				<div class="col-md-1 full-left">
-					<span class="glyphicon glyphicon-asterisk"></span>
 				</div>
 			</div>
 		</div>
@@ -51,7 +45,7 @@ include("../../side.php");
 			</div>
 		</div>
 
-		<button class="form-group btn btn-primary pull-right" type="submit" id="submit">Envoyer
+		<button class="form-group btn btn-primary" type="submit" id="submit"><?php echo getLabel("action.submit"); ?>
 			<span class="glyphicon glyphicon-ok" style="color:#4f4;"></span>
 		</button>
 	</form>

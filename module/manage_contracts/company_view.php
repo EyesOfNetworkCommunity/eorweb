@@ -9,23 +9,25 @@ include("../../side.php");
 			<h1 class="page-header"><?php echo getLabel("label.manage_contracts.company_view_title"); ?></h1>
 		</div>
 	</div>
-	<div class="Table_wrapper">
-		<div class="table-responsive">
-			<table class="table table-striped table-hover" id="myTable">
-				<thead class="altTop">
-					<tr>
-						<th></th>
-						<th><?php echo getLabel("label.name"); ?></th>
-						<th><?php echo getLabel("label.edit"); ?></th>
-					</tr>
-				</thead>
-				<tbody id="body_table">
-				</tbody>
-			</table>
+	<div class="row">
+		<div class="Table_wrapper">
+			<div class="table-responsive">
+				<table class="table table-striped table-hover" id="myTable">
+					<thead class="altTop">
+						<tr>
+							<th></th>
+							<th><?php echo getLabel("label.name"); ?></th>
+							<th><?php echo getLabel("label.edit"); ?></th>
+						</tr>
+					</thead>
+					<tbody id="body_table">
+					</tbody>
+				</table>
+			</div>
 		</div>
-	</div>
-	<div class="col-md-12">
-		<input type="button" class="btn btn-primary" value="Add" onclick="location.href='./company.php';">
+		<div class="col-md-12">
+			<input type="button" class="btn btn-primary" value="<?php echo getLabel("action.add"); ?>" onclick="location.href='./company.php';">
+		</div>
 	</div>
 </div>
 

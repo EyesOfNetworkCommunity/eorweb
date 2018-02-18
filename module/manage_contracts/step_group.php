@@ -11,72 +11,52 @@ include("../../side.php");
 			<h1 class="page-header"><?php echo getLabel("label.manage_contracts.step_group_title"); ?></h1>
 		</div>
 	</div>
-	<form class="form-horizontal col-md-7 marge" id="global_form" style="display:none">
-		<div class="row pad-top">
-			<div class="form-group has-feedback">
-				<label style="font-weight:normal;" for="name" class="col-md-3 control-label"><?php echo getLabel("label.contracts_menu.seuils_create_name"); ?> : </label>
-				<div class="col-md-8">
-					<input type="text" class="form-control" id="name" onkeyup="this.value=this.value.replace(/[^éèàêâç0-9a-zA-Z-_ \/\*]/g,'')">
-				</div>
-				<div class="col-md-1 full-left">
-					<span class="glyphicon glyphicon-asterisk"></span>
-				</div>
-			</div>	
-		</div>
-
-		<div class="row">
-			<div class="form-group has-feedback">
-				<label style="font-weight:normal;" for="name_kpi" class="col-md-3 control-label"><?php echo getLabel("label.contracts_menu.seuils_create_indicator"); ?> : </label>
-				<div class="col-md-8">
-					<button class="btn btn-default btn-block dropdown-toggle" type="button" data-toggle="dropdown" id="name_kpi"><?php echo getLabel("label.contracts_menu.context_contract_create_indicator_value_default"); ?>
-					<span class="caret"></span></button>
-					<ul class="dropdown-menu btn-block" id="ul_kpi">
-					</ul>
-				</div>
-				<div class="col-md-1 full-left">
-					<span class="glyphicon glyphicon-asterisk"></span>
-				</div>
+	<form class="form-horizontal col-md-7" id="global_form" style="display:none">
+		<div class="form-group has-feedback">
+			<label style="font-weight:normal;" for="name" class="col-md-3 control-label"><?php echo getLabel("label.contracts_menu.seuils_create_name"); ?> : </label>
+			<div class="col-md-8">
+				<input type="text" class="form-control" id="name" onkeyup="this.value=this.value.replace(/[^éèàêâç0-9a-zA-Z-_ \/\*]/g,'')">
+			</div>
+		</div>	
+		<div class="form-group has-feedback">
+			<label style="font-weight:normal;" for="name_kpi" class="col-md-3 control-label"><?php echo getLabel("label.contracts_menu.seuils_create_indicator"); ?> : </label>
+			<div class="col-md-8">
+				<button class="btn btn-default btn-block dropdown-toggle" type="button" data-toggle="dropdown" id="name_kpi"><?php echo getLabel("label.contracts_menu.context_contract_create_indicator_value_default"); ?>
+				<span class="caret"></span></button>
+				<ul class="dropdown-menu btn-block" id="ul_kpi"></ul>
 			</div>
 		</div>
+		<div class="form-group has-feedback" id="display_unit_checkbox" style="display:none">
+			<label style="font-weight:normal;" class="col-md-3 control-label"><?php echo getLabel("label.contracts_menu.seuils_create_type"); ?> : </label>
+			<label style="font-weight:normal;" class="col-md-4 radio-inline" id="label_unit_kpi" for="unit_kpi"><input type="radio" name="optradio" id="unit_kpi" onchange="CheckRadioButton(id)"></label>
+			<label style="font-weight:normal;" class="col-md-4 radio-inline" id="label_unit_ratio" for="unit_ratio"><input type="radio" name="optradio" id="unit_ratio" onchange="CheckRadioButton(id)">Ratio (%) </label>
+		</div>
+		<div class="form-group has-feedback" style="display:none" id="display_interval">
+			<label style="font-weight:normal;" class="col-md-3 control-label"><?php echo getLabel("label.contracts_menu.seuils_create_minimum"); ?></label>
+			<div class="col-md-3">
+				<input type="text" class="form-control" id="interval_min" onkeyup="this.value=this.value.replace(/[^0-9.]/g,'')">
+			</div>
 
-		<div class="row" id="display_unit_checkbox" style="display:none">
-			<div class="form-group has-feedback">
-				<label style="font-weight:normal;" class="col-md-3 control-label"><?php echo getLabel("label.contracts_menu.seuils_create_type"); ?> : </label>
-
-				<label style="font-weight:normal;" class="col-md-4 radio-inline" id="label_unit_kpi" for="unit_kpi"><input type="radio" name="optradio" id="unit_kpi" onchange="CheckRadioButton(id)"></label>
-				<label style="font-weight:normal;" class="col-md-4 radio-inline" id="label_unit_ratio" for="unit_ratio"><input type="radio" name="optradio" id="unit_ratio" onchange="CheckRadioButton(id)">Ratio (%) </label>
+			<label style="font-weight:normal;" class="col-md-3 control-label"><?php echo getLabel("label.contracts_menu.seuils_create_maximum"); ?></label>
+			<div class="col-md-3">
+				<input type="text" class="form-control" id="interval_max" onkeyup="this.value=this.value.replace(/[^0-9.]/g,'')">
 			</div>
 		</div>
-
-		<div class="row" style="display:none" id="display_interval">
-			<div class="form-group has-feedback">
-				<label style="font-weight:normal;" class="col-md-3 control-label"><?php echo getLabel("label.contracts_menu.seuils_create_minimum"); ?></label>
-				<div class="col-md-3">
-					<input type="text" class="form-control" id="interval_min" onkeyup="this.value=this.value.replace(/[^0-9.]/g,'')">
-				</div>
-
-				<label style="font-weight:normal;" class="col-md-3 control-label"><?php echo getLabel("label.contracts_menu.seuils_create_maximum"); ?></label>
-				<div class="col-md-3">
-					<input type="text" class="form-control" id="interval_max" onkeyup="this.value=this.value.replace(/[^0-9.]/g,'')">
-				</div>
-			</div>
-		</div>
-
-	  <div class="row pull-right" style="display:none" id="display_interval_button">
-	    <div class="col-md-2">
-					<button class="form-group btn btn-primary" type="submit" id="submit_interval"><?php echo getLabel("label.contracts_menu.seuils_create_btn_add"); ?>
+		<div class="form-group" style="display:none" id="display_interval_button">
+			<div class="col-md-3">
+				<button class="btn btn-primary" type="submit" id="submit_interval"><?php echo getLabel("label.contracts_menu.seuils_create_btn_add"); ?>
 					<span class="glyphicon glyphicon-ok" style="color:#4f4;"></span>
-			  </button>
+				</button>
 			</div>
-	  </div>
+		</div>
 
-		<input type="text" class="form-control" style="display:none" id="id_kpi">
-
-		<div class="form-group marge" style="display:none" id="text_entry">
+		<input type="text" class="form-control" id="id_kpi" style="display:none">
+		
+		<div class="form-groupœ" style="display:none" id="text_entry">
 			<h2 class="page-header"><?php echo getLabel("label.contracts_menu.seuils_create_title_list"); ?></h2>
 		</div>
 
-		<div class="row col-md-12 pull-right">
+		<div class="col-md-12">
 		<table class="table" style="display:none" id="container_interval">
 		    <thead>
 			    <tr>
@@ -91,10 +71,11 @@ include("../../side.php");
 		</table>
 		</div>
 
-		<button class="form-group btn btn-primary pull-right" type="submit" id="submit">Envoyer
-			<span class="glyphicon glyphicon-ok" style="color:#4f4;"></span>
-		</button>
-
+		<div class="col-md-12">
+			<button class="form-group btn btn-primary" type="submit" id="submit"><?php echo getLabel("action.submit"); ?>
+				<span class="glyphicon glyphicon-ok" style="color:#4f4;"></span>
+			</button>
+		</div>
 	</form>
 </div>
 

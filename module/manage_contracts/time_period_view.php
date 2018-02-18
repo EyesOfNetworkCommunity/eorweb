@@ -28,7 +28,7 @@ include("../../side.php");
 		</div>
 	</div>
 	<div class="col-md-12">
-		<input type="button" class="btn btn-primary" value="Add" onclick="location.href='./time_period.php';">
+		<input type="button" class="btn btn-primary" value="<?php echo getLabel("action.add"); ?>" onclick="location.href='./time_period.php';">
 	</div>
 </div>
 

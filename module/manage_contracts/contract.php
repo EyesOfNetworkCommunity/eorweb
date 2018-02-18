@@ -9,98 +9,85 @@ include("../../side.php");
 			<h1 class="page-header"><?php echo getLabel("label.manage_contracts.contract_title"); ?></h1>
 		</div>
 	</div>
-	<form class="form-horizontal col-md-7 marge" id="global_form">
-		<div class="row pad-top">
-			<div class="form-group has-feedback div-name">
-				<label style="font-weight:normal;" for="name" class="col-md-4 control-label"><?php echo getLabel("label.contracts_menu.contracts_menu_create_name"); ?></label>
-				<div class="col-md-7 input-name">
-					<input type="text" class="form-control" id="name" onkeyup="this.value=this.value.replace(/[^éèàêâç0-9a-zA-Z-_ \/\*]/g,'')">
-				</div>
-				<div class="form-group col-md-1">
-					<span class="glyphicon glyphicon-asterisk" style="font-size:15px;"></span>
-				</div>
-			</div>
-		</div>
-
-		<div class="row">
-			<div class="form-group has-feedback div-desc">
-				<label style="font-weight:normal;" for="desc" class="col-md-4 control-label"><?php echo getLabel("label.contracts_menu.contracts_menu_create_description"); ?></label>
-				<div class="col-md-7 input-desc">
-					<input type="text" class="form-control" id="desc" onkeyup="this.value=this.value.replace(/[^éèàêâç0-9a-zA-Z-_ \/\*]/g,'')">
-				</div>
-			</div>	
-		</div>
-
-		<div class="row">
-			<div class="form-group has-feedback div-sdm-intern">
-				<label style="font-weight:normal;" for="contract_sdm_intern" class="col-md-4 control-label"><?php echo getLabel("label.contracts_menu.contracts_menu_create_sdm_internal"); ?></label>
-				<div class="col-md-7 input-sdm-intern">
-					<input type="text" class="form-control" id="contract_sdm_intern" onkeyup="this.value=this.value.replace(/[^éèàêâç0-9a-zA-Z-_ \/\*]/g,'')">
+	<div class="col-md-7">
+		<form class="form-horizontal" id="global_form">
+			<div class="row pad-top">
+				<div class="form-group has-feedback div-name">
+					<label style="font-weight:normal;" for="name" class="col-md-4 control-label"><?php echo getLabel("label.contracts_menu.contracts_menu_create_name"); ?></label>
+					<div class="col-md-7 input-name">
+						<input type="text" class="form-control" id="name" onkeyup="this.value=this.value.replace(/[^éèàêâç0-9a-zA-Z-_ \/\*]/g,'')">
+					</div>
 				</div>
 			</div>
-		</div>
-
-		<div class="row">
-			<div class="form-group has-feedback div-sdm-extern">
-				<label style="font-weight:normal;" for="contract_sdm-extern" class="col-md-4 control-label"><?php echo getLabel("label.contracts_menu.contracts_menu_create_sdm_external"); ?></label>
-				<div class="col-md-7 input-sdm-extern">
-					<input type="text" class="form-control" id="contract_sdm-extern" onkeyup="this.value=this.value.replace(/[^éèàêâç0-9a-zA-Z-_ \/\*]/g,'')">
+			<div class="row">
+				<div class="form-group has-feedback div-desc">
+					<label style="font-weight:normal;" for="desc" class="col-md-4 control-label"><?php echo getLabel("label.contracts_menu.contracts_menu_create_description"); ?></label>
+					<div class="col-md-7 input-desc">
+						<input type="text" class="form-control" id="desc" onkeyup="this.value=this.value.replace(/[^éèàêâç0-9a-zA-Z-_ \/\*]/g,'')">
+					</div>
+				</div>	
+			</div>
+			<div class="row">
+				<div class="form-group has-feedback div-sdm-intern">
+					<label style="font-weight:normal;" for="contract_sdm_intern" class="col-md-4 control-label"><?php echo getLabel("label.contracts_menu.contracts_menu_create_sdm_internal"); ?></label>
+					<div class="col-md-7 input-sdm-intern">
+						<input type="text" class="form-control" id="contract_sdm_intern" onkeyup="this.value=this.value.replace(/[^éèàêâç0-9a-zA-Z-_ \/\*]/g,'')">
+					</div>
 				</div>
 			</div>
-		</div>
-
-		<div class="row">
-			<div class="form-group has-feedback div-company">
-				<label style="font-weight:normal;" for="name_company" class="col-md-4 control-label"><?php echo getLabel("label.contracts_menu.contracts_menu_display_tab_company"); ?>:</label>
-				<div class="col-md-7 input-company">
-					<button class="btn btn-default btn-block dropdown-toggle" type="button" data-toggle="dropdown" id="name_company"><?php echo getLabel("label.manage_contracts.company_view_title"); ?>
-					<span class="caret"></span></button>
-					<ul class="dropdown-menu btn-block" id="ul_company">
-					</ul>
-				</div>
-				<div class="form-group col-md-1">
-					<span class="glyphicon glyphicon-asterisk" style="font-size:15px;"></span>
+			<div class="row">
+				<div class="form-group has-feedback div-sdm-extern">
+					<label style="font-weight:normal;" for="contract_sdm-extern" class="col-md-4 control-label"><?php echo getLabel("label.contracts_menu.contracts_menu_create_sdm_external"); ?></label>
+					<div class="col-md-7 input-sdm-extern">
+						<input type="text" class="form-control" id="contract_sdm-extern" onkeyup="this.value=this.value.replace(/[^éèàêâç0-9a-zA-Z-_ \/\*]/g,'')">
+					</div>
 				</div>
 			</div>
-		</div>
-		
-		<div class="row">
-			<div class="form-group has-feedback div-extern-id">
-				<label style="font-weight:normal;" for="extern_contract_id" class="col-md-4 control-label"><?php echo getLabel("label.contracts_menu.contracts_menu_create_reference"); ?></label>
-				<div class="col-md-7 input-extern-id">
-					<input type="text" class="form-control" id="extern_contract_id" onkeyup="this.value=this.value.replace(/[^éèàêâç0-9a-zA-Z-_ \/\*]/g,'')">
+			<div class="row">
+				<div class="form-group has-feedback div-company">
+					<label style="font-weight:normal;" for="name_company" class="col-md-4 control-label"><?php echo getLabel("label.contracts_menu.contracts_menu_display_tab_company"); ?>:</label>
+					<div class="col-md-7 input-company">
+						<button class="btn btn-default btn-block dropdown-toggle" type="button" data-toggle="dropdown" id="name_company"><?php echo getLabel("label.manage_contracts.company_view_title"); ?>
+						<span class="caret"></span></button>
+						<ul class="dropdown-menu btn-block" id="ul_company">
+						</ul>
+					</div>
 				</div>
 			</div>
-		</div>
-
-		<div class="row">
-			<div class="form-group has-feedback div-validity-date">
-				<label style="font-weight:normal;" for="validity_date" class="col-md-4 control-label"><?php echo getLabel("label.contracts_menu.contracts_menu_create_date"); ?></label>
-				<div class="col-md-7 input-validity-date input-group date" id="datepicker">
-					<input type="text" class="form-control" readonly id="validity_date">
-					<span class="input-group-addon">
-	                	<span class="glyphicon glyphicon-calendar"></span>
-		            	<span class="glyphicon glyphicon-asterisk" style="font-size:15px;"></span>
-	            	</span>
+			<div class="row">
+				<div class="form-group has-feedback div-extern-id">
+					<label style="font-weight:normal;" for="extern_contract_id" class="col-md-4 control-label"><?php echo getLabel("label.contracts_menu.contracts_menu_create_reference"); ?></label>
+					<div class="col-md-7 input-extern-id">
+						<input type="text" class="form-control" id="extern_contract_id" onkeyup="this.value=this.value.replace(/[^éèàêâç0-9a-zA-Z-_ \/\*]/g,'')">
+					</div>
 				</div>
 			</div>
-		</div>
-
-		<div class="col-md-7">
-			<input type="text" class="form-control" id="id_company" style="display:none">
-		</div>
-
-		<div class="row" style="text-align: center;">
-				<label style="font-weight:lighter;" class="control-label"><?php echo getLabel("label.manage_contracts.required_field"); ?></label>
-				<span class="glyphicon glyphicon-asterisk" style="font-size:10px;color:#707070;"></span>
-				<label style="font-weight:lighter;" class="control-label"><?php echo getLabel("label.manage_contracts.required_field_2"); ?></label>
+			<div class="row">
+				<div class="form-group has-feedback div-validity-date">
+					<label style="font-weight:normal;" for="validity_date" class="col-md-4 control-label"><?php echo getLabel("label.contracts_menu.contracts_menu_create_date"); ?></label>
+					<div class="col-md-7">
+						<div class="input-validity-date input-group date" id="datepicker">
+							<input type="text" class="form-control" readonly id="validity_date">
+							<span class="input-group-addon">
+			                	<span class="glyphicon glyphicon-calendar"></span>
+			            	</span>
+						</div>
+					</div>
+				</div>
 			</div>
-
-		<button class="form-group btn btn-primary pull-right" type="submit" id="submit"><?php echo getLabel("action.submit"); ?>
-			<span class="glyphicon glyphicon-ok" style="color:#4f4;"></span>
-		</button>
-
-	</form>
+			<div class="row">
+				<div class="col-md-7">
+					<input type="text" class="form-control" id="id_company" style="display:none">
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-7">
+					<button class="form-group btn btn-primary" type="submit" id="submit"><?php echo getLabel("action.submit"); ?>
+						<span class="glyphicon glyphicon-ok" style="color:#4f4;"></span>
+					</button>
+				</div>
+		</form>
+	</div>
 </div>
 
 <script src="../../bower_components/jquery/dist/jquery.min.js"></script>

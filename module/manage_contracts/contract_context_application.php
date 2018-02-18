@@ -9,9 +9,8 @@ include("../../side.php");
 			<h1 class="page-header"><?php echo getLabel("label.manage_contracts.contract_context_application_title"); ?></h1>
 		</div>
 	</div>
-	<div class="row">
-		<form class="form-horizontal col-md-7 marge" id="global_form">
-			
+	<div class="col-md-7">
+		<form class="form-horizontal" id="global_form">
 			<div class="row pad-top">
 				<div class="form-group has-feedback div-context">
 					<label style="font-weight:normal;" for="name_contract_context" class="col-md-4 control-label"><?php echo getLabel("label.contract_context"); ?> : </label>
@@ -20,12 +19,8 @@ include("../../side.php");
 						<span class="caret"></span></button>
 						<ul class="dropdown-menu btn-block" id="ul_context"></ul>
 					</div>
-					<div class="form-group col-md-1">
-						<span class="glyphicon glyphicon-asterisk" style="font-size:15px;"></span>
-					</div>
 				</div>
 			</div>
-
 			<div class="row">
 				<div class="form-group has-feedback">
 					<label style="font-weight:normal;" for="application_name" class="col-md-4 control-label"><?php echo getLabel("label.application"); ?> : </label>
@@ -34,13 +29,9 @@ include("../../side.php");
 					</button>
 					<ul class="dropdown-menu btn-block" id="ul_application"></ul>
 					</div>
-					<div class="form-group col-md-1">
-						<span class="glyphicon glyphicon-asterisk" style="font-size:15px;"></span>
-					</div>
 				</div>
 			</div>
-
-			<div class="row pull-right">
+			<div class="row">
 				<div class="col-md-3">
 					<button class="form-group btn btn-primary" type="submit" id="submit_entry"><?php echo getLabel("label.contracts_menu.application_menu_create_btn_add"); ?>
 					<span class="glyphicon glyphicon-ok" style="color:#4f4;"></span>
@@ -50,25 +41,28 @@ include("../../side.php");
 		</form>
 	</div>
 	<div id="application_list" class="row" style="display: none;">
-		<div class="form-group marge">
-			<h2 class="page-header"><?php echo getLabel("label.contracts_menu.application_menu_create_title_list"); ?></h2>
+		<div class="col-md-12">
+			<div class="form-group">
+				<h2 class="page-header"><?php echo getLabel("label.contracts_menu.application_menu_create_title_list"); ?></h2>
+			</div>
 		</div>
-		<table class="table table-striped table-hover" id="container_application">
-			<thead>
-				<tr>
-					<th><?php echo getLabel("menu.link.app"); ?></th>
-					<th><?php echo getLabel("label.suppress"); ?></th>
-				</tr>
-			</thead>
-			<tbody id="body_table">
-			</tbody>
-		</table>
-
-		<div class="row">
-			<div class="col-md-offset-10">
-				<button class="form-group btn btn-primary " type="submit" id="submit"><?php echo getLabel("action.submit"); ?>
-					<span class="glyphicon glyphicon-ok" style="color:#4f4;"></span>
-				</button>
+		<div class="col-md-7">
+			<table class="table table-striped table-hover" id="container_application">
+				<thead>
+					<tr>
+						<th><?php echo getLabel("menu.link.app"); ?></th>
+						<th><?php echo getLabel("label.suppress"); ?></th>
+					</tr>
+				</thead>
+				<tbody id="body_table">
+				</tbody>
+			</table>
+			<div class="row">
+				<div class="col-md-3">
+					<button class="form-group btn btn-primary " type="submit" id="submit"><?php echo getLabel("action.submit"); ?>
+						<span class="glyphicon glyphicon-ok" style="color:#4f4;"></span>
+					</button>
+				</div>
 			</div>
 		</div>
 	</div>
