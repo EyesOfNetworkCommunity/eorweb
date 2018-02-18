@@ -24,12 +24,12 @@
 // @param $db_name (String) -> Nom de la source.
 // @return (String) -> Le nick_name de la source.
 function getNickName($db_name) {
-	global $database_vanillabp;
-	$result = sqlrequest($database_vanillabp, "SELECT nick_name FROM bp_sources WHERE db_names='$db_name'");
-	while ($line = mysqli_fetch_array($result)){
-		$nick_name=$line[0];
-	}
-	return $nick_name;
+    global $database_vanillabp;
+    $result = sqlrequest($database_vanillabp, "SELECT nick_name FROM bp_sources WHERE db_names='$db_name'");
+    while ($line = mysqli_fetch_array($result)){
+        $nick_name=$line[0];
+    }
+    return $nick_name;
 }
 
 //
@@ -37,43 +37,43 @@ function getNickName($db_name) {
 // @param $source_name (String) -> Nom de la source choisie.
 // @return (String) -> Le thruk_idx associé à la source.
 function getThrukId($source_name) {
-	global $database_vanillabp;
-	$result = sqlrequest($database_vanillabp, "SELECT thruk_idx FROM bp_sources WHERE db_names='$source_name'");
-	while ($line = mysqli_fetch_array($result)){
-		$thruk_idx=$line[0];
-	}
-	return $thruk_idx;
+    global $database_vanillabp;
+    $result = sqlrequest($database_vanillabp, "SELECT thruk_idx FROM bp_sources WHERE db_names='$source_name'");
+    while ($line = mysqli_fetch_array($result)){
+        $thruk_idx=$line[0];
+    }
+    return $thruk_idx;
 }
 
 function sqlArrayDatabase($database,$request) {
         $result = sqlrequest($database,$request);
         $values = array();
-        	for ($i=0; $i<mysqli_num_rows($result); ++$i) {
-        	$values[] = mysqli_fetch_assoc($result);
+            for ($i=0; $i<mysqli_num_rows($result); ++$i) {
+            $values[] = mysqli_fetch_assoc($result);
         }
         return $values ;
 }
 
 function deleteAll($tableBp,$Source){
-	foreach($tableBp as $bp){
-		$result = sqlArrayDatabase($Source,"SELECT bp_name FROM bp_links WHERE bp_link='$bp[bp_name]'");
-		sqlrequest($Source,"DELETE FROM bp_links WHERE bp_name='$bp[bp_name]'");
-		sqlrequest($Source,"DELETE FROM bp_services WHERE bp_name='$bp[bp_name]'");
-		sqlrequest($Source,"DELETE FROM bp WHERE name='$bp[bp_name]'");
-		deleteAll($result, $Source);
-	}
+    foreach($tableBp as $bp){
+        $result = sqlArrayDatabase($Source,"SELECT bp_name FROM bp_links WHERE bp_link='$bp[bp_name]'");
+        sqlrequest($Source,"DELETE FROM bp_links WHERE bp_name='$bp[bp_name]'");
+        sqlrequest($Source,"DELETE FROM bp_services WHERE bp_name='$bp[bp_name]'");
+        sqlrequest($Source,"DELETE FROM bp WHERE name='$bp[bp_name]'");
+        deleteAll($result, $Source);
+    }
 }
 
 function deleteOne($bp,$deleted,$Source){
-	if ( $deleted != "" ) {
-		$deleted .= ",$bp";
-	} else {
-		$deleted = "$bp";
-	}
-	sqlrequest($Source,"DELETE FROM bp_links WHERE bp_name='$bp'");
-	sqlrequest($Source,"DELETE FROM bp_services WHERE bp_name='$bp'");
-	sqlrequest($Source,"DELETE FROM bp WHERE name='$bp'");
-	return $deleted;
+    if ( $deleted != "" ) {
+        $deleted .= ",$bp";
+    } else {
+        $deleted = "$bp";
+    }
+    sqlrequest($Source,"DELETE FROM bp_links WHERE bp_name='$bp'");
+    sqlrequest($Source,"DELETE FROM bp_services WHERE bp_name='$bp'");
+    sqlrequest($Source,"DELETE FROM bp WHERE name='$bp'");
+    return $deleted;
 }
 
 function display_bp($bp,$bp_racine,$source_bp) {
@@ -209,7 +209,7 @@ function display_global_son($bp_racine) {
             display_bp($t_bp_son[$i],$bp_racine,$t_bp_son_source[$i]."_nagiosbp");
             if($t_bp_son_source[$i] == "global"){
                 display_global_son($t_bp_son[$i]);
-            }	
+            }   
             else {
                 display_son($t_bp_son[$i],$t_bp_son_source[$i]."_nagiosbp");
             }
