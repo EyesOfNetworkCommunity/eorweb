@@ -114,7 +114,7 @@ function display_bp($bp,$bp_racine,$source_bp) {
 
     if ($bp != "") {
         print "<ul class=\"tree-toggle nav-header glyphicon-link glyphicon\">
-                    <b class=\"condition_presentation\">".$desc_bp." ".$bp."</b> (".$rule_type."".$min_value.")
+                    <b class=\"condition_presentation\">".$bp." ".$desc_bp."</b> (".$rule_type."".$min_value.")
                 </ul>";
         }
     }
@@ -150,7 +150,7 @@ function display_son($bp_racine,$bp_racine_source) {
         die('There was an error running the query 3 [' . $db->error . ']');
     }
 
-    print_r(mysql_num_rows($result_service));
+    //print_r(mysqli_num_rows($result_service));
 
     while($row = $result_service->fetch_assoc()){   
         array_push($t_service_son,$row['host'].";".$row['service']);
@@ -205,7 +205,7 @@ function display_global_son($bp_racine) {
 
     if(sizeof($t_bp_son) > 0 ) {
         for ($i = 0; $i < sizeof($t_bp_son); $i++) {
-            echo "<ul class=\"s tree\">\n";
+            echo "<ul class=\"s tree\">";
             display_bp($t_bp_son[$i],$bp_racine,$t_bp_son_source[$i]."_nagiosbp");
             if($t_bp_son_source[$i] == "global"){
                 display_global_son($t_bp_son[$i]);
@@ -213,85 +213,12 @@ function display_global_son($bp_racine) {
             else {
                 display_son($t_bp_son[$i],$t_bp_son_source[$i]."_nagiosbp");
             }
-
             echo "</ul>\n";
         }
     }
 }
 
-function display_by_source() {
-    global $database_nagios;
-    global $database_vanillabp;
-    global $database_host;
-    global $database_username;
-    global $database_password;
-    $db = new mysqli($database_host, $database_username, $database_password, $database_vanillabp);
-    if($db->connect_errno > 0){
-        die('Unable to connect to database 4 [' . $db->connect_error . ']');
-    }
-    $sql = "SELECT bp_name, bp_link, bp_source, type, description, min_value FROM bp, bp_links WHERE bp.name = bp_links.bp_name GROUP BY bp_source";
-    if(!$result = $db->query($sql)){
-        die('There was an error running the query 5 [' . $db->error . ']');
-    }
-    while($row = $result->fetch_assoc()){
-        if ($row['min_value'] != "") {
-            $min_value = ": ".$row['min_value'];
-        } else {
-            $min_value = "";
-        }
-        // dedoubler les col-md a l'interieur du block pour mettre les checkbox aligner sur la droite
-        echo "<div class=\"well well-sm\">
-            <ul class=\"nav nav-list tree\">
-                <ul class=\"tree-toggle nav-header glyphicon-link glyphicon\">
-                <b class=\"condition_presentation\"> ".$row['description']." ".$row['bp_name']."</b>  (".$row['type']."".$min_value.") 
-                </ul><a href=\"#\" onclick=\"javascript:selectAll('".$row['bp_source']."')\"> All</a>
-                <ul class=\"s tree\">";
-                display_bp_linked($row['bp_name'],$row['bp_source']);
-        echo "</ul></ul></div>";
-    }
-}
-
-function display_bp_linked($bp_name, $bp_source) {
-    global $database_nagios;
-    global $database_vanillabp;
-    global $database_host;
-    global $database_username;
-    global $database_password;
-    $db = new mysqli($database_host, $database_username, $database_password, $database_vanillabp);
-    if($db->connect_errno > 0){
-        die('Unable to connect to database 3 [' . $db->connect_error . ']');
-    }
-    $sql2 = "SELECT bp_name, bp_link, bp_source, type, description, min_value, priority FROM bp, bp_links 
-    WHERE bp.name = bp_links.bp_name AND bp_link='$bp_name' AND bp_source='$bp_source' ORDER BY bp_name";
-    if(!$result = $db->query($sql2)){
-        die('There was an error running the query 5 [' . $db->error . ']');
-    }
-    while($row = $result->fetch_assoc()){
-        $sql_service = "SELECT host,service FROM bp_services WHERE bp_name = '".$row['bp_name']."'";
-        if(!$result_service = $db->query($sql_service)){
-            die('There was an error running the query 5 [' . $db->error . ']');
-        }
-        if ($row['min_value'] != "") {
-            $min_value = ": ".$row['min_value'];
-        } else {
-            $min_value = "";
-        }
-        $prio = $row['priority'];
-        echo "<ul class=\"nav-header glyphicon-link glyphicon\" style=\"display: inline;\">
-                <b class=\"condition_presentation\"> ".$row['description']." ".$row['bp_name']."</b>  (".$row['type']."".$min_value.")
-                </ul>
-                <a href='add_process.php?name=".$row['bp_name']."&source=".$bp_source."'>edit </a>
-                <input type=\"checkbox\" class=\"checkbox ".$row['bp_source']."\" name=\"bp_selected".$prio."[]\" value=\"".$row['bp_name']."::".$bp_source."\"  style=\"display: inline;\">
-                <ul class=\"s tree\"  style=\"display: block;\">";
-                display_bp_linked($row['bp_name'], $bp_source);
-                while($row_service = $result_service->fetch_assoc()){
-                    display_service($row_service['host']." - ".$row_service['service'],$row['bp_name'],$bp_source,$row['bp_source'],$row['priority']);
-                }
-        echo "</ul>";
-    }
-}
-
-function display_service($host_service,$name,$source_global,$source,$prio) {
+function display_service($host_service,$name/*,$source_global,$source,$prio*/) {
     print "<ul><span class=\"nav-header glyphicon glyphicon-cog\" style=\"display: inline;\"> ".$host_service."</span></ul>";
 }
 
