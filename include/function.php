@@ -734,13 +734,14 @@ function ldap_escape($str, $login=false, $escape=false){
 }
 
 // User creation
-function insert_user($user_name, $user_descr, $user_group, $user_password1, $user_password2, $user_type, $user_location, $user_email, $user_limitation, $message, $in_nagvis = false, $in_cacti = false, $nagvis_group = false, $user_language = false){
+function insert_user($user_name, $user_descr, $user_group, $user_password1, $user_password2, $user_type, $user_location, $user_email, $user_language = false, $message){
 	global $database_host;
 	global $database_username;
 	global $database_password;
 	global $database_eonweb;
 	
 	$user_id=null;
+	$user_limitation=0;
 
 	// Check if user exist
 	$user_exist=mysqli_result(sqlrequest("$database_eonweb","SELECT count('user_name') from users where user_name='$user_name';"),0);
