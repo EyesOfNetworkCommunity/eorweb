@@ -39,14 +39,14 @@ class Translator
 	public function __construct()
 	{
 
-		global $database_eonweb;
+		global $database_eorweb;
 		$lang = 0;
 		
 		// # Languages files
 		
 		// Check if user default lang is defined
 		if(isset($_COOKIE['user_id'])){
-			$lang = mysqli_result(sqlrequest($database_eonweb,"select user_language from users where user_id='".$_COOKIE['user_id']."'"),0);
+			$lang = mysqli_result(sqlrequest($database_eorweb,"select user_language from users where user_id='".$_COOKIE['user_id']."'"),0);
 		}
 		
 		// Check if isset browser lang

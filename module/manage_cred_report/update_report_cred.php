@@ -3,12 +3,12 @@
   include("../../include/config.php");
   
   
-  global $database_eonweb;
+  global $database_eorweb;
   global $database_host;
   global $database_username;
   global $database_password;
   
-  $db = new mysqli($database_host, $database_username, $database_password, $database_eonweb);
+  $db = new mysqli($database_host, $database_username, $database_password, $database_eorweb);
   
   if($db->connect_errno > 0){
       $response_array['status'] = 'error';

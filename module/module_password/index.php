@@ -46,7 +46,7 @@ include("../../side.php");
 					$user_password = md5($user_password1);
 
 					// Insert into eonweb
-					sqlrequest("$database_eonweb","UPDATE users set user_passwd='$user_password' WHERE user_id='$usrid';");
+					sqlrequest("$database_eorweb","UPDATE users set user_passwd='$user_password' WHERE user_id='$usrid';");
 
 					// update password into nagvis if user is in
 					$bdd = new PDO('sqlite:/srv/eyesofnetwork/nagvis/etc/auth.db');

@@ -35,14 +35,14 @@ include("../../side.php");
 		// Retrieve Group Information
 		function retrieve_user_info($user_id)
 		{
-			global $database_eonweb;
-			return sqlrequest("$database_eonweb","SELECT user_name, user_descr, group_id, user_passwd, user_type,user_email, user_location, user_language  FROM users WHERE user_id='$user_id'");
+			global $database_eorweb;
+			return sqlrequest("$database_eorweb","SELECT user_name, user_descr, group_id, user_passwd, user_type,user_email, user_location, user_language  FROM users WHERE user_id='$user_id'");
 		}
 
 		// Display user language selection  
 		function GetUserLang() {
 
-			global $database_eonweb;
+			global $database_eorweb;
 			global $user_id;
 			global $path_languages;
 
@@ -63,7 +63,7 @@ include("../../side.php");
 			$files = array_unique($files);
 
 			// creation of a select and catch values
-			$langtmp = mysqli_result(sqlrequest("$database_eonweb","SELECT user_language FROM users WHERE user_id='".$user_id."'"),0);
+			$langtmp = mysqli_result(sqlrequest("$database_eorweb","SELECT user_language FROM users WHERE user_id='".$user_id."'"),0);
 			$res = '<select class="form-control" name="user_language">';
 			foreach($files as $v) {
 				if($v == $langtmp){
@@ -87,12 +87,12 @@ include("../../side.php");
 			global $database_username;
 			global $database_password;
 
-			global $database_eonweb;
+			global $database_eorweb;
 			global $path_eonweb;
 
 			// Check if user exist
 			if($user_name!=$old_name)	
-				$user_exist=mysqli_result(sqlrequest("$database_eonweb","SELECT count('user_name') from users where user_name='$user_name';"),0);
+				$user_exist=mysqli_result(sqlrequest("$database_eorweb","SELECT count('user_name') from users where user_name='$user_name';"),0);
 			else
 				$user_exist=0;
 
@@ -103,16 +103,16 @@ include("../../side.php");
 			if (($user_name != "") && ($user_name != null) && ($user_id != null) && ($user_id != "") && ($user_exist == 0)) {
 				if (($user_password1 != "") && ($user_password1 != null) && ($user_password1 == $user_password2)) {
 
-					$eonweb_groupname=mysqli_result(sqlrequest("$database_eonweb","SELECT group_name FROM groups WHERE group_id='$user_group'"),0,"group_name");			
-					$eonweb_oldgroupname=mysqli_result(sqlrequest("$database_eonweb","SELECT group_name FROM groups WHERE group_id='$old_group_id'"),0,"group_name");			
+					$eonweb_groupname=mysqli_result(sqlrequest("$database_eorweb","SELECT group_name FROM groups WHERE group_id='$user_group'"),0,"group_name");			
+					$eonweb_oldgroupname=mysqli_result(sqlrequest("$database_eorweb","SELECT group_name FROM groups WHERE group_id='$old_group_id'"),0,"group_name");			
 					if ($user_password1 != "abcdefghijklmnopqrstuvwxyz") {
 						$passwd_temp = md5($user_password1);
 						// Update into eonweb
-						sqlrequest("$database_eonweb","UPDATE users set user_name='$user_name', user_descr='$user_descr',group_id='$user_group',user_passwd='$passwd_temp',user_type='$user_type',user_location='$user_location',user_email='$user_email',user_language='$user_language' WHERE user_id ='$user_id'");
+						sqlrequest("$database_eorweb","UPDATE users set user_name='$user_name', user_descr='$user_descr',group_id='$user_group',user_passwd='$passwd_temp',user_type='$user_type',user_location='$user_location',user_email='$user_email',user_language='$user_language' WHERE user_id ='$user_id'");
 					}
 					else {
 						// Update into eonweb
-						sqlrequest("$database_eonweb","UPDATE users set user_name='$user_name', user_descr='$user_descr',group_id='$user_group',user_type='$user_type',user_location='$user_location',user_email='$user_email',user_language='$user_language' WHERE user_id ='$user_id'");
+						sqlrequest("$database_eorweb","UPDATE users set user_name='$user_name', user_descr='$user_descr',group_id='$user_group',user_type='$user_type',user_location='$user_location',user_email='$user_email',user_language='$user_language' WHERE user_id ='$user_id'");
 					}
 					
 					// logging action
@@ -135,7 +135,7 @@ include("../../side.php");
 
 
 		// Global parameter
-		global $database_eonweb;
+		global $database_eorweb;
 
 		// Get parameter
 		$user_change_passord = retrieve_form_data("user_change_passord",null);
@@ -153,7 +153,7 @@ include("../../side.php");
 		$user_email = retrieve_form_data("user_email","");
 		$user_type = retrieve_form_data("user_type","");
 		$user_language = retrieve_form_data("user_language","");
-		$old_group_id = mysqli_result(sqlrequest($database_eonweb,"select group_id from users where user_id='$user_id'"),0,"group_id");
+		$old_group_id = mysqli_result(sqlrequest($database_eorweb,"select group_id from users where user_id='$user_id'"),0,"group_id");
 		$old_name = retrieve_form_data("user_name_old","");
 
 
@@ -162,7 +162,7 @@ include("../../side.php");
 		$create_user_in_cacti = retrieve_form_data("create_user_in_cacti","");
 
 		/*if($user_type=="1"){
-			$result = sqlrequest($database_eonweb,"select login from ldap_users_extended where dn='$user_location'");
+			$result = sqlrequest($database_eorweb,"select login from ldap_users_extended where dn='$user_location'");
 			$username = mysqli_result($result,0,"login");
 			$user_name = strtolower($username);
 			//message(8,"User location1: $user_location",'ok');	// For debug pupose, to be removed
@@ -334,7 +334,7 @@ include("../../side.php");
 			<div class="col-md-9">
 				<select class="form-control" name='user_group' size=1>
 					<?php
-						$result=sqlrequest("$database_eonweb","SELECT group_id,group_name from groups");
+						$result=sqlrequest("$database_eorweb","SELECT group_id,group_name from groups");
 						while ($line = mysqli_fetch_array($result))
 						{
 							if ($user_group == $line[0])

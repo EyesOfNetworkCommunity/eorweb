@@ -24,6 +24,6 @@ include(dirname(__FILE__)."/config.php");
 include(dirname(__FILE__)."/function.php");
 
 $date=strtotime($datepurge);
-sqlrequest($database_eonweb,"delete from logs where date < $date;");
+sqlrequest($database_eorweb,"delete from logs where date < $date;");
 
 ?>

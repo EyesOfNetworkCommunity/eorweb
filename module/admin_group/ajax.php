@@ -25,7 +25,7 @@ include('../../include/arrays.php');
 include('../../include/function.php');
 
 // Retrieve authentification backend settings
-$sqlresult1=sqlrequest("$database_eonweb","select * from auth_settings;");
+$sqlresult1=sqlrequest("$database_eorweb","select * from auth_settings;");
 $backend_selected=mysqli_result($sqlresult1,0,"auth_type");
 
 if($backend_selected=="1"){
@@ -55,7 +55,7 @@ if($backend_selected=="1"){
 		$ldap_users = array();
 		foreach ($group_names as $group_name) {
 			$sql = "SELECT group_dn FROM groups WHERE group_name = '$group_name'";
-			$result = sqlrequest("$database_eonweb", "$sql");
+			$result = sqlrequest("$database_eorweb", "$sql");
 			$group_dn = ldap_escape(mysqli_result($result,0,"group_dn"),true,true);
 
 			$mini_array = array();

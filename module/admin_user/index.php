@@ -33,7 +33,7 @@ include("../../side.php");
 	</div>
 
 	<?php 
-	global $database_eonweb;
+	global $database_eorweb;
 	$action=retrieve_form_data("action",null);
 	$user_mgt_list=retrieve_form_data("user_mgt_list",null);
 	$user_selected=retrieve_form_data("user_selected",null);
@@ -47,10 +47,10 @@ include("../../side.php");
 				if (isset($user_selected[0])){
 					for ($i = 0; $i < count($user_selected); $i++){
 						// Get user name
-						$user_res=sqlrequest("$database_eonweb","select user_name from users where user_id='$user_selected[$i]'");
+						$user_res=sqlrequest("$database_eorweb","select user_name from users where user_id='$user_selected[$i]'");
 						$user_name=mysqli_result($user_res,0,"user_name");
 						// Delete user in eonweb
-						sqlrequest("$database_eonweb","delete from users where user_id='$user_selected[$i]'");
+						sqlrequest("$database_eorweb","delete from users where user_id='$user_selected[$i]'");
 						// Delete user files
 						$user_files_path="$path_eonweb/$dir_imgcache/$user_name";
 						@unlink("$user_files_path-ged.xml");
@@ -71,7 +71,7 @@ include("../../side.php");
         
 	// Get the name user and description group
 	$user_id="";
-	$user_name_descr=sqlrequest("$database_eonweb","SELECT user_name,user_descr,user_id,group_name,user_type,user_email FROM users LEFT OUTER JOIN groups ON groups.group_id = users.group_id ORDER BY user_name");
+	$user_name_descr=sqlrequest("$database_eorweb","SELECT user_name,user_descr,user_id,group_name,user_type,user_email FROM users LEFT OUTER JOIN groups ON groups.group_id = users.group_id ORDER BY user_name");
 	 ?>
 
 		<form action="./index.php" method="GET" class="form-inline">

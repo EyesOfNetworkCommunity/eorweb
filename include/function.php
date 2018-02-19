@@ -315,9 +315,9 @@ function get_toolport_ports(){
 // Display User list
 function get_user_listbox(){
 	echo "<h2>Select user : </h2>";
-        global $database_eonweb;
+        global $database_eorweb;
 
-        $result=sqlrequest($database_eonweb,"SELECT DISTINCT user_name,user_id,group_id,user_descr FROM users ORDER BY user_name");
+        $result=sqlrequest($database_eorweb,"SELECT DISTINCT user_name,user_id,group_id,user_descr FROM users ORDER BY user_name");
         print "<SELECT name='users_list' class='select' size=15>";
         while ($line = mysqli_fetch_array($result))
         {
@@ -350,12 +350,12 @@ function stripAccents($str, $charset='utf-8'){
 
 // Add Logs
 function logging($module,$command,$user=false){
-	global $database_eonweb;
+	global $database_eorweb;
 	global $dateformat;
 	if($user)
-		sqlrequest($database_eonweb,"insert into logs values ('','".time()."','$user','$module','$command','".$_SERVER["REMOTE_ADDR"]."');");
+		sqlrequest($database_eorweb,"insert into logs values ('','".time()."','$user','$module','$command','".$_SERVER["REMOTE_ADDR"]."');");
 	elseif(isset($_COOKIE['user_name']))
-		sqlrequest($database_eonweb,"insert into logs values ('','".time()."','".$_COOKIE['user_name']."','$module','$command','".$_SERVER["REMOTE_ADDR"]."');");
+		sqlrequest($database_eorweb,"insert into logs values ('','".time()."','".$_COOKIE['user_name']."','$module','$command','".$_SERVER["REMOTE_ADDR"]."');");
 }
 
 // Time
@@ -738,13 +738,13 @@ function insert_user($user_name, $user_descr, $user_group, $user_password1, $use
 	global $database_host;
 	global $database_username;
 	global $database_password;
-	global $database_eonweb;
+	global $database_eorweb;
 	
 	$user_id=null;
 	$user_limitation=0;
 
 	// Check if user exist
-	$user_exist=mysqli_result(sqlrequest("$database_eonweb","SELECT count('user_name') from users where user_name='$user_name';"),0);
+	$user_exist=mysqli_result(sqlrequest("$database_eorweb","SELECT count('user_name') from users where user_name='$user_name';"),0);
 
 	// Check user descr
 	if($user_descr=="")
@@ -768,9 +768,9 @@ function insert_user($user_name, $user_descr, $user_group, $user_password1, $use
 			$user_password = md5($user_password1);
 			
 			// Insert into eonweb
-			sqlrequest("$database_eonweb","INSERT INTO users (user_name,user_descr,group_id,user_passwd,user_type,user_email,user_location,user_limitation,user_language) VALUES('$user_name', '$user_descr', '$user_group', '$user_password', '$user_type', '$user_email','$user_location', '0', '$user_language')");
-			$user_id=mysqli_result(sqlrequest("$database_eonweb","SELECT user_id FROM users WHERE user_name='$user_name'"),0,"user_id");
-			$group_name=mysqli_result(sqlrequest("$database_eonweb","SELECT group_name FROM groups WHERE group_id='$user_group'"),0,"group_name");
+			sqlrequest("$database_eorweb","INSERT INTO users (user_name,user_descr,group_id,user_passwd,user_type,user_email,user_location,user_limitation,user_language) VALUES('$user_name', '$user_descr', '$user_group', '$user_password', '$user_type', '$user_email','$user_location', '0', '$user_language')");
+			$user_id=mysqli_result(sqlrequest("$database_eorweb","SELECT user_id FROM users WHERE user_name='$user_name'"),0,"user_id");
+			$group_name=mysqli_result(sqlrequest("$database_eorweb","SELECT group_name FROM groups WHERE group_id='$user_group'"),0,"group_name");
 
 			// Messages
 			logging("admin_user","INSERT : $user_name $user_descr $user_limitation $user_group $user_type $user_location");
@@ -1229,12 +1229,12 @@ function strTime($s) {
 function getEonConfig($name,$type=false)
 {
 
-	global $database_eonweb;
+	global $database_eorweb;
 	global ${$name};
 	
 	// mysql request	
 	$sql = "SELECT value FROM configs WHERE name='".$name."'";
-	$value = sqlrequest($database_eonweb, $sql);
+	$value = sqlrequest($database_eorweb, $sql);
 	$result = mysqli_fetch_row($value);
 	
 	// return value if exists

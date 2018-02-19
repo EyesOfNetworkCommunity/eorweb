@@ -25,7 +25,7 @@ include("../../include/function.php");
 
 // Search function for Jquery an exit
 if(isset($_GET['term']) && isset($_GET['request']) && $_GET['request'] == "search_group") {
-	$result=sqlrequest($database_eonweb,"select * from ldap_groups_extended where group_name LIKE '%".$_GET['term']."%' order by group_name");
+	$result=sqlrequest($database_eorweb,"select * from ldap_groups_extended where group_name LIKE '%".$_GET['term']."%' order by group_name");
 	
 	$array = array();
 	while ($line = mysqli_fetch_array($result)){

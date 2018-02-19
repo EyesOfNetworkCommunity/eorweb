@@ -132,7 +132,7 @@ if( strpos($_SERVER["PHP_SELF"], "/module/module_frame") !== false ){
 			<ul class="dropdown-menu dropdown-user">
 				<?php 
 					// No password modification link if ldap user
-					$ldapsql=sqlrequest($database_eonweb,"SELECT user_type FROM users WHERE user_name='".$_COOKIE["user_name"]."';");
+					$ldapsql=sqlrequest($database_eorweb,"SELECT user_type FROM users WHERE user_name='".$_COOKIE["user_name"]."';");
 					$user_type=mysqli_result($ldapsql,0,"user_type");
 					if($user_type != 1) { 
 				?>
@@ -160,7 +160,7 @@ if( strpos($_SERVER["PHP_SELF"], "/module/module_frame") !== false ){
 						foreach($menus["menutab"] as $menutab) { 	
 							// Verify group rights
 							$tab_request = "SELECT tab_".$menutab["id"]." FROM groupright WHERE group_id=".$_COOKIE['group_id'].";";
-							$tab_right = mysqli_result(sqlrequest($database_eonweb, $tab_request),0);				
+							$tab_right = mysqli_result(sqlrequest($database_eorweb, $tab_request),0);				
 							if($tab_right == 0){ continue; }
 						?>
 						<li>

@@ -27,7 +27,7 @@
 include("../../header.php");
 include("../../side.php");
 
-global $database_eonweb;
+global $database_eorweb;
 global $database_host;
 global $database_username;
 global $database_password;
@@ -36,7 +36,7 @@ global $path_rptdesign;
 $grp_avail = array();
 $grp_format = array();
 
-$db = new mysqli($database_host, $database_username, $database_password, $database_eonweb);
+$db = new mysqli($database_host, $database_username, $database_password, $database_eorweb);
 
 if($db->connect_errno > 0){
 die('Unable to connect to database [' . $db->connect_error . ']');

@@ -36,7 +36,7 @@ include("../../side.php");
 	<div id="errors"></div>
 
 	<?php
-	global $database_eonweb;
+	global $database_eorweb;
 	$action=retrieve_form_data("action",null);
 	$group_mgt_list=retrieve_form_data("group_mgt_list",null);
 	$group_selected=retrieve_form_data("group_selected",null);
@@ -54,10 +54,10 @@ include("../../side.php");
 					for ($i = 0; $i < count($group_selected); $i++)
 					{
 						// Get group name
-						$group_res=sqlrequest("$database_eonweb","select group_name from groups where group_id='$group_selected[$i]'");
+						$group_res=sqlrequest("$database_eorweb","select group_name from groups where group_id='$group_selected[$i]'");
 						$group_name=mysqli_result($group_res,0,"group_name");
 						// Get users in group
-						$users_in=sqlrequest("$database_eonweb","select user_name from users where group_id='$group_selected[$i]'");
+						$users_in=sqlrequest("$database_eorweb","select user_name from users where group_id='$group_selected[$i]'");
 						$users_in_names="";
 						while ($line = mysqli_fetch_array($users_in))	
 							$users_in_names=$line[0]." ".$users_in_names;
@@ -65,8 +65,8 @@ include("../../side.php");
 						// Delete group if no users in
 						if($users_in_names==""){
 							// Delete in eonweb
-							sqlrequest("$database_eonweb","delete from groupright where group_id='$group_selected[$i]'");
-							sqlrequest("$database_eonweb","delete from groups where group_id='$group_selected[$i]'");
+							sqlrequest("$database_eorweb","delete from groupright where group_id='$group_selected[$i]'");
+							sqlrequest("$database_eorweb","delete from groups where group_id='$group_selected[$i]'");
 						}
 						else
 							message(8," : Group $group_name contains users : $users_in_names",'warning');
@@ -97,7 +97,7 @@ include("../../side.php");
 				$usrlimitation = 0;
 
 				$sql = "SELECT group_id FROM groups WHERE group_name = '$usergroup'";
-				$query = sqlrequest($database_eonweb, $sql);
+				$query = sqlrequest($database_eorweb, $sql);
 				$usergroup = mysqli_result($query,0,"group_id");
 
 				$nagvis_role_id = "";
@@ -127,10 +127,10 @@ include("../../side.php");
 	}
 
 	//Get the name group and description group
-	$group_name_descr=sqlrequest("$database_eonweb","SELECT group_name,group_descr,group_id,group_type FROM groups ORDER BY group_name");
+	$group_name_descr=sqlrequest("$database_eorweb","SELECT group_name,group_descr,group_id,group_type FROM groups ORDER BY group_name");
 	
 	// determine if there is LDAP conf
-	$request = sqlrequest($database_eonweb, "SELECT auth_type FROM auth_settings");
+	$request = sqlrequest($database_eorweb, "SELECT auth_type FROM auth_settings");
 	$conf_type=mysqli_result($request,0,"auth_type");
 	$ldap_conf = ($conf_type == "1") ? true : false;
 	?>

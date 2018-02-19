@@ -46,7 +46,7 @@ if($date != ""){
 
 
 $sql = "SELECT * FROM logs WHERE id!=0".$where_clause." ORDER BY date DESC";
-$results = sqlrequest($database_eonweb,$sql,false,$where_prepare);
+$results = sqlrequest($database_eorweb,$sql,false,$where_prepare);
 
 ?>
 

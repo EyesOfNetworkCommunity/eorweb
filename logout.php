@@ -25,7 +25,7 @@ include("header.php");
 logging("logout","User logged out");
 if(isset($_COOKIE["session_id"])) { 
 	$sessid=$_COOKIE["session_id"]; 
-	sqlrequest($database_eonweb,"DELETE FROM sessions where session_id=?",false,array("s",(string)$sessid));
+	sqlrequest($database_eorweb,"DELETE FROM sessions where session_id=?",false,array("s",(string)$sessid));
 }
 setcookie("session_eor_id",FALSE);
 setcookie("user_name",FALSE);

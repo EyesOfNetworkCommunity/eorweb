@@ -26,13 +26,13 @@
   include("../../header.php");
   include("../../side.php");
 
-  global $database_eonweb;
+  global $database_eorweb;
   global $database_host;
   global $database_username;
   global $database_password;
   global $path_rptdesign;
    
-  $db = new mysqli($database_host, $database_username, $database_password, $database_eonweb);
+  $db = new mysqli($database_host, $database_username, $database_password, $database_eorweb);
 
   if($db->connect_errno > 0){
     die("echo getLabel(\"label.manage_report.query_error\")" . $db->connect_error . ']');
