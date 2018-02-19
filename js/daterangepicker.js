@@ -29,7 +29,7 @@ ranges[dictionnary["label.last_30_days"]] = [moment().subtract(29, 'days'), mome
 ranges[dictionnary["label.this_month"]] = [moment().startOf('month'), moment().endOf('month')];
 ranges[dictionnary["label.last_month"]] = [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')];
 
-$('.daterangepicker').daterangepicker({
+$('.daterangepicker-eorweb').daterangepicker({
 	autoUpdateInput: false,
 	locale: {
 		//format: 'MMMM D, YYYY',
@@ -41,10 +41,10 @@ $('.daterangepicker').daterangepicker({
 	ranges: ranges
 });
 	
-$('.daterangepicker').on('apply.daterangepicker', function(ev, picker) {
+$('.daterangepicker-eorweb').on('apply.daterangepicker', function(ev, picker) {
 	$(this).val(picker.startDate.format('MM/DD/YYYY') + ' - ' + picker.endDate.format('MM/DD/YYYY'));
 });
 
-$('.daterangepicker').on('cancel.daterangepicker', function(ev, picker) {
+$('.daterangepicker-eorweb').on('cancel.daterangepicker', function(ev, picker) {
 	$(this).val('');
 });

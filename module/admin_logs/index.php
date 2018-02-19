@@ -37,7 +37,7 @@ include("../../side.php");
 		<div class="row">
 			<div class="form-group col-md-4">
 				<label><?php echo getLabel('label.period'); ?></label>
-				<input type="text" class="daterangepicker-eonweb form-control" name="date">
+				<input type="text" class="daterangepicker-eorweb form-control" name="date">
 			</div>
 			
 			<div class="form-group col-md-4">
