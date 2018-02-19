@@ -21,6 +21,7 @@ include("../../side.php");
 			</div>
 		</div>
 		<button class="form-group btn btn-primary" type="submit" id="submit"><?php echo getLabel("label.manage_contracts.company_add"); ?></button>
+		<button class="btn btn-default" type="button" name="back" value="back" onclick="location.href='company_view.php'"><?php echo getLabel("action.cancel") ?></button>
 	</form>
 </div>
 
@@ -55,7 +56,7 @@ $(document).ready(function() {
 				},
 				function GotoView(value){
 					if (value == "true"){
-						document.getElementById('global_form').innerHTML = "<?php message(12, getLabel("label.manage_contracts.company_saved"), "ok"); ?>";
+						document.getElementById('global_form').innerHTML = "<?php message(12, getLabel("message.manage_contracts.company_saved"), "ok"); ?>";
 						setTimeout(function(){
 							$(location).attr('href', "company_view.php");
 							},
@@ -90,7 +91,7 @@ $(document).ready(function() {
 				},
 				function GotoView(value){
 					if (value == "true"){
-						document.getElementById('global_form').innerHTML = "<?php message(12, getLabel("label.manage_contracts.company_saved"), "ok"); ?>";
+						document.getElementById('global_form').innerHTML = "<?php message(12, getLabel("message.manage_contracts.company_saved"), "ok"); ?>";
 						setTimeout(function(){
 							$(location).attr("href", "company_view.php");
 							},

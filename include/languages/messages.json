@@ -755,6 +755,7 @@
 	"message.error.snmp_version": "Could not determine SNMP version",
 	"message.kettle_apps.date_error": "Please select dates from same month",
 	"message.loading": "Loading, please wait ...",
+	"message.manage_contracts.company_saved": "Company recorded",
 	"message.manage_contracts.company_suppress": "Delete this company ?",
 	"message.manage_contracts.contract_context_application_suppress": "Suppress this application ?",
 	"message.module.not_installed": "Module",

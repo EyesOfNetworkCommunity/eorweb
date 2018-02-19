@@ -755,6 +755,7 @@
 	"message.error.snmp_version": "Impossible de déterminer la version snmp",
 	"message.kettle_apps.date_error": "Sélectionnez deux dates du même mois",
 	"message.loading": "Chargement, veuillez patienter ...",
+	"message.manage_contracts.company_saved": "Entreprise sauvegardée",
 	"message.manage_contracts.company_suppress": "Supprimer l'entreprise sélectionnée ?",
 	"message.manage_contracts.contract_context_application_suppress": "Supprimer l'application sélectionnée ?",
 	"message.module.not_installed": "Le module",

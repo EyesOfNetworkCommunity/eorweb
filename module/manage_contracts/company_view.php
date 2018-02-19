@@ -15,7 +15,7 @@ include("../../side.php");
 				<tr>
 					<th></th>
 					<th><?php echo getLabel("label.name"); ?></th>
-					<th><?php echo getLabel("label.edit"); ?></th>
+					<th><?php echo getLabel("label.actions"); ?></th>
 				</tr>
 			</thead>
 			<tbody id="body_table">
@@ -57,7 +57,7 @@ function EditSelection(id){
 }
 
 function RemoveSelection(id){
-	DisplayPopupRemove("<?php echo getLabel("message.manage_contracts.company_suppress"); ?>", "company", id, "<?php echo getLabel("label.suppress"); ?>","<?php echo getLabel("label.yes"); ?>","<?php echo getLabel("label.no"); ?>");
+	DisplayPopupRemove("<?php echo getLabel("message.manage_contracts.company_suppress"); ?>", "company", id, "<?php echo getLabel("action.delete"); ?>","<?php echo getLabel("label.yes"); ?>","<?php echo getLabel("label.no"); ?>");
 }
 
 </script>
