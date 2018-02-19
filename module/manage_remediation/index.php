@@ -55,7 +55,7 @@ if(isset($_GET["action"])) {
 	<form action="./index.php" method="POST">
 		<div class="dataTable_wrapper">
 			<div class="table-responsive">
-				<table class="table table-striped datatable-eonweb table-condensed">
+				<table class="table table-striped datatable-eorweb table-condensed">
 					<thead>
 						<tr>
 							<th class="text-center"> <?php echo getLabel("label.admin_group.select"); ?> </th>
@@ -118,7 +118,7 @@ if(isset($_GET["action"])) {
 	<form action="./index.php" method="POST">
 		<div class="dataTable_wrapper">
 			<div class="table-responsive">
-				<table class="table table-striped datatable-eonweb table-condensed">
+				<table class="table table-striped datatable-eorweb table-condensed">
 					<thead>
 						<tr>
 							<th class="text-center"> <?php echo getLabel("label.admin_group.select"); ?> </th>
@@ -178,7 +178,7 @@ if(isset($_GET["action"])) {
 	<form action="./index.php" method="POST">
 		<div class="dataTable_wrapper">
 			<div class="table-responsive">
-				<table class="table table-striped datatable-eonweb table-condensed">
+				<table class="table table-striped datatable-eorweb table-condensed">
 					<thead>
 						<tr>
 							<th class="text-center"> <?php echo getLabel("label.admin_group.select"); ?> </th>

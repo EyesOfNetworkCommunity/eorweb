@@ -99,7 +99,7 @@ $nagvis_groups = $req->fetchAll(PDO::FETCH_OBJ);
 				<div class="panel-heading"><?php echo getLabel("label.ldap_usr_list"); ?></div>
 				<div class="panel-body">
 					<div class="dataTable_wrapper">
-						<table class="table table-striped table-condensed datatable-eonweb-ajax">
+						<table class="table table-striped table-condensed datatable-eorweb-ajax">
 							<thead>
 								<tr>
 									<th class="col-md-3 text-center"><?php echo getLabel("label.admin_group.select"); ?></th>
@@ -186,7 +186,7 @@ $nagvis_groups = $req->fetchAll(PDO::FETCH_OBJ);
 <script src="/bower_components/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.min.js"></script>
 <script src="/bower_components/datatables-responsive/js/dataTables.responsive.js"></script>
 <script type="text/javascript">
-	$('.datatable-eonweb-ajax').DataTable({
+	$('.datatable-eorweb-ajax').DataTable({
 		responsive: true,
 		lengthMenu: [ [10, 25, 50, 100, -1], [10, 25, 50, 100, dictionnary['label.all']] ],
 		language: {

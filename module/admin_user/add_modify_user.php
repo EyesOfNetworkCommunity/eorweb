@@ -88,7 +88,7 @@ include("../../side.php");
 			global $database_password;
 
 			global $database_eorweb;
-			global $path_eonweb;
+			global $path_eorweb;
 
 			// Check if user exist
 			if($user_name!=$old_name)	
@@ -103,15 +103,15 @@ include("../../side.php");
 			if (($user_name != "") && ($user_name != null) && ($user_id != null) && ($user_id != "") && ($user_exist == 0)) {
 				if (($user_password1 != "") && ($user_password1 != null) && ($user_password1 == $user_password2)) {
 
-					$eonweb_groupname=mysqli_result(sqlrequest("$database_eorweb","SELECT group_name FROM groups WHERE group_id='$user_group'"),0,"group_name");			
-					$eonweb_oldgroupname=mysqli_result(sqlrequest("$database_eorweb","SELECT group_name FROM groups WHERE group_id='$old_group_id'"),0,"group_name");			
+					$eorweb_groupname=mysqli_result(sqlrequest("$database_eorweb","SELECT group_name FROM groups WHERE group_id='$user_group'"),0,"group_name");			
+					$eorweb_oldgroupname=mysqli_result(sqlrequest("$database_eorweb","SELECT group_name FROM groups WHERE group_id='$old_group_id'"),0,"group_name");			
 					if ($user_password1 != "abcdefghijklmnopqrstuvwxyz") {
 						$passwd_temp = md5($user_password1);
-						// Update into eonweb
+						// Update into eorweb
 						sqlrequest("$database_eorweb","UPDATE users set user_name='$user_name', user_descr='$user_descr',group_id='$user_group',user_passwd='$passwd_temp',user_type='$user_type',user_location='$user_location',user_email='$user_email',user_language='$user_language' WHERE user_id ='$user_id'");
 					}
 					else {
-						// Update into eonweb
+						// Update into eorweb
 						sqlrequest("$database_eorweb","UPDATE users set user_name='$user_name', user_descr='$user_descr',group_id='$user_group',user_type='$user_type',user_location='$user_location',user_email='$user_email',user_language='$user_language' WHERE user_id ='$user_id'");
 					}
 					

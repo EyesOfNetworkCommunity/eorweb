@@ -51,7 +51,7 @@ $results = sqlrequest($database_eorweb,$sql,false,$where_prepare);
 ?>
 
 <div class="dataTable_wrapper">
-	<table class="table table-striped datatable-eonweb table-condensed">
+	<table class="table table-striped datatable-eorweb table-condensed">
 		<thead>
 			<tr>
 				<th>Date</th>

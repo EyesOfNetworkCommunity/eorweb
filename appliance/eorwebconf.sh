@@ -5,7 +5,7 @@ eonconfpath=$(readlink -f "$0")
 eonconfdir=$(dirname "$eonconfpath")
 eondir="/srv/eyesofnetwork"
 datadir="$eondir/eorweb"
-eonwebdb="eorweb"
+eorwebdb="eorweb"
 nagiosbpdb="nagiosbp"
 snmpdir="/etc/snmp"
 backupdir="/etc"
@@ -14,15 +14,15 @@ backupdir="/etc"
 chmod 775 ${datadir}/cache
 chmod 644 ${backupdir}/backup-manager.conf
 
-# change own user for eonweb directory
+# change own user for eorweb directory
 chown -R root:eyesofnetwork ${datadir}*
 
-# create the eonweb database
-mysqladmin -u root --password=root66 create ${eonwebdb}
+# create the eorweb database
+mysqladmin -u root --password=root66 create ${eorwebdb}
 mysqladmin -u root --password=root66 create ${nagiosbpdb}
 
 # create the database content
-mysql -u root --password=root66 ${eonwebdb} < ${eonconfdir}/eonweb.sql
+mysql -u root --password=root66 ${eorwebdb} < ${eonconfdir}/eorweb.sql
 mysql -u root --password=root66 ${nagiosbpdb} < ${eonconfdir}/nagiosbp.sql
 
 # Change DocumentRoot for apache

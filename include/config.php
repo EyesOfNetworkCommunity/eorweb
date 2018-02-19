@@ -49,7 +49,7 @@ $dateformat="M j, Y g:i:s A";
 $datepurge="-1 month";
 
 // # Menu Config
-// You can view tabid in eonweb database
+// You can view tabid in eorweb database
 $defaulttab=1;
 $defaultpage="./module/birt_apps/index.php";
 
@@ -84,7 +84,7 @@ $max_bu_file = 5;
 
 // # Define All Path
 $path_eon="/srv/eyesofnetwork";
-$path_eonweb="$path_eon/eorweb";
+$path_eorweb="$path_eon/eorweb";
 $path_frame="/module/module_frame/index.php?url=";
 $dir_imgcache="cache";
 $path_images="/images";
@@ -94,14 +94,14 @@ $path_logo_favicon="$path_images/favicon.png";
 $path_logo_favicon_custom="$path_images/custom.favicon.png";
 $path_logo_navbar="$path_images/logo-navbar.png";
 $path_logo_navbar_custom="$path_images/custom.logo-navbar.png";
-$path_languages="$path_eonweb/include/languages";
+$path_languages="$path_eorweb/include/languages";
 $path_messages="$path_languages/messages";
 $path_messages_custom="$path_languages/custom.messages";
 $path_menus="$path_languages/menus";
 $path_menus_custom="$path_languages/custom.menus";
 $path_menu_limited="$path_languages/menus-limited";
 $path_menu_limited_custom="$path_languages/custom.menus-limited";
-$path_reports="$path_eonweb/include/reports";
+$path_reports="$path_eorweb/include/reports";
 
 // # NetCAT
 $default_minport=1;

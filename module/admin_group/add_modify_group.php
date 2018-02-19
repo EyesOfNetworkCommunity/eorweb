@@ -151,7 +151,7 @@ function update_group($count_menu_item,$group_id,$group_name,$group_descr,$group
 			$group_type = 0;
 		}
 		
-		// Update into eonweb
+		// Update into eorweb
 		sqlrequest("$database_eorweb","UPDATE groups set group_name='$group_name', group_descr='$group_descr', group_type='$group_type', group_dn='$group_dn' where group_id='$group_id'");
 		// Update into lilac
 		sqlrequest("$database_lilac", "UPDATE nagios_contact_group SET name='$group_name', alias='$group_descr' WHERE name='$old_group'");
@@ -194,7 +194,7 @@ function insert_group($group_name,$group_descr,$group_type,$ldap_group_name)
 			$group_type = 0;
 		}
 		
-		// Insert into eonweb
+		// Insert into eorweb
 		sqlrequest("$database_eorweb","INSERT INTO groups (group_name,group_descr,group_type,group_dn) VALUES('$group_name', '$group_descr', '$group_type', '$group_dn')");
 		$group_id=mysqli_result(sqlrequest("$database_eorweb","SELECT group_id, group_descr FROM groups WHERE group_name='$group_name'"),0,"group_id");
 		sqlrequest("$database_eorweb","INSERT INTO groupright (group_id) VALUES('$group_id')");

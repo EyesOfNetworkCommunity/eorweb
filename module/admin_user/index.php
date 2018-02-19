@@ -49,14 +49,14 @@ include("../../side.php");
 						// Get user name
 						$user_res=sqlrequest("$database_eorweb","select user_name from users where user_id='$user_selected[$i]'");
 						$user_name=mysqli_result($user_res,0,"user_name");
-						// Delete user in eonweb
+						// Delete user in eorweb
 						sqlrequest("$database_eorweb","delete from users where user_id='$user_selected[$i]'");
 						// Delete user files
-						$user_files_path="$path_eonweb/$dir_imgcache/$user_name";
+						$user_files_path="$path_eorweb/$dir_imgcache/$user_name";
 						@unlink("$user_files_path-ged.xml");
 						@unlink("$user_files_path-report.doc");
 						@unlink("$user_files_path-report.xml");
-						@unlink("$path_eonweb/$dir_imgcache/$user_name-report_xml.xml");
+						@unlink("$path_eorweb/$dir_imgcache/$user_name-report_xml.xml");
 						foreach (glob("$user_files_path-*.png") as $filename){
 							@unlink($filename);
 						}
@@ -76,7 +76,7 @@ include("../../side.php");
 
 		<form action="./index.php" method="GET" class="form-inline">
 			<div class="dataTable_wrapper">
-				<table class="table table-striped datatable-eonweb table-condensed">
+				<table class="table table-striped datatable-eorweb table-condensed">
 					<thead>
 						<tr>
 							<th class="col-md-2 text-center"><?php echo getLabel("label.admin_user.select"); ?></th>

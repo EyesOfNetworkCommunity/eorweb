@@ -137,7 +137,7 @@ include("../../side.php");
 				if (!$connexion) {
 					echo "<ul>";
 					echo "<li class='msg_title'>Alert EyesOfNetwork - Message EON-database connect</li>";
-					echo "<li class='msg'> Could not connect to database : $databasea_eonweb ($database_host)</li>";
+					echo "<li class='msg'> Could not connect to database : $databasea_eorweb ($database_host)</li>";
 					echo "</ul>";
 					exit(1);
 				}

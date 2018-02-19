@@ -45,7 +45,7 @@ include("../../side.php");
 				if($user_password1!="abcdefghijklmnopqrstuvwxyz") {
 					$user_password = md5($user_password1);
 
-					// Insert into eonweb
+					// Insert into eorweb
 					sqlrequest("$database_eorweb","UPDATE users set user_passwd='$user_password' WHERE user_id='$usrid';");
 
 					// update password into nagvis if user is in

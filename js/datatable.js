@@ -19,7 +19,7 @@
 #########################################
 */
 
-$('.datatable-eonweb').DataTable({
+$('.datatable-eorweb').DataTable({
 	responsive: true,
 	lengthMenu: [ [10, 25, 50, 100, -1], [10, 25, 50, 100, dictionnary['label.all']] ],
 	language: {

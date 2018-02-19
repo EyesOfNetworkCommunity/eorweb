@@ -44,12 +44,12 @@
                     "link":[
                         {
                             "name":"menu.link.business",
-                            "url":"/module/manage_bp/",
+                            "url":"/module/manage_bp.old/",
                             "target":"main"
                         },
                         {
                             "name":"menu.link.business_tree",
-                            "url":"/module/manage_bp/process_tree.php",
+                            "url":"/module/manage_bp.old/process_tree.php",
                             "target":"main"
                         }
                     ]
@@ -57,7 +57,12 @@
             ],
             "link": [
                 {
-                    "name":"label.manage_report.report_declaration",
+                    "name":"menu.link.business",
+                    "url":"/module/manage_bp/",
+                    "target":"main"
+                },
+                {
+                    "name":"menu.link.report_declaration",
                     "url":"/module/manage_report/",
                     "target":"main"
                 },

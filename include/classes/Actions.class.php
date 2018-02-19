@@ -21,7 +21,7 @@
 */
 
 /**
- * Actions class for all eonweb's pages
+ * Actions class for all eorweb's pages
  */
 class Actions
 {

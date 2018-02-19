@@ -81,7 +81,7 @@ function sqlrequest($database,$sql,$id=false,$prepare=false){
 		exit(1);
 	}
 
-	if ( $database == "eonweb" ) {
+	if ( $database == "eorweb" ) {
 		// Force UTF-8
 		mysqli_query($connexion, "SET NAMES 'utf8'");
 	}
@@ -767,7 +767,7 @@ function insert_user($user_name, $user_descr, $user_group, $user_password1, $use
 		if (($user_password1 != "") && ($user_password1 != null) && ($user_password1 == $user_password2)) {
 			$user_password = md5($user_password1);
 			
-			// Insert into eonweb
+			// Insert into eorweb
 			sqlrequest("$database_eorweb","INSERT INTO users (user_name,user_descr,group_id,user_passwd,user_type,user_email,user_location,user_limitation,user_language) VALUES('$user_name', '$user_descr', '$user_group', '$user_password', '$user_type', '$user_email','$user_location', '0', '$user_language')");
 			$user_id=mysqli_result(sqlrequest("$database_eorweb","SELECT user_id FROM users WHERE user_name='$user_name'"),0,"user_id");
 			$group_name=mysqli_result(sqlrequest("$database_eorweb","SELECT group_name FROM groups WHERE group_id='$user_group'"),0,"group_name");

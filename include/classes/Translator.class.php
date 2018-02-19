@@ -21,7 +21,7 @@
 */
 
 /**
- * Translator class for all eonweb's pages
+ * Translator class for all eorweb's pages
  *
  * usage examples :
  * PHP : 		echo getLabel("label...");

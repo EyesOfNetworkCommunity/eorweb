@@ -64,7 +64,7 @@ include("../../side.php");
 
 						// Delete group if no users in
 						if($users_in_names==""){
-							// Delete in eonweb
+							// Delete in eorweb
 							sqlrequest("$database_eorweb","delete from groupright where group_id='$group_selected[$i]'");
 							sqlrequest("$database_eorweb","delete from groups where group_id='$group_selected[$i]'");
 						}
@@ -137,7 +137,7 @@ include("../../side.php");
 
 	<form action="./index.php" method="GET" class="form-inline">
 		<div class="dataTable_wrapper">
-			<table class="table table-striped datatable-eonweb table-condensed">
+			<table class="table table-striped datatable-eorweb table-condensed">
 				<thead>
 				<tr>
 					<th class="col-md-2 text-center"><?php echo getLabel("label.admin_group.select"); ?></th>
