@@ -26,7 +26,7 @@ include("../../side.php");
 					<label style="font-weight:normal;" for="application_name" class="col-md-4 control-label"><?php echo getLabel("label.application"); ?> : </label>
 					<div class="col-md-7">
 					<button class="btn btn-default btn-block dropdown-toggle" type="button" data-toggle="dropdown" id="application_name"><?php echo getLabel("label.manage_contracts.contract_context_select_application"); ?>
-					</button>
+					<span class="caret"></span></button>
 					<ul class="dropdown-menu btn-block" id="ul_application"></ul>
 					</div>
 				</div>

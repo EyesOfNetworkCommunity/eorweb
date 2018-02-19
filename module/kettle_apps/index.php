@@ -30,9 +30,11 @@ include("../../side.php");
 		<div id="endDate"></div>
 	</div>
 	<div class="row form-group">
-		<button class="form-group btn btn-primary center-block" type="submit" id="launch"><?php echo getLabel("label.kettle_apps.launch"); ?>
-			<span class="glyphicon glyphicon-ok" style="color:#4f4;"></span>
-		</button>
+		<div class="col-md-3">
+			<button class="form-group btn btn-primary" type="submit" id="launch"><?php echo getLabel("label.kettle_apps.launch"); ?>
+				<span class="glyphicon glyphicon-ok" style="color:#4f4;"></span>
+			</button>
+		</div>
 	</div>
 </form>
 
@@ -63,7 +65,6 @@ include("../../side.php");
 				document.getElementById('launch').setAttribute("disabled", true);
 			}
 		});
-
 		$('#launch').click(function(event){
 			event.preventDefault();
 			$.get(
@@ -79,8 +80,9 @@ include("../../side.php");
 			);
 		});
 	});
-
 	
 </script>
 
-<?php include("./footer.php"); ?>
+<?php
+include("./footer.php"); 
+?>

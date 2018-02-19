@@ -11,7 +11,8 @@ include("../../side.php");
 			<h1 class="page-header"><?php echo getLabel("label.manage_contracts.step_group_title"); ?></h1>
 		</div>
 	</div>
-	<form class="form-horizontal col-md-7" id="global_form" style="display:none">
+	<div class="col-md-12" id="global_form"></div>
+	<form class="form-horizontal col-md-7" >
 		<div class="form-group has-feedback">
 			<label style="font-weight:normal;" for="name" class="col-md-3 control-label"><?php echo getLabel("label.contracts_menu.seuils_create_name"); ?> : </label>
 			<div class="col-md-8">
@@ -42,17 +43,13 @@ include("../../side.php");
 				<input type="text" class="form-control" id="interval_max" onkeyup="this.value=this.value.replace(/[^0-9.]/g,'')">
 			</div>
 		</div>
-		<div class="form-group" style="display:none" id="display_interval_button">
-			<div class="col-md-3">
-				<button class="btn btn-primary" type="submit" id="submit_interval"><?php echo getLabel("label.contracts_menu.seuils_create_btn_add"); ?>
-					<span class="glyphicon glyphicon-ok" style="color:#4f4;"></span>
-				</button>
-			</div>
-		</div>
-
+			<button class="btn btn-primary" type="submit" id="submit_interval" style="display: none;"><?php echo getLabel("label.contracts_menu.seuils_create_btn_add"); ?>
+				<span class="glyphicon glyphicon-ok" style="color:#4f4;"></span>
+			</button>
+		
 		<input type="text" class="form-control" id="id_kpi" style="display:none">
 		
-		<div class="form-groupœ" style="display:none" id="text_entry">
+		<div class="form-group" style="display:none" id="text_entry">
 			<h2 class="page-header"><?php echo getLabel("label.contracts_menu.seuils_create_title_list"); ?></h2>
 		</div>
 
@@ -92,7 +89,7 @@ $(document).ready(function() {
 	if (UrlParam('id_number') != false){
 		$('#display_unit_checkbox').css("display", "inline");
 		$('#display_interval').css("display", "inline");
-    $('#display_interval_button').css("display", "inline");
+    $('#submit_interval').css("display", "block");
 		$('#text_entry').css("display", "inline");
 		$('#container_interval').css("display", "inline");
 
@@ -332,7 +329,7 @@ function ChangeValueSelected(values){
 	else{
 		$('#display_unit_checkbox').css("display", "inline");
 		$('#display_interval').css("display", "inline");
-    $('#display_interval_button').css("display", "inline");
+    $('#submit_interval').css("display", "block");
 		$('#text_entry').css("display", "inline");
 	}
 }

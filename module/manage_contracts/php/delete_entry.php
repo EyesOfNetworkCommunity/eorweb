@@ -11,7 +11,7 @@
 
 	$id_name = strtoupper($id_name);
 
-	$sql = "delete from " . $table_name . " where " . $id_name . " = '" . $id_number . "'";
+	$sql = "DELETE FROM " . $table_name . " WHERE " . $id_name . " = '" . $id_number . "'";
 	try {
         $bdd = new PDO("mysql:host=$database_host;dbname=$database_vanillabp", $database_username, $database_password);
     } catch(Exception $e) {
@@ -22,7 +22,7 @@
 	$bdd->exec($sql);
  
   if($table_name == 'time_period'){
-    $new_sql = "delete from timeperiod_entry where ID_TIME_PERIOD = " . $id_number;
+    $new_sql = "DELETE FROM timeperiod_entry WHERE ID_TIME_PERIOD = " . $id_number;
     
     $bdd->exec($new_sql);
   }

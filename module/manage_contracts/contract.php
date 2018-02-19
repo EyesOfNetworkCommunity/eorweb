@@ -86,6 +86,7 @@ include("../../side.php");
 						<span class="glyphicon glyphicon-ok" style="color:#4f4;"></span>
 					</button>
 				</div>
+			</div>
 		</form>
 	</div>
 </div>

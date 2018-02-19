@@ -11,7 +11,7 @@ include("../../side.php");
 	<form class="form-horizontal col-md-7 marge" id="global_form">
 		<div class="row pad-top">
 			<div class="form-group has-feedback div-name">
-				<label style="font-weight:normal;" for="name" class="col-md-4 control-label">Nom : </label>
+				<label style="font-weight:normal;" for="name" class="col-md-4 control-label"><?php echo getLabel("label.name"); ?> : </label>
 				<div class="col-md-7 input-name">
 					<input type="text" class="form-control" id="name" onkeyup="this.value=this.value.replace(/[^éèàêâç0-9a-zA-Z-_ \/\*]/g,'')">
 				</div>
@@ -20,7 +20,7 @@ include("../../side.php");
 
 		<div class="row">
 			<div class="form-group has-feedback div-short-name">
-				<label style="font-weight:normal;" for="short_name" class="col-md-4 control-label">Nom court : </label>
+				<label style="font-weight:normal;" for="short_name" class="col-md-4 control-label"><?php echo getLabel("label.short_name"); ?> : </label>
 				<div class="col-md-7 input-short-name">
 					<input type="text" class="form-control" id="short_name" onkeyup="this.value=this.value.replace(/[^éèàêâç0-9a-zA-Z-_ \/\*]/g,'')">
 				</div>
@@ -29,7 +29,7 @@ include("../../side.php");
 
 		<div class="row">
 			<div class="form-group has-feedback div-optional">
-				<label style="font-weight:normal;" for="optional" class="col-md-4 control-label">Option : </label>
+				<label style="font-weight:normal;" for="optional" class="col-md-4 control-label"><?php echo getLabel("label.option"); ?> : </label>
 				<div class="col-md-7 input-optional">
 					<input type="text" class="form-control" id="optional" onkeyup="this.value=this.value.replace(/[^éèàêâç0-9a-zA-Z-_ \/\*]/g,'')">
 				</div>
@@ -38,7 +38,7 @@ include("../../side.php");
 
 		<div class="row">
 			<div class="form-group has-feedback div-comment">
-				<label style="font-weight:normal;" for="comment" class="col-md-4 control-label">Commentaire : </label>
+				<label style="font-weight:normal;" for="comment" class="col-md-4 control-label"><?php echo getLabel("label.contracts_menu.unit_comment"); ?> : </label>
 				<div class="col-md-7 input-comment">
 					<input type="text" class="form-control" id="comment" onkeyup="this.value=this.value.replace(/[^éèàêâç0-9a-zA-Z-_ \/\*]/g,'')">
 				</div>
