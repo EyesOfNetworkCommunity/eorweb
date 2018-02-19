@@ -57,7 +57,7 @@ function EditSelection(id){
 }
 
 function RemoveSelection(id){
-	DisplayPopupRemove("<?php echo getLabel("label.manage_contracts.company_suppress_message"); ?>", "company", id, "<?php echo getLabel("label.suppress"); ?>","<?php echo getLabel("label.yes"); ?>","<?php echo getLabel("label.no"); ?>");
+	DisplayPopupRemove("<?php echo getLabel("message.manage_contracts.company_suppress"); ?>", "company", id, "<?php echo getLabel("label.suppress"); ?>","<?php echo getLabel("label.yes"); ?>","<?php echo getLabel("label.no"); ?>");
 }
 
 </script>

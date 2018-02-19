@@ -71,7 +71,7 @@ $(document).ready(function() {
 						);
 					}
 					else {
-						document.getElementById('global_form').innerHTML = "<?php message(1, " : ".getLabel("message.error.database"), "critical"); ?>";
+						document.getElementById('global_form').innerHTML = "<?php message(1, "", "critical"); ?>";
 						setTimeout(function(){
 							document.getElementById('global_form').innerHTML = "";
 							},
@@ -105,7 +105,7 @@ $(document).ready(function() {
 							5000
 						);
 					} else {
-						document.getElementById('global_form').innerHTML = "<?php message(1, " : ".getLabel("message.error.database"), "critical"); ?>";
+						document.getElementById('global_form').innerHTML = "<?php message(1, "", "critical"); ?>";
 						setTimeout(function(){
 							document.getElementById('global_form').innerHTML = "";
 							},
