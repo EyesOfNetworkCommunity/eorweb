@@ -71,7 +71,7 @@ include("../../side.php");
         
 	// Get the name user and description group
 	$user_id="";
-	$user_name_descr=sqlrequest("$database_eonweb"," SELECT user_name,user_descr,user_id,group_name,user_type,user_email FROM users LEFT OUTER JOIN groups ON groups.group_id = users.group_id ORDER BY user_name");
+	$user_name_descr=sqlrequest("$database_eonweb","SELECT user_name,user_descr,user_id,group_name,user_type,user_email FROM users LEFT OUTER JOIN groups ON groups.group_id = users.group_id ORDER BY user_name");
 	 ?>
 
 		<form action="./index.php" method="GET" class="form-inline">
