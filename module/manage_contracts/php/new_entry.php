@@ -76,8 +76,11 @@
 			echo "false";
 			exit;
 		}
+		if (isset($_GET['alias'])) {
 		$alias = $_GET['alias'];
-
+		} else {
+			$alias ="";
+		}
 		$sql = "INSERT INTO company (NAME,ALIAS) values('".$name."','".$alias."')";
 	}
 
@@ -199,7 +202,7 @@
 			exit;
 		}
 
-		$sql = "INSERT INTO contract (NAME,ALIAS,CONTRACT_SDM_INTERN,CONTRACT_SDM_EXTERN,ID_COMPANY,EXTERN_CONTRACT_ID,VALIDITY_DATE) values('".$name."','".$alias."','".$contract_sdm_intern."','".$contract_sdm_extern."',".$id_company.",'".$extern_contract_id."','".$validity_date."')";
+		$sql = "INSERT INTO contract (NAME,ALIAS,CONTRACT_SDM_INTERN,CONTRACT_SDM_EXTERN,ID_COMPANY,EXTERN_CONTRACT_ID,VALIDITY_DATE) VALUES('".$name."','".$alias."','".$contract_sdm_intern."','".$contract_sdm_extern."',".$id_company.",'".$extern_contract_id."','".$validity_date."')";
 
 	}
 
@@ -212,7 +215,7 @@
     }
 
 	if ($table_name == 'contract_context'){
-		$sql_verify = $bdd->query("select count(*) from contract_context where ID_CONTRACT='$id_contract' and ID_TIME_PERIOD='$id_time_period' and ID_KPI = $id_kpi and ID_STEP_GROUP = $id_step_group");
+		$sql_verify = $bdd->query("SELECT count(*) FROM contract_context WHERE ID_CONTRACT='$id_contract' AND ID_TIME_PERIOD='$id_time_period' AND ID_KPI = $id_kpi AND ID_STEP_GROUP = $id_step_group");
 		$verify = $sql_verify->fetch();
 
 		if ($verify["count(*)"] >= 1){
@@ -222,7 +225,7 @@
 	}
 	
 	if ($table_name == 'contract_context'){
-		$sql_verify = $bdd->query("select count(*) from contract_context where ID_CONTRACT='$id_contract' and ID_TIME_PERIOD <> '$id_time_period'");
+		$sql_verify = $bdd->query("SELECT count(*) FROM contract_context WHERE ID_CONTRACT='$id_contract' AND ID_TIME_PERIOD <> '$id_time_period'");
 		$verify = $sql_verify->fetch();
 
 		if ($verify["count(*)"] >= 1){
@@ -237,7 +240,7 @@
 	include('../php/save_last_entry.php');
 
 	if ($table_name == 'time_period'){
-		$sql = "select ID_TIME_PERIOD from time_period where NAME = '". $name ."'";
+		$sql = "SELECT ID_TIME_PERIOD FROM time_period WHERE NAME = '". $name ."'";
 		$req = $bdd->query($sql);
 		$id = $req->fetch();
 		$id = $id['ID_TIME_PERIOD'];
@@ -248,7 +251,7 @@
 			$h_open = $values["$i"][1].":".$values["$i"][2];
 			$h_close = $values["$i"][3].":".$values["$i"][4];
 
-			$sql = "INSERT INTO timeperiod_entry (ID_TIME_PERIOD,ENTRY,H_OPEN,H_CLOSE) values(".$id.",'".$day."','".$h_open."','".$h_close."')";
+			$sql = "INSERT INTO timeperiod_entry (ID_TIME_PERIOD,ENTRY,H_OPEN,H_CLOSE) VALUES(".$id.",'".$day."','".$h_open."','".$h_close."')";
 			$bdd->exec($sql);
 		}
 	}

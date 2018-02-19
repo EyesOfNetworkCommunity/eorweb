@@ -104,5 +104,5 @@ function RemoveSelection(id){
 </script>
 
 <?php
-include("footer.php");
+include("../../footer.php");
 ?>
