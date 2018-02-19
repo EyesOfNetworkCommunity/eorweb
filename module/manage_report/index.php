@@ -45,40 +45,40 @@
     <div class="col-lg-12">    
       <h1 class="page-header"><?php echo getLabel("label.manage_report.report_declaration");?></h1>
     </div>
-  </div> 
-  <div class="table-responsive">          
-    <table class="table table-striped">
-      <thead>
-        <tr>
-          <th class="col-sd-1"><?php echo getLabel("label.manage_report.delete");?></th>
-          <th class="col-sd-1"><?php echo getLabel("label.edit");?></th>
-          <th><?php echo getLabel("label.manage_report.column_report_name");?></th>
-          <th><?php echo getLabel("label.manage_report.column_filename");?></th>
-        </tr>
-      </thead>
-      <tbody>
-        <?php
-          $sql = "SELECT * FROM reports ORDER BY report_rptfile;";
-          if(!$result = $db->query($sql)){die("echo getLabel(\"label.manage_report.query_error\")". $db->error . ']');}
-          while($row = $result->fetch_assoc()){
-            echo " <tr>
-                    <td><button type=\"button\" class=\"btn btn-danger\" id=\"row_report_".$row['report_id']."\">
-                      <span class=\"glyphicon glyphicon-trash\"></span></button>
-                    </td>
-                    <td><button type=\"button\" class=\"btn btn-primary\" id=\"row_edit_".$row['report_id']."\">
-                      <span class=\"glyphicon glyphicon-pencil\"></span></button>
-                    </td>
-                    
-                    <td>".$row['report_name']."</td>
-                    <td>".$path_rptdesign."/".$row['report_rptfile']."</td>
-                  </tr>";
-          }?>
-      </tbody>
-    </table>
   </div>
-  <div class="col-md-2">
-    <button class="btn btn-sm btn-primary btn-block" id="AddButton"><?php echo getLabel("label.manage_report.add_report");?></button>
+  <div class="row">
+	<div class="col-lg-12">
+		<div class="table-responsive form-group">          
+			<table class="table table-striped">
+			  <thead>
+				<tr>
+				  <th><?php echo getLabel("label.manage_report.column_report_name");?></th>
+				  <th><?php echo getLabel("label.manage_report.column_filename");?></th>
+				  <th class="col-sd-1"><?php echo getLabel("label.actions");?></th>
+				</tr>
+			  </thead>
+			  <tbody>
+				<?php
+				  $sql = "SELECT * FROM reports ORDER BY report_rptfile;";
+				  if(!$result = $db->query($sql)){die("echo getLabel(\"label.manage_report.query_error\")". $db->error . ']');}
+				  while($row = $result->fetch_assoc()){
+					echo " <tr>
+							<td>".$row['report_name']."</td>
+							<td>".$path_rptdesign."/".$row['report_rptfile']."</td>
+							<td>
+							  <button type=\"button\" class=\"btn btn-primary\" id=\"row_edit_".$row['report_id']."\">
+							  <span class=\"glyphicon glyphicon-pencil\"></span></button>
+							  <button type=\"button\" class=\"btn btn-danger\" id=\"row_report_".$row['report_id']."\">
+							  <span class=\"glyphicon glyphicon-trash\"></span></button>
+							</td>
+						  </tr>";
+				  }?>
+			  </tbody>
+			</table>
+		</div>
+	</div>
   </div>
+  <button class="btn btn-sm btn-primary" id="AddButton"><?php echo getLabel("label.manage_report.add_report");?></button>
 </div>
 
 <script src="../../bower_components/jquery/dist/jquery.min.js"></script>

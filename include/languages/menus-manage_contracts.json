@@ -3,7 +3,7 @@
 	"navbarlink":[
 		{
 			"name": "label.home",
-			"url": "/module/manage_contracts/index.php"
+			"url": "/module/manage_contracts/"
 		},
 		{
 			"name":"label.application",

@@ -9,7 +9,7 @@ include("../../side.php");
 			<h1 class="page-header"><?php echo getLabel("label.manage_contracts.contract_context_application_view_title"); ?></h1>
 		</div>
 	</div>
-	<div class="table-responsive">
+	<div class="table-responsive form-group">
 		<table class="table table-striped">
 			<thead>
 				<tr>
@@ -19,18 +19,14 @@ include("../../side.php");
 					<th><?php echo getLabel("label.time_period"); ?></th>
 					<th><?php echo getLabel("label.contracts_menu.indicator"); ?></th>
 					<th><?php echo getLabel("label.sla"); ?></th>
-					<th class="radius_th"><?php echo getLabel("label.suppress"); ?></th>
+					<th class="radius_th"><?php echo getLabel("action.delete"); ?></th>
 				</tr>
 			</thead>
 			<tbody id="body_table">
 			</tbody>
 		</table>
 	</div>
-	<div class="row">
-		<div class="col-md-12">
-			<input type="button" class="btn btn-primary" value="<?php echo getLabel("label.manage_contracts.contract_context_application_add"); ?>" onclick="location.href='./contract_context_application.php';">
-		</div>
-	</div>
+	<input type="button" class="btn btn-primary" value="<?php echo getLabel("label.manage_contracts.contract_context_application_add"); ?>" onclick="location.href='./contract_context_application.php';">
 </div>
 
 <script src="../../bower_components/jquery/dist/jquery.min.js"></script>
@@ -84,7 +80,6 @@ $(document).ready(function() {
                         }
                         setTimeout(function(){
 				$('#container_table').css("display", "inline");
-                                $('#myTable').DataTable();
                                 },
                                 $timer_update_table
                         );
@@ -100,5 +95,5 @@ function RemoveSelection(application_name){
 </script>
 
 <?php
-include("footer.php");
+include("../../footer.php");
 ?>

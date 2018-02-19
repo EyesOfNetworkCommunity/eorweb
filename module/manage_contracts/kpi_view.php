@@ -17,7 +17,7 @@ include("../../side.php");
 					<th></th>
 			        <th><?php echo getLabel("label.name"); ?></th>
 		            <th><?php echo getLabel("label.contracts_menu.indicator_display_tab_unit"); ?></th>
-				    <th><?php echo getLabel("label.edit"); ?></th>
+				    <th><?php echo getLabel("label.actions"); ?></th>
 				</tr>
 			</thead>
 			<tbody id="body_table">

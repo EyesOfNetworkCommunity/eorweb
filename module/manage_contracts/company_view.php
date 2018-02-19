@@ -16,7 +16,7 @@ include("../../side.php");
 				<tr>
 					<th></th>
 					<th><?php echo getLabel("label.name"); ?></th>
-					<th><?php echo getLabel("label.edit"); ?></th>
+					<th><?php echo getLabel("label.actions"); ?></th>
 				</tr>
 			</thead>
 			<tbody id="body_table">

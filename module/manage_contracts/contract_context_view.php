@@ -21,7 +21,7 @@ include("../../side.php");
 					<th><?php echo getLabel("label.time_period"); ?></th>
 					<th><?php echo getLabel("label.indicator"); ?></th>
 					<th><?php echo getLabel("label.manage_contracts.associate_sla"); ?></th>
-					<th><?php echo getLabel("label.edit"); ?></th>
+					<th><?php echo getLabel("label.actions"); ?></th>
 				</tr>
 			</thead>
 			<tbody id="body_table">

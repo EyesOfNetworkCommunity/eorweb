@@ -18,7 +18,7 @@ include("../../side.php");
 					<th><?php echo getLabel("label.admin_group.group_name"); ?></th>
 					<th><?php echo getLabel("label.contracts_menu.indicator_create_name"); ?></th>
 					<th><?php echo getLabel("label.contracts_menu.seuils_display_tab_threshold"); ?></th>
-					<th><?php echo getLabel("label.edit"); ?></th>
+					<th><?php echo getLabel("label.actions"); ?></th>
 				</tr>
 			</thead>
 			<tbody id="body_table">

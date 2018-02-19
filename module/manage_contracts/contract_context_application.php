@@ -35,8 +35,8 @@ include("../../side.php");
 		</div>
 		<div class="row form-group">
 			<div class="col-md-6">
-				<button class="form-group btn btn-primary" type="submit" id="submit_entry"><?php echo getLabel("label.contracts_menu.application_menu_create_btn_add"); ?>
-				</button>
+				<button class="btn btn-primary" type="submit" id="submit_entry"><?php echo getLabel("label.contracts_menu.application_menu_create_btn_add"); ?></button>
+				<button class="btn btn-default" type="button" name="back" value="back" onclick="location.href='contract_context_application_view.php'"><?php echo getLabel("action.cancel") ?></button>
 			</div>
 		</div>
 	</form>
@@ -51,7 +51,7 @@ include("../../side.php");
 				<thead>
 					<tr>
 						<th><?php echo getLabel("menu.link.app"); ?></th>
-						<th><?php echo getLabel("label.suppress"); ?></th>
+						<th><?php echo getLabel("action.delete"); ?></th>
 					</tr>
 				</thead>
 				<tbody id="body_table">

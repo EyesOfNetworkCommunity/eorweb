@@ -75,7 +75,7 @@ include("../../side.php");
 			        <th><?php echo getLabel("label.contracts_menu.seuils_create_list_sla"); ?></th>
 					<th><?php echo getLabel("label.contracts_menu.seuils_create_minimum"); ?></th>
 					<th><?php echo getLabel("label.contracts_menu.seuils_create_maximum"); ?></th>
-					<th><?php echo getLabel("label.suppress"); ?></th>
+					<th><?php echo getLabel("action.delete"); ?></th>
 			    </tr>
 		    </thead>
 			<tbody id="body_table">

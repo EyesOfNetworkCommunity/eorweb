@@ -55,7 +55,7 @@
           <input type="text" class="form-control" id="rpt_filename">
       </div>
       <div class="col-md-6">
-          <button class="btn btn-sm btn-primary btn-block" id="AddButton"><?php echo getLabel("label.form_report.button");?></button>
+          <button class="btn btn-sm btn-primary btn-block" id="AddButton"><?php echo getLabel("label.manage_report.add_report");?></button>
       </div>
   </div>
 </div>
