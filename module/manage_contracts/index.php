@@ -24,7 +24,7 @@ include("../../side.php");
 						</div>
 					</div>
 				</div>
-				<div class="panel panel-body">
+				<div class="panel-body">
 					<div class="col-md-12">
 						<div class="skillst4">
 							<div class="skillbar">
@@ -83,7 +83,7 @@ include("../../side.php");
 						</div>
 					</div>
 				</div>
-				<div class="panel panel-body">					
+				<div class="panel-body">					
 					<div class="col-md-12 table-responsive">
 						<table class="table table-responsive">
 							<thead>
