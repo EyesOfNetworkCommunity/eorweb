@@ -33,27 +33,22 @@ include("../../side.php");
 	</div>
 
 	<div id="message"></div>
-
+	
 	<form id="global">
 		<div class="row form-group">
-			<label class="col-md-3" style="font-weight: normal"><?php echo getLabel("label.kettle_apps.time_period_select"); ?></p></label>
-			<div class="col-md-9 input-validity-date">
-				<div class="form-group input-group">
+			<div class="col-md-6">
+				<label><?php echo getLabel("label.kettle_apps.time_period_select"); ?></label>
+				<div class="input-group input-validity-date">
 					<input type="text" class="form-control" readonly id="validity_date">
 					<span class="input-group-addon">
 						<span class="glyphicon glyphicon-calendar"></span>
 					</span>
 				</div>
-			</div>
-			<div id="startDate"></div>
-			<div id="endDate"></div>
-		</div>
-		<div class="row form-group">
-			<div class="col-md-3">
-				<button class="form-group btn btn-primary" type="submit" id="launch"><?php echo getLabel("label.kettle_apps.launch"); ?>
-				</button>
+				<div id="startDate"></div>
+				<div id="endDate"></div>
 			</div>
 		</div>
+		<button class="form-group btn btn-primary" type="submit" id="launch"><?php echo getLabel("label.kettle_apps.launch"); ?></button>
 	</form>
 
 </div>
