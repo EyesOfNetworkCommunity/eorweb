@@ -49,9 +49,6 @@
 <!-- Custom Theme JavaScript -->
 <script src="/bower_components/startbootstrap-sb-admin-2/dist/js/sb-admin-2.js"></script>
 
-<!-- EONWEB variables -->
-<script src="/js/eonweb.js"></script>
-
 <!-- EORWEB menu -->
 <script src="/js/side.js"></script>
 
