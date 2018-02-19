@@ -306,7 +306,16 @@ include("./function.php");
 										<div class=\"col-xs-4 col-md-4\"><a href='#' onclick='javascript:selectAll($i)'>ALL</a></div>
 									</div>
 								</div>
-								<div class=\"panel-body\">
+								<div class=\"panel-body\">";?>
+									<table>
+										<thead>
+											<td>Source</td><td>Name</td><td>Select</td>
+										</thead>
+										<tbody>
+											
+										</tbody>
+									</table>
+
 									<div class=\"row\">
 										<div class=\"col-xs-4 col-md-4\">Source</div>
 										<div class=\"col-xs-4 col-md-4\">Name</div>

@@ -9,21 +9,19 @@ include("../../side.php");
 			<h1 class="page-header"><?php echo getLabel("label.manage_contracts.company_title"); ?></h1>
 		</div>
 	</div>
+
 	<div class="row" id="global_form"></div>
-	<div class="container">
-		<form class="form-horizontal col-md-7">
-			<div class="row pad-top">
-				<div class="form-group has-feedback div-name">
-					<label style="font-weight:normal;" for="name" class="col-md-4 control-label"><?php echo getLabel("label.manage_contracts.company_name"); ?></label>
-					<div class="col-md-7 input-name">
-						<input type="text" class="form-control" id="name" onkeyup="this.value=this.value.replace(/[^éèàêâç0-9a-zA-Z-_ \/\*]/g,'')">
-					</div>
-				</div>	
+	<form>
+		<div class="row form-group">
+			<div class="col-md-6">
+				<label><?php echo getLabel("label.manage_contracts.company_name"); ?></label>
+				<div class="input-name">
+					<input type="text" class="form-control" id="name" onkeyup="this.value=this.value.replace(/[^éèàêâç0-9a-zA-Z-_ \/\*]/g,'')">
+				</div>
 			</div>
-			<button class="form-group btn btn-primary" type="submit" id="submit"><?php echo getLabel("action.submit"); ?>
-			</button>
-		</form>
-	</div>
+		</div>
+		<button class="form-group btn btn-primary" type="submit" id="submit"><?php echo getLabel("action.submit"); ?></button>
+	</form>
 </div>
 
 <script src="../../bower_components/jquery/dist/jquery.min.js"></script>

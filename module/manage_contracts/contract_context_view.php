@@ -9,30 +9,30 @@ include("../../side.php");
 			<h1 class="page-header"><?php echo getLabel("label.manage_contracts.contract_context_view_title"); ?></h1>
 		</div>
 	</div>
-	<div id="container_table">
-		<div class="Table_wrapper">
-			<div class="table-responsive">
-				<table class="table table-striped table-hover" id="myTable">
-					<thead class="altTop">
-						<tr>
-							<th></th>
-							<th><?php echo getLabel("label.name"); ?></th>
-							<th><?php echo getLabel("label.description"); ?></th>
-							<th><?php echo getLabel("label.manage_contracts.associate_contracts"); ?></th>
-							<th><?php echo getLabel("label.time_period"); ?></th>
-							<th><?php echo getLabel("label.indicator"); ?></th>
-							<th><?php echo getLabel("label.manage_contracts.associate_sla"); ?></th>
-							<th><?php echo getLabel("label.edit"); ?></th>
-						</tr>
-					</thead>
-					<tbody id="body_table">
-					</tbody>
-				</table>
-			</div>
-		</div>
+
+	<div class="table-responsive">
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th></th>
+					<th><?php echo getLabel("label.name"); ?></th>
+					<th><?php echo getLabel("label.description"); ?></th>
+					<th><?php echo getLabel("label.manage_contracts.associate_contracts"); ?></th>
+					<th><?php echo getLabel("label.time_period"); ?></th>
+					<th><?php echo getLabel("label.indicator"); ?></th>
+					<th><?php echo getLabel("label.manage_contracts.associate_sla"); ?></th>
+					<th><?php echo getLabel("label.edit"); ?></th>
+				</tr>
+			</thead>
+			<tbody id="body_table">
+			</tbody>
+		</table>
 	</div>
-	<div class="col-md-12">
-		<input type="button" class="btn btn-primary" value="<?php echo getLabel("action.add"); ?>" onclick="location.href='./contract_context.php';">
+
+	<div class="row">
+		<div class="col-md-12">
+			<input type="button" class="btn btn-primary" value="<?php echo getLabel("label.manage_contracts.contract_context_add"); ?>" onclick="location.href='./contract_context.php';">
+		</div>
 	</div>
 </div>
 
@@ -101,10 +101,6 @@ function EditSelection(id){
 function RemoveSelection(id){
 	DisplayPopupRemove("Delete the selected contract context ?", "contract_context", id);
 }
-
- $('#hover').hover(function() {
-        $(this).css('cursor','pointer');
-    });
 </script>
 
 <?php

@@ -28,7 +28,7 @@ include("../../side.php");
 	</div>
 	<div class="row">
 		<div class="col-md-12">
-			<input type="button" class="btn btn-primary" value="<?php echo getLabel("action.add"); ?>" onclick="location.href='./contract_context_application.php';">
+			<input type="button" class="btn btn-primary" value="<?php echo getLabel("label.manage_contracts.contract_context_application_add"); ?>" onclick="location.href='./contract_context_application.php';">
 		</div>
 	</div>
 </div>

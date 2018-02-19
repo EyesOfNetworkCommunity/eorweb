@@ -9,36 +9,37 @@ include("../../side.php");
 			<h1 class="page-header"><?php echo getLabel("label.manage_contracts.contract_context_application_title"); ?></h1>
 		</div>
 	</div>
-	<div class="col-md-7">
-		<form class="form-horizontal" id="global_form">
-			<div class="row pad-top">
-				<div class="form-group has-feedback div-context">
-					<label style="font-weight:normal;" for="name_contract_context" class="col-md-4 control-label"><?php echo getLabel("label.contract_context"); ?> : </label>
-					<div class="col-md-7 input-context">
-						<button class="btn btn-default btn-block dropdown-toggle" type="button" data-toggle="dropdown" id="name_contract_context"><?php echo getLabel("label.manage_contracts.contract_context_view_title"); ?>
-						<span class="caret"></span></button>
-						<ul class="dropdown-menu btn-block" id="ul_context"></ul>
-					</div>
-				</div>
-			</div>
-			<div class="row">
-				<div class="form-group has-feedback">
-					<label style="font-weight:normal;" for="application_name" class="col-md-4 control-label"><?php echo getLabel("label.application"); ?> : </label>
-					<div class="col-md-7">
-					<button class="btn btn-default btn-block dropdown-toggle" type="button" data-toggle="dropdown" id="application_name"><?php echo getLabel("label.manage_contracts.contract_context_select_application"); ?>
+
+	<div class="row" id="global_form"></div>
+	
+	<form>
+		<div class="row form-group">
+			<div class="col-md-6 has-feedback div-context">
+				<label for="name_contract_context"><?php echo getLabel("label.contract_context"); ?></label>
+				<div class="input-context">
+					<button class="btn btn-default btn-block dropdown-toggle" type="button" data-toggle="dropdown" id="name_contract_context"><?php echo getLabel("label.manage_contracts.contract_context_view_title"); ?>
 					<span class="caret"></span></button>
-					<ul class="dropdown-menu btn-block" id="ul_application"></ul>
-					</div>
+					<ul class="dropdown-menu btn-block" id="ul_context"></ul>
 				</div>
 			</div>
-			<div class="row">
-				<div class="col-md-3">
-					<button class="form-group btn btn-primary" type="submit" id="submit_entry"><?php echo getLabel("label.contracts_menu.application_menu_create_btn_add"); ?>
-					</button>
+		</div>
+		<div class="row form-group">
+			<div class="col-md-6 has-feedback">
+				<label for="application_name"><?php echo getLabel("label.application"); ?></label>
+				<div class="">
+				<button class="btn btn-default btn-block dropdown-toggle" type="button" data-toggle="dropdown" id="application_name"><?php echo getLabel("label.manage_contracts.contract_context_select_application"); ?>
+				<span class="caret"></span></button>
+				<ul class="dropdown-menu btn-block" id="ul_application"></ul>
 				</div>
 			</div>
-		</form>
-	</div>
+		</div>
+		<div class="row form-group">
+			<div class="col-md-6">
+				<button class="form-group btn btn-primary" type="submit" id="submit_entry"><?php echo getLabel("label.contracts_menu.application_menu_create_btn_add"); ?>
+				</button>
+			</div>
+		</div>
+	</form>
 	<div id="application_list" class="row" style="display: none;">
 		<div class="col-md-12">
 			<div class="form-group">
@@ -84,7 +85,7 @@ $(document).ready(function() {
 			if(values.length == 0){
 				DisplayAlertMissing("Vous devez créer une fiche de contexte de contrat</br>avant de pouvoir crÃ©er une Application");	
 			} else {
-				$("#global_form").css("display", "inline");
+				$("#global_form").css("display", "block");
 				$.each(values, function(v, k){
 					$name = k['NAME'];
 					$id = k['ID_CONTRACT_CONTEXT'];
@@ -127,7 +128,7 @@ $(document).ready(function() {
 					DisplayAlertWarning('Veuillez saisir les champs obligatoire');
 				}
 				else {
-					DisplayAlertWarning('Impossible de se connecter à  la base de données');
+					DisplayAlertWarning('Impossible de se connecter à la base de données');
 				}
 			}
 		);

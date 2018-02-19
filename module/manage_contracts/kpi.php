@@ -9,21 +9,35 @@ include("../../side.php");
 			<h1 class="page-header"><?php echo getLabel("label.manage_contracts.kpi_title"); ?></h1>
 		</div>
 	</div>
-	<div class="col-md-7">
-		<form class="form-horizontal" id="global_form" style="display:none">
-			<div class="row pad-top">
-				<div class="form-group has-feedback div-name">
-					<label style="font-weight:normal;" for="name" class="col-md-4 control-label"><?php echo getLabel("label.contracts_menu.indicator_create_name"); ?> : </label>
-					<div class="col-md-7 input-name">
+
+	<div class="row" id="global_form"></div>
+
+		<form>
+
+			<div class="row form-group">
+				<div class="col-md-6 has-feedback div-context">
+					<label for="name_contract_context"><?php echo getLabel("label.contract_context"); ?></label>
+					<div class="input-context">
+						<button class="btn btn-default btn-block dropdown-toggle" type="button" data-toggle="dropdown" id="name_contract_context"><?php echo getLabel("label.manage_contracts.contract_context_view_title"); ?>
+						<span class="caret"></span></button>
+						<ul class="dropdown-menu btn-block" id="ul_context"></ul>
+					</div>
+				</div>
+			</div>
+
+			<div class="row form-group">
+				<div class="col-md-6 has-feedback div-name">
+					<label for="name"><?php echo getLabel("label.contracts_menu.indicator_create_name"); ?></label>
+					<div class="input-name">
 						<input type="text" class="form-control" id="name" onkeyup="this.value=this.value.replace(/[^éèàêâç0-9a-zA-Z-_ \/\*]/g,'')">
 					</div>
 				</div>
 			</div>
 
-			<div class="row">
-				<div class="form-group has-feedback div-comput">
-					<label style="font-weight:normal;" for="name_unit_comput" class="col-md-4 control-label"><?php echo getLabel("label.contracts_menu.indicator_create_compute"); ?> : </label>
-					<div class="col-md-7 input-comput">
+			<div class="row form-group">
+				<div class="col-md-6 has-feedback div-comput">
+					<label for="name_unit_comput"><?php echo getLabel("label.contracts_menu.indicator_create_compute"); ?></label>
+					<div class="input-comput">
 						<button class="btn btn-default btn-block dropdown-toggle" type="button" data-toggle="dropdown" id="name_unit_comput"><?php echo getLabel("label.contracts_menu.indicator_create_compute_value_default"); ?>
 						<span class="caret"></span></button>
 						<ul class="dropdown-menu btn-block" id="ul_comput"></ul>
@@ -31,10 +45,10 @@ include("../../side.php");
 				</div>
 			</div>
 
-			<div class="row">
-				<div class="form-group has-feedback div-presentation">
-					<label style="font-weight:normal;" for="name_unit_presentation" class="col-md-4 control-label"><?php echo getLabel("label.contracts_menu.indicator_create_presentation"); ?> : </label>
-					<div class="col-md-7 input-presentation">
+			<div class="row form-group">
+				<div class="col-md-6 has-feedback div-presentation">
+					<label for="name_unit_presentation"><?php echo getLabel("label.contracts_menu.indicator_create_presentation"); ?> </label>
+					<div class="input-presentation">
 						<button class="btn btn-default btn-block dropdown-toggle" type="button" data-toggle="dropdown" id="name_unit_presentation"><?php echo getLabel("label.contracts_menu.indicator_create_presentation"); ?>
 						<span class="caret"></span></button>
 						<ul class="dropdown-menu btn-block" id="ul_presentation"></ul>
@@ -42,16 +56,16 @@ include("../../side.php");
 				</div>
 			</div>
 
-			<div class="row" style="display:none">
-				<div class="form-group has-feedback div-presentation">
+			<div class="row form-group" style="display:none">
+				<div class="col-md-6 has-feedback div-presentation">
 					<div class="col-md-7">
 						<input type="text" class="form-control" id="id_unit_comput">
 					</div>
 				</div>
 			</div>
 
-			<div class="row" style="display:none">
-				<div class="form-group has-feedback div-presentation">
+			<div class="row form-group" style="display:none">
+				<div class="col-md-6 has-feedback div-presentation">
 					<div class="col-md-7">
 						<input type="text" class="form-control" id="id_unit_presentation">
 					</div>
@@ -118,11 +132,12 @@ $(document).ready(function() {
 		},
 		function ReturnName(values){
 			if(values.length == 0){
+				$('#global_form').css("display", "none");
 				DisplayAlertMissing("Vous devez créer une fiche d'unité de mesure avant de pouvoir créer un Indicateur");
 			}
 
 			else{
-				$('#global_form').css("display", "inline");
+				$('#global_form').css("display", "block");
 				$.each(values, function(v, k){
 					$name = k['NAME'];
 					$id = k['ID_UNIT'];
