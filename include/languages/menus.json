@@ -19,7 +19,7 @@
             "link":[
                 {
                     "name":"menu.link.launch",
-                    "url":"/module/kettle_apps/",
+                    "url":"/module/kettle_apps/index.php",
                     "target":"main"
                 },
                 {
@@ -58,17 +58,17 @@
             "link": [
                 {
                     "name":"menu.link.business",
-                    "url":"/module/manage_bp/",
+                    "url":"/module/manage_bp/index.php",
                     "target":"main"
                 },
                 {
                     "name":"menu.link.report_declaration",
-                    "url":"/module/manage_report/",
+                    "url":"/module/manage_report/index.php",
                     "target":"main"
                 },
                 {
                     "name":"menu.link.service_contracts",
-                    "url":"/module/manage_contracts/",
+                    "url":"/module/manage_contracts/index.php",
                     "target":"main"
                 }   
             ]
@@ -80,27 +80,27 @@
             "link":[
                 {
                     "name":"menu.link.auth",
-                    "url":"/module/admin_auth/",
+                    "url":"/module/admin_auth/index.php",
                     "target":"main"
                 },
                 {
                     "name":"menu.link.groups",
-                    "url":"/module/admin_group/",
+                    "url":"/module/admin_group/index.php",
                     "target":"main"
                 },
                 {
                     "name":"menu.link.users",
-                    "url":"/module/admin_user/",
+                    "url":"/module/admin_user/index.php",
                     "target":"main"
                 },
                 {
                     "name":"menu.link.process",
-                    "url":"/module/admin_process/",
+                    "url":"/module/admin_process/index.php",
                     "target":"main"
                 },
                 {
                     "name":"menu.link.logs",
-                    "url":"/module/admin_logs/",
+                    "url":"/module/admin_logs/index.php",
                     "target":"main"
                 }
             ]
@@ -112,7 +112,7 @@
             "link":[
                 {
                     "name":"menu.link.eyesofreport",
-                    "url":"/module/help_about/",
+                    "url":"/module/help_about/index.php",
                     "target":"main"
                 }
             ]
