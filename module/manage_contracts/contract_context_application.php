@@ -34,7 +34,6 @@ include("../../side.php");
 			<div class="row">
 				<div class="col-md-3">
 					<button class="form-group btn btn-primary" type="submit" id="submit_entry"><?php echo getLabel("label.contracts_menu.application_menu_create_btn_add"); ?>
-					<span class="glyphicon glyphicon-ok" style="color:#4f4;"></span>
 					</button>
 				</div>
 			</div>
@@ -60,7 +59,6 @@ include("../../side.php");
 			<div class="row">
 				<div class="col-md-3">
 					<button class="form-group btn btn-primary " type="submit" id="submit"><?php echo getLabel("action.submit"); ?>
-						<span class="glyphicon glyphicon-ok" style="color:#4f4;"></span>
 					</button>
 				</div>
 			</div>

@@ -32,7 +32,6 @@ include("../../side.php");
 	<div class="row form-group">
 		<div class="col-md-3">
 			<button class="form-group btn btn-primary" type="submit" id="launch"><?php echo getLabel("label.kettle_apps.launch"); ?>
-				<span class="glyphicon glyphicon-ok" style="color:#4f4;"></span>
 			</button>
 		</div>
 	</div>

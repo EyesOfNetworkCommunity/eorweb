@@ -21,7 +21,6 @@ include("../../side.php");
 				</div>	
 			</div>
 			<button class="form-group btn btn-primary" type="submit" id="submit"><?php echo getLabel("action.submit"); ?>
-				<span class="glyphicon glyphicon-ok" style="color:#4f4;"></span>
 			</button>
 		</form>
 	</div>

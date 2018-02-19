@@ -44,7 +44,6 @@ include("../../side.php");
 			</div>
 		</div>
 			<button class="btn btn-primary" type="submit" id="submit_interval" style="display: none;"><?php echo getLabel("label.contracts_menu.seuils_create_btn_add"); ?>
-				<span class="glyphicon glyphicon-ok" style="color:#4f4;"></span>
 			</button>
 		
 		<input type="text" class="form-control" id="id_kpi" style="display:none">
@@ -70,7 +69,6 @@ include("../../side.php");
 
 		<div class="col-md-12">
 			<button class="form-group btn btn-primary" type="submit" id="submit"><?php echo getLabel("action.submit"); ?>
-				<span class="glyphicon glyphicon-ok" style="color:#4f4;"></span>
 			</button>
 		</div>
 	</form>
