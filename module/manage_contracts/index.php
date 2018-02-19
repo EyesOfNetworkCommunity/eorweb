@@ -118,7 +118,7 @@ $(document).ready(function(){
 				$('#welcome').css("display", "inline");
 			}
 			else{
-				$('#global_container').css("display", "inline");
+				$('#global_container').show();
 				$.get(
 					'./php/return_number_entry_all.php',
 					function returnNumbers(numbers){

@@ -9,24 +9,22 @@ include("../../side.php");
 			<h1 class="page-header"><?php echo getLabel("label.manage_contracts.contract_context_application_view_title"); ?></h1>
 		</div>
 	</div>
-	<div class="row">
-		<div class="col-md-12">
-			<table class="table table-striped table-responsive">
-				<thead>
-					<tr>
-						<th class="radius_th"></th>
-						<th><?php echo getLabel("menu.link.app"); ?></th>
-						<th><?php echo getLabel("menu.subtad.contracts"); ?></th>
-						<th><?php echo getLabel("label.time_period"); ?></th>
-						<th><?php echo getLabel("label.contracts_menu.indicator"); ?></th>
-						<th><?php echo getLabel("label.sla"); ?></th>
-						<th class="radius_th"><?php echo getLabel("label.suppress"); ?></th>
-					</tr>
-				</thead>
-				<tbody id="body_table">
-				</tbody>
-			</table>
-		</div>
+	<div class="table-responsive">
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th class="radius_th"></th>
+					<th><?php echo getLabel("menu.link.app"); ?></th>
+					<th><?php echo getLabel("menu.subtad.contracts"); ?></th>
+					<th><?php echo getLabel("label.time_period"); ?></th>
+					<th><?php echo getLabel("label.contracts_menu.indicator"); ?></th>
+					<th><?php echo getLabel("label.sla"); ?></th>
+					<th class="radius_th"><?php echo getLabel("label.suppress"); ?></th>
+				</tr>
+			</thead>
+			<tbody id="body_table">
+			</tbody>
+		</table>
 	</div>
 	<div class="row">
 		<div class="col-md-12">
