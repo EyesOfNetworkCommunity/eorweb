@@ -72,8 +72,8 @@ include("../../side.php");
 				</div>
 			</div>
 
-			<button class="form-group btn btn-primary" type="submit" id="submit"><?php echo getLabel("action.submit"); ?>
-			</button>
+			<button class="form-group btn btn-primary" type="submit" id="submit"><?php echo getLabel("action.submit"); ?></button>
+			<button class="btn btn-default" type="button" name="back" value="back" onclick="location.href='kpi_view.php'"><?php echo getLabel("action.cancel") ?></button>
 		</form>
 	</div>
 </div>

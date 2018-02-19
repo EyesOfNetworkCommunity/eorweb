@@ -85,12 +85,8 @@ include("../../side.php");
 					</div>
 				</div>
 			</div>
-			<div class="row">
-				<div class="col-md-3">
-					<button class="form-group btn btn-primary" type="submit" id="submit_entry"><?php echo getLabel("label.contracts_menu.period_create_btn_add"); ?>
-					</button>
-				</div>
-			</div>
+			<button class="form-group btn btn-primary" type="submit" id="submit_entry"><?php echo getLabel("label.contracts_menu.period_create_btn_add"); ?></button>
+			<button class="btn btn-default" type="button" name="back" value="back" onclick="location.href='time_period_view.php'"><?php echo getLabel("action.cancel") ?></button>
 
 			<input type="text" class="form-control" style="display:none" id="name_entry_hide">
 			<input type="text" class="form-control" style="display:none" id="start_hour_hide">

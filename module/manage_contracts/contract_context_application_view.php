@@ -78,11 +78,6 @@ $(document).ready(function() {
                         if ($timer_update_table < 100){
                                 $timer_update_table = 100;
                         }
-                        setTimeout(function(){
-				$('#container_table').css("display", "inline");
-                                },
-                                $timer_update_table
-                        );
 		},
 		'json'
 	);

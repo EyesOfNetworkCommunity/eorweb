@@ -51,11 +51,6 @@ $(document).ready(function() {
 		},
 		'json'
 	);
-	setTimeout(function(){
-          $('#myTable').DataTable();
-                },
-                1000
-        );
 });
 
 function EditSelection(id){

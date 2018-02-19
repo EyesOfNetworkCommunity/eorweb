@@ -93,12 +93,6 @@ $(document).ready(function() {
                         if ($timer_update_table < 200){
                                 $timer_update_table = 200;
                         }
-                        setTimeout(function(){
-								$('#container_table').css("display", "inline");
-                                $('#myTable').DataTable();
-                                },
-                                $timer_update_table
-                        );
 		},
 		'json'
 	);
