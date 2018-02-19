@@ -9,26 +9,20 @@ include("../../side.php");
 			<h1 class="page-header"><?php echo getLabel("label.manage_contracts.company_view_title"); ?></h1>
 		</div>
 	</div>
-
 	<div class="table-responsive">
 		<table class="table table-striped">
 			<thead>
 				<tr>
 					<th></th>
 					<th><?php echo getLabel("label.name"); ?></th>
-					<th><?php echo getLabel("label.actions"); ?></th>
+					<th><?php echo getLabel("label.edit"); ?></th>
 				</tr>
 			</thead>
 			<tbody id="body_table">
 			</tbody>
 		</table>
 	</div>
-
-	<div class="row">
-		<div class="col-md-12">
-			<input type="button" class="btn btn-primary" value="<?php echo getLabel("label.manage_contracts.company_add"); ?>" onclick="location.href='./company.php';">
-		</div>
-	</div>
+	<input type="button" class="btn btn-primary" value="<?php echo getLabel("label.manage_contracts.company_add"); ?>" onclick="location.href='./company.php';">
 </div>
 
 <script src="../../bower_components/jquery/dist/jquery.min.js"></script>
@@ -53,22 +47,9 @@ $(document).ready(function() {
                         if ($timer_update_table < 200){
                                 $timer_update_table = 200;
                         }
-			setTimeout(function(){
-          	      		$('#container_table').css("display", "inline");
-                		$('#myTable').DataTable();
-                		},
-                		$timer_update_table
-        		);
 		},
 		'json'
 	);
-	
-	setTimeout(function(){
-		$('#container_table').css("display", "inline");
-          	$('#myTable').DataTable();
-                },
-                2000
-        );
 });
 
 function EditSelection(id){
@@ -76,11 +57,11 @@ function EditSelection(id){
 }
 
 function RemoveSelection(id){
-	DisplayPopupRemove("Supprimer l'entreprise sélectionner ?", "company", id);
+	DisplayPopupRemove("<?php echo getLabel("label.manage_contracts.company_suppress_message"); ?>", "company", id, "<?php echo getLabel("label.suppress"); ?>","<?php echo getLabel("label.yes"); ?>","<?php echo getLabel("label.no"); ?>");
 }
 
 </script>
 
 <?php
-include("footer.php");
+include("../../footer.php");
 ?>

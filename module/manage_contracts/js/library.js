@@ -1,18 +1,18 @@
-function DisplayPopupRemove(text, tablename, number){
-	$('body').append('<div id="popup_confirmation" title="Suppression"></div>');
+function DisplayPopupRemove(text, tablename, number, title,Yes,No){
+	$('body').append('<div id="popup_confirmation" title="' + title + '"></div>');
 	$("#popup_confirmation").html(text);
 	$("#popup_confirmation").dialog({
 		autoOpen: false,
 		width: 400,
 		buttons: [
 			{
-				text: "Oui",
+				text: Yes,
 				click: function(){
           ClickOnYes(tablename, number);
         }
 			},
 			{
-				text: "Non",
+				text: No,
 				click: function () {
 					$(this).dialog("close");
 				}

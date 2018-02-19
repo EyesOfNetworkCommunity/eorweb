@@ -20,7 +20,7 @@ include("../../side.php");
 				</div>
 			</div>
 		</div>
-		<button class="form-group btn btn-primary" type="submit" id="submit"><?php echo getLabel("action.submit"); ?></button>
+		<button class="form-group btn btn-primary" type="submit" id="submit"><?php echo getLabel("label.manage_contracts.company_add"); ?></button>
 	</form>
 </div>
 
@@ -55,13 +55,28 @@ $(document).ready(function() {
 				},
 				function GotoView(value){
 					if (value == "true"){
-						DisplayAlertSuccess('Entreprise sauvegardée', "company_view.php");
+						document.getElementById('global_form').innerHTML = "<?php message(12, getLabel("label.manage_contracts.company_saved"), "ok"); ?>";
+						setTimeout(function(){
+							$(location).attr('href', "company_view.php");
+							},
+							2000
+						);
 					}
 					else if (value == "false"){
-						DisplayAlertWarning('Veuillez saisir les champs obligatoire');
+						document.getElementById('global_form').innerHTML = "<?php message(12, getLabel("message.error.required_fields"), "critical"); ?>";
+						setTimeout(function(){
+							document.getElementById('global_form').innerHTML = "";
+							},
+							5000
+						);
 					}
 					else {
-						DisplayAlertWarning('Impossible de se connecter à la base de données');
+						document.getElementById('global_form').innerHTML = "<?php message(1, " : ".getLabel("message.error.database"), "critical"); ?>";
+						setTimeout(function(){
+							document.getElementById('global_form').innerHTML = "";
+							},
+							5000
+						);
 					}
 				}
 			);
@@ -75,13 +90,27 @@ $(document).ready(function() {
 				},
 				function GotoView(value){
 					if (value == "true"){
-						DisplayAlertSuccess('Entreprise sauvegardée', "company_view.php");
+						document.getElementById('global_form').innerHTML = "<?php message(12, getLabel("label.manage_contracts.company_saved"), "ok"); ?>";
+						setTimeout(function(){
+							$(location).attr("href", "company_view.php");
+							},
+							2000
+						);
 					}
 					else if (value == "false"){
-						DisplayAlertWarning('Veuillez saisir les champs obligatoire');
-					}
-					else {
-						DisplayAlertWarning('Impossible de se connecter à la base de données');
+						document.getElementById('global_form').innerHTML = "<?php message(12, getLabel("message.error.required_fields"), "critical"); ?>";
+						setTimeout(function(){
+							document.getElementById('global_form').innerHTML = "";
+							},
+							5000
+						);
+					} else {
+						document.getElementById('global_form').innerHTML = "<?php message(1, " : ".getLabel("message.error.database"), "critical"); ?>";
+						setTimeout(function(){
+							document.getElementById('global_form').innerHTML = "";
+							},
+							5000
+						);
 					}
 				}
 			);
