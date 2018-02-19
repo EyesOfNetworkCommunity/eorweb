@@ -5,7 +5,7 @@
 # Copyright (C) 2018 EyesOfNetwork Team
 # DEV NAME : Jean-Philippe LEVY
 # VERSION : 2.0
-# APPLICATION : eorweb for eyesofnetwork project
+# APPLICATION : eorweb for eyesofreport project
 #
 # LICENCE :
 # This program is free software; you can redistribute it and/or
@@ -136,7 +136,7 @@ include("../../side.php");
 				$connexion = mysqli_connect($database_host, $database_username, $database_password, $database_eorweb);
 				if (!$connexion) {
 					echo "<ul>";
-					echo "<li class='msg_title'>Alert EyesOfNetwork - Message EON-database connect</li>";
+					echo "<li class='msg_title'>Alert EyesOfReport - Message EOR-database connect</li>";
 					echo "<li class='msg'> Could not connect to database : $databasea_eorweb ($database_host)</li>";
 					echo "</ul>";
 					exit(1);

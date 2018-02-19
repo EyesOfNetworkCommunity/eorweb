@@ -5,7 +5,7 @@
 # Copyright (C) 2018 EyesOfNetwork Team
 # DEV NAME : Michael Aubertin
 # VERSION 4.2
-# APPLICATION : eorweb for eyesofnetwork project
+# APPLICATION : eorweb for eyesofreport project
 #
 # LICENCE :
 # This program is free software; you can redistribute it and/or

@@ -5,7 +5,7 @@
 # Copyright (C) 2018 EyesOfNetwork Team
 # DEV NAME : Jean-Philippe LEVY
 # VERSION : 2.0
-# APPLICATION : eorweb for eyesofnetwork project
+# APPLICATION : eorweb for eyesofreport project
 #
 # LICENCE :
 # This program is free software; you can redistribute it and/or
@@ -44,7 +44,7 @@ setcookie("highlightedTreeviewLink",FALSE);
 		<div class="img col-md-4 col-md-offset-4">
 			<div class="login-panel panel panel-default">
 				<div class="panel-heading">
-					<img class="img-responsive center-block login-logo" src="<?php echo $path_logo; ?>" alt="logo eyesofnetwork">
+					<img class="img-responsive center-block login-logo" src="<?php echo $path_logo; ?>" alt="logo eyesofreport">
 				</div>
 				<div class="panel-body">
 					<div class="alert alert-info">

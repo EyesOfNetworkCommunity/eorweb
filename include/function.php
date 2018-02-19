@@ -75,7 +75,7 @@ function sqlrequest($database,$sql,$id=false,$prepare=false){
 	$connexion = mysqli_connect($database_host, $database_username, $database_password, $database);
 	if (!$connexion) {
 		echo "<ul>
-				<li class=\"msg_title\">Alert EyesOfNetwork - Message EON-database connect</li>
+				<li class=\"msg_title\">Alert EyesOfReport - Message EOR-database connect</li>
 				<li class=\"msg\"> Could not connect to database : $database ($database_host)</li>
 			</ul>";
 		exit(1);

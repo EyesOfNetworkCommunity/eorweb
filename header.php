@@ -40,7 +40,7 @@ if(file_exists($path_eorweb.$path_logo_navbar_custom)) { $path_logo_navbar=$path
 	<meta http-equiv="Content-type" content="text/html; charset=utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<meta name="description" content="EyesOfNetwork">
+	<meta name="description" content="EyesOfReport">
 	<meta name="author" content="EyesOfNetwork Team">
 	
 	<link rel="icon" type="image/png" href="<?php echo $path_logo_favicon; ?>">
@@ -70,7 +70,7 @@ if(file_exists($path_eorweb.$path_logo_navbar_custom)) { $path_logo_navbar=$path
 	$module_path=basename(dirname($_SERVER["PHP_SELF"]));
 	$module_css=$module_path.".css";
 	if(file_exists($module_css)) { 
-	?><!-- EonWeb Module CSS -->
+	?><!-- EorWeb Module CSS -->
 	<link href="<?php echo $module_css; ?>" rel="stylesheet">
 	<?php } ?>	
 </head>
