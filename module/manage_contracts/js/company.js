@@ -45,19 +45,22 @@ $(document).ready(function() {
 					id_number: UrlParam('id_number')
 				},
 				function GotoView(value){
-					if (value == "true"){
-						DisplayAlertSuccess(dictionnary["message.manage_contracts.company_saved"],"ok","#global_form","company_view.php");
-					}
-					else if (value == "false"){
-						DisplayAlert(dictionnary["message.error.required_fields"],"critical","#global_form");
-					}
-					else {
-						DisplayAlert("Unknown Error","critical","#global_form");
+					switch (value) {
+						case 'true':
+							DisplayAlertSuccess(dictionnary["message.manage_contracts.company_saved"],"ok","#global_form","company_view.php");
+							break;
+						case 'false':
+							DisplayAlert(dictionnary["message.error.required_fields"],"critical","#global_form");
+							break;
+						case 'already exist':
+							DisplayAlert(dictionnary["message.error.company_exists"],"critical","#global_form");
+						break;
+						default:
+							DisplayAlert("Unknown Error","critical","#global_form");
 					}
 				}
 			);
-		}
-		else{
+		} else {
 			$.get(
 				'./php/new_entry.php',
 				{
@@ -65,13 +68,18 @@ $(document).ready(function() {
 					name: $("#name").val()
 				},
 				function GotoView(value){
-					if (value == "true"){
-						DisplayAlertSuccess(dictionnary["message.manage_contracts.company_saved"],"ok","#global_form","company_view.php");
-					}
-					else if (value == "false"){
-						DisplayAlert(dictionnary["message.error.required_fields"],"critical","#global_form");
-					} else {
-						DisplayAlert("Unknown Error","critical","#global_form");
+					switch (value) {
+						case 'true':
+							DisplayAlertSuccess(dictionnary["message.manage_contracts.company_saved"],"ok","#global_form","company_view.php");
+							break;
+						case 'false':
+							DisplayAlert(dictionnary["message.error.required_fields"],"critical","#global_form");
+							break;
+						case 'already exist':
+							DisplayAlert(dictionnary["message.error.company_exists"],"critical","#global_form");
+						break;
+						default:
+							DisplayAlert("Unknown Error","critical","#global_form");
 					}
 				}
 			);

@@ -747,6 +747,7 @@
 	"menu.user.disconnect": "Se déconnecter",
 	"menu.user.profile": "Mon profil",
 	"message.error": "Erreur",
+	"message.error.company_exists": "Ce nom d'entreprise existe déjà",
 	"message.error.manage_contracts_contract_context_alredy_exist": "Un contexte de contrat avec des attributs identiques existe déjà",
 	"message.error.manage_contracts_time_period_reserved": "Un contexte de contrat lie le contrat actuellement sélectionné avec une autre période de couverture que celle sélectionnée",
 	"message.error.missing_host": "Impossible de déterminer le host",
