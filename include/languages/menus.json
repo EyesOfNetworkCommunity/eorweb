@@ -24,7 +24,7 @@
                 },
                 {
                     "name":"menu.link.pentaho",
-                    "url":"/module/kettle_apps/status.php",
+                    "url":"/kettle/status/index.php",
                     "target":"frame"
                 },
                 {

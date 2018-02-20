@@ -21,6 +21,7 @@
 */
 ?>
 
+<script src="/bower_components/jquery-appear/build/jquery.appear.min.js"></script>
 <script src="./js/library.js"></script>
 
 <?php
