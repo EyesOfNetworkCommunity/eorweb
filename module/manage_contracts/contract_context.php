@@ -156,16 +156,16 @@ $(document).ready(function() {
 				);
 
 				$.get(
-                                  './php/select_name_by_id.php',
-                                  {
-                                        table_name: 'step_group',
-                                        id_number: values['ID_STEP_GROUP']
-                                  },
-                                  function return_name(name){
-                                        $('#name_step_group').html(name['NAME']+'  <span class="caret"></span></button>');
-                                  },
-                                  'json'
-                                );
+                  './php/select_name_by_id.php',
+                  {
+                        table_name: 'step_group',
+                        id_number: values['ID_STEP_GROUP']
+                  },
+                  function return_name(name){
+                        $('#name_step_group').html(name['NAME']+'  <span class="caret"></span></button>');
+                  },
+                  'json'
+                );
 			},
 			'json'
 		);
@@ -223,18 +223,18 @@ $(document).ready(function() {
 			id: 'ID_TIME_PERIOD'
 		},
 		function ReturnName(values){
-			if(values.length == 0 || $counter > 0){
-				DisplayAlertMissing("Vous devez créer au moins un Indicateur, une période de temps et un contrat</br>avant de pouvoir créer un contexte de contrat");
-			}
+			// if(values.length == 0 || $counter > 0){
+			// 	DisplayAlertMissing("Vous devez créer au moins un Indicateur, une période de temps et un contrat</br>avant de pouvoir créer un contexte de contrat");
+			// }
 
-			else{
-				$('#global_form').css("display", "inline");
+			// else{
+				$('#global_form').css("display", "block");
 				$.each(values, function(v, k){
 					$time_name = k['NAME'];
 					$id = k['ID_TIME_PERIOD'];
 					$('#ul_time').append('<li><a class="dropdown-item" id="time_-_'+$time_name+'_-_'+$id+'"href="javascript:void(0);" onclick="ChangeValue(id);">' + $time_name + '</a></li>');
 				});
-			}
+			// }
 		},
 		'json'
 	);
@@ -256,13 +256,28 @@ $(document).ready(function() {
 				},
 				function ShowMsg(value){
 					if (value == "true"){
-						DisplayAlertSuccess('Contexte de contrat sauvegardé', "contract_context_view.php");
+						document.getElementById('global_form').innerHTML = "<?php message(12, getLabel("message.manage_contracts.contract_context_saved"), "ok"); ?>";
+						setTimeout(function(){
+							$(location).attr('href', "contract_context_view.php");
+							},
+							2000
+						);
 					}
 					else if (value == "false"){
-						DisplayAlertWarning('Veuillez saisir les champs obligatoire');
+						document.getElementById('global_form').innerHTML = "<?php message(12, getLabel("message.error.required_fields"), "critical"); ?>";
+						setTimeout(function(){
+							document.getElementById('global_form').innerHTML = "";
+							},
+							5000
+						);
 					}
 					else {
-						DisplayAlertWarning('Impossible de se connecter à la base de données');
+						document.getElementById('global_form').innerHTML = "<?php message(1, "", "critical"); ?>";
+						setTimeout(function(){
+							document.getElementById('global_form').innerHTML = "";
+							},
+							5000
+						);
 					}
 				}
 			);
@@ -282,19 +297,45 @@ $(document).ready(function() {
 				},
 				function GotoContextView(value){
 					if (value == "true"){
-						DisplayAlertSuccess('Contexte de contrat sauvegardé', "contract_context_view.php");
+						document.getElementById('global_form').innerHTML = "<?php message(12, getLabel("message.manage_contracts.contract_context_saved"), "ok"); ?>";
+						setTimeout(function(){
+							$(location).attr('href', "contract_context_view.php");
+							},
+							2000
+						);
 					}
 					else if (value == "false"){
-						DisplayAlertWarning('Veuillez saisir les champs obligatoire');
-					}
-					else if (value == "no_right"){
-                                                DisplayAlertWarning('Un contexte de contrat avec des attributs identiques existe déjà');
-                                        }
-					else if (value == "no_right_2"){
-                                                DisplayAlertWarning('Un contexte de contrat lie le contrat actuellement sélectionné avec une autre période de couverture que celle sélectionnée');
-                                        }
-					else {
-						DisplayAlertWarning('Impossible de se connecter à la base de données');
+						document.getElementById('global_form').innerHTML = "<?php message(12, getLabel("message.error.required_fields"), "critical"); ?>";
+						setTimeout(function(){
+							document.getElementById('global_form').innerHTML = "";
+							},
+							5000
+						);
+					} else {
+						if (value == "no_right"){
+                           document.getElementById('global_form').innerHTML = "<?php message(12, getLabel("message.error.manage_contracts_contract_context_alredy_exist"), "critical"); ?>";
+							setTimeout(function(){
+								document.getElementById('global_form').innerHTML = "";
+								},
+								6000
+							);
+						} else {
+                        	if (value == "no_right_2"){
+                                document.getElementById('global_form').innerHTML = "<?php message(12, getLabel("message.error.manage_contracts_time_period_reserved"), "critical"); ?>";
+								setTimeout(function(){
+									document.getElementById('global_form').innerHTML = "";
+									},
+									6000
+								);
+                            } else {
+								document.getElementById('global_form').innerHTML = "<?php message(1, "", "critical"); ?>";
+								setTimeout(function(){
+									document.getElementById('global_form').innerHTML = "";
+									},
+									5000
+								);
+							}
+						}
 					}
 				}
 			);
@@ -312,13 +353,11 @@ function ChangeValue(value){
 	if($object_name == "contract"){
 		$('#name_contract').html($name+'  <span class="caret"></span></button>');
 		$('#id_contract').val($id);
-		$("div.input-contract").append('<span class="glyphicon glyphicon-ok form-control-feedback"></span>');
 	}
 	else if($object_name == "kpi"){
-		$('#display_step_group').css('display', 'inline');
+		$('#display_step_group').css('display', 'block');
 		$('#name_kpi').html($name+'  <span class="caret"></span></button>');
 		$('#id_kpi').val($id);
-		$("div.input-kpi").append('<span class="glyphicon glyphicon-ok form-control-feedback"></span>');
 
 		$.get(
            		'./php/get_info_step_group.php',
@@ -339,7 +378,6 @@ function ChangeValue(value){
 	else if($object_name == "time"){
 		$('#name_time_period').html($name+'  <span class="caret"></span></button>');
 		$('#id_time_period').val($id);
-		$("div.input-time").append('<span class="glyphicon glyphicon-ok form-control-feedback"></span>');
 	}
 
 	else if($object_name == "seuil"){

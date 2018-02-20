@@ -41,18 +41,20 @@ include("../../side.php");
 			<div class="col-md-6 has-feedback div-sdm-extern">
 				<label for="contract_sdm-extern"><?php echo getLabel("label.contracts_menu.contracts_menu_create_sdm_external"); ?></label>
 				<div class="input-sdm-extern">
-					<input type="text" class="form-control" id="contract_sdm-extern" onkeyup="this.value=this.value.replace(/[^éèàêâç0-9a-zA-Z-_ \/\*]/g,'')">
+					<input type="text" class="form-control" id="contract_sdm_extern" onkeyup="this.value=this.value.replace(/[^éèàêâç0-9a-zA-Z-_ \/\*]/g,'')">
 				</div>
 			</div>
 		</div>
 		<div class="row form-group">
-			<div class="col-md-6 has-feedback div-company">
-				<label for="name_company"><?php echo getLabel("label.contracts_menu.contracts_menu_display_tab_company"); ?></label>
-				<div class="cinput-company">
-					<button class="btn btn-default btn-block dropdown-toggle" type="button" data-toggle="dropdown" id="name_company"><?php echo getLabel("label.manage_contracts.company_view_title"); ?>
-					<span class="caret"></span></button>
-					<ul class="dropdown-menu btn-block" id="ul_company">
-					</ul>
+			<div class="col-md-6">
+				<div class="has-feedback div-company">
+					<label for="name_company"><?php echo getLabel("label.contracts_menu.contracts_menu_display_tab_company"); ?></label>
+					<div class="cinput-company">
+						<button class="btn btn-default btn-block dropdown-toggle" type="button" data-toggle="dropdown" id="name_company"><?php echo getLabel("label.manage_contracts.company_view_title"); ?>
+						<span class="caret"></span></button>
+						<ul class="dropdown-menu btn-block" id="ul_company">
+						</ul>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -140,18 +142,23 @@ $(document).ready(function() {
 			id: 'ID_COMPANY'
 		},
 		function ReturnName(values){
-			if(values.length == 0){
-				DisplayAlertMissing("Vous devez créer une fiche Entreprise avant de pouvoir créer un contrat");
-			}
+			// if(values.length == 0){
+			// 	document.getElementById('global_form').innerHTML = "<?php// message(12, getLabel("message.manage_contracts.contract_required_company"), "critical"); ?>";
+			// 	setTimeout(function(){
+			// 		document.getElementById('global_form').innerHTML = "";
+			// 		},
+			// 		5000
+			// 	);
+			// }
 
-			else{
-				$('#global_form').css("display", "inline");
+			// else{
+				$('#global_form').css("display", "block");
 				$.each(values, function(v, k){
 					$name = k['NAME'];
 					$id = k['ID_COMPANY'];
 					$('#ul_company').append('<li><a class="dropdown-item" id="'+$name+'_'+$id+'"href="javascript:void(0);" onclick="ChangeValue(id);">' + $name + '</a></li>');
 				});
-			}
+			// }
 		},
 		'json'
 	);
@@ -174,13 +181,28 @@ $(document).ready(function() {
 				},
 				function ShowMsg(value){
 					if (value == "true"){
-						DisplayAlertSuccess('Contrat sauvegardé', "contract_view.php");
+						document.getElementById('global_form').innerHTML = "<?php message(12, getLabel("message.manage_contracts.contract_saved"), "ok"); ?>";
+						setTimeout(function(){
+							$(location).attr('href', "contract_view.php");
+							},
+							2000
+						);
 					}
 					else if (value == "false"){
-						DisplayAlertWarning('Veuillez saisir les champs obligatoire');
+						document.getElementById('global_form').innerHTML = "<?php message(12, getLabel("message.error.required_fields"), "critical"); ?>";
+						setTimeout(function(){
+							document.getElementById('global_form').innerHTML = "";
+							},
+							5000
+						);
 					}
 					else {
-						DisplayAlertWarning('Impossible de se connecter à la base de données');
+						document.getElementById('global_form').innerHTML = "<?php message(1, "", "critical"); ?>";
+						setTimeout(function(){
+							document.getElementById('global_form').innerHTML = "";
+							},
+							5000
+						);
 					}
 				}
 			);
@@ -201,13 +223,28 @@ $(document).ready(function() {
 				},
 				function GotoContextView(value){
 					if (value == "true"){
-						DisplayAlertSuccess('Contrat sauvegardé', "contract_view.php");
+						document.getElementById('global_form').innerHTML = "<?php message(12, getLabel("message.manage_contracts.contract_saved"), "ok"); ?>";
+						setTimeout(function(){
+							$(location).attr('href', "contract_view.php");
+							},
+							2000
+						);
 					}
 					else if (value == "false"){
-						DisplayAlertWarning('Veuillez saisir les champs obligatoire');
+						document.getElementById('global_form').innerHTML = "<?php message(12, getLabel("message.error.required_fields"), "critical"); ?>";
+						setTimeout(function(){
+							document.getElementById('global_form').innerHTML = "";
+							},
+							5000
+						);
 					}
 					else {
-						DisplayAlertWarning('Impossible de se connecter à la base de données');
+						document.getElementById('global_form').innerHTML = "<?php message(1, "", "critical"); ?>";
+						setTimeout(function(){
+							document.getElementById('global_form').innerHTML = "";
+							},
+							5000
+						);
 					}
 				}
 			);

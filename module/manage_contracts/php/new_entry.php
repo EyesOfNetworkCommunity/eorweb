@@ -175,15 +175,17 @@
 			exit;
 		}
 		$alias = $_GET['alias'];
-
+			
 		$contract_sdm_intern = $_GET['contract_sdm_intern'];
 		if (empty($contract_sdm_intern)) {
 			$contract_sdm_intern = NULL;
 		}
+
 		$contract_sdm_extern = $_GET['contract_sdm_extern'];
 		if (empty($contract_sdm_extern)) {
 			$contract_sdm_extern = NULL;
 		}
+
 		$id_company = $_GET['id_company'];
 		if (empty($id_company)) {
 			echo "false";

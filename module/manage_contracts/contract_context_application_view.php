@@ -30,6 +30,7 @@ include("../../side.php");
 </div>
 
 <script src="../../bower_components/jquery/dist/jquery.min.js"></script>
+<script src="./js/library.js"></script>
 
 <script>
 $(document).ready(function() {
@@ -84,7 +85,7 @@ $(document).ready(function() {
 });
 
 function RemoveSelection(application_name){
-	DisplayPopupRemove("Supprimer l'application sélectionnée ?", "contract_context_application", application_name);
+	DisplayPopupRemove("<?php echo getLabel("message.manage_contracts.contract_context_application_suppress"); ?>", "contract_context_application", application_name, "<?php echo getLabel("action.delete"); ?>","<?php echo getLabel("label.yes"); ?>","<?php echo getLabel("label.no"); ?>");
 }
 
 </script>

@@ -26,12 +26,7 @@ include("../../side.php");
 			</tbody>
 		</table>
 	</div>
-
-	<div class="row">
-		<div class="col-md-12">
-			<input type="button" class="btn btn-primary" value="<?php echo getLabel("label.manage_contracts.contract_add"); ?>" onclick="location.href='./contract.php';">
-		</div>
-	</div>
+	<input type="button" class="btn btn-primary" value="<?php echo getLabel("label.manage_contracts.contract_add"); ?>" onclick="location.href='./contract.php';">
 </div>
 
 <script src="../../bower_components/jquery/dist/jquery.min.js"></script>
@@ -94,7 +89,7 @@ function EditSelection(id){
 }
 
 function RemoveSelection(id){
-	DisplayPopupRemove("Supprimer le contrat sélectionner ?", "contract", id);
+	DisplayPopupRemove("<?php echo getLabel("message.manage_contracts.contract_suppress"); ?>", "contract", id, "<?php echo getLabel("action.delete"); ?>","<?php echo getLabel("label.yes"); ?>","<?php echo getLabel("label.no"); ?>");
 }
 
 </script>

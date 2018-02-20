@@ -10,7 +10,7 @@ include("../../side.php");
 		</div>
 	</div>
 
-	<div class="row" id="global_form"></div>
+	<div id="global_form"></div>
 	<form>
 		<div class="row form-group">
 			<div class="col-md-6">

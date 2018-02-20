@@ -93,7 +93,7 @@ function EditSelection(id){
 }
 
 function RemoveSelection(id){
-	DisplayPopupRemove("Delete the selected contract context ?", "contract_context", id);
+	DisplayPopupRemove("<?php echo getLabel("message.manage_contracts.contract_context_suppress"); ?>", "contract_context", id, "<?php echo getLabel("action.delete"); ?>","<?php echo getLabel("label.yes"); ?>","<?php echo getLabel("label.no"); ?>");
 }
 </script>
 

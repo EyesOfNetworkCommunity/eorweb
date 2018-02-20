@@ -14,22 +14,26 @@ include("../../side.php");
 	
 	<form>
 		<div class="row form-group">
-			<div class="col-md-6 has-feedback div-context">
-				<label for="name_contract_context"><?php echo getLabel("label.contract_context"); ?></label>
-				<div class="input-context">
-					<button class="btn btn-default btn-block dropdown-toggle" type="button" data-toggle="dropdown" id="name_contract_context"><?php echo getLabel("label.manage_contracts.contract_context_view_title"); ?>
-					<span class="caret"></span></button>
-					<ul class="dropdown-menu btn-block" id="ul_context"></ul>
+			<div class="col-md-6">
+				<div class="has-feedback div-context">
+					<label for="name_contract_context"><?php echo getLabel("label.contract_context"); ?></label>
+					<div class="input-context">
+						<button class="btn btn-default btn-block dropdown-toggle" type="button" data-toggle="dropdown" id="name_contract_context"><?php echo getLabel("label.manage_contracts.contract_context_view_title"); ?>
+						<span class="caret"></span></button>
+						<ul class="dropdown-menu btn-block" id="ul_context"></ul>
+					</div>
 				</div>
 			</div>
 		</div>
 		<div class="row form-group">
-			<div class="col-md-6 has-feedback">
-				<label for="application_name"><?php echo getLabel("label.application"); ?></label>
-				<div class="">
-				<button class="btn btn-default btn-block dropdown-toggle" type="button" data-toggle="dropdown" id="application_name"><?php echo getLabel("label.manage_contracts.contract_context_select_application"); ?>
-				<span class="caret"></span></button>
-				<ul class="dropdown-menu btn-block" id="ul_application"></ul>
+			<div class="col-md-6">
+				<div class="has-feedback">
+					<label for="application_name"><?php echo getLabel("label.application"); ?></label>
+					<div class="">
+					<button class="btn btn-default btn-block dropdown-toggle" type="button" data-toggle="dropdown" id="application_name"><?php echo getLabel("label.manage_contracts.contract_context_select_application"); ?>
+					<span class="caret"></span></button>
+					<ul class="dropdown-menu btn-block" id="ul_application"></ul>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -46,17 +50,21 @@ include("../../side.php");
 				<h2 class="page-header"><?php echo getLabel("label.contracts_menu.application_menu_create_title_list"); ?></h2>
 			</div>
 		</div>
-		<div class="col-md-7">
-			<table class="table table-striped table-hover" id="container_application">
-				<thead>
-					<tr>
-						<th><?php echo getLabel("menu.link.app"); ?></th>
-						<th><?php echo getLabel("action.delete"); ?></th>
-					</tr>
-				</thead>
-				<tbody id="body_table">
-				</tbody>
-			</table>
+		<div class="col-md-6">
+			<div class="row form-group">
+				<div class="col-md-12">
+					<table class="table table-striped table-hover" id="container_application">
+						<thead>
+							<tr>
+								<th><?php echo getLabel("menu.link.app"); ?></th>
+								<th><?php echo getLabel("action.delete"); ?></th>
+							</tr>
+						</thead>
+						<tbody id="body_table">
+						</tbody>
+					</table>
+				</div>
+			</div>
 			<div class="row">
 				<div class="col-md-3">
 					<button class="form-group btn btn-primary " type="submit" id="submit"><?php echo getLabel("action.submit"); ?>
@@ -82,10 +90,17 @@ $(document).ready(function() {
 			id: 'ID_CONTRACT_CONTEXT'
 		},
 		function ReturnName(values){
+			console.log(values.length);
+			console.log(values);
 			if(values.length == 0){
-				DisplayAlertMissing("Vous devez créer une fiche de contexte de contrat</br>avant de pouvoir crÃ©er une Application");	
+				document.getElementById('global_form').innerHTML = "<?php message(12, "Vous devez créer une fiche de contexte de contrat avant de pouvoir créer une application", "warning"); ?>";
+				setTimeout(function(){
+					document.getElementById('global_form').innerHTML = "";
+					},
+					5000
+				);
 			} else {
-				$("#global_form").css("display", "block");
+				//$("#global_form").css("display", "block");
 				$.each(values, function(v, k){
 					$name = k['NAME'];
 					$id = k['ID_CONTRACT_CONTEXT'];
@@ -122,13 +137,28 @@ $(document).ready(function() {
 			},
 			function GotoContextView(value){
 				if (value == "true"){
-					DisplayAlertSuccess('Application sauvegardée', "contract_context_application_view.php");
+					document.getElementById('global_form').innerHTML = "<?php message(12, getLabel("message.manage_contracts.contract_context_application_saved"), "ok"); ?>";
+						setTimeout(function(){
+							$(location).attr('href', "contract_context_application_view.php");
+							},
+							2000
+						);
 				}
 				else if (value == "false"){
-					DisplayAlertWarning('Veuillez saisir les champs obligatoire');
+					document.getElementById('global_form').innerHTML = "<?php message(12, getLabel("message.error.required_fields"), "critical"); ?>";
+						setTimeout(function(){
+							document.getElementById('global_form').innerHTML = "";
+							},
+							5000
+						);
 				}
 				else {
-					DisplayAlertWarning('Impossible de se connecter à la base de données');
+					document.getElementById('global_form').innerHTML = "<?php message(1, "", "critical"); ?>";
+						setTimeout(function(){
+							document.getElementById('global_form').innerHTML = "";
+							},
+							5000
+						);
 				}
 			}
 		);
@@ -169,54 +199,51 @@ function ChangeValue(value){
 	$array_name_id = value.split("_");
 	$name = $array_name_id[0];
 	$id = $array_name_id[1];
- 
-  $("#name_contract_context").html($name+'  <span class="caret"></span></button>');
-  $("#id_contract_context").val($id);
-  
-  $.get(
+
+	$("#name_contract_context").html($name+'  <span class="caret"></span></button>');
+	$("#id_contract_context").val($id);
+	$.get(
 		'./php/select_application_by_context_id.php',
 		{
 			table_name: "contract_context_application",
-      id: $id
+			id: $id
 		},
 
-		function ReturnAllApplications(values){
-      if($('#container_application').is(':hidden')){
-				$('#container_application').css('display', 'inline');
-      }
-			$.each(values, function(v, k){
-				$name = k['APPLICATION_NAME'];
-        
-        $('#body_table').append('<tr id="'+$name+'"><td>' + $name + '</td><td><button type="button" class="btn btn-danger" id="'+$name+'" onclick=RemoveEntry(id)><span class="glyphicon glyphicon-remove"></span></button></td></tr>');
-        
-        $counter++;
-        $global_array[$counter] = $name;
-      });
-      $('#application_name').html('Selectionnez une application <span class="caret"></span>');
-    },
-    'json'
-   );
+	function ReturnAllApplications(values){
+		if($('#container_application').is(':hidden')){
+			$('#container_application').css('display', 'inline');
+		}
+		$.each(values, function(v, k){
+			$name = k['APPLICATION_NAME'];
+			$('#body_table').append('<tr id="'+$name+'"><td>' + $name + '</td><td><button type="button" class="btn btn-danger" id="'+$name+'" onclick=RemoveEntry(id)><span class="glyphicon glyphicon-remove"></span></button></td></tr>');
+			$counter++;
+			$global_array[$counter] = $name;
+		});
+		$('#application_name').html('Selectionnez une application <span class="caret"></span>');
+	},
+	'json'
+	);
 }
 
 function ChangeApplication(app){
-  $("#application_name").html(app+'  <span class="caret"></span></button>');
-  $("#application_name_hide").val(app);
+	$("#application_name").html(app+'  <span class="caret"></span></button>');
+	$("#application_name_hide").val(app);
 }
 
 function RemoveEntry(value){
-  $array = {};
-  $index = 0;
-  var count = $.map($global_array, function(n, i) { return i; }).length;
+	$array = {};
+	$index = 0;
+	var count = $.map($global_array, function(n, i) { return i; }).length;
 
 	$('tr[id="' + value +'"]').remove();
 
-  for ($i = 1; $i <= count; $i++){
-    if($global_array[$i] != value){
-      $index++;
-      $array[$index] = $global_array[$i];
-      continue;
-    }
-  }
+	for ($i = 1; $i <= count; $i++){
+	if($global_array[$i] != value){
+		$index++;
+		$array[$index] = $global_array[$i];
+		continue;
+	}
+	}
 
 	$global_array = $array;
 	$counter = $index;
