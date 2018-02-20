@@ -1,4 +1,25 @@
 <?php 
+/*
+#########################################
+#
+# Copyright (C) 2018 EyesOfNetwork Team
+# DEV NAME : Jean-Philippe LEVY
+# VERSION : 2.0
+# APPLICATION : eorweb for eyesofreport project
+#
+# LICENCE :
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+#########################################
+*/
+
 include("../../header.php");
 include("../../side.php");
 ?>
@@ -25,102 +46,4 @@ include("../../side.php");
 	</form>
 </div>
 
-<script src="../../bower_components/jquery/dist/jquery.min.js"></script>
-<script src="./js/library.js"></script>
-
-<script>
-$(document).ready(function() {
-	if (UrlParam('id_number') != false){
-		$.get(
-			'./php/view_entry.php',
-			{
-				table_name: 'company',
-				id_number: UrlParam('id_number')
-			},
-			function return_values(values){
-				$('#name').val(values['NAME']);
-			},
-			'json'
-		);
-	}
-	$('#submit').click(function(event){
-		event.preventDefault();
-
-		if (UrlParam('id_number') != false){
-			$.get(
-				'./php/update_entry.php',
-				{
-					table_name: 'company',
-					name: $('#name').val(),
-					id_number: UrlParam('id_number')
-				},
-				function GotoView(value){
-					if (value == "true"){
-						document.getElementById('global_form').innerHTML = "<?php message(12, getLabel("message.manage_contracts.company_saved"), "ok"); ?>";
-						setTimeout(function(){
-							$(location).attr('href', "company_view.php");
-							},
-							2000
-						);
-					}
-					else if (value == "false"){
-						document.getElementById('global_form').innerHTML = "<?php message(12, getLabel("message.error.required_fields"), "critical"); ?>";
-						setTimeout(function(){
-							document.getElementById('global_form').innerHTML = "";
-							},
-							5000
-						);
-					}
-					else {
-						document.getElementById('global_form').innerHTML = "<?php message(1, "", "critical"); ?>";
-						setTimeout(function(){
-							document.getElementById('global_form').innerHTML = "";
-							},
-							5000
-						);
-					}
-				}
-			);
-		}
-		else{
-			$.get(
-				'./php/new_entry.php',
-				{
-					table_name: 'company',
-					name: $("#name").val()
-				},
-				function GotoView(value){
-					if (value == "true"){
-						document.getElementById('global_form').innerHTML = "<?php message(12, getLabel("message.manage_contracts.company_saved"), "ok"); ?>";
-						setTimeout(function(){
-							$(location).attr("href", "company_view.php");
-							},
-							2000
-						);
-					}
-					else if (value == "false"){
-						document.getElementById('global_form').innerHTML = "<?php message(12, getLabel("message.error.required_fields"), "critical"); ?>";
-						setTimeout(function(){
-							document.getElementById('global_form').innerHTML = "";
-							},
-							5000
-						);
-					} else {
-						document.getElementById('global_form').innerHTML = "<?php message(1, "", "critical"); ?>";
-						setTimeout(function(){
-							document.getElementById('global_form').innerHTML = "";
-							},
-							5000
-						);
-					}
-				}
-			);
-		}
-	});
-});
-</script>
-
-
-<?php
-include("../../footer.php");
-?>
+<?php include("../../footer.php"); ?>
