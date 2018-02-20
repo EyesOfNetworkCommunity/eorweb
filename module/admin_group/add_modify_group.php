@@ -325,8 +325,8 @@ if($group_type == 0){
 			else {
 				echo "<button class='btn btn-primary' type='submit' name='add' value='add'>".getLabel("action.add")."</button>";
 			}
-			echo "<button class='btn btn-default' style='margin-left: 10px;' type='button' name='back' value='back' onclick='location.href=\"index.php\"'>".getLabel("action.cancel")."</button>";
 			?>
+			<button class='btn btn-default' type='button' name='back' value='back' onclick='location.href="index.php"'><?php echo getLabel("action.cancel"); ?></button>
 			</div>
 		</div>
 		<br>
