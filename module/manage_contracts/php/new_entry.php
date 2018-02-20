@@ -109,7 +109,6 @@
 
 		$applications = $_GET['applications'];
 		$application_source = "global_nagiosbp";
-
 		if (empty($applications)) {
 			echo "false";
 			exit;
@@ -119,10 +118,9 @@
    
 		for ($i = 1; $i <= count($applications); $i++){
 			$application_name = $applications["$i"];
-      if(empty($application_name)){
-        continue;
-      }
-
+			if(empty($application_name)){
+				continue;
+			}
 			if ($i == count($applications)){
 				$sql .= "INSERT INTO contract_context_application (ID_CONTRACT_CONTEXT,APPLICATION_NAME,APPLICATION_SOURCE) values(".$id_contract_context.",'".$application_name."','".$application_source."')";
 			}
@@ -130,6 +128,9 @@
 				$sql .= "INSERT INTO contract_context_application (ID_CONTRACT_CONTEXT,APPLICATION_NAME,APPLICATION_SOURCE) values(".$id_contract_context.",'".$application_name."','".$application_source."');";
 			}
 		}
+		
+		$name = $application_name;
+		
 	}
 
 	else if ($table_name == 'step_group'){
@@ -209,11 +210,10 @@
 	}
 
     try {
-        #$bdd = new PDO("mysql:host=$database_host;dbname=$database_vanillabp", 'eyesofreport', 'SaintThomas,2014');
-        $bdd = new PDO("mysql:host=$database_host;dbname=$database_vanillabp", $database_username, $database_password);
+		$bdd = new PDO("mysql:host=$database_host;dbname=$database_vanillabp", $database_username, $database_password);
     } catch(Exception $e) {
-		 echo "Connection failed: " . $e->getMessage();
-        exit('Impossible de se connecter à la base de données.');
+		echo "Connection failed: " . $e->getMessage();
+		exit('Impossible de se connecter à la base de données.');
     }
 
 	if ($table_name == 'contract_context'){

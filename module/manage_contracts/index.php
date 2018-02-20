@@ -150,7 +150,7 @@ $(document).ready(function(){
 				$.get(
 					'./php/display_entry.php',
 					{
-						table_name: 'last_entry'
+						table_name: 'last_entry ORDER BY 1 DESC'
 					},
 					function returnEntries(entries){
 						$.each(entries, function(v, k){

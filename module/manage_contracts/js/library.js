@@ -1,15 +1,39 @@
+function message(msg, type, target){
+	
+	switch (type) {
+		case 'critical':
+			type = "danger";
+			icon = "fa-exclamation-circle";
+			break;
+		 case 'warning':
+			icon = "fa-warning";
+			break;
+		default:
+			type = "success";
+			icon = "fa-check-circle";
+	}
+	
+    var message = ''
+        +'<p class="alert alert-dismissible alert-'+type+'">'
+        +   '<button type="button" class="close" data-dismiss="alert" aria-label="Close">'
+        +       '<span aria-hidden="true">&times;</span>'
+        +   '</button>'
+        +   '<i class="fa '+icon+'"> </i> '+ msg
+        +'</p>';
+    $(target).html(message);
+}
+
 function DisplayPopupRemove(text, tablename, number, title,Yes,No){
 	$('body').append('<div id="popup_confirmation" title="' + title + '"></div>');
 	$("#popup_confirmation").html(text);
 	$("#popup_confirmation").dialog({
 		autoOpen: false,
-		width: 400,
 		buttons: [
 			{
 				text: Yes,
 				click: function(){
-          ClickOnYes(tablename, number);
-        }
+					ClickOnYes(tablename, number);
+				}
 			},
 			{
 				text: No,
@@ -22,15 +46,15 @@ function DisplayPopupRemove(text, tablename, number, title,Yes,No){
 }
 
 function ClickOnYes(tablename, number){
-  $.get(
-    './php/delete_entry.php',
-    {
-      table_name: tablename,
-      id_number: number
-    }
-  );
-  $("#popup_confirmation").dialog("close");
-  $(location).attr('href',""+tablename+"_view.php");
+	$.get(
+		'./php/delete_entry.php',
+		{
+			table_name: tablename,
+			id_number: number
+		}
+	);
+	$("#popup_confirmation").dialog("close");
+	$(location).attr('href',""+tablename+"_view.php");
 }
 
 function UrlParam(name){
@@ -41,10 +65,8 @@ function UrlParam(name){
 	return results[1];
 }
 
-function DisplayAlertSuccess(message, url){
-	$('#global_form').append('<div class="col-md-12 alert alert-success" id="alert_success" style="display:none"><div class="col-md-2"><span class="glyphicon glyphicon-ok" style="font-size:28px;"></span></div><div class="col-md-10"><h4>' + message + '</h4></div></div>');
-
-	$("#alert_success").show("slow").delay(2000).hide("slow");
+function DisplayAlertSuccess(msg,type,target,url){
+	message(msg,type,target);
 	setTimeout(function(){
 		$(location).attr('href', url);
 		},
@@ -52,12 +74,11 @@ function DisplayAlertSuccess(message, url){
 	);
 }
 
-function DisplayAlertWarning(message){
-	$('#global_form').append('<div class="col-md-12 alert alert-warning" id="alert_warning" style="display:none"><div class="col-md-2"><span class="glyphicon glyphicon-warning-sign" style="font-size:28px;"></span></div><div class="col-md-10"><h4>' + message + '</h4></div></div>');
-
-	$("#alert_warning").show("slow").delay(2000).hide("slow", function(){ $("#alert_warning").remove(); });
-}
-
-function DisplayAlertMissing(message){
-	$('body').append('<div class="form-group pad-top"><span class="input-group-addon"><br/><span class="glyphicon glyphicon-warning-sign" style="font-size:120px;color:#f11;"></span><h2><br/>' + message + '</h2></span></div>');
+function DisplayAlert(msg,type,target){
+	message(msg,type,target);
+	setTimeout(
+		function(){
+			$(target).empty();
+		},5000
+	);
 }

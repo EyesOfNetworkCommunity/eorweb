@@ -1,4 +1,25 @@
-<?php 
+ï»¿<?php
+/*
+#########################################
+#
+# Copyright (C) 2018 EyesOfNetwork Team
+# DEV NAME : Jean-Philippe LEVY
+# VERSION : 2.0
+# APPLICATION : eorweb for eyesofreport project
+#
+# LICENCE :
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+#########################################
+*/
+
 include("../../header.php");
 include("../../side.php");
 ?>
@@ -10,7 +31,7 @@ include("../../side.php");
 		</div>
 	</div>
 
-	<div class="row" id="global_form"></div>
+	<div id="global_form"></div>
 	
 	<form>
 		<div class="row form-group">
@@ -72,185 +93,13 @@ include("../../side.php");
 				</div>
 			</div>
 		</div>
+		<div class="col-md-6" style="display:none">
+			<input type="text" class="form-control" id="id_contract_context">
+		</div>
+		<div class="col-md-6" style="display:none">
+			<input type="text" class="form-control" id="application_name_hide">
+		</div>
 	</div>
 </div>
 
-<script src="../../bower_components/jquery/dist/jquery.min.js"></script>
-<script src="./js/library.js"></script>
-
-<script>
-$(document).ready(function() {
-	$global_array = {};
-	$counter = 0;
-
-	$.get(
-		'./php/get_name_id.php',
-		{
-			table_name:'contract_context',
-			id: 'ID_CONTRACT_CONTEXT'
-		},
-		function ReturnName(values){
-			console.log(values.length);
-			console.log(values);
-			if(values.length == 0){
-				document.getElementById('global_form').innerHTML = "<?php message(12, "Vous devez créer une fiche de contexte de contrat avant de pouvoir créer une application", "warning"); ?>";
-				setTimeout(function(){
-					document.getElementById('global_form').innerHTML = "";
-					},
-					5000
-				);
-			} else {
-				//$("#global_form").css("display", "block");
-				$.each(values, function(v, k){
-					$name = k['NAME'];
-					$id = k['ID_CONTRACT_CONTEXT'];
-					$("#ul_context").append('<li><a class="dropdown-item" id="'+$name+'_'+$id+'"href="javascript:void(0);" onclick="ChangeValue(id);">' + $name + '</a></li>');
-				});
-			}
-		},
-		'json'
-	);
-
-  $.get(
-		'./php/select_all_applications.php',
-		{
-			table_name:"bp"
-		},
-
-		function ReturnAllApplications(values){
-			$.each(values, function(v, k){
-				$name = k['name'];
-				$("#ul_application").append('<li><a class="dropdown-item" id="'+$name+'" href="javascript:void(0);" onclick="ChangeApplication(id);">' + $name + '</a></li>');
-			});
-    	},
-		'json'
-	);
-
-	$("#submit").click(function(event){
-		event.preventDefault();
-		$.get(
-			'./php/new_entry.php',
-			{
-				table_name: 'contract_context_application',
-				id_contract_context: $("#id_contract_context").val(),
-				applications: $global_array
-			},
-			function GotoContextView(value){
-				if (value == "true"){
-					document.getElementById('global_form').innerHTML = "<?php message(12, getLabel("message.manage_contracts.contract_context_application_saved"), "ok"); ?>";
-						setTimeout(function(){
-							$(location).attr('href', "contract_context_application_view.php");
-							},
-							2000
-						);
-				}
-				else if (value == "false"){
-					document.getElementById('global_form').innerHTML = "<?php message(12, getLabel("message.error.required_fields"), "critical"); ?>";
-						setTimeout(function(){
-							document.getElementById('global_form').innerHTML = "";
-							},
-							5000
-						);
-				}
-				else {
-					document.getElementById('global_form').innerHTML = "<?php message(1, "", "critical"); ?>";
-						setTimeout(function(){
-							document.getElementById('global_form').innerHTML = "";
-							},
-							5000
-						);
-				}
-			}
-		);
-	});
-
-  $("#submit_entry").click(function(event){
-		event.preventDefault();
-		if($("#application_name_hide").val() == ""){
-			DisplayAlertWarning("Vous n'avez pas sélectionnez d'application");
-			return false;
-		} else {
-			var status;
-			$.each($global_array, function(v, k){
-				if(k == $('#application_name_hide').val()){
-					DisplayAlertWarning("Cette application a déjà été ajoutée");
-					status = 'stop';
-					return false;
-				}
-			});
-			if(status == 'stop'){
-				return false;
-			}
-			$counter++;
-			$name = $('#application_name_hide').val();
-			$("#application_list").toggle();
-			if($('#container_application').is(':hidden')){
-				$('#container_application').css('display', 'inline');
-			}
-			$('#body_table').append('<tr id="'+$name+'"><td>' + $name + '</td><td><button type="button" class="btn btn-danger" id="'+$name+'" onclick=RemoveEntry(id)><span class="glyphicon glyphicon-remove"></span></button></td></tr>');
-			$global_array[$counter] = $('#application_name_hide').val();
-			$('#application_name').html('Sélectionnez une application <span class="caret"></span>');
-		}
-	});
-
-});
-
-function ChangeValue(value){
-	$array_name_id = value.split("_");
-	$name = $array_name_id[0];
-	$id = $array_name_id[1];
-
-	$("#name_contract_context").html($name+'  <span class="caret"></span></button>');
-	$("#id_contract_context").val($id);
-	$.get(
-		'./php/select_application_by_context_id.php',
-		{
-			table_name: "contract_context_application",
-			id: $id
-		},
-
-	function ReturnAllApplications(values){
-		if($('#container_application').is(':hidden')){
-			$('#container_application').css('display', 'inline');
-		}
-		$.each(values, function(v, k){
-			$name = k['APPLICATION_NAME'];
-			$('#body_table').append('<tr id="'+$name+'"><td>' + $name + '</td><td><button type="button" class="btn btn-danger" id="'+$name+'" onclick=RemoveEntry(id)><span class="glyphicon glyphicon-remove"></span></button></td></tr>');
-			$counter++;
-			$global_array[$counter] = $name;
-		});
-		$('#application_name').html('Selectionnez une application <span class="caret"></span>');
-	},
-	'json'
-	);
-}
-
-function ChangeApplication(app){
-	$("#application_name").html(app+'  <span class="caret"></span></button>');
-	$("#application_name_hide").val(app);
-}
-
-function RemoveEntry(value){
-	$array = {};
-	$index = 0;
-	var count = $.map($global_array, function(n, i) { return i; }).length;
-
-	$('tr[id="' + value +'"]').remove();
-
-	for ($i = 1; $i <= count; $i++){
-	if($global_array[$i] != value){
-		$index++;
-		$array[$index] = $global_array[$i];
-		continue;
-	}
-	}
-
-	$global_array = $array;
-	$counter = $index;
-}
-
-</script>
-
-<?php
-include("../../footer.php");
-?>
+<?php include("../../footer.php"); ?>
