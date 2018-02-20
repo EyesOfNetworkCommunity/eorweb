@@ -60,7 +60,7 @@ include("../../side.php");
 		</div>
 		<div class="row form-group">
 			<div class="col-md-6 has-feedback div-sdm-extern">
-				<label for="contract_sdm-extern"><?php echo getLabel("label.contracts_menu.contracts_menu_create_sdm_external"); ?></label>
+				<label for="contract_sdm_extern"><?php echo getLabel("label.contracts_menu.contracts_menu_create_sdm_external"); ?></label>
 				<div class="input-sdm-extern">
 					<input type="text" class="form-control" id="contract_sdm_extern" onkeyup="this.value=this.value.replace(/[^éèàêâç0-9a-zA-Z-_ \/\*]/g,'')">
 				</div>
@@ -90,7 +90,7 @@ include("../../side.php");
 		<div class="row form-group">
 			<div class="col-md-6 has-feedback div-validity-date">
 				<label for="validity_date"><?php echo getLabel("label.contracts_menu.contracts_menu_create_date"); ?></label>
-				<div class="input-validity-date input-group date" id="datepicker">
+				<div class="input-validity-date input-group" id="datepicker">
 					<input type="text" class="form-control" readonly id="validity_date">
 					<span class="input-group-addon">
 	                	<span class="glyphicon glyphicon-calendar"></span>
