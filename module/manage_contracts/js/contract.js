@@ -104,7 +104,7 @@ $(document).ready(function() {
 				},
 				function ShowMsg(value){
 					if (value == "true"){
-						DisplayAlertSuccess(dictionnary["message.manage_contracts.contract_saved"],"ok","#global_form","contract_context_application_view.php");
+						DisplayAlertSuccess(dictionnary["message.manage_contracts.contract_saved"],"ok","#global_form","contract_view.php");
 					}
 					else if (value == "false"){
 						DisplayAlert(dictionnary["message.error.required_fields"],"critical","#global_form");
@@ -131,7 +131,7 @@ $(document).ready(function() {
 				},
 				function GotoContextView(value){
 					if (value == "true"){
-						DisplayAlertSuccess(dictionnary["message.manage_contracts.contract_saved"],"ok","#global_form","contract_context_application_view.php");
+						DisplayAlertSuccess(dictionnary["message.manage_contracts.contract_saved"],"ok","#global_form","contract_view.php");
 					}
 					else if (value == "false"){
 						DisplayAlert(dictionnary["message.error.required_fields"],"critical","#global_form");
@@ -145,10 +145,13 @@ $(document).ready(function() {
 	});
 });
 
-$('#datepicker').daterangepicker({
-    format: "yyyy-mm-dd",
+$('#validity_date').daterangepicker({
+    locale: {
+      format: 'YYYY-MM-DD'
+    },
     weekStart: 1,
     singleDatePicker: true,
+	drops: "up"
 });
 
 function ChangeValue(value){

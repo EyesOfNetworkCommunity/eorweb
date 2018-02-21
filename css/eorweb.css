@@ -191,3 +191,13 @@ table.dataTable.table-condensed.dtr-inline.collapsed > tbody > tr > td:first-chi
 .datatable_actions_top {
         margin-bottom: 20px !important;
 }
+
+/*
+ * ------------------------------------------------------------------------
+ * Date picker
+ * ------------------------------------------------------------------------
+*/
+
+#validity_date {
+	background-color: white;
+}

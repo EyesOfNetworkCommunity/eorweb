@@ -25,11 +25,13 @@ include("../../side.php");
 ?>
 
 <div id="page-wrapper">
+	
 	<div class="row">
 		<div class="col-md-12">
 			<h1 class="page-header"><?php echo getLabel("label.manage_contracts.company_view_title"); ?></h1>
 		</div>
 	</div>
+	
 	<div class="table-responsive">
 		<table class="table table-striped">
 			<thead>
@@ -43,7 +45,9 @@ include("../../side.php");
 			</tbody>
 		</table>
 	</div>
+	
 	<input type="button" class="btn btn-primary" value="<?php echo getLabel("label.manage_contracts.company_add"); ?>" onclick="location.href='./company.php';">
+
 </div>
 
 <?php include("../../footer.php"); ?>
