@@ -1,5 +1,12 @@
 <?php include('../../../include/config.php');
 
+	try {
+		$bdd = new PDO("mysql:host=$database_host;dbname=$database_vanillabp", $database_username, $database_password);
+	} catch(Exception $e) {
+		echo "Connection failed: " . $e->getMessage();
+		exit('Impossible de se connecter à la base de données.');
+	}
+
 	$table_name = $_GET['table_name'];
 
 	if ($table_name == 'contract_context'){
@@ -76,8 +83,17 @@
 			echo "false";
 			exit;
 		}
+
+		$sql_verify = $bdd->query("SELECT COUNT(*) FROM company WHERE NAME='$name'");
+		$verify = $sql_verify->fetch();
+
+		if ($verify["COUNT(*)"] >= 1){
+			echo "already exist";
+			exit;
+		}
+	
 		if (isset($_GET['alias'])) {
-		$alias = $_GET['alias'];
+			$alias = $_GET['alias'];
 		} else {
 			$alias ="";
 		}
@@ -208,13 +224,6 @@
 		$sql = "INSERT INTO contract (NAME,ALIAS,CONTRACT_SDM_INTERN,CONTRACT_SDM_EXTERN,ID_COMPANY,EXTERN_CONTRACT_ID,VALIDITY_DATE) VALUES('".$name."','".$alias."','".$contract_sdm_intern."','".$contract_sdm_extern."',".$id_company.",'".$extern_contract_id."','".$validity_date."')";
 
 	}
-
-    try {
-		$bdd = new PDO("mysql:host=$database_host;dbname=$database_vanillabp", $database_username, $database_password);
-    } catch(Exception $e) {
-		echo "Connection failed: " . $e->getMessage();
-		exit('Impossible de se connecter à la base de données.');
-    }
 
 	if ($table_name == 'contract_context'){
 		$sql_verify = $bdd->query("SELECT count(*) FROM contract_context WHERE ID_CONTRACT='$id_contract' AND ID_TIME_PERIOD='$id_time_period' AND ID_KPI = $id_kpi AND ID_STEP_GROUP = $id_step_group");

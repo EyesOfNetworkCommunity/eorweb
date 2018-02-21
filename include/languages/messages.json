@@ -747,6 +747,7 @@
 	"menu.user.disconnect": "Logout",
 	"menu.user.profile": "My profile",
 	"message.error": "Error",
+	"message.error.company_exists": "This company already exists",
 	"message.error.manage_contracts_contract_context_alredy_exist": "A contract context with similar attibute already exists",
 	"message.error.manage_contracts_time_period_reserved": "This selected contract is already linked to this context with an other time period",
 	"message.error.missing_host": "Could not determine host",
