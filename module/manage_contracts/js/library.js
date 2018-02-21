@@ -90,8 +90,7 @@ function DisplayAlertSuccess(msg,type,target,url){
 	message(msg,type,target);
 	setTimeout(function(){
 		$(location).attr('href', url);
-		},
-		2000
+		},5000
 	);
 }
 
