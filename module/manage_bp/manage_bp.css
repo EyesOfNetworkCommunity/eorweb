@@ -51,7 +51,7 @@
 /* BP icon */
 .glyphicon-link, .tree-line {
 	cursor:pointer;
-	margin-right:20px;
+	margin-right:10px;
 }
 
 /* X bp level */
@@ -62,6 +62,15 @@
 /* X service level */
 .tree > li > ul > label {
 	margin-left:35px;
+}
+
+.bp_presentation {
+    font-size: 16px;
+	margin-right: 10px;
+}
+
+.btn_presentation {
+	margin-right: 5px;
 }
 
 .condition_presentation {
@@ -95,14 +104,14 @@
 }
 
 .sign-first {
-    padding: 8px 10px;
-    border-radius: 3px;
-    -webkit-transition: all 0.7s;
-    -moz-transition: all 0.7s;
-    transition: all 0.7s;
-    border: 1px solid #0B8CB8;
-    box-shadow: inset rgba(0,0,0,0.35) 2px 2px 12px, #0B8CB8 0 0 10px;
-    outline: 0;
+	padding: 8px 10px;
+	border-radius: 3px;
+	-webkit-transition: all 0.7s;
+	-moz-transition: all 0.7s;
+	transition: all 0.7s;
+	border: 1px solid #0B8CB8;
+	box-shadow: inset rgba(0,0,0,0.35) 2px 2px 12px, #0B8CB8 0 0 10px;
+	outline: 0;
 }
 
 .container-title {
