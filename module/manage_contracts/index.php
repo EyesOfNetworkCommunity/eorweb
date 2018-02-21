@@ -24,8 +24,6 @@ include("../../header.php");
 include("../../side.php");
 ?>
 
-<link href="./css/design.css" rel="stylesheet">
-
 <div id="page-wrapper">
 	<div class="row">
 		<div class="col-md-12">

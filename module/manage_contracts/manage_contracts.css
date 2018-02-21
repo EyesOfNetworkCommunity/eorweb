@@ -86,30 +86,6 @@
 	font-size: 12px;
 }
 
-thead .altTop {
-    font-weight: bold;
-    border-bottom: 1px solid #aaaaaa;
-    margin: 0px;
-}
-
-tr.altRow1:hover {
-	background-color: rgba(230,230,230,0.7) !important;
-}
-
-tr.altRow2:hover {
-	background-color: rgba(240,240,240,0.7) !important;
-}
-
-tr.altRow1 {
-    background-color: rgb(249,249,249) !important;
-    border-bottom: 1px solid #aaaaaa !important;
-}
-
-tr.altRow2 {
-    background-color: rgb(255,255,255) !important;
-    border-bottom: 1px solid #aaaaaa !important;
-}
-
 .date {
 	padding-left: 15px !important;
 	padding-right: 15px !important;
