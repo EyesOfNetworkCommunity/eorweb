@@ -25,7 +25,6 @@ include("../../side.php");
 ?>
 
 <div id="page-wrapper">
-	
 	<div class="row">
 		<div class="col-md-12">
 			<h1 class="page-header"><?php echo getLabel("label.manage_contracts.company_title"); ?></h1>
@@ -33,7 +32,6 @@ include("../../side.php");
 	</div>
 
 	<div id="global_form"></div>
-	
 	<form>
 		<div class="row form-group">
 			<div class="col-md-6">
@@ -43,10 +41,11 @@ include("../../side.php");
 				</div>
 			</div>
 		</div>
-		<button class="btn btn-primary" type="submit" id="submit"><?php echo getLabel("action.submit"); ?></button>
+		<button class="form-group btn btn-primary" type="submit" id="submit"><?php echo getLabel("label.manage_contracts.company_add"); ?></button>
+		<button class="btn btn-default" type="button" name="back" value="back" onclick="location.href='company_view.php'"><?php echo getLabel("action.cancel") ?></button>
+	<button class="form-group btn btn-primary" type="submit" id="submit"><?php echo getLabel("label.manage_contracts.company_add"); ?></button>
 		<button class="btn btn-default" type="button" name="back" value="back" onclick="location.href='company_view.php'"><?php echo getLabel("action.cancel") ?></button>
 	</form>
-
 </div>
 
 <?php include("../../footer.php"); ?>
