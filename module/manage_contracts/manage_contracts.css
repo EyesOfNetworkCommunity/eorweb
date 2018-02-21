@@ -85,12 +85,6 @@
 	right:-15px;
 	font-size: 12px;
 }
-
-.date {
-	padding-left: 15px !important;
-	padding-right: 15px !important;
-}
-
 #validity_date {
 	background-color: white;
 }
