@@ -38,7 +38,7 @@ print "<div id=\"page-wrapper\">";
 
 	print "<div class=\"row\">";
 		print "<div class=\"col-lg-12\">";
-			print "<h1 class=\"page-header bp_name\">".getLabel("label.admin_bp.business_process")." : $bp_name</h1>";
+			print "<h1 class=\"page-header bp_name\">".getLabel("label.manage_bp.business_process")." : $bp_name</h1>";
 		print "</div>";
     print "</div>";
 
@@ -76,11 +76,11 @@ print "<div id=\"page-wrapper\">";
 				}
 				else {
 					print "<div id=\"container_process\">";
-						print "<label>".getLabel("label.admin_bp.display")."</label>";
+						print "<label>".getLabel("label.manage_bp.display")."</label>";
 						print "<div>";
 							print "<div class=\"row col-md-12\">";
 								print "<select class=\"form-control\" name=\"display\">";
-									print "<option data-hidden=\"true\">".getLabel("label.admin_bp.select_display")."</option>";
+									print "<option data-hidden=\"true\">".getLabel("label.manage_bp.select_display")."</option>";
 									print "<option>0</option>";
 									print "<option>1</option>";
 									print "<option>2</option>";
@@ -111,7 +111,7 @@ print "<div id=\"page-wrapper\">";
 		print "<div class=\"col-md-6\">";
 			print "<form id=\"form_drop\" class=\"form-horizontal\" style=\"top:0px\">";
 				$text_display = ($display_actually_bp > 0 ? "Process" : "Services");
-				print "<label>$text_display ".getLabel("label.admin_bp.linked_to_bp")." $bp_name</label>";
+				print "<label>$text_display ".getLabel("label.manage_bp.linked_to_bp")." $bp_name</label>";
 				print "<div id=\"container-drop_zone\" class=\"container-drop_zone\">";
 				
 					if($display_actually_bp > 0){
@@ -132,7 +132,7 @@ print "<div id=\"page-wrapper\">";
 						}
 						if($count == 0){
 							print "<div id=\"primary_drop_zone\" class=\"ui-widget-content panel panel-info\" style=\"height:50px\">";
-								print "<div class=\"text-center panel-body\">".getLabel("label.admin_bp.drop_here")."</div>";
+								print "<div class=\"text-center panel-body\">".getLabel("label.manage_bp.drop_here")."</div>";
 							print "</div>";
 						} 
 					}
@@ -173,7 +173,7 @@ print "<div id=\"page-wrapper\">";
 						
 						if($old_host == ""){ // ca signifie que aucun service n'est ajoute
 							print "<div id=\"primary_drop_zone\" class=\"ui-widget-content panel panel-info\" style=\"height:50px\">";
-								print "<div class=\"text-center panel-body\">".getLabel("label.admin_bp.drop_here")."</div>";
+								print "<div class=\"text-center panel-body\">".getLabel("label.manage_bp.drop_here")."</div>";
 							print "</div>";
 						}	
 					}
@@ -184,7 +184,7 @@ print "<div id=\"page-wrapper\">";
 				print "\">";
 		    	print getLabel("action.apply");
 		    	print "</a>";
-				print "<a class=\"btn btn-primary\" onclick=\"window.location = '/module/admin_bp/index.php';\">".getLabel("action.cancel")."</a>";
+				print "<a class=\"btn btn-primary\" onclick=\"window.location = '/module/manage_bp/index.php';\">".getLabel("action.cancel")."</a>";
 				print "</div>";
 			print "</form>";
 		print "</div>";

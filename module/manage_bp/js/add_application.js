@@ -60,7 +60,7 @@ $(document).ready(function() {
 		if(uniq_name!=uniq_name_orig) {
 			var bpExists = bpAlreadyExists(uniq_name);
 			if(bpExists == true){
-				var msg = dictionnary["message.admin_bp.bp_already_exists"];
+				var msg = dictionnary["message.manage_bp.bp_already_exists"];
 				message(msg, 'warning', '#error-message');
 				return;
 			}

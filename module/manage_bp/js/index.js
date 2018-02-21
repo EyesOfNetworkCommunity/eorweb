@@ -84,7 +84,7 @@ function AddingApplication(){
 
 function ShowModalDeleteBP(bp){
 	$("#popup_confirmation .modal-title").html(dictionnary["action.delete"]);
-	$("#popup_confirmation .modal-body").html(dictionnary["label.admin_bp.delete_bp"]+': ' + bp);
+	$("#popup_confirmation .modal-body").html(dictionnary["label.manage_bp.delete_bp"]+': ' + bp);
 	$("#popup_confirmation button").hide();
 	$("#modal-confirmation-del-bp").show();
 	$("#action-cancel").show();

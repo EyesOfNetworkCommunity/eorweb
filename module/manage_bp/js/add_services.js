@@ -64,7 +64,7 @@ $(document).ready(function () {
 					$services = list_services['service'];
 
 					$('#draggablePanelList').children().remove();
-					$('#process').html(dictionnary["label.admin_bp.serv_linked_to_host"]+' ' + $('#host').val());
+					$('#process').html(dictionnary["label.manage_bp.serv_linked_to_host"]+' ' + $('#host').val());
 					
 					for(i=0;i<$services.length;i++){
 						var element = $('div[id$="::' + $("#host").val() + ';;' + $services[i] + '"]');
@@ -92,7 +92,7 @@ $(document).ready(function () {
         var bp_name = element_bp_name.split(" : ")[1];
 		var nb_display = $('select[name="display"]').val();
 		if(nb_display % 1 === 0) {
-			$('#process').html(dictionnary["label.admin_bp.process_for_display"]+' ' + nb_display + '');
+			$('#process').html(dictionnary["label.manage_bp.process_for_display"]+' ' + nb_display + '');
 		} else {
 			$('#process').html('');
 		}
@@ -198,7 +198,7 @@ function DeleteService(line_service){
 		$('#container-drop_zone').html('\
 		<div id="primary_drop_zone" class="ui-widget-content panel panel-info" style="height:50px">\
 			<div class="panel-body text-center">\
-				'+dictionnary["label.admin_bp.drop_here"]+'\
+				'+dictionnary["label.manage_bp.drop_here"]+'\
 			</div>\
 		</div>');
 	}
@@ -217,7 +217,7 @@ function DeleteService(line_service){
 				$('#draggablePanelList').children().remove();
 
 				if($services !== undefined){
-					$('#process').html(dictionnary["label.admin_bp.serv_linked_to_host"]+' ' + $('#host').val());
+					$('#process').html(dictionnary["label.manage_bp.serv_linked_to_host"]+' ' + $('#host').val());
 					for(i=0;i<$services.length;i++){
 						var element = $('div[id$="::' + $("#host").val() + ';;' + $services[i] + '"]');
 						
@@ -236,7 +236,7 @@ function DeleteService(line_service){
 	    var bp_name = element_bp_name.split(" : ")[1];
 		var nb_display = $('select[name="display"]').val();
 		if(nb_display % 1 === 0) {
-			$('#process').html(dictionnary["label.admin_bp.process_for_display"]+' ' + nb_display + '');
+			$('#process').html(dictionnary["label.manage_bp.process_for_display"]+' ' + nb_display + '');
 		} else {
 			$('#process').html('');
 		}

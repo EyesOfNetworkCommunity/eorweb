@@ -4,7 +4,7 @@
 #
 # Copyright (C) 2018 EyesOfNetwork Team
 # DEV NAME : Michael Aubertin
-# VERSION : 2.0
+# VERSION : 5.2
 # APPLICATION : eorweb for eyesofreport project
 #
 # LICENCE :
@@ -28,12 +28,12 @@ include("../../side.php");
 
 	<div class="row">
 		<div class="col-lg-12">
-			<h1 class="page-header"><?php echo getLabel("label.admin_bp.title"); ?></h1>
+			<h1 class="page-header"><?php echo getLabel("label.business.title"); ?></h1>
 		</div>
 	</div>
 
 	<?php
-	global $database_nagios;
+	global $database_vanillabp;
 	global $database_host;
 	global $database_username;
 	global $database_password;
@@ -42,11 +42,11 @@ include("../../side.php");
 
 	function display_bp($bp,$bp_racine) {
 		
-		global $database_nagios;
+		global $database_vanillabp;
 		global $database_host;
 		global $database_username;
 		global $database_password;
-		$db = new mysqli($database_host, $database_username, $database_password, $database_nagios);
+		$db = new mysqli($database_host, $database_username, $database_password, $database_vanillabp);
 
 		if($db->connect_errno > 0){
 			die('Unable to connect to database [' . $db->connect_error . ']');
@@ -85,7 +85,7 @@ include("../../side.php");
 		<li>
 			<div id="<?php echo $bp; ?>" class="tree-toggle">
 				<div class="tree-line">
-					<i class="glyphicon-link glyphicon"></i><?php echo getLabel("label.admin_bp.display") ?>:<?php echo $priority; ?>&nbsp;
+					<i class="glyphicon-link glyphicon"></i><?php echo getLabel("label.manage_bp.display") ?>:<?php echo $priority; ?>&nbsp;
 					<b class="condition_presentation"><?php echo $rule_type.".".$min_value."</b>&nbsp;&nbsp;".$bp."&nbsp;&nbsp;(".$desc_bp.")"; ?>
 				</div>
 				<div class="list-inline marge-buttons">
@@ -116,11 +116,11 @@ include("../../side.php");
 	function display_son($bp_racine)
 	{
 
-		global $database_nagios;
+		global $database_vanillabp;
 		global $database_host;
 		global $database_username;
 		global $database_password;
-		$db = new mysqli($database_host, $database_username, $database_password, $database_nagios);
+		$db = new mysqli($database_host, $database_username, $database_password, $database_vanillabp);
 
 		if($db->connect_errno > 0){
 			die('Unable to connect to database [' . $db->connect_error . ']');
@@ -183,7 +183,7 @@ include("../../side.php");
 	}
 
 	$HTMLTREE ="";
-	$db = new mysqli($database_host, $database_username, $database_password, $database_nagios);
+	$db = new mysqli($database_host, $database_username, $database_password, $database_vanillabp);
 
 	if($db->connect_errno > 0){
 		die('Unable to connect to database [' . $db->connect_error . ']');
