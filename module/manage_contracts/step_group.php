@@ -76,8 +76,10 @@ include("../../side.php");
 					</div>
 				</div>
 		</div>
+		<div class="form-group">
 			<button class="btn btn-primary" type="submit" id="submit_interval"><?php echo getLabel("label.contracts_menu.seuils_create_btn_add"); ?>
 			</button>
+		</div>
 		
 		<input type="text" class="form-control" id="id_kpi" style="display:none">
 		
