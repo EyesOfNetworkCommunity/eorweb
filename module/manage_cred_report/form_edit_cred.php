@@ -19,10 +19,6 @@
 #
 #########################################
 */
-?>
-
-<?php
-
 
 include("../../header.php");
 include("../../side.php");
@@ -39,7 +35,7 @@ $grp_format = array();
 $db = new mysqli($database_host, $database_username, $database_password, $database_eorweb);
 
 if($db->connect_errno > 0){
-die('Unable to connect to database [' . $db->connect_error . ']');
+    die('Unable to connect to database [' . $db->connect_error . ']');
 } 
 
 
@@ -66,102 +62,127 @@ if (isset($_POST['change_name']) && $_POST['change_name'] != '') {
 
 <div id="page-wrapper">
     <div class="row">
-        <h1 class="page-header">Report credentials settings</h1>
-        <div class="form-group">
-            <h3><?php echo getLabel("label.mgt_upload_report.title"); ?></h3>
-            <form class="form-inline" method="post">
-                <div class="input-group col-md-5">
-                    <input type="hidden" name="MAX_FILE_SIZE" value="2000000">
-                    <input class="form-control" type="file" name="filename">
-                    <span class="input-group-btn">
-                        <button class="btn btn-primary" type="submit" name="upload" onclick="upload()"><?php echo getLabel("label.mgt_upload_report.btn_upload"); ?></button>
-                    </span>
-                </div>
-            </form>
+        <div class="col-md-12">
+            <h1 class="page-header">Report credentials settings: <?php echo $report_name ?></h1>
         </div>
-        <h2><?php echo $report_name ?></h2>
-        <div class="table-responsive">          
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>User group</th>
-                        <th>Available</th>
-                        <?php
-                        $sql = "SELECT * FROM output_format;";
-                        if(!$result = $db->query($sql)){
-                           die('There was an error running the query [' . $db->error . ']');
-                        }
-                        while($row = $result->fetch_assoc()){ 
-                            echo " <th>".$row['type']."</th>";
-                        }
-                        ?>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php
-                    /****************  User Group ********************/
-                    $sql_group = " SELECT * FROM groups;";
-                    if(!$result_group = $db->query($sql_group)){
-                        die('There was an error running the query [' . $db->error . ']');
-                    }
-                    while($row_group = $result_group->fetch_assoc()){
-                        echo "<tr>\n"; 
-                        echo "<td id=\"group_id_".$row_group['group_id']."\">".$row_group['group_descr']."</td>\n";
-                        /**************** Available (list from join_report_cred ****************/
-                        $sql_report_avail = "SELECT * FROM join_report_cred 
-                            WHERE group_id=".$row_group['group_id']."
-                            AND report_id=".$report_id.";";
-                        if(!$result_report_avail = mysqli_query($db,$sql_report_avail)){
-                            die('There was an error running the query [' . $db->error . ']');
-                        }
-                        $num_rows = mysqli_num_rows($result_report_avail);
-                        if ($num_rows > 0){ 
-                            echo " <td><input type=\"checkbox\" id=\"grp_".$row_group['group_id']."_avail_".$row_group['group_id']."\" value=\"\" checked></td>\n";
-                            array_push($grp_avail,"grp_".$row_group['group_id']."_avail_".$row_group['group_id']);
-                        } else {
-                            echo " <td><input type=\"checkbox\" id=\"grp_".$row_group['group_id']."_avail_".$row_group['group_id']."\" value=\"\"></td>\n";
-                            array_push($grp_avail,"grp_".$row_group['group_id']."_avail_".$row_group['group_id']);
-                        }
+    </div>
 
-                        /***************** FORMAT ******************/  
-                        $sql_format = "SELECT * FROM output_format;";
-                        if(!$result_format = $db->query($sql_format)){
-                            die('There was an error running the query ['. $db->error . ']');
-                        }
-                        while($row_format = $result_format->fetch_assoc()){ 
-                            # Test current Settings....
-                            $sql_format_inDB = "SELECT * FROM join_report_format 
-                                INNER JOIN join_report_cred ON join_report_cred.report_id=join_report_format.report_id 
-                                WHERE output_format_id=".$row_format['format_id']." 
-                                AND join_report_cred.report_id=".$report_id." 
-                                AND group_id=".$row_group['group_id'].";";
-                                if(!$result_format_inDB = mysqli_query($db,$sql_format_inDB)){
+    <div class="row">
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <?php echo getLabel("label.form_edit_cred.change_name"); ?>
+                </div>
+                <div class="panel-body">
+                    <form method="POST">
+                        <div class="input-group col-md-12">
+                            <?php echo "<input class=\"form-control\" type=\"text\" name=\"change_name\" value=\"".$report_name."\">"; ?>
+                            <span class="input-group-btn">
+                                <input type="submit" class="btn btn-primary" onclick="changeName()" value="Valid">
+                            </span>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <?php echo getLabel("label.mgt_upload_report.title"); ?>
+                </div>
+                <div class="panel-body">
+                    <form method="post">
+                        <div class="input-group">
+                            <input type="hidden" name="MAX_FILE_SIZE" value="2000000">
+                            <input class="form-control" type="file" name="filename">
+                            <span class="input-group-btn">
+                                <button class="btn btn-primary" type="submit" name="upload" onclick="upload()"><?php echo getLabel("label.mgt_upload_report.btn_upload"); ?></button>
+                            </span>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Change credentials
+                </div>
+                <div class="panel-body">
+                    <div class="table-responsive">          
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>User group</th>
+                                    <th>Available</th>
+                                    <?php
+                                    $sql = "SELECT * FROM output_format;";
+                                    if(!$result = $db->query($sql)){
+                                        die('There was an error running the query [' . $db->error . ']');
+                                    }
+                                    while($row = $result->fetch_assoc()){ 
+                                        echo " <th>".$row['type']."</th>";
+                                    } ?>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                /****************  User Group ********************/
+                                $sql_group = " SELECT * FROM groups;";
+                                if(!$result_group = $db->query($sql_group)){
                                     die('There was an error running the query [' . $db->error . ']');
                                 }
-                                $num_rowsDB = mysqli_num_rows($result_format_inDB);
-                                if ($num_rowsDB > 0){                                       
-                                    echo " <td><input type=\"checkbox\" id=\"grp_".$row_group['group_id']."_format_id_".$row_format['format_id']."\" value=\"\" checked></td>\n";
-                                    array_push($grp_format,"grp_".$row_group['group_id']."_format_id_".$row_format['format_id']);
-                                } else {
-                                    echo " <td><input type=\"checkbox\" id=\"grp_".$row_group['group_id']."_format_id_".$row_format['format_id']."\" value=\"\"></td>\n";
-                                    array_push($grp_format,"grp_".$row_group['group_id']."_format_id_".$row_format['format_id']);
+                                while($row_group = $result_group->fetch_assoc()){
+                                    echo "<tr>\n"; 
+                                    echo "<td id=\"group_id_".$row_group['group_id']."\">".$row_group['group_descr']."</td>\n";
+                                    /**************** Available (list from join_report_cred ****************/
+                                    $sql_report_avail = "SELECT * FROM join_report_cred WHERE group_id=".$row_group['group_id']." AND report_id=".$report_id.";";
+                                    if(!$result_report_avail = mysqli_query($db,$sql_report_avail)){
+                                        die('There was an error running the query [' . $db->error . ']');
+                                    }
+                                    $num_rows = mysqli_num_rows($result_report_avail);
+                                    if ($num_rows > 0){ 
+                                        echo " <td><input type=\"checkbox\" id=\"grp_".$row_group['group_id']."_avail_".$row_group['group_id']."\" value=\"\" checked></td>\n";
+                                        array_push($grp_avail,"grp_".$row_group['group_id']."_avail_".$row_group['group_id']);
+                                    } else {
+                                        echo " <td><input type=\"checkbox\" id=\"grp_".$row_group['group_id']."_avail_".$row_group['group_id']."\" value=\"\"></td>\n";
+                                        array_push($grp_avail,"grp_".$row_group['group_id']."_avail_".$row_group['group_id']);
+                                    }
+
+                                    /***************** FORMAT ******************/  
+                                    $sql_format = "SELECT * FROM output_format;";
+                                    if(!$result_format = $db->query($sql_format)){
+                                        die('There was an error running the query ['. $db->error . ']');
+                                    }
+                                    while($row_format = $result_format->fetch_assoc()){ 
+                                        # Test current Settings....
+                                        $sql_format_inDB = "SELECT * FROM join_report_format  INNER JOIN join_report_cred ON join_report_cred.report_id=join_report_format.report_id 
+                                                            WHERE output_format_id=".$row_format['format_id']." 
+                                                            AND join_report_cred.report_id=".$report_id." 
+                                                            AND group_id=".$row_group['group_id'].";";
+                                        if(!$result_format_inDB = mysqli_query($db,$sql_format_inDB)){
+                                            die('There was an error running the query [' . $db->error . ']');
+                                        }
+                                        $num_rowsDB = mysqli_num_rows($result_format_inDB);
+                                        if ($num_rowsDB > 0){                                       
+                                            echo " <td><input type=\"checkbox\" id=\"grp_".$row_group['group_id']."_format_id_".$row_format['format_id']."\" value=\"\" checked></td>\n";
+                                            array_push($grp_format,"grp_".$row_group['group_id']."_format_id_".$row_format['format_id']);
+                                        } else {
+                                            echo " <td><input type=\"checkbox\" id=\"grp_".$row_group['group_id']."_format_id_".$row_format['format_id']."\" value=\"\"></td>\n";
+                                            array_push($grp_format,"grp_".$row_group['group_id']."_format_id_".$row_format['format_id']);
+                                        }
+                                    }
+                                    echo "</tr>\n\n";                
                                 }
-                        }
-                        echo "</tr>\n\n";                
-                    }
-                    ?>
-                    </tbody>
-            </table>
-        </div>
-        <h3><?php echo getLabel("label.form_edit_cred.change_name"); ?></h3>
-        <form method="POST">
-            <div class="input-group col-md-3">
-                <?php echo "<input class=\"form-control\" type=\"text\" name=\"change_name\" value=\"".$report_name."\">"; ?>
-                <span class="input-group-btn">
-                    <input type="submit" class="btn btn-primary" onclick="changeName()" value="Valid">
-                </span>
+                                ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
-        </form>
+        </div>
     </div>
 </div>
 
