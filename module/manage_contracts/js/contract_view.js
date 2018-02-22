@@ -75,6 +75,6 @@ function EditSelection(id){
 }
 
 function RemoveSelection(id){
-	DisplayPopupRemove(dictionnary["message.manage_contracts.contract_suppress"], "contract_context_application", application_name, dictionnary["action.delete"],dictionnary["label.yes"],dictionnary["label.no"]);
+	DisplayPopupRemove(dictionnary["message.manage_contracts.contract_suppress"], "contract", id, dictionnary["action.delete"],dictionnary["label.yes"],dictionnary["label.no"]);
 	
 }

@@ -53,7 +53,7 @@ include("../../side.php");
 		</div>
 		<div class="row form-group has-feedback" id="display_unit_checkbox" style="display:none">
 			<div class="col-md-6">
-				<label><?php echo getLabel("label.contracts_menu.seuils_create_type"); ?></label></br>
+				<label><?php echo getLabel("label.contracts_menu.seuils_create_type"); ?></label>
 				<div class="col-md-12">
 					<label class="radio-inline" id="label_unit_kpi" for="unit_kpi">
 						<input type="radio" name="optradio" id="unit_kpi" onchange="CheckRadioButton(id)">

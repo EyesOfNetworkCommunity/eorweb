@@ -39,7 +39,7 @@ include("../../side.php");
 				<div class="has-feedback div-name">
 					<label for="name"><?php echo getLabel("label.manage_contracts.contract_context_name_descr"); ?></label>
 					<div class="input-name">
-						<input type="text" class="form-control" id="name" onkeyup="this.value=this.value.replace(/[^éèàêâç0-9a-zA-Z-_ \/\*]/g,'')" required="true">
+						<input type="text" class="form-control" id="name" onkeyup="this.value=this.value.replace(/[^éèàêâç0-9a-zA-Z-_ \/\*]/g,'')">
 					</div>
 				</div>
 			</div>	

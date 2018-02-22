@@ -41,7 +41,7 @@ include("../../side.php");
 				</div>
 			</div>
 		</div>
-		<button class="form-group btn btn-primary" type="submit" id="submit"><?php echo getLabel("label.manage_contracts.company_add"); ?></button>
+		<button class="form-group btn btn-primary" type="submit" id="submit"><?php echo getLabel("action.submit"); ?></button>
 		<button class="btn btn-default" type="button" name="back" value="back" onclick="location.href='company_view.php'"><?php echo getLabel("action.cancel") ?></button>
 	</form>
 </div>
