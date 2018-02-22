@@ -23,11 +23,13 @@ $(document).ready(function () {
 	$('.tree li.son').toggle();
 	$('.tree li.end').toggle();
 	$('.tree-line').click(function () {
-		$(this).parent().parent().parent().children('.tree li.end').toggle(200);
-		$(this).parent().parent().parent().children('.tree li.son').toggle(200);
+		$(this).parent().parent().parent().children('.tree li.end').toggle();
+		$(this).parent().parent().parent().children('.tree li.son').toggle();
 	});
 	$("[data-toggle=tooltip]").tooltip();
 
+	$("#body").show();
+	
 	$(document).keypress(function press_enter(e){
     	if(e.which == 13){
 			e.preventDefault();
@@ -47,14 +49,13 @@ $(document).ready(function () {
 $('#FindIt').on('click', findIt());
 
 function findIt(){
-	ShowAll();
+	HideAll()
 	$search_text = $('#SearchFor').val();
 	$('.tree-toggle').jmRemoveHighlight();
     $('.tree-toggle').jmHighlight($search_text);
+	ShowHight($search_text);
 	
 	var offset = $("ul:contains('" + $search_text +"')").offset();
-	//var offset = $('ul[id^="' + $search_text +'"]').offset();
-	//console.log(offset);
 	if(offset) {
 		offset.left -= 20;
 		offset.top -= 20;
@@ -67,6 +68,11 @@ function findIt(){
 }
 
 var n = 0;
+
+function ShowHight($search_text){
+	$("ul:contains('" + $search_text +"') li.son").show();
+	$("ul:contains('" + $search_text +"') li.end").show();
+}
 
 function ShowAll(){
 	$('.tree li.son').show();

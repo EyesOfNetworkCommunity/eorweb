@@ -81,17 +81,23 @@ include("../../side.php");
 		$result_type->free();
 		mysqli_close($db);
 
+		if(!empty($desc_bp)) {
+			$display_bp=$desc_bp;
+		} else {
+			$display_bp=$bp;
+		}
+		
 ?>	
 		<li>
 			<div id="<?php echo $bp; ?>" class="tree-toggle">
 				<div class="tree-line">
-					<i class="glyphicon-link glyphicon"></i><?php echo getLabel("label.manage_bp.display") ?>:<?php echo $priority; ?>&nbsp;
-					<b class="condition_presentation"><?php echo $rule_type.".".$min_value."</b>&nbsp;&nbsp;".$bp."&nbsp;&nbsp;(".$desc_bp.")"; ?>
-				</div>
-				<div class="list-inline marge-buttons">
-					<button type="button" class="btn btn-xs btn-success" onclick="location.href='add_services.php?bp_name=<?php echo $bp; ?>&display=<?php echo $priority; ?>'"><i class="glyphicon glyphicon-plus"></i></button>
-					<button type="button" class="btn btn-xs btn-info" onclick="editApplication('<?php echo $bp; ?>');"><i class="glyphicon glyphicon-pencil"></i></button>
-					<button type="button" class="btn btn-xs btn-danger" onclick="ShowModalDeleteBP('<?php echo $bp; ?>');"><i class="glyphicon glyphicon-trash"></i></button>
+					<i class="glyphicon-link glyphicon"></i>
+					<b class="bp_presentation"><?php echo $display_bp; ?></b>
+					<b class="condition_presentation"><?php echo $priority; ?></b>
+					<b class="condition_presentation"><?php echo $rule_type.".".$min_value; ?></b>
+					<button type="button" class="btn_presentation pull-right btn btn-xs btn-danger" onclick="ShowModalDeleteBP('<?php echo $bp; ?>');"><i class="glyphicon glyphicon-trash"></i></button>
+					<button type="button" class="btn_presentation pull-right btn btn-xs btn-info" onclick="editApplication('<?php echo $bp; ?>');"><i class="glyphicon glyphicon-pencil"></i></button>
+					<button type="button" class="btn_presentation pull-right btn btn-xs btn-success" onclick="location.href='add_services.php?bp_name=<?php echo $bp; ?>&display=<?php echo $priority; ?>'"><i class="glyphicon glyphicon-plus"></i></button>
 				</div>
 			</div>
 		</li>				
@@ -209,8 +215,10 @@ include("../../side.php");
 
 	?>
     
-	<form class="form-inline">
-		<div class="">
+	<form>
+	
+		<div class="form-inline">
+		
 			<div class="form-group">
 				<div class="btn-group">
 					<button class="btn btn-info" type="button" onclick="ShowAll();"><?php echo getLabel("action.show_all") ?></button>
@@ -228,30 +236,37 @@ include("../../side.php");
 				</div><!-- /input-group -->
 			</div>
 
+		</div>
+		
+		<div class="form-inline">
+			
 			<div class="form-group">		                   
 				<button type="button" class="btn btn-success" onclick="AddingApplication();">
 					<?php echo getLabel("action.add_new_app"); ?>
 				</button>
 			</div>
+			
 			<div class="form-group">
 				<button type="button" class="btn btn-primary" onclick="ShowModalApplyConfiguration();">
 					<?php echo getLabel("action.apply_conf"); ?>
 				</button>
 			</div> 
+		
 		</div>
 
-		<div id="body" class="pad-top">
-<?php for ($i = 0; $i < sizeof($t_bp_racine); $i++) { ?>
+		<div id="body" class="pad-top" style="display: none;">
+		<?php for ($i = 0; $i < sizeof($t_bp_racine); $i++) { ?>
 			<div class="well well-sm">
 				<ul class="nav nav-list tree">
-			<?php
+				<?php
 				display_bp($t_bp_racine[$i],$t_bp_racine[$i]);
 				display_son($t_bp_racine[$i]);
-			?>
+				?>
 				</ul>
 			</div>
-<?php } ?>
+		<?php } ?>
 		</div>
+		
 	</form>
 
 	<!-- modal for apply conf button -->
