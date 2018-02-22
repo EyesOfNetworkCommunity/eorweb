@@ -36,18 +36,6 @@ include("../../side.php");
 	<form>
 		<div class="row form-group">
 			<div class="col-md-6">
-				<div class=" has-feedback div-context">
-					<label for="name_contract_context"><?php echo getLabel("label.contract_context"); ?></label>
-					<div class="input-context">
-						<button class="btn btn-default btn-block dropdown-toggle" type="button" data-toggle="dropdown" id="name_contract_context"><?php echo getLabel("label.manage_contracts.contract_context_view_title"); ?>
-						<span class="caret"></span></button>
-						<ul class="dropdown-menu btn-block" id="ul_context"></ul>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="row form-group">
-			<div class="col-md-6">
 				<label for="name"><?php echo getLabel("label.contracts_menu.seuils_create_name"); ?></label>
 				<input type="text" class="form-control" id="name" onkeyup="this.value=this.value.replace(/[^éèàêâç0-9a-zA-Z-_ \/\*]/g,'')">
 			</div>
