@@ -76,32 +76,39 @@ include("../../side.php");
 					</div>
 				</div>
 		</div>
-			<button class="btn btn-primary" type="submit" id="submit_interval" style="display: none;"><?php echo getLabel("label.contracts_menu.seuils_create_btn_add"); ?>
+			<button class="btn btn-primary" type="submit" id="submit_interval"><?php echo getLabel("label.contracts_menu.seuils_create_btn_add"); ?>
 			</button>
 		
 		<input type="text" class="form-control" id="id_kpi" style="display:none">
 		
-		<div class="row form-group" style="display:none" id="text_entry">
-			<h2 class="page-header"><?php echo getLabel("label.contracts_menu.seuils_create_title_list"); ?></h2>
+		<div class="row" style="display:none" id="text_entry">
+			<div class="col-md-12">
+				<h2 class="page-header"><?php echo getLabel("label.contracts_menu.seuils_create_title_list"); ?></h2>
+			</div>
 		</div>
 
-		<div class="col-md-12">
-		<table class="table" style="display:none" id="container_interval">
-		    <thead>
-			    <tr>
-			        <th><?php echo getLabel("label.contracts_menu.seuils_create_list_sla"); ?></th>
-					<th><?php echo getLabel("label.contracts_menu.seuils_create_minimum"); ?></th>
-					<th><?php echo getLabel("label.contracts_menu.seuils_create_maximum"); ?></th>
-					<th><?php echo getLabel("action.delete"); ?></th>
-			    </tr>
-		    </thead>
-			<tbody id="body_table">
-			</tbody>
-		</table>
+		<div class="row">
+			<div class="col-md-12">
+				<table class="table" style="display:none" id="container_interval">
+				    <thead>
+					    <tr>
+					        <th><?php echo getLabel("label.contracts_menu.seuils_create_list_sla"); ?></th>
+							<th><?php echo getLabel("label.contracts_menu.seuils_create_minimum"); ?></th>
+							<th><?php echo getLabel("label.contracts_menu.seuils_create_maximum"); ?></th>
+							<th><?php echo getLabel("action.delete"); ?></th>
+					    </tr>
+				    </thead>
+					<tbody id="body_table">
+					</tbody>
+				</table>
+			</div>
 		</div>
-
-		<button class="form-group btn btn-primary" type="submit" id="submit"><?php echo getLabel("action.submit"); ?></button>
-		<button class="btn btn-default" type="button" name="back" value="back" onclick="location.href='step_group_view.php'"><?php echo getLabel("action.cancel") ?></button>
+		<div class="row" id="hidden_button" style="display: none;">
+			<div class="col-md-12">
+				<button class="form-group btn btn-primary" type="submit" id="submit"><?php echo getLabel("action.submit"); ?></button>
+				<button class="btn btn-default" type="button" name="back" value="back" onclick="location.href='step_group_view.php'"><?php echo getLabel("action.cancel") ?></button>
+			</div>
+		</div>
 	</form>
 </div>
 

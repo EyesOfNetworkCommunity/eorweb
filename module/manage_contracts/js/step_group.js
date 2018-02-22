@@ -198,9 +198,10 @@ $(document).ready(function() {
 					$('#unit_ratio').prop('disabled', true);
 				}
 			}
-
+			$('#text_entry').show();
+			$('#hidden_button').show();
 			if($('#container_interval').is(':hidden')){
-				$('#container_interval').css('display', 'inline');
+				$('#container_interval').css('display', 'block');
 			}
 
 			// On camoufle le bouton de suppression de l'interval du dessus
@@ -208,7 +209,7 @@ $(document).ready(function() {
 			$current_id_button = $counter +'id';
 
 			$('#' + $previous_id_button).css('display','none');
-
+			
 			$('#container_interval').append('<tr id="'+$counter+'"><td style="text-align:center">n°' + $counter + '</td><td style="text-align:center">' + $interval_min + $radio_value + '</td><td style="text-align:center">' + $interval_max + $radio_value + '</td><td style="text-align:center"><button type="button" class="btn btn-danger" id="'+$current_id_button+'" onclick=RemoveInterval(id)><span class="glyphicon glyphicon-remove"></span></button></td></tr>');
 
 			var arr = [$interval_min, $interval_max];
@@ -275,7 +276,7 @@ function ChangeValueSelected(values){
 		$('#display_unit_checkbox').css("display", "block");
 		$('#display_interval').css("display", "inline");
     	$('#submit_interval').css("display", "block");
-		$('#text_entry').css("display", "inline");
+		
 	}
 }
 

@@ -46,7 +46,7 @@ $(document).ready(function() {
 						break;
 					}
 
-					$step_array = $step_array + '  <button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-tag"></span> [' +$step_min+ $type +' ; ' +$step_max + $type +'[</button>';
+					$step_array = $step_array + '  <button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-tag"></span> ' +$step_min+ $type +' ; ' +$step_max + $type +'</button>';
 				}
 				
 				$global_array[$counter] = [$id,$name,$id_kpi,$step_array];

@@ -35,7 +35,6 @@ include("../../side.php");
 	<div id="global_form"></div>
 	
 		<form>
-		
 			<div class="row form-group">
 				<div class="col-md-6">
 					<label for="name"><?php echo getLabel("label.contracts_menu.contracts_menu_create_name"); ?></label>
@@ -108,9 +107,7 @@ include("../../side.php");
 			
 			<button class="form-group btn btn-primary" type="submit" id="submit"><?php echo getLabel("action.submit"); ?></button>
 			<button class="btn btn-default" type="button" name="back" value="back" onclick="location.href='contract_view.php'"><?php echo getLabel("action.cancel") ?></button>
-		
 		</form>
-	
 </div>
 
 <?php include("../../footer.php"); ?>
