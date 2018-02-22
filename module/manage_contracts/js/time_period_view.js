@@ -45,17 +45,16 @@ $(document).ready(function() {
 						table_name: 'timeperiod_entry',
 						id_number: $global_array[i+''][0]
 					},
+
 					function return_time_period(time_period){
 						$id = $global_array[$count+''][0];
 						$name = $global_array[$count+''][1];
-
 						$concatenation_time_period = "";
 						$index = 0;
 						$.each(time_period, function(v, k){
 							$day = k['ENTRY'];
 							$h_open = k['H_OPEN'];
 							$h_close = k['H_CLOSE'];
-
 							if($index == 4){
 								$concatenation_time_period = $concatenation_time_period + '    <span class="glyphicon glyphicon-option-horizontal" style="vertical-align:bottom"></span>'
 								return false;
@@ -66,16 +65,15 @@ $(document).ready(function() {
 							$index++;
             			});
 						$('#body_table').append('<tr><td><span class="glyphicon glyphicon-share-alt text-warning"></span></td><td>' + $name + '</td><td>'+$concatenation_time_period+'</td><td><button type="button" class="btn btn-primary" id="'+$id+'" onclick=EditSelection(id)><span class="glyphicon glyphicon-pencil"></span></button>  <button type="button" class="btn btn-danger" id="'+$id+'" onclick=RemoveSelection(id)><span class="glyphicon glyphicon-trash"></span></button></td></tr>');
-        
 						$count++;
 					},
 					'json'
 				);
 			}
 			$timer_update_table = ($counter /30) *1000
-                        if ($timer_update_table < 200){
-                                $timer_update_table = 200;
-                        }
+			if ($timer_update_table < 200){
+				$timer_update_table = 200;
+			}
 		},
 		'json'
 	);

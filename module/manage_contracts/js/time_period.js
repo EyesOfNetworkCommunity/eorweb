@@ -24,6 +24,7 @@ $(document).ready(function() {
 	$global_array = {};
 
 	if (UrlParam('id_number') != false){
+		$('#input_list').css('display', 'block');
 		$('#container_time_period').css('display', 'inline');
 		$.get(
 			'./php/view_entry.php',
@@ -166,10 +167,10 @@ $(document).ready(function() {
 				return false;
 			}
       
-      $counter++;
-      		$("#input_list").toggle();
+      		$counter++;
+      		$("#input_list").show();
 			if($('#container_time_period').is(':hidden')){
-				$('#container_time_period').css('display', 'inline');
+				$('#container_time_period').css('display', 'block');
 			}
 			$('#body_table').append('<tr id="'+$counter+'"><td>' + $('#name_entry_hide').val() + '</td><td>' + $('#start_hour_hide').val() + ':' + $('#start_min_hide').val() + '</td><td>' + $('#end_hour_hide').val() + ':' + $('#end_min_hide').val() + '</td><td><button type="button" class="btn btn-danger" id="'+$counter+'" onclick=RemoveEntry(id)><span class="glyphicon glyphicon-remove"></span></button></td></tr>');
 

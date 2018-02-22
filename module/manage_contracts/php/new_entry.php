@@ -262,6 +262,9 @@
 			$h_open = $values["$i"][1].":".$values["$i"][2];
 			$h_close = $values["$i"][3].":".$values["$i"][4];
 
+			setlocale(LC_TIME, "fr_FR");
+			$day = strftime("%A");
+
 			$sql = "INSERT INTO timeperiod_entry (ID_TIME_PERIOD,ENTRY,H_OPEN,H_CLOSE) VALUES(".$id.",'".$day."','".$h_open."','".$h_close."')";
 			$bdd->exec($sql);
 		}
