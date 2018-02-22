@@ -775,6 +775,8 @@
 	"message.manage_contracts.contract_required_company": "Vous devez créer une fiche entreprise avant de pouvoir créer un contrat",
 	"message.manage_contracts.contract_saved": "Contrat sauvegardé",
 	"message.manage_contracts.contract_suppress": "Supprimer le sélectionné ?",
+	"message.manage_contracts.kpi_saved": "Indicateur sauvegardé",
+	"message.manage_contracts.kpi_suppress": "Supprimer l'indicateur sélectionné ?",
 	"message.manage_contracts.step_group_saved": "Groupe de seuils sauvegardé",
 	"message.manage_contracts.step_group_suppress": "Supprimer le groupe de seuils sélectionné ?",
 	"message.manage_contracts.time_period_saved": "Plage de service sauvegardée",

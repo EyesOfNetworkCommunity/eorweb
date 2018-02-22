@@ -58,9 +58,6 @@ $(document).ready(function() {
 						case 'false':
 							DisplayAlert(dictionnary["message.error.required_fields"],"critical","#global_form");
 							break;
-						case 'already exist':
-							DisplayAlert(dictionnary["message.error.company_exists"],"critical","#global_form");
-						break;
 						default:
 							DisplayAlert("Unknown Error","critical","#global_form");
 					}
@@ -86,9 +83,6 @@ $(document).ready(function() {
 						case 'false':
 							DisplayAlert(dictionnary["message.error.required_fields"],"critical","#global_form");
 							break;
-						case 'already exist':
-							DisplayAlert(dictionnary["message.error.company_exists"],"critical","#global_form");
-						break;
 						default:
 							DisplayAlert("Unknown Error","critical","#global_form");
 					}

@@ -775,6 +775,8 @@
 	"message.manage_contracts.contract_required_company": "You need a company to create a contract",
 	"message.manage_contracts.contract_saved": "Contract saved",
 	"message.manage_contracts.contract_suppress": "Delete this contract ?",
+	"message.manage_contracts.kpi_saved": "Indicator saved",
+	"message.manage_contracts.kpi_suppress": "Delete this indicator ?",
 	"message.manage_contracts.step_group_saved": "Sla saved",
 	"message.manage_contracts.step_group_suppress": "Delete this sla ?",
 	"message.manage_contracts.time_period_saved": "Time period saved",
