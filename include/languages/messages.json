@@ -779,6 +779,8 @@
 	"message.manage_contracts.step_group_suppress": "Delete this sla ?",
 	"message.manage_contracts.time_period_saved": "Time period saved",
 	"message.manage_contracts.time_period_suppress": "Delete this time period ?",
+	"message.manage_contracts.unit_saved":"Unit saved",
+	"message.manage_contracts.unit_suppress":"Delete this unit ?",
 	"message.module.not_installed": "Module",
 	"message.module.not_installed2": "is not installed",
 	"message.monitoring_passwd.error": "Passwords do not match or are empty",

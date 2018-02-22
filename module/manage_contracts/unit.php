@@ -1,46 +1,80 @@
 <?php 
+/*
+#########################################
+#
+# Copyright (C) 2018 EyesOfNetwork Team
+# DEV NAME : Jean-Philippe LEVY
+# VERSION : 2.0
+# APPLICATION : eorweb for eyesofreport project
+#
+# LICENCE :
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+#########################################
+*/
+
 include("../../header.php");
 include("../../side.php");
 ?>
+
+
 <div id="page-wrapper">
 	<div class="row">
 		<div class="col-md-12">
 			<h1 class="page-header"><?php echo getLabel("label.manage_contracts.unit_title"); ?></h1>
 		</div>
 	</div>
-	<form class="form-horizontal col-md-7 marge" id="global_form">
-		<div class="row pad-top">
-			<div class="form-group has-feedback div-name">
-				<label style="font-weight:normal;" for="name" class="col-md-4 control-label"><?php echo getLabel("label.name"); ?> : </label>
-				<div class="col-md-7 input-name">
-					<input type="text" class="form-control" id="name" onkeyup="this.value=this.value.replace(/[^éèàêâç0-9a-zA-Z-_ \/\*]/g,'')">
-				</div>
-			</div>	
-		</div>
 
-		<div class="row">
-			<div class="form-group has-feedback div-short-name">
-				<label style="font-weight:normal;" for="short_name" class="col-md-4 control-label"><?php echo getLabel("label.short_name"); ?> : </label>
-				<div class="col-md-7 input-short-name">
-					<input type="text" class="form-control" id="short_name" onkeyup="this.value=this.value.replace(/[^éèàêâç0-9a-zA-Z-_ \/\*]/g,'')">
+	<div id="global_form"></div>
+	
+	<form>
+		<div class="row form-group">
+			<div class="col-md-6">
+				<div class="has-feedback div-name">
+					<label for="name"><?php echo getLabel("label.name"); ?></label>
+					<div class="input-name">
+						<input type="text" class="form-control" id="name" onkeyup="this.value=this.value.replace(/[^éèàêâç0-9a-zA-Z-_ \/\*]/g,'')">
+					</div>
 				</div>
 			</div>
 		</div>
 
-		<div class="row">
-			<div class="form-group has-feedback div-optional">
-				<label style="font-weight:normal;" for="optional" class="col-md-4 control-label"><?php echo getLabel("label.option"); ?> : </label>
-				<div class="col-md-7 input-optional">
-					<input type="text" class="form-control" id="optional" onkeyup="this.value=this.value.replace(/[^éèàêâç0-9a-zA-Z-_ \/\*]/g,'')">
+		<div class="row form-group">
+			<div class="col-md-6">
+				<div class="has-feedback div-short-name">
+					<label for="short_name"><?php echo getLabel("label.short_name"); ?></label>
+					<div class="input-short-name">
+						<input type="text" class="form-control" id="short_name" onkeyup="this.value=this.value.replace(/[^éèàêâç0-9a-zA-Z-_ \/\*]/g,'')">
+					</div>
 				</div>
 			</div>
 		</div>
 
-		<div class="row">
-			<div class="form-group has-feedback div-comment">
-				<label style="font-weight:normal;" for="comment" class="col-md-4 control-label"><?php echo getLabel("label.contracts_menu.unit_comment"); ?> : </label>
-				<div class="col-md-7 input-comment">
-					<input type="text" class="form-control" id="comment" onkeyup="this.value=this.value.replace(/[^éèàêâç0-9a-zA-Z-_ \/\*]/g,'')">
+		<div class="row form-group">
+			<div class="col-md-6">
+				<div class="has-feedback div-optional">
+					<label for="optional"><?php echo getLabel("label.option"); ?></label>
+					<div class="input-optional">
+						<input type="text" class="form-control" id="optional" onkeyup="this.value=this.value.replace(/[^éèàêâç0-9a-zA-Z-_ \/\*]/g,'')">
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="row form-group">
+			<div class="col-md-6">
+				<div class="has-feedback div-comment">
+					<label for="comment"><?php echo getLabel("label.contracts_menu.unit_comment"); ?></label>
+					<div class="input-comment">
+						<input type="text" class="form-control" id="comment" onkeyup="this.value=this.value.replace(/[^éèàêâç0-9a-zA-Z-_ \/\*]/g,'')">
+					</div>
 				</div>
 			</div>
 		</div>
@@ -50,85 +84,4 @@ include("../../side.php");
 	</form>
 </div>
 
-<script src="../../bower_components/jquery/dist/jquery.min.js"></script>
-<script src="./js/library.js"></script>
-
-<script>
-$(document).ready(function() {
-	if (UrlParam('id_number') != false){
-		$.get(
-			'./php/view_entry.php',
-			{
-				table_name: 'unit',
-				id_number: UrlParam('id_number')
-			},
-			function return_values(values){
-				$('#name').val(values['NAME']);
-				$('#short_name').val(values['SHORT_NAME']);
-				$('#optional').val(values['OPTIONAL']);
-				$('#comment').val(values['COMMENT']);
-			},
-			'json'
-		);
-	}
-
-	$('#submit').click(function(event){
-		event.preventDefault();
-		if (UrlParam('id_number') != false){
-			$.get(
-				'./php/update_entry.php',
-				{
-					table_name: 'unit',
-					name: $('#name').val(),
-					id_number: UrlParam('id_number'),
-					short_name: $("#short_name").val(),
-					optional: $("#optional").val(),
-					comment: $("#comment").val()
-				},
-				function ShowMsg(value){
-					if (value == "true"){
-						DisplayAlertSuccess('Unité sauvegardé', "unit_view.php");
-					}
-					else if (value == "false"){
-						DisplayAlertWarning('Veuillez saisir les champs obligatoire');
-					}
-					else {
-						DisplayAlertWarning('Impossible de se connecter à la base de données');
-					}
-				}
-			);
-		}
-
-		else{
-			$.get(
-				'./php/new_entry.php',
-				{
-					table_name: 'unit',
-					name: $("#name").val(),
-					short_name: $("#short_name").val(),
-					optional: $("#optional").val(),
-					comment: $("#comment").val()
-				},
-				function GotoContextView(value){
-					if (value == "true"){
-						DisplayAlertSuccess('Unité sauvegardé', "unit_view.php");
-					}
-					else if (value == "false"){
-						DisplayAlertWarning('Veuillez saisir les champs obligatoire');
-					}
-					else {
-						DisplayAlertWarning('Impossible de se connecter à la base de données');
-					}
-				}
-			);
-		}
-	});
-
-});
-
-</script>
-
-
-<?php
-include("../../footer.php");
-?>
+<?php include("../../footer.php"); ?>

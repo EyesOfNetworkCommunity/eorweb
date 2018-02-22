@@ -779,6 +779,8 @@
 	"message.manage_contracts.step_group_suppress": "Supprimer le groupe de seuils sélectionné ?",
 	"message.manage_contracts.time_period_saved": "Plage de service sauvegardée",
 	"message.manage_contracts.time_period_suppress": "Supprimer la période de temps sélectionnée ?",
+	"message.manage_contracts.unit_saved":"Unité sauvegardée",
+	"message.manage_contracts.unit_suppress":"Supprimer l'unité sélecionnée ?",
 	"message.module.not_installed": "Le module",
 	"message.module.not_installed2": "n'est pas installé",
 	"message.monitoring_passwd.error": "Les mot de passe sont différents ou sont vides",
