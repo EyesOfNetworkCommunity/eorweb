@@ -19,6 +19,17 @@
 #########################################
 */
 
+// UGLY FRENCH TRADUCTION FOR TIMEPERIOD ENTRIES
+var $eor_days = new Object();
+$eor_days["lundi"]=dictionnary["label.contracts_menu.period_create_day_value_monday"];
+$eor_days["mardi"]=dictionnary["label.contracts_menu.period_create_day_value_tuesday"];
+$eor_days["mercredi"]=dictionnary["label.contracts_menu.period_create_day_value_wednesday"];
+$eor_days["jeudi"]=dictionnary["label.contracts_menu.period_create_day_value_thursday"];
+$eor_days["vendredi"]=dictionnary["label.contracts_menu.period_create_day_value_friday"];
+$eor_days["samedi"]=dictionnary["label.contracts_menu.period_create_day_value_saturday"];
+$eor_days["dimanche"]=dictionnary["label.contracts_menu.period_create_day_value_sunday"];
+// ----------------------------------------------
+
 function message(msg, type, target){
 	
 	switch (type) {

@@ -49,17 +49,19 @@
 <!-- Custom Theme JavaScript -->
 <script src="/bower_components/startbootstrap-sb-admin-2/dist/js/sb-admin-2.js"></script>
 
+<!-- EORWEB traduction -->
+<?php 
+	# Include javascript dictionnary
+	$t->createJSDictionnary();
+?>
+
 <!-- EORWEB variables -->
 <script src="/js/eorweb.js"></script>
 
 <!-- EORWEB menu -->
 <script src="/js/side.js"></script>
 
-<!-- EORWEB traduction -->
-<?php 
-	# Include javascript dictionnary
-	$t->createJSDictionnary();
-	
+<?php
 	# Include module js and php
 	$module_path=basename(dirname($_SERVER["PHP_SELF"]));
 	$module_js=$module_path.".js";

@@ -20,15 +20,18 @@
 */
 
 $(document).ready(function() {
-  $global_array = {};
 	$counter = 0;
-
-	$.get(
-		'./php/display_entry.php',
-		{
+	$global_array = {};
+	
+	$.ajax({
+		type: 'GET',
+		async: false,
+		url: './php/display_entry.php',
+		dataType: 'json',
+		data: {
 			table_name: 'time_period'
 		},
-		function return_values(values){
+		success: function return_values(values){
 			$.each(values, function(v, k){
 				$id = k['ID_TIME_PERIOD'];
 				$name =k['NAME'];
@@ -36,23 +39,25 @@ $(document).ready(function() {
 				$global_array[$counter] = [$id,$name];
 				$counter++;
 			});
-      
+     
 			$count = 0;
 			for(var i = 0; i < $counter; i++){
-				$.get(
-					'./php/get_values_timeperiod_entry.php',
-					{
+				$.ajax({
+					type: 'GET',
+					async: false,
+					url: './php/get_values_timeperiod_entry.php',
+					dataType: 'json',
+					data: {
 						table_name: 'timeperiod_entry',
 						id_number: $global_array[i+''][0]
 					},
-
-					function return_time_period(time_period){
+					success: function return_time_period(time_period){
 						$id = $global_array[$count+''][0];
 						$name = $global_array[$count+''][1];
 						$concatenation_time_period = "";
 						$index = 0;
 						$.each(time_period, function(v, k){
-							$day = k['ENTRY'];
+							$day = $eor_days[k['ENTRY']];
 							$h_open = k['H_OPEN'];
 							$h_close = k['H_CLOSE'];
 							if($index == 4){
@@ -66,17 +71,11 @@ $(document).ready(function() {
             			});
 						$('#body_table').append('<tr><td><span class="glyphicon glyphicon-share-alt text-warning"></span></td><td>' + $name + '</td><td>'+$concatenation_time_period+'</td><td><button type="button" class="btn btn-primary" id="'+$id+'" onclick=EditSelection(id)><span class="glyphicon glyphicon-pencil"></span></button>  <button type="button" class="btn btn-danger" id="'+$id+'" onclick=RemoveSelection(id)><span class="glyphicon glyphicon-trash"></span></button></td></tr>');
 						$count++;
-					},
-					'json'
-				);
+					}
+				});
 			}
-			$timer_update_table = ($counter /30) *1000
-			if ($timer_update_table < 200){
-				$timer_update_table = 200;
-			}
-		},
-		'json'
-	);
+		}
+	});
 });
 
 function EditSelection(id){

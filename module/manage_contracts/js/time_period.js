@@ -22,7 +22,7 @@
 $(document).ready(function() {
 	$counter = 0;
 	$global_array = {};
-
+	
 	if (UrlParam('id_number') != false){
 		$('#input_list').css('display', 'block');
 		$('#container_time_period').css('display', 'inline');
@@ -47,7 +47,7 @@ $(document).ready(function() {
 			function return_values(values){
 				$.each(values, function(v, k){
 					$counter++;
-					$get_entry = k['ENTRY'];
+					$get_entry = $eor_days[k['ENTRY']],
 					$get_start_hour_full = k['H_OPEN'];
 					$get_end_hour_full = k['H_CLOSE'];
 					$get_start_hour = $get_start_hour_full.split(":")[0];
@@ -57,7 +57,7 @@ $(document).ready(function() {
 
 					$('#body_table').append('<tr id="'+$counter+'"><td>' + $get_entry + '</td><td>' + $get_start_hour + ':' +$get_start_min + '</td><td>' + $get_end_hour + ':' + $get_end_min + '</td><td><button type="button" class="btn btn-danger" id="'+$counter+'" onclick=RemoveEntry(id)><span class="glyphicon glyphicon-remove"></span></button></td></tr>');
 
-					var arr = [$get_entry,$get_start_hour,$get_start_min,$get_end_hour,$get_end_min];
+					var arr = [k['ENTRY'],$get_start_hour,$get_start_min,$get_end_hour,$get_end_min];
 
 					$global_array[$counter] = arr;
 				});
@@ -174,7 +174,7 @@ $(document).ready(function() {
 			}
 			$('#body_table').append('<tr id="'+$counter+'"><td>' + $('#name_entry_hide').val() + '</td><td>' + $('#start_hour_hide').val() + ':' + $('#start_min_hide').val() + '</td><td>' + $('#end_hour_hide').val() + ':' + $('#end_min_hide').val() + '</td><td><button type="button" class="btn btn-danger" id="'+$counter+'" onclick=RemoveEntry(id)><span class="glyphicon glyphicon-remove"></span></button></td></tr>');
 
-			var arr = [$('#name_entry_hide').val(), $('#start_hour_hide').val(), $('#start_min_hide').val(), $('#end_hour_hide').val(), $('#end_min_hide').val()];
+			var arr = [Object.keys($eor_days).find(key => $eor_days[key] === $('#name_entry_hide').val()), $('#start_hour_hide').val(), $('#start_min_hide').val(), $('#end_hour_hide').val(), $('#end_min_hide').val()];
 
 			$global_array[$counter] = arr;
 			$('#name_entry').html(dictionnary["label.contracts_menu.period_create_day"]+' <span class="caret"></span>');

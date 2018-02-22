@@ -292,7 +292,7 @@ if ($table_name == 'time_period'){
 		$day = $values["$i"][0];
 		$h_open = $values["$i"][1].":".$values["$i"][2];
 		$h_close = $values["$i"][3].":".$values["$i"][4];
-
+		
 		$sql = "INSERT INTO timeperiod_entry (ID_TIME_PERIOD,ENTRY,H_OPEN,H_CLOSE) VALUES(".$id.",'".$day."','".$h_open."','".$h_close."')";
 		$bdd->exec($sql);
 	}
