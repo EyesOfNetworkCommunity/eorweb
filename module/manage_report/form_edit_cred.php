@@ -35,7 +35,14 @@ include("../../side.php");
 	<div id="message">
 	<?php
 	# --- Get Report ID
-	if (!isset($_GET['report_id'])) {
+	if(isset($_GET['report_id'])) {
+		$report_id = $_GET['report_id'];
+	}elseif(isset($_POST["report_id"])) {
+		$report_id = $_POST['report_id'];
+	}
+	
+	# --- Get Report Name if isset report_id
+	if(!isset($report_id)) {
 		message(0,"No Report ID","critical");
 	} else {
 		
@@ -43,7 +50,6 @@ include("../../side.php");
 		$grp_avail = array();
 		$grp_format = array();
 		
-		$report_id = $_GET['report_id'];
 		$sql = "SELECT * FROM reports WHERE report_id=?;";
 		$result = sqlrequest($database_eorweb,$sql,false,array("i",(int)$report_id));
 		$row = $result->fetch_assoc(); 
@@ -56,7 +62,6 @@ include("../../side.php");
 		$report_name = $_POST['change_name'];
 		$sql2 = "UPDATE reports SET report_name = ? WHERE report_id = ?";
 		$result2 = sqlrequest($database_eorweb,$sql2, false,array("si",(string)$report_name,(int)$report_id));
-		echo "<script>window.location.replace(\"./form_edit_cred.php?report_id=".$report_id."\")</script>";
 	}
 	
 	# --- Upload new report
@@ -79,9 +84,9 @@ include("../../side.php");
 			}
 		} else {
 			$file_tmp = $_FILES['filename']['tmp_name'];
-			$file_dst = "/srv/eyesofreport/report/" . basename($_FILES['filename']['name']);
+			$file_dst = $path_rptdesign."/".basename($_FILES['filename']['name']);
 			if (move_uploaded_file($file_tmp, $file_dst)) {
-				message(5,"Upload succeed of ". $file_dst .".: Please consider to perform declaration and setup credential","critical");
+				message(5,"Upload succeed of ". $file_dst .".: Please consider to perform declaration and setup credential","ok");
 			} else {
 				message(5,"Upload failed. Please contact your administrator","critical");
 			}
@@ -203,23 +208,12 @@ include("../../side.php");
 					</div>
 				</div>
 			</div>
-			<button class="btn btn-default" type="button" name="back" value="back" onclick="location.href='../manage_report/index.php'"><?php echo getLabel("action.cancel") ?></button>
+			<a class="btn btn-default" href="index.php" role="button"><?php echo getLabel("action.cancel") ?></a>
 		</div>
 	</div>
 </div>
 
-<script src="../../bower_components/jquery/dist/jquery.min.js"></script>
-
-<script>
-    $(function () {
-        $(".source, .target").sortable({
-            connectWith: ".connected"
-        });
-        $(".source, .target").bind('sortstop', function(e, ui) {
-            $('.btn-primary').removeClass('disabled')
-        });
-    });
-</script>
+<script src="/bower_components/jquery/dist/jquery.min.js"></script>
 
 <?php 
 /********* Global Avail *************/

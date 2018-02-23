@@ -124,10 +124,9 @@ $db->close();
   </body>
 <script type="text/javascript">  
 function InitLoad() {
-  <?php
-	//echo "alert(\"Redirect\");";
+<?php
 	echo "window.open ('./form_edit_cred.php?report_id=".$report_id."','_self',false);";
-  ?>
- }
+?>
+}
 </script>
 </html>
