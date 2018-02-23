@@ -57,28 +57,6 @@ include("../../side.php");
 			</div>
 		</div>
 
-		<div class="row form-group">
-			<div class="col-md-6">
-				<div class="has-feedback div-optional">
-					<label for="optional"><?php echo getLabel("label.option"); ?></label>
-					<div class="input-optional">
-						<input type="text" class="form-control" id="optional" onkeyup="this.value=this.value.replace(/[^éèàêâç0-9a-zA-Z-_ \/\*]/g,'')">
-					</div>
-				</div>
-			</div>
-		</div>
-
-		<div class="row form-group">
-			<div class="col-md-6">
-				<div class="has-feedback div-comment">
-					<label for="comment"><?php echo getLabel("label.contracts_menu.unit_comment"); ?></label>
-					<div class="input-comment">
-						<input type="text" class="form-control" id="comment" onkeyup="this.value=this.value.replace(/[^éèàêâç0-9a-zA-Z-_ \/\*]/g,'')">
-					</div>
-				</div>
-			</div>
-		</div>
-
 		<button class="form-group btn btn-primary" type="submit" id="submit"><?php echo getLabel("action.submit"); ?></button>
 		<button class="btn btn-default" type="button" name="back" value="back" onclick="location.href='unit_view.php'"><?php echo getLabel("action.cancel") ?></button>
 	</form>

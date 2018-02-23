@@ -47,6 +47,18 @@ $(document).ready(function() {
 				);
 
 				$.get(
+				  './php/view_entry.php',
+				  {
+					table_name: 'contract_context',
+					id_number: values['ID_CONTRACT_CONTEXT']
+				  },
+				  function return_name(name){
+					$('#desc').val(name['ALIAS']);
+				  },
+				  'json'
+				);
+
+				$.get(
 				  './php/select_name_by_id.php',
 				  {
 					table_name: 'time_period',

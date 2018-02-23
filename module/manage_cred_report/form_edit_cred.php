@@ -58,15 +58,57 @@ if (isset($_POST['change_name']) && $_POST['change_name'] != '') {
     echo "<script>window.location.replace(\"http://eyesofreport/module/manage_cred_report/form_edit_cred.php?report_id=".$report_id."\")</script>";
 }
 
+if (isset(var)) {
+    # code...
+}
+
 ?>
 
 <div id="page-wrapper">
     <div class="row">
         <div class="col-md-12">
-            <h1 class="page-header">Report credentials settings: <?php echo $report_name ?></h1>
+            <h1 class="page-header">Report credentials settings</h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+             <h2 class="page-header"><?php echo $report_name ?></h2>
         </div>
     </div>
 
+    <div id="message">
+        <?php
+        # --- Check if the form is post
+        if( isset($_POST['upload']) ){
+            # --- Check if there is an error in the upload
+            if ($_FILES['filename']['error']) {
+                switch ($_FILES['filename']['error']){
+                       case 1: // UPLOAD_ERR_INI_SIZE
+                           message(5,"The uploaded file exceeds the upload_max_filesize directive in php.ini","critical");
+                           break;
+                       case 2: // UPLOAD_ERR_FORM_SIZE
+                           message(5,"The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form.","critical");
+                           break;
+                       case 3: // UPLOAD_ERR_PARTIAL
+                           message(5,"The uploaded file was only partially uploaded.","critical");
+                           break;
+                       case 4: // UPLOAD_ERR_NO_FILE
+                           message(5,"No file was uploaded","critical");
+                           break;
+                }
+            } else {
+                $file_tmp = $_FILES['filename']['tmp_name'];
+                $file_dst = "/srv/eyesofreport/report/" . basename($_FILES['filename']['name']);
+                if (move_uploaded_file($file_tmp, $file_dst)) {
+                    message(5,"Upload succeed of ". $file_dst .".: Please consider to perform declaration and setup credential","critical");
+                } else {
+                    message(5,"Upload failed. Please contact your administrator","critical");
+                }
+            }
+        } ?>
+    </div>
+
+        
     <div class="row">
         <div class="col-md-6">
             <div class="panel panel-default">
@@ -91,12 +133,13 @@ if (isset($_POST['change_name']) && $_POST['change_name'] != '') {
                     <?php echo getLabel("label.mgt_upload_report.title"); ?>
                 </div>
                 <div class="panel-body">
-                    <form method="post">
+                    <form method="post" ENCTYPE="multipart/form-data" action="./form_edit_cred.php">
                         <div class="input-group">
+                             <input type="hidden" name="report_id" value="<?php echo $report_id; ?>">
                             <input type="hidden" name="MAX_FILE_SIZE" value="2000000">
                             <input class="form-control" type="file" name="filename">
                             <span class="input-group-btn">
-                                <button class="btn btn-primary" type="submit" name="upload" onclick="upload()"><?php echo getLabel("label.mgt_upload_report.btn_upload"); ?></button>
+                                <button class="btn btn-primary" type="submit" name="upload" value="Upload"><?php echo getLabel("label.mgt_upload_report.btn_upload"); ?></button>
                             </span>
                         </div>
                     </form>
@@ -184,6 +227,7 @@ if (isset($_POST['change_name']) && $_POST['change_name'] != '') {
             </div>
         </div>
     </div>
+    <button class="btn btn-default" type="button" name="back" value="back" onclick="location.href='../manage_report/index.php'"><?php echo getLabel("action.cancel") ?></button>
 </div>
 
 <script src="../../bower_components/jquery/dist/jquery.min.js"></script>
@@ -214,10 +258,6 @@ if (isset($_POST['change_name']) && $_POST['change_name'] != '') {
         })
         .fail(function(){ alert("<?php echo getLabel("label.manage_report.error_delete"); ?>"); });
     };
-
-    function upload() {
-        /************************************************* à coder ***************************************/
-    }
 </script>
 
 <?php 
@@ -244,37 +284,6 @@ while (list ($key, $val) = each ($grp_format) ) {
 reset($grp_format);
 
   $db->close();
-?>
-
-<?php
-# --- Check if the form is post
-if( isset($_POST['upload']) ){
-    # --- Check if there is an error in the upload
-    if ($_FILES['filename']['error']) {
-        switch ($_FILES['filename']['error']){
-               case 1: // UPLOAD_ERR_INI_SIZE
-                   message(5,"The uploaded file exceeds the upload_max_filesize directive in php.ini","critical");
-                   break;
-               case 2: // UPLOAD_ERR_FORM_SIZE
-                   message(5,"The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form.","critical");
-                   break;
-               case 3: // UPLOAD_ERR_PARTIAL
-                   message(5,"The uploaded file was only partially uploaded.","critical");
-                   break;
-               case 4: // UPLOAD_ERR_NO_FILE
-                   message(5,"No file was uploaded","critical");
-                   break;
-        }
-    } else {
-        $file_tmp = $_FILES['filename']['tmp_name'];
-        $file_dst = "/srv/eyesofreport/report/" . basename($_FILES['filename']['name']);
-        if (move_uploaded_file($file_tmp, $file_dst)) {
-            echo "Upload succeed of ".$file_dst.".&nbsp; Please consider to perform declaration and setup credential.&nbsp;";
-        } else {
-            echo "Upload failed. Please contact your administrator.\n";
-        }
-    }
-}
 
 include("../../footer.php"); 
 ?>
