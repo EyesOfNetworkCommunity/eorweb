@@ -84,6 +84,7 @@ $max_bu_file = 5;
 
 // # Define All Path
 $path_eon="/srv/eyesofnetwork";
+$path_eor="/srv/eyesofreport";
 $path_eorweb="$path_eon/eorweb";
 $path_frame="/module/module_frame/index.php?url=";
 $dir_imgcache="cache";
@@ -102,6 +103,7 @@ $path_menus_custom="$path_languages/custom.menus";
 $path_menu_limited="$path_languages/menus-limited";
 $path_menu_limited_custom="$path_languages/custom.menus-limited";
 $path_reports="$path_eorweb/include/reports";
+$path_rptdesign="$path_eor/report";
 
 // # NetCAT
 $default_minport=1;

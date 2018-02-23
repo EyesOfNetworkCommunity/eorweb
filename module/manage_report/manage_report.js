@@ -19,7 +19,6 @@
 #########################################
 */
 
-
 function DisplayPopupRemove(text, id, title,Yes,No){
 	$('body').append('<div id="popup_confirmation" title="' + title + '"></div>');
 	$("#popup_confirmation").html(text);
@@ -67,43 +66,51 @@ $(function () {
     $('.btn-primary').removeClass('disabled')});
 });
 
+$(document).ready(function(){
 
-$('#AddButton').on('click', function (StoreMessage) {
-window.open ('./form_add_report.php','_self',false);
-});
-
-$('#AddButton_form').on('click', function (StoreMessage) {
-	rpt_name = document.getElementById('rpt_name').value;
-	rpt_filename = document.getElementById('rpt_filename').value;
-
-	if (rpt_name == '') {
-		DisplayAlert(dictionnary["label.form_report_name.not_set"],"critical","#message");
-		return;
-	}
-	if (rpt_filename == '') {
-		DisplayAlert(dictionnary["label.form_report_file.not_set"],"critical","#message");
-		return;
-	}
-
-	$.ajax({
-		url: "add_report.php",
-		type : 'POST',
-		dataType:'json',
-		data: {
-			"rpt_name" : rpt_name,
-			"rpt_filename" : rpt_filename
-		},
-	})
-	.done (function(data) { 
-		if(data.status == 'success'){
-			window.open ('./index.php','_self',false);
-		} else {
-			if(data.status == 'error'){
-				alert("Error on query!");
-			}
-		}
-	})
-	.fail   (function()     { 
-		alert("Impossible to reach or execution failed of add_report.php");
+	$('#AddButton').on('click', function (StoreMessage) {
+		window.open ('./form_add_report.php','_self',false);
 	});
+
+	$('#AddButton_form').on('click', function (StoreMessage) {
+		rpt_name = document.getElementById('rpt_name').value;
+		rpt_filename = document.getElementById('rpt_filename').value;
+
+		if (rpt_name == '') {
+			DisplayAlert(dictionnary["label.form_report_name.not_set"],"critical","#message");
+			return;
+		}
+		if (rpt_filename == '') {
+			DisplayAlert(dictionnary["label.form_report_file.not_set"],"critical","#message");
+			return;
+		}
+
+		$.ajax({
+			url: "add_report.php",
+			type : 'POST',
+			dataType:'json',
+			data: {
+				"rpt_name" : rpt_name,
+				"rpt_filename" : rpt_filename
+			},
+		})
+		.done (function(data) { 
+			if(data.status == 'success'){
+				window.open ('./index.php','_self',false);
+			} else {
+				if(data.status == 'error'){
+					alert("Error on query!");
+				}
+			}
+		})
+		.fail   (function()     { 
+			alert("Impossible to reach or execution failed of add_report.php");
+		});
+	});
+
+	// Remove report
+	$(document).on('click', "#table-manage-report button[name=delete]", function(){
+		RemoveSelection($(this).attr("id"));
+	});
+	
 });
