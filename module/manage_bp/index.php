@@ -40,13 +40,12 @@ include("../../side.php");
 
 	$t_bp_racine = array();
 
-function display_bp($bp,$bp_racine) {
-	global $database_vanillabp;
+function display_bp($bp,$bp_racine,$source) {
 	global $database_host;
 	global $database_username;
 	global $database_password;
 
-	$db = new mysqli($database_host, $database_username, $database_password, $database_vanillabp);
+	$db = new mysqli($database_host, $database_username, $database_password, $source);
 
 	if($db->connect_errno > 0){
 		die('Unable to connect to database [' . $db->connect_error . ']');
@@ -153,7 +152,7 @@ function display_son($bp_racine,$source) {
 			<li class="son">
 				<ul class="nav nav-list tree">
 				<?php
-					display_bp($t_bp_son[$i],$bp_racine);
+					display_bp($t_bp_son[$i],$bp_racine,$source);
 					display_son($t_bp_son[$i],$source);
 				?>
 				</ul>
@@ -273,7 +272,7 @@ function display_global_son($bp_racine) {
 			<div class="well well-sm">
 				<ul class="nav nav-list tree">
 				<?php
-				display_bp($t_bp_racine[$i],$t_bp_racine[$i]);
+				display_bp($t_bp_racine[$i],$t_bp_racine[$i],$database_vanillabp);
 				display_global_son($t_bp_racine[$i]);
 				?>
 				</ul>
