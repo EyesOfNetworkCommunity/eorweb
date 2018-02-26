@@ -40,153 +40,178 @@ include("../../side.php");
 
 	$t_bp_racine = array();
 
-	function display_bp($bp,$bp_racine) {
-		
-		global $database_vanillabp;
-		global $database_host;
-		global $database_username;
-		global $database_password;
-		$db = new mysqli($database_host, $database_username, $database_password, $database_vanillabp);
+function display_bp($bp,$bp_racine) {
+	global $database_vanillabp;
+	global $database_host;
+	global $database_username;
+	global $database_password;
 
-		if($db->connect_errno > 0){
-			die('Unable to connect to database [' . $db->connect_error . ']');
-		}
+	$db = new mysqli($database_host, $database_username, $database_password, $database_vanillabp);
 
-		$rule_type = "";
-		$desc_bp = "";
-		$min_value = "";
-		$priority = "";
+	if($db->connect_errno > 0){
+		die('Unable to connect to database [' . $db->connect_error . ']');
+	}
 
-		$sql_type = "
-		SELECT type, description, min_value , priority
-		FROM bp 
-		WHERE name='".$bp."'
-		";
+	$rule_type = "";
+	$desc_bp = "";
+	$min_value = "";
+	$priority = "";
 
-		if(!$result_type = $db->query($sql_type)){
-			die('There was an error running the query [' . $db->error . ']');
-		}
+	$sql_type = "SELECT type, description, min_value , priority FROM bp WHERE name='".$bp."'";
 
-		while($row = $result_type->fetch_assoc()){   
-			$rule_type = $row['type'];
-			$desc_bp = $row['description'];
-			$min_value = $row['min_value'];
-			$priority = $row['priority'];
-		} 
+	if(!$result_type = $db->query($sql_type)){
+		die('There was an error running the query [' . $db->error . ']');
+	}
 
-		if($min_value > 0) {
-			$min_value = " ".$min_value;
-		}
+	while($row = $result_type->fetch_assoc()){   
+		$rule_type = $row['type'];
+		$desc_bp = $row['description'];
+		$min_value = $row['min_value'];
+		$priority = $row['priority'];
+	} 
 
-		$result_type->free();
-		mysqli_close($db);
+	if($min_value > 0) {
+		$min_value = " ".$min_value;
+	}
 
-		if(!empty($desc_bp)) {
-			$display_bp=$desc_bp;
-		} else {
-			$display_bp=$bp;
-		}
-		
-?>	
-		<li>
-			<div id="<?php echo $bp; ?>" class="tree-toggle">
-				<div class="tree-line">
-					<i class="glyphicon-link glyphicon"></i>
-					<b class="bp_presentation"><?php echo $display_bp; ?></b>
-					<b class="condition_presentation"><?php echo $priority; ?></b>
-					<b class="condition_presentation"><?php echo $rule_type.".".$min_value; ?></b>
-					<button type="button" class="btn_presentation pull-right btn btn-xs btn-danger" onclick="ShowModalDeleteBP('<?php echo $bp; ?>');"><i class="glyphicon glyphicon-trash"></i></button>
-					<button type="button" class="btn_presentation pull-right btn btn-xs btn-info" onclick="editApplication('<?php echo $bp; ?>');"><i class="glyphicon glyphicon-pencil"></i></button>
-					<button type="button" class="btn_presentation pull-right btn btn-xs btn-success" onclick="location.href='add_services.php?bp_name=<?php echo $bp; ?>&display=<?php echo $priority; ?>'"><i class="glyphicon glyphicon-plus"></i></button>
-				</div>
+	$result_type->free();
+	mysqli_close($db);
+
+	if(!empty($desc_bp)) {
+		$display_bp=$desc_bp;
+	} else {
+		$display_bp=$bp;
+	} ?>	
+
+	<li>
+		<div id="<?php echo $bp; ?>" class="tree-toggle">
+			<div class="tree-line">
+				<i class="glyphicon-link glyphicon"></i>
+				<b class="bp_presentation"><?php echo $display_bp; ?></b>
+				<b class="condition_presentation"><?php echo $priority; ?></b>
+				<b class="condition_presentation"><?php echo $rule_type.".".$min_value; ?></b>
+				<button type="button" class="btn_presentation pull-right btn btn-xs btn-danger" onclick="ShowModalDeleteBP('<?php echo $bp; ?>');"><i class="glyphicon glyphicon-trash"></i></button>
+				<button type="button" class="btn_presentation pull-right btn btn-xs btn-info" onclick="editApplication('<?php echo $bp; ?>');"><i class="glyphicon glyphicon-pencil"></i></button>
+				<button type="button" class="btn_presentation pull-right btn btn-xs btn-success" onclick="location.href='add_services.php?bp_name=<?php echo $bp; ?>&display=<?php echo $priority; ?>'"><i class="glyphicon glyphicon-plus"></i></button>
 			</div>
-		</li>				
-<?php
+		</div>
+	</li>				
+<?php }
+
+function display_service($host_service,$bp_racine) {
+	$service_name = explode(";", $host_service);
+	$service_name = strtolower($service_name[1]);
+
+	?>
+	<li class="end">
+		<div id="<?php echo $bp_racine."::".$host_service; ?>" class="tree-toggle">
+			<i class="nav-header glyphicon glyphicon-eye-open"></i>
+			<?php echo $host_service."\n"; ?>
+		</div>
+	</li>	
+<?php }
+
+function display_son($bp_racine,$source) {
+	global $database_host;
+	global $database_username;
+	global $database_password;
+
+	$db = new mysqli($database_host, $database_username, $database_password, $source);
+	if($db->connect_errno > 0){
+		die('Unable to connect to database [' . $db->connect_error . ']');
 	}
 
-	function display_service($host_service,$bp_racine)
-	{
-		$service_name = explode(";", $host_service);
-		$service_name = strtolower($service_name[1]);
+	$t_bp_son = array();
+	$t_service_son = array();
 
-?>
-					<li class="end">
-						<div id="<?php echo $bp_racine."::".$host_service; ?>" class="tree-toggle">
-							<i class="nav-header glyphicon glyphicon-eye-open"></i>
-							<?php echo $host_service."\n"; ?>
-						</div>
-					</li>	
-<?php
+	$sql_bp = "SELECT bp_link FROM bp_links WHERE bp_name = '".$bp_racine."'";
+	$sql_service = "SELECT host,service FROM bp_services WHERE bp_name = '".$bp_racine."'  ORDER BY host,service";
+
+	if(!$result_bp = $db->query($sql_bp)){
+		die('There was an error running the query [' . $db->error . ']');
 	}
 
-	function display_son($bp_racine)
-	{
+	while($row = $result_bp->fetch_assoc()){   
+		array_push($t_bp_son,$row['bp_link']);
+	} 
 
-		global $database_vanillabp;
-		global $database_host;
-		global $database_username;
-		global $database_password;
-		$db = new mysqli($database_host, $database_username, $database_password, $database_vanillabp);
+	$result_bp->free();
 
-		if($db->connect_errno > 0){
-			die('Unable to connect to database [' . $db->connect_error . ']');
-		}
+	if(!$result_service = $db->query($sql_service)){
+		die('There was an error running the query [' . $db->error . ']');
+	}
 
-		$t_bp_son = array();
-		$t_service_son = array();
+	while($row = $result_service->fetch_assoc()){   
+		array_push($t_service_son,$row['host'].";".$row['service']);
+	}
+	
+	$result_service->free();
+	mysqli_close($db);
 
-		$sql_bp = "
-		SELECT bp_link 
-		FROM bp_links 
-		WHERE bp_name = '".$bp_racine."'
-		";
+	if(sizeof($t_bp_son) > 0 ) {
+		for ($i = 0; $i < sizeof($t_bp_son); $i++) { ?>
+			<li class="son">
+				<ul class="nav nav-list tree">
+				<?php
+					display_bp($t_bp_son[$i],$bp_racine);
+					display_son($t_bp_son[$i],$source);
+				?>
+				</ul>
+			</li>
+		<?php }
+	}
 
-		$sql_service = "
-		SELECT host,service 
-		FROM bp_services 
-		WHERE bp_name = '".$bp_racine."'  ORDER BY host,service
-		";
-
-		if(!$result_bp = $db->query($sql_bp)){
-			die('There was an error running the query [' . $db->error . ']');
-		}
-
-		while($row = $result_bp->fetch_assoc()){   
-			array_push($t_bp_son,$row['bp_link']);
-		} 
-
-		$result_bp->free();
-
-		if(!$result_service = $db->query($sql_service)){
-			die('There was an error running the query [' . $db->error . ']');
-		}
-
-		while($row = $result_service->fetch_assoc()){   
-			array_push($t_service_son,$row['host'].";".$row['service']);
-		}
-		$result_service->free();
-		mysqli_close($db);
-
-		if(sizeof($t_bp_son) > 0 ) {
-			for ($i = 0; $i < sizeof($t_bp_son); $i++) {
-?>
-					<li class="son">
-						<ul class="nav nav-list tree">
-<?php
-							display_bp($t_bp_son[$i],$bp_racine);
-							display_son($t_bp_son[$i]);
-?>
-						</ul>
-					</li>
-<?php
-			}
-		}
-		if(sizeof($t_service_son) > 0 ) {
-			for ($i = 0; $i < sizeof($t_service_son); $i++) {
-				display_service($t_service_son[$i],$bp_racine);
-			}
+	if(sizeof($t_service_son) > 0 ) {
+		for ($i = 0; $i < sizeof($t_service_son); $i++) {
+			display_service($t_service_son[$i],$bp_racine);
 		}
 	}
+}
+
+function display_global_son($bp_racine) {
+    global $database_nagios;
+    global $database_vanillabp;
+    global $database_host;
+    global $database_username;
+    global $database_password;
+    
+    $db = new mysqli($database_host, $database_username, $database_password, $database_vanillabp);
+    if($db->connect_errno > 0){
+        die('Unable to connect to database 3 [' . $db->connect_error . ']');
+    }
+
+    $t_bp_son = array();
+    $bp_source = array();
+
+    $sql_bp = "SELECT bp_link, bp_source FROM bp_links WHERE bp_name = '".$bp_racine."'";
+
+    if(!$result_bp = $db->query($sql_bp)){
+        die('There was an error running the query 4 [' . $db->error . ']');
+    }
+
+    while($row = $result_bp->fetch_assoc()){   
+        array_push($t_bp_son,$row['bp_link']);
+        array_push($bp_source,$row['bp_source']);
+	} 
+
+    $result_bp->free();
+
+    if(sizeof($t_bp_son) > 0 ) {
+        for ($i = 0; $i < sizeof($t_bp_son); $i++) { ?>
+        	<li class="son">
+				<ul class="nav nav-list tree">
+				<?php
+				display_bp($t_bp_son[$i],$bp_racine,$bp_source[$i]."_nagiosbp");
+				if($bp_source[$i] == "global"){
+					display_global_son($t_bp_son[$i]);
+				} else {
+					display_son($t_bp_son[$i],$bp_source[$i]."_nagiosbp");
+				} ?>
+				</ul>
+			</li>
+        <?php }
+    }
+}
 
 	$HTMLTREE ="";
 	$db = new mysqli($database_host, $database_username, $database_password, $database_vanillabp);
@@ -195,13 +220,7 @@ include("../../side.php");
 		die('Unable to connect to database [' . $db->connect_error . ']');
 	}
 
-	$sql = "
-	  SELECT name 
-	  FROM bp  
-	  WHERE name 
-	  NOT IN (SELECT bp_link FROM bp_links) 
-	  ORDER BY priority, name
-	";
+	$sql = "SELECT name FROM bp WHERE name NOT IN (SELECT bp_link FROM bp_links) ORDER BY priority, name";
 
 	if(!$result = $db->query($sql)){
 		die('There was an error running the query [' . $db->error . ']');
@@ -216,9 +235,8 @@ include("../../side.php");
 	?>
     
 	<form>
-	
-		<div class="form-inline">
 		
+		<div class="form-inline">
 			<div class="form-group">
 				<div class="btn-group">
 					<button class="btn btn-info" type="button" onclick="ShowAll();"><?php echo getLabel("action.show_all") ?></button>
@@ -235,23 +253,19 @@ include("../../side.php");
 					</span>
 				</div><!-- /input-group -->
 			</div>
-
 		</div>
 		
 		<div class="form-inline">
-			
 			<div class="form-group">		                   
 				<button type="button" class="btn btn-success" onclick="AddingApplication();">
 					<?php echo getLabel("action.add_new_app"); ?>
 				</button>
 			</div>
-			
 			<div class="form-group">
 				<button type="button" class="btn btn-primary" onclick="ShowModalApplyConfiguration();">
 					<?php echo getLabel("action.apply_conf"); ?>
 				</button>
 			</div> 
-		
 		</div>
 
 		<div id="body" class="pad-top" style="display: none;">
@@ -260,7 +274,7 @@ include("../../side.php");
 				<ul class="nav nav-list tree">
 				<?php
 				display_bp($t_bp_racine[$i],$t_bp_racine[$i]);
-				display_son($t_bp_racine[$i]);
+				display_global_son($t_bp_racine[$i]);
 				?>
 				</ul>
 			</div>
