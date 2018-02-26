@@ -16,9 +16,10 @@ $url = isset($_GET['url']) ? $_GET['url'] : false;
 $command = isset($_GET['command']) ? $_GET['command'] : false;
 $type = isset($_GET['type']) ? $_GET['type'] : false;
 $min_value = isset($_GET['min_value']) ? $_GET['min_value'] : false;
+$source_name = isset($_GET['source_name']) ? $_GET['source_name'] : false;
 
 try {
-	$bdd = new PDO('mysql:host=localhost;dbname='.$database_nagios, $database_username, $database_password);
+	$bdd = new PDO('mysql:host=localhost;dbname='.$source_name, $database_username, $database_password);
 } catch(Exception $e) {
 	echo "Connection failed: " . $e->getMessage();
 	exit('Impossible de se connecter à la base de données.');
@@ -65,7 +66,7 @@ elseif ($action == 'check_app_exists'){
 }
 
 function verify_services($bp,$host,$bdd){
-	$sql = "select COUNT(*),service from bp_services where bp_name = '" . $bp . "' and host = '". $host . "'";
+	$sql = "SELECT COUNT(*),service FROM bp_services WHERE bp_name = '" . $bp . "' AND host = '". $host . "'";
 	$req = $bdd->query($sql);
 	$informations = $req->fetch();
 	$number_services = intval($informations['COUNT(*)']);
@@ -75,19 +76,19 @@ function verify_services($bp,$host,$bdd){
 }
 
 function delete_bp($bp,$bdd){
-	$sql = "delete from bp where name = ?";
+	$sql = "DELETE FROM bp WHERE name = ?";
 	$req = $bdd->prepare($sql);
 	$req->execute(array($bp));
 
-	$sql = "delete from bp_services where bp_name = ?";
+	$sql = "DELETE FROM bp_services WHERE bp_name = ?";
 	$req = $bdd->prepare($sql);
 	$req->execute(array($bp));
 
-	$sql = "delete from bp_links where bp_name = ?";
+	$sql = "DELETE FROM bp_links WHERE bp_name = ?";
 	$req = $bdd->prepare($sql);
 	$req->execute(array($bp));
 	
-	$sql = "delete from bp_links where bp_link = ?";
+	$sql = "DELETE FROM bp_links WHERE bp_link = ?";
 	$req = $bdd->prepare($sql);
 	$req->execute(array($bp));
 }
@@ -127,7 +128,7 @@ function list_services($host_name){
 
 
 function list_process($bp,$display,$bdd){
-	$sql = "select name from bp where is_define = 1 and name!=? and priority = ?";
+	$sql = "SELECT name FROM bp WHERE is_define = 1 AND name!=? AND priority = ?";
 	$req = $bdd->prepare($sql);
 	$req->execute(array($bp,$display));
 	$process = $req->fetchall();
@@ -147,17 +148,17 @@ function add_services($bp,$services,$bdd){
 		}
 	}
 
-	$sql = "delete from bp_services where bp_name = ?";
+	$sql = "DELETE FROM bp_services WHERE bp_name = ?";
 	$req = $bdd->prepare($sql);
 	$req->execute(array($bp));
 
 	if(count($services) > 0){
-		$sql = "update bp set is_define = 1 where name = ?";
+		$sql = "UPDATE bp set is_define = 1 WHERE name = ?";
 		$req = $bdd->prepare($sql);
 		$req->execute(array($bp));
 	}
 	else{
-		$sql = "update bp set is_define = 0 where name = ?";
+		$sql = "UPDATE bp set is_define = 0 WHERE name = ?";
 		$req = $bdd->prepare($sql);
 		$req->execute(array($bp));
     }
@@ -168,7 +169,7 @@ function add_services($bp,$services,$bdd){
 			$host = $value[0];
 			$service = $value[1];
 			echo $service;
-			$sql = "insert into bp_services (bp_name,host,service) values(?,?,?)";
+			$sql = "INSERT INTO bp_services (bp_name,host,service) VALUES(?,?,?)";
 			$req = $bdd->prepare($sql);
 			$req->execute(array(trim($bp),$host,$service));
 		}
@@ -176,15 +177,15 @@ function add_services($bp,$services,$bdd){
 }
 
 function add_process($bp,$process,$bdd){
-	$sql = "delete from bp_links where bp_name = ?";
+	$sql = "DELETE FROM bp_links WHERE bp_name = ?";
 	$req = $bdd->prepare($sql);
 	$req->execute(array($bp));
-	$sql = "update bp set is_define = 0 where name = ?";
+	$sql = "UPDATE bp set is_define = 0 WHERE name = ?";
 	$req = $bdd->prepare($sql);
 	$req->execute(array($bp));
 
-    if(count($process) > 0 and is_array($process)){
-		$sql = "update bp set is_define = 1 where name = ?";
+    if(count($process) > 0 AND is_array($process)){
+		$sql = "UPDATE bp set is_define = 1 WHERE name = ?";
 		$req = $bdd->prepare($sql);
 		$req->execute(array($bp));
 	
@@ -192,7 +193,7 @@ function add_process($bp,$process,$bdd){
 			$value = explode("::", $values);
 			$bp_link = $value[1];
 
-			$sql = "insert into bp_links (bp_name,bp_link) values(?,?)";
+			$sql = "INSERT INTO bp_links (bp_name,bp_link) VALUES(?,?)";
 
 			$req = $bdd->prepare($sql);
 			$req->execute(array($bp,$bp_link));
@@ -202,7 +203,7 @@ function add_process($bp,$process,$bdd){
 
 function check_app_exists($uniq_name, $bdd)
 {
-	$sql = "select count(*) from bp where name = ?;";
+	$sql = "SELECT count(*) FROM bp WHERE name = ?;";
 	$req = $bdd->prepare($sql);
 	$req->execute(array($uniq_name));
 	$bp_exist = $req->fetch(PDO::FETCH_NUM);
@@ -218,14 +219,14 @@ function add_application($uniq_name_orig,$uniq_name,$process_name,$display,$url,
 	if($type != 'MIN'){
 		$min_value = "";
 	}
-	$sql = "select count(*) from bp where name = ?;";
+	$sql = "SELECT count(*) FROM bp WHERE name = ?;";
 	$req = $bdd->prepare($sql);
 	$req->execute(array($uniq_name));
 	$bp_exist = $req->fetch();
 
 	// add
 	if($bp_exist[0] == 0 and empty($uniq_name_orig)){
-		$sql = "insert into bp (name,description,priority,type,command,url,min_value) values(?,?,?,?,?,?,?)";
+		$sql = "INSERT INTO bp (name,description,priority,type,command,url,min_value) VALUES(?,?,?,?,?,?,?)";
 		$req = $bdd->prepare($sql);
 		$req->execute(array($uniq_name,$process_name,$display,$type,$command,$url,$min_value));
 	}
@@ -234,23 +235,23 @@ function add_application($uniq_name_orig,$uniq_name,$process_name,$display,$url,
 		if($bp_exist[0] != 0){
 			// TODO QUENTIN
 		} else {
-			$sql = "update bp set name = ?,description = ?,priority = ?,type = ?,command = ?,url = ?,min_value = ? where name = ?";
+			$sql = "UPDATE bp set name = ?,description = ?,priority = ?,type = ?,command = ?,url = ?,min_value = ? WHERE name = ?";
 			$req = $bdd->prepare($sql);
 			$req->execute(array($uniq_name,$process_name,$display,$type,$command,$url,$min_value,$uniq_name_orig));
-			$sql = "update bp_links set bp_name = ? where bp_name = ?";
+			$sql = "UPDATE bp_links set bp_name = ? WHERE bp_name = ?";
 			$req = $bdd->prepare($sql);
 			$req->execute(array($uniq_name,$uniq_name_orig));	
-			$sql = "update bp_links set bp_link = ? where bp_link = ?";
+			$sql = "UPDATE bp_links set bp_link = ? WHERE bp_link = ?";
 			$req = $bdd->prepare($sql);
 			$req->execute(array($uniq_name,$uniq_name_orig));
-			$sql = "update bp_services set bp_name = ? where bp_name = ?";					
+			$sql = "UPDATE bp_services set bp_name = ? WHERE bp_name = ?";					
 			$req = $bdd->prepare($sql);
 			$req->execute(array($uniq_name,$uniq_name_orig));	
 		}
 	}	
 	// modification
 	else{
-		$sql = "update bp set name = ?,description = ?,priority = ?,type = ?,command = ?,url = ?,min_value = ? where name = ?";
+		$sql = "UPDATE bp set name = ?,description = ?,priority = ?,type = ?,command = ?,url = ?,min_value = ? WHERE name = ?";
 		$req = $bdd->prepare($sql);
 		$req->execute(array($uniq_name,$process_name,$display,$type,$command,$url,$min_value,$uniq_name));
 	}
@@ -260,7 +261,7 @@ function build_file($bdd){
 	
 	$bp_sons=array();
 	
-	$sql = "SELECT * FROM bp where is_define ='1'";
+	$sql = "SELECT * FROM bp WHERE is_define ='1'";
 	$req = $bdd->query($sql);
 	$bps_informations = $req->fetchall();
 	$file = "../../../../nagiosbp/etc/nagios-bp.conf";
@@ -281,7 +282,7 @@ function build_file($bdd){
 
 function build_file_recursive($bdd,$bp_file,$bp_informations,$bp_sons){
 
-	$sql = "SELECT bp_link FROM bp_links where bp_name=?";
+	$sql = "SELECT bp_link FROM bp_links WHERE bp_name=?";
 	$req = $bdd->prepare($sql);
 	$req->execute(array($bp_informations['name']));
 	if($req->rowCount() == 0) {
@@ -290,7 +291,7 @@ function build_file_recursive($bdd,$bp_file,$bp_informations,$bp_sons){
 	} else {
 		$bp_links = $req->fetchall();
 		foreach($bp_links as $bp_link){
-			$sql = "SELECT * FROM bp where is_define ='1' and name=?";
+			$sql = "SELECT * FROM bp WHERE is_define ='1' and name=?";
 			$req = $bdd->prepare($sql);
 			$req->execute(array($bp_link["bp_link"]));
 			$bps_sons_informations = $req->fetchall();
@@ -318,7 +319,7 @@ function build_file_bp($bdd,$bp_file, $bp_informations){
 		$type = "+";
 		fputs($bp_file, $bp_informations['min_value'] . " of: ");
 	}
-	$sql = "select host,service from bp_services where bp_name = ?";
+	$sql = "SELECT host,service FROM bp_services WHERE bp_name = ?";
 	$req = $bdd->prepare($sql);
 	$req->execute(array($bp_informations['name']));
 	$host_services = $req->fetchall();
@@ -335,7 +336,7 @@ function build_file_bp($bdd,$bp_file, $bp_informations){
 		}
 	}
 
-	$sql = "select bp_link from bp_links where bp_name = ?";
+	$sql = "SELECT bp_link FROM bp_links WHERE bp_name = ?";
 	$req = $bdd->prepare($sql);
 	$req->execute(array($bp_informations['name']));
 	$link_informations = $req->fetchall();
@@ -366,7 +367,7 @@ function build_file_bp($bdd,$bp_file, $bp_informations){
 }
 
 function info_application($bp_name, $bdd){
-	$sql = "select * from bp where name = ?";
+	$sql = "SELECT * FROM bp WHERE name = ?";
 	$req = $bdd->prepare($sql);
 	$req->execute(array($bp_name));
 	$info = $req->fetch();

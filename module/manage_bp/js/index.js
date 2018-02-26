@@ -88,9 +88,16 @@ function AddingApplication(){
 	$(location).attr('href',"./add_application.php");
 }
 
-function ShowModalDeleteBP(bp){
+function ShowModalDeleteBP(info){
+	var info_parts = info.split(',');
+	var bp = info_parts[0];
+	var source = info_parts[1];
+	$("#source").html(source);
+	//if (source == "global_nagiosbp") {
+	//	source = "global";
+	//}
 	$("#popup_confirmation .modal-title").html(dictionnary["action.delete"]);
-	$("#popup_confirmation .modal-body").html(dictionnary["label.manage_bp.delete_bp"]+': ' + bp);
+	$("#popup_confirmation .modal-body").html(dictionnary["label.manage_bp.delete_bp"]+': ' + bp + dictionnary["label.manage_bp.from_source"] +': ' + source);
 	$("#popup_confirmation button").hide();
 	$("#modal-confirmation-del-bp").show();
 	$("#action-cancel").show();
@@ -101,6 +108,7 @@ function DeleteBP(){
 	var message = $(".modal-body").html();
 	var message_parts = message.split(': ');
 	var bp = message_parts[1];
+	var source = message_parts[2];
 
 	$('div[id="' + bp + '"]').remove();
 
@@ -108,6 +116,7 @@ function DeleteBP(){
 		'./php/function_bp.php',
 		{
 			action: 'delete_bp',
+			source_name: source,
 			bp_name: bp
 		},
 		function ReturnAction(){
@@ -140,9 +149,4 @@ function ApplyConfiguration(){
 
 	// and close the modal
 	$("#popup_confirmation").modal('hide');
-}
-
-function editApplication(bp_name){
-	var url = "./add_application.php?bp_name=" + bp_name;
-	$(location).attr('href',url);
 }

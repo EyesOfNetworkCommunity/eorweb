@@ -89,9 +89,9 @@ function display_bp($bp,$bp_racine,$source) {
 				<b class="bp_presentation"><?php echo $display_bp; ?></b>
 				<b class="condition_presentation"><?php echo $priority; ?></b>
 				<b class="condition_presentation"><?php echo $rule_type.".".$min_value; ?></b>
-				<button type="button" class="btn_presentation pull-right btn btn-xs btn-danger" onclick="ShowModalDeleteBP('<?php echo $bp; ?>');"><i class="glyphicon glyphicon-trash"></i></button>
-				<button type="button" class="btn_presentation pull-right btn btn-xs btn-info" onclick="editApplication('<?php echo $bp; ?>');"><i class="glyphicon glyphicon-pencil"></i></button>
-				<button type="button" class="btn_presentation pull-right btn btn-xs btn-success" onclick="location.href='add_services.php?bp_name=<?php echo $bp; ?>&display=<?php echo $priority; ?>'"><i class="glyphicon glyphicon-plus"></i></button>
+				<button type="button" class="btn_presentation pull-right btn btn-xs btn-danger" onclick="ShowModalDeleteBP('<?php echo $bp; ?>,<?php echo $source; ?>');"><i class="glyphicon glyphicon-trash"></i></button>
+				<button type="button" class="btn_presentation pull-right btn btn-xs btn-info" onclick="location.href='add_application.php?bp_name=<?php echo $bp; ?>&source=<?php echo $source; ?>'"><i class="glyphicon glyphicon-pencil"></i></button>
+				<button type="button" class="btn_presentation pull-right btn btn-xs btn-success" onclick="location.href='add_services.php?bp_name=<?php echo $bp; ?>&display=<?php echo $priority; ?>&source=<?php echo $source; ?>'"><i class="glyphicon glyphicon-plus"></i></button>
 			</div>
 		</div>
 	</li>				
@@ -212,6 +212,45 @@ function display_global_son($bp_racine) {
     }
 }
 
+function display_other_source_bp(){
+    global $database_vanillabp;
+    global $database_host;
+    global $database_username;
+    global $database_password;
+	$db = new mysqli($database_host, $database_username, $database_password, $database_vanillabp);
+	$sql_source = "SELECT db_names FROM bp_sources";
+	
+	if(!$result_source = $db->query($sql_source)){
+		die('There was an error running the query [' . $db->error . ']');
+	}
+
+	while($row_source = $result_source->fetch_assoc()){  
+		if ($row_source['db_names'] != "global_nagiosbp") {
+			$db = new mysqli($database_host, $database_username, $database_password, $row_source['db_names']);
+			if($db->connect_errno > 0){
+				die('Unable to connect to database [' . $db->connect_error . ']');
+			}
+			$sql = "SELECT name FROM bp WHERE name IN (SELECT bp_link FROM bp_links) ORDER BY priority, name";
+			if(!$result = $db->query($sql)){
+				die('There was an error running the query [' . $db->error . ']');
+			}
+			while($row = $result->fetch_assoc()){ ?> 
+				<div class="well well-sm">
+					<ul class="nav nav-list tree">
+						<?php
+						display_bp($row['name'],$row['name'],$row_source['db_names']);
+						display_global_son($row['name']);
+						?>
+					</ul>
+				</div>
+				<?php
+			}
+		}
+	}
+	$result_source->free();
+	mysqli_close($db);
+}
+
 	$HTMLTREE ="";
 	$db = new mysqli($database_host, $database_username, $database_password, $database_vanillabp);
 
@@ -230,7 +269,6 @@ function display_global_son($bp_racine) {
 
 	$result->free();
 	mysqli_close($db);
-
 	?>
     
 	<form>
@@ -277,7 +315,8 @@ function display_global_son($bp_racine) {
 				?>
 				</ul>
 			</div>
-		<?php } ?>
+		<?php }
+		display_other_source_bp(); ?>
 		</div>
 		
 	</form>

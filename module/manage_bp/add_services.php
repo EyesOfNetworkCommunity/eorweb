@@ -25,122 +25,123 @@ include("../../side.php");
 
 $bp_name = isset($_GET['bp_name']) ? $_GET['bp_name'] : false;
 $display_actually_bp = isset($_GET['display']) ? $_GET['display'] : false;
+$source = isset($_GET['source']) ? $_GET['source'] : false;
 
 try {
-    $bdd = new PDO("mysql:host=$database_host;dbname=nagiosbp", $database_username, $database_password);
+    $bdd = new PDO("mysql:host=$database_host;dbname=$source", $database_username, $database_password);
     }
 catch(Exception $e) {
 	echo "Connection failed: " . $e->getMessage();
 	exit('Impossible de se connecter à la base de données.');
 }
 
-print "<div id=\"page-wrapper\">";
+?>
+<div id="page-wrapper">
 
-	print "<div class=\"row\">";
-		print "<div class=\"col-lg-12\">";
-			print "<h1 class=\"page-header bp_name\">".getLabel("label.manage_bp.business_process")." : $bp_name</h1>";
-		print "</div>";
-    print "</div>";
+	<div class="row">
+		<div class="col-lg-12">
+			<h1 class="page-header bp_name"><?php echo getLabel("label.manage_bp.business_process");?> : <?php $bp_name ?></h1>
+		</div>
+    </div>
 
-	print "<div class=\"row\">";
-		print "<div class=\"col-md-6\">";
-			print "<form onsubmit=\"return false;\">";
-			print "<input type=\"hidden\" id=\"bp_name\" name=\"bp_name\" value=\"".$bp_name."\">";
-			print "<input type=\"hidden\" id=\"display\" name=\"display\" value=\"".$display_actually_bp."\">";
-			
+	<div class="row">
+		<div class="col-md-6">
+			<?php echo"<form onsubmit=\"return false;\">"; ?>
+			<input type="hidden" id="bp_name" name="bp_name" value="<?php $bp_name ?>">
+			<input type="hidden" id="display" name="display" value="<?php $display_actually_bp ?>">
+			<?php 
 				if($display_actually_bp == 0) {	
-					print "<div id=\"container_service\">";
-						print "<label>".getLabel("label.host")."</label>";
-						print "<div>";
-							print "<div class=\"row col-md-12\">";
-								print "<div class=\"input-group\">";
-									print "<span class=\"input-group-addon\" id=\"sizing-addon1\"><img src=\"./images/server.png\" height=\"20\" width=\"25\" alt=\"server\"></span>";
-									print "<input type=\"text\" class=\"form-control\" id=\"host\" placeholder=\"Hostname\" aria-describedby=\"sizing-addon1\">";
-								print "</div>";
-							print "</div>";
-						print "</div>";
+					?>
+					<div id="container_service">
+						<label><?php echo getLabel("label.host"); ?></label>
+						<div>
+							<div class="row col-md-12">
+								<div class="input-group">
+									<span class="input-group-addon" id="sizing-addon1"><img src="./images/server.png" height="20" width="25" alt="server"></span>
+									<input type="text" class="form-control" id="host" placeholder="Hostname" aria-describedby="sizing-addon1">
+								</div>
+							</div>
+						</div>
 
-						print "<div class=\"row col-md-12\">";
-							print "<div class=\"form-group\">";
-								print "<label style=\"font-weight:lighter;font-size:16px;\" class=\"control-label pad-top text-primary\" id=\"process\"></label>";
-							print "</div>";
-						print "</div>";
+						<div class="row col-md-12">
+							<div class="form-group">
+								<label style="font-weight:lighter;font-size:16px;" class="control-label pad-top text-primary" id="process"></label>
+							</div>
+						</div>
 						
-						print "<div class=\"row col-md-12\">";
-							print "<div class=\"form-group\">";
-								print "<div id=\"draggablePanelList\" class=\"list-unstyled\">";
-								print "</div>";
-							print "</div>";
-						print "</div>";
-					print "</div>";
-				}
-				else {
-					print "<div id=\"container_process\">";
-						print "<label>".getLabel("label.manage_bp.display")."</label>";
-						print "<div>";
-							print "<div class=\"row col-md-12\">";
-								print "<select class=\"form-control\" name=\"display\">";
-									print "<option data-hidden=\"true\">".getLabel("label.manage_bp.select_display")."</option>";
-									print "<option>0</option>";
-									print "<option>1</option>";
-									print "<option>2</option>";
-									print "<option>3</option>";
-									print "<option>4</option>";
-									print "<option>5</option>";
-								print "</select>";
-							print "</div>";
-						print "</div>";
+						<div class="row col-md-12">
+							<div class="form-group">
+								<div id="draggablePanelList" class="list-unstyled">
+								</div>
+							</div>
+						</div>
+					</div>
+				<?php }	 else { ?>
+					<div id="container_process">
+						<label><?php echo getLabel("label.manage_bp.display"); ?></label>
+						<div>
+							<div class="row col-md-12">
+								<select class="form-control" name="display">
+									<option data-hidden="true"><?php echo getLabel("label.manage_bp.select_display"); ?></option>
+									<option>0</option>
+									<option>1</option>
+									<option>2</option>
+									<option>3</option>
+									<option>4</option>
+									<option>5</option>
+								</select>
+							</div>
+						</div>
 						
-						print "<div class=\"row col-md-12\">";
-							print "<div class=\"form-group\">";
-								print "<label style=\"font-weight:lighter;font-size:16px;\" class=\"control-label pad-top text-primary\" id=\"process\"></label>";
-							print "</div>";
-						print "</div>";
+						<div class="row col-md-12">
+							<div class="form-group">
+								<label style="font-weight:lighter;font-size:16px;" class="control-label pad-top text-primary" id="process"></label>
+							</div>
+						</div>
 						
-						print "<div class=\"row col-md-12\">";
-							print "<div class=\"form-group\">";
-								print "<ul id=\"draggablePanelListProcess\" class=\"list-unstyled\">";
-								print "</ul>";
-							print "</div>";
-						print "</div>";
-					print "</div>";
-				}
-		    print "</form>";
-		print "</div>";
+						<div class="row col-md-12">
+							<div class="form-group">
+								<ul id="draggablePanelListProcess" class="list-unstyled">
+								</ul>
+							</div>
+						</div>
+					</div>
+				<?php } ?>
+		    </form>
+		</div>
 
-		print "<div class=\"col-md-6\">";
-			print "<form id=\"form_drop\" class=\"form-horizontal\" style=\"top:0px\">";
-				$text_display = ($display_actually_bp > 0 ? "Process" : "Services");
-				print "<label>$text_display ".getLabel("label.manage_bp.linked_to_bp")." $bp_name</label>";
-				print "<div id=\"container-drop_zone\" class=\"container-drop_zone\">";
-				
+		<div class="col-md-6">
+			<form id="form_drop" class="form-horizontal" style="top:0px">
+				<?php $text_display = ($display_actually_bp > 0 ? "Process" : "Services"); ?>
+				<label><?php $text_display; echo getLabel("label.manage_bp.linked_to_bp"); $bp_name ?></label>
+				<div id="container-drop_zone" class="container-drop_zone">
+					<?php 
 					if($display_actually_bp > 0){
-											
-						$sql = "select bp_link from bp_links where bp_name = '" . $bp_name . "'";
+						$sql = "SELECT bp_link FROM bp_links WHERE bp_name = '$bp_name'";
 						$req = $bdd->query($sql);
 						$count = 0;
 
 						while($row = $req->fetch()){
 		               		$bp_name_linked = $row['bp_link'];
-							print "<div id=\"$bp_name::--;;$bp_name_linked\" class=\"text-info well well-sm\" style=\"font-size:16px;\">
-								<button type=\"button\" class=\"btn btn-xs btn-danger button-addbp\" onclick=\"DeleteService('$bp_name::--;;$bp_name_linked');\">
-									<span class=\"glyphicon glyphicon-trash\"></span>
+		               		?>
+							<div id="$bp_name::--;;$bp_name_linked" class="text-info well well-sm" style="font-size:16px;">
+								<button type="button" class="btn btn-xs btn-danger button-addbp" onclick="DeleteService('$bp_name::--;;$bp_name_linked');">
+									<span class="glyphicon glyphicon-trash"></span>
 								</button>
-								$bp_name_linked
-							</div>";
-							$count += 1;
+								<?php $bp_name_linked ?>
+							</div>
+							<?php $count += 1;
 						}
 						if($count == 0){
-							print "<div id=\"primary_drop_zone\" class=\"ui-widget-content panel panel-info\" style=\"height:50px\">";
-								print "<div class=\"text-center panel-body\">".getLabel("label.manage_bp.drop_here")."</div>";
-							print "</div>";
-						} 
-					}
-
-					else{
+							?>
+							<div id="primary_drop_zone" class="ui-widget-content panel panel-info" style="height:50px">
+								<div class="text-center panel-body"><?php echo getLabel("label.manage_bp.drop_here"); ?></div>
+							</div>
+						<?php } 
+					} else {
 						$old_host = "";
 						$old_host_count = 0;
-						$sql = "select host,service from bp_services where bp_name = '" . $bp_name . "' ORDER BY host, service";
+						$sql = "SELECT host,service FROM bp_services WHERE bp_name = '" . $bp_name . "' ORDER BY host, service";
 						$req = $bdd->query($sql);
 						
 						if($req->rowCount() != 0){
@@ -150,47 +151,49 @@ print "<div id=\"page-wrapper\">";
 								
 								if($host != $old_host){
 									if($old_host_count!=0) {
-										print "</div>";
-										print "</div>"; //fermeture du div du host
+										?>
+										</div>
+										</div>
+										<?php  //fermeture du div du host
 									}
-									print "<div id=\"drop_zone::$host\" class=\"ui-widget-content panel panel-info\">";
-									print "<div id=\"panel::$host\" class=\"panel-heading panel-title\">$host</div>";
-									print "<div class=\"pannel-body\">";
+									?>
+									<div id="drop_zone::$host" class="ui-widget-content panel panel-info">
+									<div id="panel::<?php $host ?>" class="panel-heading panel-title"><?php $host ?></div>
+									<div class="pannel-body">
+									<?php
 									$old_host=$host;
 									$old_host_count++;
-								}
-								
-								print "<div id=\"$bp_name::$host;;$service\" class=\"text-info well well-sm\" style=\"font-size:16px;\">";
-								print "<button type=\"button\" class=\"btn btn-xs btn-danger button-addbp\" onclick=\"DeleteService('$bp_name::$host;;$service');\">";
-								print "<span class=\"glyphicon glyphicon-trash\"></span>";
-								print "</button>";
-								print "$service";
-								print "</div>";
-							}
-							print "</div>";
-							print "</div>";
-						}
-						
+								} ?>								
+								<div id="$bp_name::$host;;$service" class="text-info well well-sm" style="font-size:16px;">
+								<button type="button" class="btn btn-xs btn-danger button-addbp" onclick="DeleteService('<?php $bp_name."::".$host.";;".$service ?>');">
+								<span class="glyphicon glyphicon-trash"></span>
+								</button>
+								<?php $service ?>
+								</div>
+							<?php } ?>
+							</div>
+							</div>
+						<?php }
 						if($old_host == ""){ // ca signifie que aucun service n'est ajoute
-							print "<div id=\"primary_drop_zone\" class=\"ui-widget-content panel panel-info\" style=\"height:50px\">";
-								print "<div class=\"text-center panel-body\">".getLabel("label.manage_bp.drop_here")."</div>";
-							print "</div>";
-						}	
-					}
-				print "</div>"; //fermeture du div container-drop_zone
-				print "<br>";
-				print "<div class=\"btn-group btn-group-justified\">";
-				print "<a class=\"btn btn-success\" onclick=\""; echo (($display_actually_bp == 0)?'ApplyService();':'ApplyProcess();');
-				print "\">";
-		    	print getLabel("action.apply");
-		    	print "</a>";
-				print "<a class=\"btn btn-primary\" onclick=\"window.location = '/module/manage_bp/index.php';\">".getLabel("action.cancel")."</a>";
-				print "</div>";
-			print "</form>";
-		print "</div>";
-	print "</div>";
+						?>
+							<div id="primary_drop_zone" class="ui-widget-content panel panel-info" style="height:50px">
+								<div class="text-center panel-body"><?php echo getLabel("label.manage_bp.drop_here"); ?></div>
+							</div>
+						<?php }	
+					} 
+				//fermeture du div container-drop_zone ?>
+				</div> 
+				<br>
+				<div class="btn-group btn-group-justified">
+				<a class="btn btn-success" onclick="<?php echo (($display_actually_bp == 0)?'ApplyService();':'ApplyProcess();'); ?>">
+		    	<?php echo getLabel("action.apply"); ?>
+		    	</a>
+				<a class="btn btn-primary" onclick="window.location = '/module/manage_bp/index.php';"><?php echo getLabel("action.cancel"); ?></a>
+				</div>
+			</form>
+		</div>
+	</div>
 
-print "</div>";
+</div>
 
-include("../../footer.php");
-?>
+<?php include("../../footer.php"); ?>
