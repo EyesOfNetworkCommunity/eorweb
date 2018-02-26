@@ -24,9 +24,9 @@ include("../../header.php");
 include("../../side.php");
 
 if (isset($_GET['app'])) {
-    $type_app = true;
-} else {
     $type_app = false;
+} else {
+    $type_app = true;
 } ?>
 
 <div id="page-wrapper">
@@ -81,7 +81,7 @@ if (isset($_GET['app'])) {
         	<form class="form-horizontal col-md-8 col-md-offset-2">
                 
                 <?php
-                if ($type_app) {
+                if (!$type_app) {
                     ?>
                     <div class="row">
                         <div class="form-group">
@@ -139,9 +139,14 @@ if (isset($_GET['app'])) {
 									<option>0</option>
 								<?php }
 								for ($i=1; $i <= 5; $i++) { 
+                                    if ($type_app && $i==1){ ?>
+                                        <option selected="selected">1</option>
+                                    <?php }
 									if (isset($bp_prior) && $i != $bp_prior) { ?>
 										<option><?php echo $i; ?></option>
-									<?php }
+									<?php } else { ?>
+                                        <option><?php echo $i; ?></option>
+                                    <?php }
 								} ?>
 							</select>
 						</div>
@@ -170,7 +175,7 @@ if (isset($_GET['app'])) {
 					<div class="form-group">
 						<label style="font-weight:normal" class="col-xs-3 control-label"><?php echo getLabel("label.manage_bp.type"); ?></label>
 						<div class="col-xs-8">
-							<select class="form-control" name="type">
+							<select class="form-control" name="type" onchange="javascript:disable_min(this);">
 								<?php
 								$list_type = array('ET','OU','MIN');
 								foreach($list_type as $type){
@@ -189,14 +194,17 @@ if (isset($_GET['app'])) {
 					<div class="form-group">
 						<label style="font-weight:normal" class="col-xs-3 control-label"><?php echo getLabel("label.manage_bp.min_value"); ?></label>
 						<div class="col-xs-8">
-							<select class="form-control" name="min_value">
-								<option><?php echo (isset($bp_minvalue)?$bp_minvalue: 0); ?>
-								</option>
+							<select class="form-control" name="min_value" disabled>
+								<option><?php echo (isset($bp_minvalue)?$bp_minvalue: 0); ?></option>
 								<?php
 								for ($i=1; $i <= 9; $i++) { 
 									if (isset($bp_minvalue) && $i != $bp_minvalue) { ?>
 										<option><?php echo $i; ?></option>
-									<?php }
+									<?php } else {
+                                        if (!isset($bp_minvalue)) {?>
+                                            <option><?php echo $i; ?></option>
+                                    <?php }
+                                    }
 								} ?>
 							</select>
 						</div>

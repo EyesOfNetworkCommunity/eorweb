@@ -124,3 +124,11 @@ function bpAlreadyExists(bp_name)
 	return tmp;
 }
 
+
+function disable_min(value) {
+    if (value.value == "MIN") {
+    	$("select[name=min_value]").removeAttr("disabled");
+    } else {
+    	$("select[name=min_value]").attr("disabled", true); 
+    }
+}

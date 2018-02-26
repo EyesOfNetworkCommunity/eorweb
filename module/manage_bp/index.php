@@ -88,7 +88,7 @@ function display_bp($bp,$bp_racine,$source) {
 				<i class="glyphicon-link glyphicon"></i>
 				<b class="bp_presentation"><?php echo $display_bp; ?></b>
 				<b class="condition_presentation"><?php echo $priority; ?></b>
-				<b class="condition_presentation"><?php echo $rule_type.".".$min_value; ?></b>
+				<b class="condition_presentation"><?php echo $rule_type." ".$min_value; ?></b>
 				<button type="button" class="btn_presentation pull-right btn btn-xs btn-danger" onclick="ShowModalDeleteBP('<?php echo $bp; ?>,<?php echo $source; ?>');"><i class="glyphicon glyphicon-trash"></i></button>
 				<button type="button" class="btn_presentation pull-right btn btn-xs btn-info" onclick="location.href='add_application.php?bp_name=<?php echo $bp; ?>&source=<?php echo $source; ?>'"><i class="glyphicon glyphicon-pencil"></i></button>
 				<button type="button" class="btn_presentation pull-right btn btn-xs btn-success" onclick="location.href='add_services.php?bp_name=<?php echo $bp; ?>&display=<?php echo $priority; ?>&source=<?php echo $source; ?>'"><i class="glyphicon glyphicon-plus"></i></button>
@@ -259,10 +259,10 @@ function display_other_source_bp(){
 	}
 
 	$sql = "SELECT name FROM bp WHERE name NOT IN (SELECT bp_link FROM bp_links) ORDER BY priority, name";
-
 	if(!$result = $db->query($sql)){
 		die('There was an error running the query [' . $db->error . ']');
 	}
+	
 	while($row = $result->fetch_assoc()){   
 		array_push($t_bp_racine,$row['name']);
 	} 
