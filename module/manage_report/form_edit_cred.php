@@ -81,7 +81,7 @@ include("../../side.php");
 			$file_tmp = $_FILES['filename']['tmp_name'];
 			$file_dst = "/srv/eyesofreport/report/" . basename($_FILES['filename']['name']);
 			if (move_uploaded_file($file_tmp, $file_dst)) {
-				message(5,getLabel("label.manage_report.upload_success"). $file_dst ." : ".getLabel("label.manage_report.upload_success2"),"critical");
+				message(5,getLabel("label.manage_report.upload_success"). $file_dst ." : ".getLabel("label.manage_report.upload_success2"),"ok");
 			} else {
 				message(5,getLabel("label.manage_report.upload_error5"),"critical");
 			}
@@ -120,7 +120,7 @@ include("../../side.php");
 					<?php echo getLabel("label.mgt_upload_report.title"); ?>
 				</div>
 				<div class="panel-body">
-					<form method="post" ENCTYPE="multipart/form-data" action="./form_edit_cred.php">
+					<form method="post" ENCTYPE="multipart/form-data" action="./form_edit_cred.php?report_id=<?php echo $report_id ?>">
 						<div class="input-group">
 						<input type="hidden" name="report_id" value="<?php echo $report_id; ?>">
 						<input type="hidden" name="MAX_FILE_SIZE" value="2000000">
