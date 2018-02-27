@@ -28,28 +28,22 @@ include("../../side.php");
 
 	<div class="row">
 		<div class="col-md-12">
-			<h1 class="page-header">Report credentials settings</h1>
+			<h1 class="page-header"><?php echo getLabel("label.manage_report.credential_title"); ?></h1>
 		</div>
 	</div>
 	
 	<div id="message">
 	<?php
 	# --- Get Report ID
-	if(isset($_GET['report_id'])) {
-		$report_id = $_GET['report_id'];
-	}elseif(isset($_POST["report_id"])) {
-		$report_id = $_POST['report_id'];
-	}
-	
-	# --- Get Report Name if isset report_id
-	if(!isset($report_id)) {
-		message(0,"No Report ID","critical");
+	if (!isset($_GET['report_id'])) {
+		message(0,getLabel("label.manage_report.no_report"),"critical");
 	} else {
 		
 		// Variables
 		$grp_avail = array();
 		$grp_format = array();
 		
+		$report_id = $_GET['report_id'];
 		$sql = "SELECT * FROM reports WHERE report_id=?;";
 		$result = sqlrequest($database_eorweb,$sql,false,array("i",(int)$report_id));
 		$row = $result->fetch_assoc(); 
@@ -62,6 +56,7 @@ include("../../side.php");
 		$report_name = $_POST['change_name'];
 		$sql2 = "UPDATE reports SET report_name = ? WHERE report_id = ?";
 		$result2 = sqlrequest($database_eorweb,$sql2, false,array("si",(string)$report_name,(int)$report_id));
+		echo "<script>window.location.replace(\"./form_edit_cred.php?report_id=".$report_id."\")</script>";
 	}
 	
 	# --- Upload new report
@@ -70,25 +65,25 @@ include("../../side.php");
 		if ($_FILES['filename']['error']) {
 			switch ($_FILES['filename']['error']){
 				   case 1: // UPLOAD_ERR_INI_SIZE
-					   message(5,"The uploaded file exceeds the upload_max_filesize directive in php.ini","critical");
+					   message(5,getLabel("label.manage_report.upload_error"),"critical");
 					   break;
 				   case 2: // UPLOAD_ERR_FORM_SIZE
-					   message(5,"The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form.","critical");
+					   message(5,getLabel("label.manage_report.upload_error2"),"critical");
 					   break;
 				   case 3: // UPLOAD_ERR_PARTIAL
-					   message(5,"The uploaded file was only partially uploaded.","critical");
+					   message(5,getLabel("label.manage_report.upload_error3"),"critical");
 					   break;
 				   case 4: // UPLOAD_ERR_NO_FILE
-					   message(5,"No file was uploaded","critical");
+					   message(5,getLabel("label.manage_report.upload_error4"),"critical");
 					   break;
 			}
 		} else {
 			$file_tmp = $_FILES['filename']['tmp_name'];
-			$file_dst = $path_rptdesign."/".basename($_FILES['filename']['name']);
+			$file_dst = "/srv/eyesofreport/report/" . basename($_FILES['filename']['name']);
 			if (move_uploaded_file($file_tmp, $file_dst)) {
-				message(5,"Upload succeed of ". $file_dst .".: Please consider to perform declaration and setup credential","ok");
+				message(5,getLabel("label.manage_report.upload_success"). $file_dst ." : ".getLabel("label.manage_report.upload_success2"),"critical");
 			} else {
-				message(5,"Upload failed. Please contact your administrator","critical");
+				message(5,getLabel("label.manage_report.upload_error5"),"critical");
 			}
 		}
 	} 
@@ -112,7 +107,7 @@ include("../../side.php");
 						<div class="input-group col-md-12">
 							<input class="form-control" type="text" name="change_name">
 							<span class="input-group-btn">
-								<input type="submit" class="btn btn-primary" value="Valid">
+								<input type="submit" class="btn btn-primary" value="<?php echo getLabel("action.submit"); ?>">
 							</span>
 						</div>
 					</form>
@@ -142,14 +137,14 @@ include("../../side.php");
 	<div class="row">
 		<div class="col-md-12">
 			<div class="panel panel-default">
-				<div class="panel-heading">Change credentials</div>
+				<div class="panel-heading"><?php echo getLabel("label.manage_report.modify_credential"); ?></div>
 				<div class="panel-body">
 					<div class="table-responsive">          
 						<table class="table table-striped">
 							<thead>
 								<tr>
-									<th>User group</th>
-									<th>Available</th>
+									<th><?php echo getLabel("label.manage_report.user_group"); ?></th>
+									<th><?php echo getLabel("label.manage_report.available"); ?></th>
 									<?php
 									$sql = "SELECT * FROM output_format;";
 									$result = sqlrequest($database_eorweb,$sql);
@@ -208,12 +203,23 @@ include("../../side.php");
 					</div>
 				</div>
 			</div>
-			<a class="btn btn-default" href="index.php" role="button"><?php echo getLabel("action.cancel") ?></a>
+			<button class="btn btn-default" type="button" name="back" value="back" onclick="location.href='../manage_report/index.php'"><?php echo getLabel("action.cancel") ?></button>
 		</div>
 	</div>
 </div>
 
-<script src="/bower_components/jquery/dist/jquery.min.js"></script>
+<script src="../../bower_components/jquery/dist/jquery.min.js"></script>
+
+<script>
+    $(function () {
+        $(".source, .target").sortable({
+            connectWith: ".connected"
+        });
+        $(".source, .target").bind('sortstop', function(e, ui) {
+            $('.btn-primary').removeClass('disabled')
+        });
+    });
+</script>
 
 <?php 
 /********* Global Avail *************/
