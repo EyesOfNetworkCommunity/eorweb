@@ -2,12 +2,15 @@
 
 include("../../../include/config.php");
 
+global $database_vanillabp;
+global $database_username;
+global $database_password;
+
 $action = isset($_GET['action']) ? $_GET['action'] : false;
 $bp_name = isset($_GET['bp_name']) ? $_GET['bp_name'] : false;
 $host_name = isset($_GET['host_name']) ? $_GET['host_name'] : false;
 $service = isset($_GET['service']) ? $_GET['service'] : false;
 $new_services = isset($_GET['new_services']) ? $_GET['new_services'] : false;
-
 $uniq_name = isset($_GET['uniq_name']) ? $_GET['uniq_name'] : false;
 $uniq_name_orig = isset($_GET['uniq_name_orig']) ? $_GET['uniq_name_orig'] : false;
 $process_name = isset($_GET['process_name']) ? $_GET['process_name'] : false;
@@ -16,10 +19,17 @@ $url = isset($_GET['url']) ? $_GET['url'] : false;
 $command = isset($_GET['command']) ? $_GET['command'] : false;
 $type = isset($_GET['type']) ? $_GET['type'] : false;
 $min_value = isset($_GET['min_value']) ? $_GET['min_value'] : false;
-$source_name = isset($_GET['source_name']) ? $_GET['source_name'] : false;
+$source_name = isset($_GET['source_name']) ? $_GET['source_name'] : "global_nagiosbp";
 
 try {
 	$bdd = new PDO('mysql:host=localhost;dbname='.$source_name, $database_username, $database_password);
+} catch(Exception $e) {
+	echo "Connection failed: " . $e->getMessage();
+	exit('Impossible de se connecter à la base de données.');
+}
+
+try {
+	$bdd_global = new PDO('mysql:host=localhost;dbname='.$database_vanillabp, $database_username, $database_password);
 } catch(Exception $e) {
 	echo "Connection failed: " . $e->getMessage();
 	exit('Impossible de se connecter à la base de données.');
@@ -30,7 +40,8 @@ if($action == 'verify_services'){
 }
 
 elseif($action == 'delete_bp'){
-    delete_bp($bp_name,$bdd);
+	delete_bp($bp_name,$bdd);
+	delete_bp($bp_name,$bdd_global);
 }
 
 elseif($action == 'list_services'){
@@ -65,20 +76,19 @@ elseif ($action == 'check_app_exists'){
 	check_app_exists($uniq_name, $bdd);
 }
 
-function verify_services($bp,$host,$bdd){
+function verify_services($bp,$host,$bdd) {
 	$sql = "SELECT COUNT(*),service FROM bp_services WHERE bp_name = '" . $bp . "' AND host = '". $host . "'";
 	$req = $bdd->query($sql);
 	$informations = $req->fetch();
 	$number_services = intval($informations['COUNT(*)']);
 	$service = $informations['service'];
-
 	echo $bp . "::" . $host . "::" . $number_services . "::" . $service;
 }
 
-function delete_bp($bp,$bdd){
+function delete_bp($bp,$bdd) {
 	$sql = "DELETE FROM bp WHERE name = ?";
 	$req = $bdd->prepare($sql);
-	$req->execute(array($bp));
+	$req->exec(array($bp));
 
 	$sql = "DELETE FROM bp_services WHERE bp_name = ?";
 	$req = $bdd->prepare($sql);
@@ -93,7 +103,7 @@ function delete_bp($bp,$bdd){
 	$req->execute(array($bp));
 }
 
-function list_services($host_name){
+function list_services($host_name) {
         $path_nagios_ser = "/srv/eyesofnetwork/nagios/etc/objects/services.cfg";
  
 	$tabServices = array() ;
@@ -127,7 +137,7 @@ function list_services($host_name){
 }
 
 
-function list_process($bp,$display,$bdd){
+function list_process($bp,$display,$bdd) {
 	$sql = "SELECT name FROM bp WHERE is_define = 1 AND name!=? AND priority = ?";
 	$req = $bdd->prepare($sql);
 	$req->execute(array($bp,$display));
@@ -136,7 +146,7 @@ function list_process($bp,$display,$bdd){
     echo json_encode($process);
 }
 
-function add_services($bp,$services,$bdd){
+function add_services($bp,$services,$bdd) {
 	$list_services = array();
 	$old_list_services = array();
 	
@@ -176,7 +186,7 @@ function add_services($bp,$services,$bdd){
 	}
 }
 
-function add_process($bp,$process,$bdd){
+function add_process($bp,$process,$bdd) {
 	$sql = "DELETE FROM bp_links WHERE bp_name = ?";
 	$req = $bdd->prepare($sql);
 	$req->execute(array($bp));
@@ -201,8 +211,7 @@ function add_process($bp,$process,$bdd){
 	}
 }
 
-function check_app_exists($uniq_name, $bdd)
-{
+function check_app_exists($uniq_name, $bdd) {
 	$sql = "SELECT count(*) FROM bp WHERE name = ?;";
 	$req = $bdd->prepare($sql);
 	$req->execute(array($uniq_name));
@@ -215,7 +224,7 @@ function check_app_exists($uniq_name, $bdd)
 	}
 }
 
-function add_application($uniq_name_orig,$uniq_name,$process_name,$display,$url,$command,$type,$min_value,$bdd){
+function add_application($uniq_name_orig,$uniq_name,$process_name,$display,$url,$command,$type,$min_value,$bdd) {
 	if($type != 'MIN'){
 		$min_value = "";
 	}
@@ -257,7 +266,7 @@ function add_application($uniq_name_orig,$uniq_name,$process_name,$display,$url,
 	}
 }
 
-function build_file($bdd){
+function build_file($bdd) {
 	
 	$bp_sons=array();
 	
@@ -280,7 +289,7 @@ function build_file($bdd){
 	fclose($bp_file);
 }
 
-function build_file_recursive($bdd,$bp_file,$bp_informations,$bp_sons){
+function build_file_recursive($bdd,$bp_file,$bp_informations,$bp_sons) {
 
 	$sql = "SELECT bp_link FROM bp_links WHERE bp_name=?";
 	$req = $bdd->prepare($sql);
@@ -307,7 +316,7 @@ function build_file_recursive($bdd,$bp_file,$bp_informations,$bp_sons){
 	return $bp_sons;
 }
 
-function build_file_bp($bdd,$bp_file, $bp_informations){
+function build_file_bp($bdd,$bp_file, $bp_informations) {
 	fputs($bp_file, $bp_informations['name'] . " = ");
 	if($bp_informations['type'] == 'ET'){
 		$type = "&";
@@ -366,7 +375,7 @@ function build_file_bp($bdd,$bp_file, $bp_informations){
 	}
 }
 
-function info_application($bp_name, $bdd){
+function info_application($bp_name, $bdd) {
 	$sql = "SELECT * FROM bp WHERE name = ?";
 	$req = $bdd->prepare($sql);
 	$req->execute(array($bp_name));

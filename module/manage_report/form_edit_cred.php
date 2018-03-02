@@ -208,18 +208,7 @@ include("../../side.php");
 	</div>
 </div>
 
-<script src="../../bower_components/jquery/dist/jquery.min.js"></script>
-
-<script>
-    $(function () {
-        $(".source, .target").sortable({
-            connectWith: ".connected"
-        });
-        $(".source, .target").bind('sortstop', function(e, ui) {
-            $('.btn-primary').removeClass('disabled')
-        });
-    });
-</script>
+<script src="/bower_components/jquery/dist/jquery.min.js"></script>
 
 <?php 
 /********* Global Avail *************/

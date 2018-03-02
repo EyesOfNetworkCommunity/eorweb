@@ -47,10 +47,7 @@ if (!isset($tgt)) {
 $tgt_array = explode("_", $tgt);
 
 if ($tgt_array[2] == "format") {
-	  $sql_report_avail = "SELECT * 
-						  FROM join_report_format 
-						  WHERE output_format_id=".$tgt_array[4]."
-						  AND report_id=".$report_id.";";
+	  $sql_report_avail = "SELECT * FROM join_report_format WHERE output_format_id=".$tgt_array[4]." AND report_id=".$report_id.";";
 						  
 	  if(!$result_report_avail = mysqli_query($db,$sql_report_avail)){
 		die('There was an error running the query [' . $db->error . ']');
@@ -73,10 +70,7 @@ if ($tgt_array[2] == "format") {
 	  }
 } elseif ($tgt_array[2] == "avail") {
 	# Test si vide.
-	 $sql_report_avail = "SELECT * 
-						  FROM join_report_cred 
-						  WHERE group_id=".$tgt_array[1]."
-						  AND report_id=".$report_id.";";
+	 $sql_report_avail = "SELECT * FROM join_report_cred WHERE group_id=".$tgt_array[1]." AND report_id=".$report_id.";";
 						  
 	  if(!$result_report_avail = mysqli_query($db,$sql_report_avail)){
 		die('There was an error running the query [' . $db->error . ']');
@@ -124,9 +118,10 @@ $db->close();
   </body>
 <script type="text/javascript">  
 function InitLoad() {
-<?php
+  <?php
+	//echo "alert(\"Redirect\");";
 	echo "window.open ('./form_edit_cred.php?report_id=".$report_id."','_self',false);";
-?>
-}
+  ?>
+ }
 </script>
 </html>

@@ -55,6 +55,13 @@ $(document).ready(function() {
 		var command = $("#command").val();
 		var type = $('select[name="type"]').val();
 		var min_value = $('select[name="min_value"]').val();
+		var source_name = $('select[name=source_name]').val();
+
+		if (source_name == "undefined"){
+			source_name = "global_nagiosbp";
+		}
+
+		alert(source_name);
 
 		// check if a BP already exists, if this is the case we stop here !
 		if(uniq_name!=uniq_name_orig) {
@@ -77,11 +84,12 @@ $(document).ready(function() {
 				url: url,
 				command: command,
 				type: type,
-				min_value: min_value
+				min_value: min_value,
+				source_name: source_name
 			},
 			function return_value(value){
 				setTimeout(function(){
-                	$(location).attr('href',"add_services.php?bp_name=" + uniq_name + "&display=" + display + "");
+                	//$(location).attr('href',"add_services.php?bp_name=" + uniq_name + "&display=" + display + "&source=" + source_name);
                 	},
                 	500
             	);

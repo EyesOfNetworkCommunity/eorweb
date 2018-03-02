@@ -15,13 +15,14 @@ if($db->connect_errno > 0){
     $response_array['status'] = 'error';
 }
 
-$id = $_POST['id'];
-if (!isset($id)) {
-      $response_array['status'] = 'error';
+
+if (isset($_POST['id'])) {
+	$id = $_POST['id'];
+} else {
+	$response_array['status'] = 'error';
 }
 
 $sql_delete = "DELETE FROM reports WHERE report_id = '".$id."';";
-
 
 if(!$result_sql = $db->query($sql_delete)){
   $response_array['status'] = 'error';

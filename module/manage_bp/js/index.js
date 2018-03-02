@@ -88,16 +88,19 @@ function AddingApplication(){
 	$(location).attr('href',"./add_application.php");
 }
 
+function AddingComponent(){
+	$(location).attr('href',"./add_application.php?app");
+}
+
 function ShowModalDeleteBP(info){
 	var info_parts = info.split(',');
 	var bp = info_parts[0];
 	var source = info_parts[1];
-	$("#source").html(source);
-	//if (source == "global_nagiosbp") {
-	//	source = "global";
-	//}
+	var nickname_parts = source.split('_nagiosbp');
+	var nickname = nickname_parts[0];
+	
 	$("#popup_confirmation .modal-title").html(dictionnary["action.delete"]);
-	$("#popup_confirmation .modal-body").html(dictionnary["label.manage_bp.delete_bp"]+': ' + bp + dictionnary["label.manage_bp.from_source"] +': ' + source);
+	$("#popup_confirmation .modal-body").html(dictionnary["action.delete"]+'  ' + bp + "  " + dictionnary["label.manage_bp.from_source"] +'  ' + nickname + "  ?");
 	$("#popup_confirmation button").hide();
 	$("#modal-confirmation-del-bp").show();
 	$("#action-cancel").show();
@@ -106,18 +109,17 @@ function ShowModalDeleteBP(info){
 
 function DeleteBP(){
 	var message = $(".modal-body").html();
-	var message_parts = message.split(': ');
-	var bp = message_parts[1];
-	var source = message_parts[2];
+	var message_parts = message.split('  ');
+	var bp_name = message_parts[1];
+	var source_name = message_parts[3] + "_nagiosbp";
 
-	$('div[id="' + bp + '"]').remove();
-
+	$('div[id="' + bp_name + '"]').remove();
 	$.get(
 		'./php/function_bp.php',
 		{
 			action: 'delete_bp',
-			source_name: source,
-			bp_name: bp
+			source_name: source_name,
+			bp_name: bp_name
 		},
 		function ReturnAction(){
 				location.reload();

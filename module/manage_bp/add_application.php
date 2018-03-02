@@ -22,34 +22,29 @@
 
 include("../../header.php");
 include("../../side.php");
-
-if (isset($_GET['app'])) {
-    $type_app = false;
-} else {
-    $type_app = true;
-} ?>
+?>
 
 <div id="page-wrapper">
 
 	<div class="row">
 		<div class="col-lg-12">
-            <?php if ($type_app) {
-                ?>
-              <h1 class="page-header"><?php echo getLabel("label.manage_bp.title_app"); ?></h1>
-            <?php } else {
-                ?>
-                 <h1 class="page-header"><?php echo getLabel("label.manage_bp.title_proc"); ?></h1>
-            <?php } ?>
-			
+              <h1 class="page-header"><?php echo getLabel("label.manage_bp.process_title"); ?></h1>			
 		</div>
 	</div>
 
     <div id="error-message"></div>
     
     <?php
+    if (isset($_GET['app'])) {
+        $type_app = false;
+    } else {
+        $type_app = true;
+    }
+
     if(isset($_GET['bp_name'])){
         $bp_name = $_GET['bp_name'];
     }
+
     if (isset($_GET['source'])) {
     	$source = $_GET['source'];
     }
@@ -81,23 +76,18 @@ if (isset($_GET['app'])) {
         	<form class="form-horizontal col-md-8 col-md-offset-2">
                 
                 <?php
-                if (!$type_app) {
+                if (!$type_app || !empty($bp_name)) {
                     ?>
                     <div class="row">
                         <div class="form-group">
                             <label style="font-weight:normal" class="col-xs-3 control-label"><?php echo getLabel("label.manage_bp.database_source"); ?></label>
                             <div class="col-xs-8">
-                                <?php
-                                $select_disabled = "";
-                                if(isset($_GET["source"])) {
-                                    $select_disabled = "disabled";
-                                } ?>
-                                <select class="form-control" name="source_name" <?php $select_disabled ?> onchange="javascript:set_display_number()">
+                                <select class="form-control" name="source_name">
                                 <?php 
-                                $db_list = sqlrequest($source,"SELECT db_names, nick_name FROM bp_sources");
+                                $db_list = sqlrequest($database_vanillabp,"SELECT db_names, nick_name FROM bp_sources");
                                 while ($row = mysqli_fetch_array($db_list)) {
                                     $selected = "";
-                                    if(isset($_GET["source"]) && $_GET["source"] == $row[1]) { 
+                                    if(isset($_GET["source"]) && $_GET["source"] == $row['db_names']) { 
                                         $selected = "selected=\"selected\""; 
                                     }
                                     echo "<option value=\"".$row[0]."\" ".$selected.">". $row[1] . "</option>";

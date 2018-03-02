@@ -25,7 +25,7 @@ include("../../side.php");
 
 $bp_name = isset($_GET['bp_name']) ? $_GET['bp_name'] : false;
 $display_actually_bp = isset($_GET['display']) ? $_GET['display'] : false;
-$source = isset($_GET['source']) ? $_GET['source'] : false;
+$source = isset($_GET['source']) ? $_GET['source'] : $database_vanillabp;
 
 try {
     $bdd = new PDO("mysql:host=$database_host;dbname=$source", $database_username, $database_password);
@@ -40,7 +40,7 @@ catch(Exception $e) {
 
 	<div class="row">
 		<div class="col-lg-12">
-			<h1 class="page-header bp_name"><?php echo getLabel("label.manage_bp.business_process");?> : <?php $bp_name ?></h1>
+			<h1 class="page-header bp_name"><?php echo getLabel("label.manage_bp.business_process");?> : <?php echo $bp_name; ?></h1>
 		</div>
     </div>
 

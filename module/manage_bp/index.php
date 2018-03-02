@@ -28,7 +28,7 @@ include("../../side.php");
 
 	<div class="row">
 		<div class="col-lg-12">
-			<h1 class="page-header"><?php echo getLabel("label.business.title"); ?></h1>
+			<h1 class="page-header"><?php echo getLabel("label.manage_bp.title"); ?></h1>
 		</div>
 	</div>
 
@@ -39,6 +39,7 @@ include("../../side.php");
 	global $database_password;
 
 	$t_bp_racine = array();
+	$bp_showed = array();
 
 function display_bp($bp,$bp_racine,$source) {
 	global $database_host;
@@ -119,7 +120,7 @@ function display_son($bp_racine,$source) {
 	if($db->connect_errno > 0){
 		die('Unable to connect to database [' . $db->connect_error . ']');
 	}
-
+	
 	$t_bp_son = array();
 	$t_service_son = array();
 
@@ -167,16 +168,16 @@ function display_son($bp_racine,$source) {
 	}
 }
 
-function display_global_son($bp_racine) {
+function display_global_son($bp_racine, $source) {
     global $database_nagios;
-    global $database_vanillabp;
     global $database_host;
     global $database_username;
     global $database_password;
+    global $bp_showed;
     
-    $db = new mysqli($database_host, $database_username, $database_password, $database_vanillabp);
+    $db = new mysqli($database_host, $database_username, $database_password, $source);
     if($db->connect_errno > 0){
-        die('Unable to connect to database 3 [' . $db->connect_error . ']');
+        die('Unable to connect to database [' . $db->connect_error . ']');
     }
 
     $t_bp_son = array();
@@ -185,7 +186,7 @@ function display_global_son($bp_racine) {
     $sql_bp = "SELECT bp_link, bp_source FROM bp_links WHERE bp_name = '".$bp_racine."'";
 
     if(!$result_bp = $db->query($sql_bp)){
-        die('There was an error running the query 4 [' . $db->error . ']');
+        die('There was an error running the query [' . $db->error . ']');
     }
 
     while($row = $result_bp->fetch_assoc()){   
@@ -199,13 +200,14 @@ function display_global_son($bp_racine) {
         for ($i = 0; $i < sizeof($t_bp_son); $i++) { ?>
         	<li class="son">
 				<ul class="nav nav-list tree">
-				<?php
-				display_bp($t_bp_son[$i],$bp_racine,$bp_source[$i]."_nagiosbp");
-				if($bp_source[$i] == "global"){
-					display_global_son($t_bp_son[$i]);
-				} else {
-					display_son($t_bp_son[$i],$bp_source[$i]."_nagiosbp");
-				} ?>
+					<?php
+					display_bp($t_bp_son[$i],$bp_racine,$bp_source[$i]."_nagiosbp");
+					array_push($bp_showed,$t_bp_son[$i]);
+					if($bp_source[$i] == "global"){
+						display_global_son($t_bp_son[$i],$bp_source[$i]."_nagiosbp");
+					} else {
+						display_son($t_bp_son[$i],$bp_source[$i]."_nagiosbp");
+					} ?>
 				</ul>
 			</li>
         <?php }
@@ -217,6 +219,8 @@ function display_other_source_bp(){
     global $database_host;
     global $database_username;
     global $database_password;
+    global $bp_showed;
+
 	$db = new mysqli($database_host, $database_username, $database_password, $database_vanillabp);
 	$sql_source = "SELECT db_names FROM bp_sources";
 	
@@ -226,29 +230,30 @@ function display_other_source_bp(){
 
 	while($row_source = $result_source->fetch_assoc()){  
 		if ($row_source['db_names'] != "global_nagiosbp") {
-			$db = new mysqli($database_host, $database_username, $database_password, $row_source['db_names']);
-			if($db->connect_errno > 0){
-				die('Unable to connect to database [' . $db->connect_error . ']');
+			$db_source = new mysqli($database_host, $database_username, $database_password, $row_source['db_names']);
+			if($db_source->connect_errno > 0){
+				die('Unable to connect to database [' . $db_source->connect_error . ']');
 			}
-			$sql = "SELECT name FROM bp WHERE name IN (SELECT bp_link FROM bp_links) ORDER BY priority, name";
-			if(!$result = $db->query($sql)){
-				die('There was an error running the query [' . $db->error . ']');
+			$sql_parent = "SELECT name FROM bp WHERE name NOT IN (SELECT bp_link FROM bp_links) ORDER BY priority, name";
+			if(!$result = $db_source->query($sql_parent)){
+				die('There was an error running the query [' . $db_source->error . ']');
 			}
-			while($row = $result->fetch_assoc()){ ?> 
-				<div class="well well-sm">
-					<ul class="nav nav-list tree">
-						<?php
-						display_bp($row['name'],$row['name'],$row_source['db_names']);
-						display_global_son($row['name']);
-						?>
-					</ul>
-				</div>
-				<?php
+			while($row = $result->fetch_assoc()){ 
+				if (!in_array($row['name'],$bp_showed)) { ?> 
+					<div class="well well-sm">
+						<ul class="nav nav-list tree">
+							<?php
+							display_bp($row['name'],$row['name'],$row_source['db_names']);
+							display_son($row['name'],$row_source['db_names']);
+							?>
+						</ul>
+					</div>
+				<?php }
 			}
 		}
 	}
 	$result_source->free();
-	mysqli_close($db);
+	mysqli_close($db_source);
 }
 
 	$HTMLTREE ="";
@@ -299,23 +304,31 @@ function display_other_source_bp(){
 				</button>
 			</div>
 			<div class="form-group">
+				<button type="button" class="btn btn-success" onclick="AddingComponent();">
+					<?php echo getLabel("action.add_new_component"); ?>
+				</button>
+			</div> 
+			<div class="form-group">
 				<button type="button" class="btn btn-primary" onclick="ShowModalApplyConfiguration();">
 					<?php echo getLabel("action.apply_conf"); ?>
 				</button>
-			</div> 
+			</div>
+
 		</div>
 
+		<!-- affichage des bps de la source global_nagiosbp -->
 		<div id="body" class="pad-top" style="display: none;">
 		<?php for ($i = 0; $i < sizeof($t_bp_racine); $i++) { ?>
 			<div class="well well-sm">
 				<ul class="nav nav-list tree">
-				<?php
-				display_bp($t_bp_racine[$i],$t_bp_racine[$i],$database_vanillabp);
-				display_global_son($t_bp_racine[$i]);
-				?>
+					<?php
+					display_bp($t_bp_racine[$i],$t_bp_racine[$i],$database_vanillabp);
+					display_global_son($t_bp_racine[$i], $database_vanillabp);
+					?>
 				</ul>
 			</div>
 		<?php }
+		// affichage des bps des autres sources
 		display_other_source_bp(); ?>
 		</div>
 		
