@@ -27,32 +27,67 @@ include("../../side.php");
 <div id="page-wrapper">
 	<div class="row">
 		<div class="col-lg-12">
-			<h1 class="page-header"><?php echo getLabel("label.module_eorweb.remediation_action_new"); ?></h1>
+			<h1 class="page-header"><?php echo getLabel("label.manage_remediation.remediation_action_new"); ?></h1>
 		</div>
 	</div>
+	
+	<?php 
+	$remediation_name=retrieve_form_data("name",null);
+	$remediation_type=retrieve_form_data("type",null);
+	$remediation_dateDebut=retrieve_form_data("start",null);
+	$remediation_dateFin=retrieve_form_data("end",null);
+	
+	if(isset($_POST["add"]) || isset($_POST["update"])) {
+		if(!$remediation_name || $remediation_name==""){
+			message(7," : Your remediation need a name",'warning');
+		}
+		elseif(!$remediation_type || $remediation_type==""){
+			message(7," : Your remediation need a type",'warning');
+		}
+		/*elseif($remediation_dateDebut>$remediation_dateFin){
+			message(7," : Wrong order in your dates",'warning');
+		}*/
+		elseif(isset($_POST["add"])){
+			
+			// insert values for add
+			$sql_add = "INSERT INTO remediation_action (description,type,DateDebut,DateFin,Action) VALUES('".$remediation_name."','".$remediation_type."','".$remediation_dateDebut."','".$remediation_dateFin."', 'add')";
+			$remediation_id = sqlrequest("eorweb",$sql_add,true);
+			
+			message(6," : Remediation have been created",'ok');
+			
+		}elseif(isset($_POST["update"])){
+			
+			message(6," : Remediation have been updated",'ok');
+		}
+	}
+	
+	?>
 				
-	<form id="form_user" action='./add_modify_user.php' method='POST' name='form_user'>
+	<form id="form_user" action='./remediation_action.php' method='POST' name='form_user'>
 		<input type='hidden' name='user_id' value='<?php echo $user_id?>'>
 		<div class="row form-group">
-			<label class="col-md-3"><?php echo getLabel("label.module_eorweb.remediation_action_name"); ?></label>
+			<label class="col-md-3"><?php echo getLabel("label.manage_remediation.remediation_action_name"); ?></label>
 			<div class="col-md-9">
 				<input class="form-control" type='text' name='name'>
 			</div>
 		</div>
 		<div class="row form-group">
-			<label class="col-md-3"><?php echo getLabel("label.module_eorweb.type"); ?></label>
+			<label class="col-md-3"><?php echo getLabel("label.manage_remediation.type"); ?></label>
 			<div class="col-md-9">
-				<input class="form-control" type='text' name='name'>
+				<select class="form-control" name='type' size=1>
+					<OPTION value='maintenance' SELECTED>Maintenance </OPTION>";
+					<OPTION value='outage'>Outage </OPTION>
+				</select>
 			</div>
 		</div>
 		<div class="row form-group">
-			<label class="col-md-3"><?php echo getLabel("label.module_eorweb.date_beginning"); ?></label>
+			<label class="col-md-3"><?php echo getLabel("label.manage_remediation.date_beginning"); ?></label>
 			<div class="col-md-9">
 				<input type="text" class="form-control datepicker_start" name="start">
 			</div>
 		</div>
 		<div class="row form-group">
-			<label class="col-md-3"><?php echo getLabel("label.module_eorweb.date_ending"); ?></label>
+			<label class="col-md-3"><?php echo getLabel("label.manage_remediation.date_ending"); ?></label>
 			<div class="col-md-9">
 				<input type="text" class="form-control datepicker_end" name="end">
 			</div>

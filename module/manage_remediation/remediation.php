@@ -23,11 +23,24 @@
 include("../../header.php");
 include("../../side.php");
 
+function get_field() {
+	$autocomplete=array();
+	
+	$request="SELECT description FROM remediation_action";
+	$result=sqlrequest("eorweb",$request);
+	
+ 	while ($line = mysqli_fetch_array($result)){ 
+		$autocomplete[]=$line[0];
+	}
+	$autocomplete= array_unique($autocomplete);
+	echo json_encode($autocomplete);
+}
+
 ?>
 <div id="page-wrapper">
 	<div class="row">
 		<div class="col-lg-12">
-			<h1 class="page-header"><?php echo getLabel("label.module_eorweb.remediation_new"); ?></h1>
+			<h1 class="page-header"><?php echo getLabel("label.manage_remediation.remediation_new"); ?></h1>
 		</div>
 	</div>
 	
@@ -49,7 +62,7 @@ include("../../side.php");
 	$user_id = $_COOKIE['user_id'];
 	if(isset($_POST["add"])){
 		$remediation_id = NULL;
-		$date_demand = date("d/m/Y - G:i");
+		$date_demand = date("Y-m-d G:i");
 	}elseif(isset($_POST["update"])){
 		// Get the remediation id and date of insertion
 		
@@ -68,7 +81,7 @@ include("../../side.php");
 		}elseif(isset($_POST["add"])){
 			
 			// insert values for add
-			$sql_add = "INSERT INTO remediation VALUES('','".$remediation_name."','".$user_id."','".$date_demand."')";
+			$sql_add = "INSERT INTO remediation  (name,user_id,date_demand) VALUES('".$remediation_name."','".$user_id."','".$date_demand."')";
 			$remediation_id = sqlrequest("eorweb",$sql_add,true);
 			/*$methodze=explode(",",$rule_method_ids);
 			foreach($methodze as $selected){
@@ -78,7 +91,6 @@ include("../../side.php");
 			message(6," : Remediation have been created",'ok');
 			
 		}elseif(isset($_POST["update"])){
-			
 			message(6," : Remediation have been updated",'ok');
 		}
 	}
@@ -88,17 +100,17 @@ include("../../side.php");
 	<form id="form_remediation" action='./remediation.php' method='POST' name='form_remediation'>
 		<input type='hidden' name='user_id' value='<?php echo $user_id?>'>
 		<div class="row form-group">
-			<label class="col-md-3"><?php echo getLabel("label.module_eorweb.remediation_name"); ?></label>
+			<label class="col-md-3"><?php echo getLabel("label.manage_remediation.remediation_name"); ?></label>
 			<div class="col-md-9">
 				<input class="form-control" type='text' name='name' value="<?php echo $remediation_name; ?>" autofocus>
 			</div>
 		</div>
 		
 		<div class="row form-group">
-			<label class="col-md-3"><?php echo getLabel("label.module_eorweb.remediation_action_add"); ?></label>
+			<label class="col-md-3"><?php echo getLabel("label.manage_remediation.remediation_action_add"); ?></label>
 			<div class="col-md-9">
 				<div class="form-group input-group">
-					<input class="form-control" id="rule_host1" type="text" name="rule_host">
+					<input class="form-control" id="rule_host1" type="text" name="rule_host" onFocus='$(this).autocomplete({source: <?php echo get_field(); ?>})'>
 					<span class="input-group-btn">
 						<input class="btn btn-success" id="rule_host_button" type="button" value="<?php echo getLabel("action.add");?>">
 						<input class="btn btn-danger" id="rule_host_button_del" type="button" value="<?php echo getLabel("action.clear");?>">
