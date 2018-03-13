@@ -32,10 +32,25 @@ include("../../side.php");
 	</div>
 	
 	<?php 
-	$remediation_name=retrieve_form_data("name",null);
-	$remediation_type=retrieve_form_data("type",null);
-	$remediation_dateDebut=retrieve_form_data("start",null);
-	$remediation_dateFin=retrieve_form_data("end",null);
+	// get infos for updates
+	$id = retrieve_form_data("id",null);
+	$invalid=false;
+	
+	if($id != null){
+		$user_infos=sqlrequest("eorweb", "SELECT * from remediation_action where id='".$id."'");
+		
+		// Retrieve Information from database
+		$remediation_name=mysqli_result($user_infos,0,"description");
+		$remediation_type=mysqli_result($user_infos,0,"type");
+		$remediation_dateDebut=mysqli_result($user_infos,0,"DateDebut");
+		$remediation_dateFin=mysqli_result($user_infos,0,"DateFin");
+		$action=mysqli_result($user_infos,0,"Action");
+	}else{	
+		$remediation_name=retrieve_form_data("name",null);
+		$remediation_type=retrieve_form_data("type",null);
+		$remediation_dateDebut=retrieve_form_data("start",null);
+		$remediation_dateFin=retrieve_form_data("end",null);
+	}
 	
 	if(isset($_POST["add"]) || isset($_POST["update"])) {
 		if(!$remediation_name || $remediation_name==""){
@@ -48,13 +63,21 @@ include("../../side.php");
 			message(7," : Wrong order in your dates",'warning');
 		}*/
 		elseif(isset($_POST["add"])){
+			$desciptionExist = sqlrequest("eorweb","SELECT description from remediation_action");
+			while ($line = mysqli_fetch_array($desciptionExist)){
+				if($line[0] == $remediation_name){
+					message(7," : Your description already exist",'warning');
+					$invalid=true;
+				}
+			}
 			
-			// insert values for add
-			$sql_add = "INSERT INTO remediation_action (description,type,DateDebut,DateFin,Action) VALUES('".$remediation_name."','".$remediation_type."','".$remediation_dateDebut."','".$remediation_dateFin."', 'add')";
-			$remediation_id = sqlrequest("eorweb",$sql_add,true);
-			
-			message(6," : Remediation have been created",'ok');
-			
+			if(!$invalid){
+				// insert values for add
+				$sql_add = "INSERT INTO remediation_action (description,type,DateDebut,DateFin,Action) VALUES('".$remediation_name."','".$remediation_type."','".$remediation_dateDebut."','".$remediation_dateFin."', 'add')";
+				$remediation_id = sqlrequest("eorweb",$sql_add,true);
+				
+				message(6," : Remediation have been created",'ok');
+			}
 		}elseif(isset($_POST["update"])){
 			
 			message(6," : Remediation have been updated",'ok');
@@ -68,35 +91,42 @@ include("../../side.php");
 		<div class="row form-group">
 			<label class="col-md-3"><?php echo getLabel("label.manage_remediation.remediation_action_name"); ?></label>
 			<div class="col-md-9">
-				<input class="form-control" type='text' name='name'>
+				<input class="form-control" type='text' name='name'  value='<?php echo $remediation_name?>'>
 			</div>
 		</div>
 		<div class="row form-group">
 			<label class="col-md-3"><?php echo getLabel("label.manage_remediation.type"); ?></label>
 			<div class="col-md-9">
 				<select class="form-control" name='type' size=1>
-					<OPTION value='maintenance' SELECTED>Maintenance </OPTION>";
-					<OPTION value='outage'>Outage </OPTION>
+					<?php
+						if ($remediation_type == "outage"){
+							echo "<OPTION value='maintenance'>Maintenance </OPTION>";
+							echo "<OPTION value='outage' SELECTED>Outage </OPTION>";
+						}else{
+							echo "<OPTION value='maintenance' SELECTED>Maintenance </OPTION>";
+							echo "<OPTION value='outage'>Outage </OPTION>";
+						}
+					?>
 				</select>
 			</div>
 		</div>
 		<div class="row form-group">
 			<label class="col-md-3"><?php echo getLabel("label.manage_remediation.date_beginning"); ?></label>
 			<div class="col-md-9">
-				<input type="text" class="form-control datepicker_start" name="start">
+				<input type="text" class="form-control datepicker_start" name="start" value='<?php echo $remediation_dateDebut?>'>
 			</div>
 		</div>
 		<div class="row form-group">
 			<label class="col-md-3"><?php echo getLabel("label.manage_remediation.date_ending"); ?></label>
 			<div class="col-md-9">
-				<input type="text" class="form-control datepicker_end" name="end">
+				<input type="text" class="form-control datepicker_end" name="end" value='<?php echo $remediation_dateFin?>'>
 			</div>
 		</div>
 		
 		<div class="form-group">
 			<?php
 				echo "<button class='btn btn-primary' type='submit' name='add' value='add'>".getLabel("action.add")."</button>";
-				echo "<button class='btn btn-default' style='margin-left: 10px;' type='button' name='back' value='back' onclick='location.href=\"index.php\"'>".getLabel("action.cancel")."</button>";
+				echo "<button class='btn btn-default' style='margin-left: 10px;' type='button' name='back' value='back' onclick='location.href=\"index.php?action=remediation_action\"'>".getLabel("action.cancel")."</button>";
 			?>
 		</div>
 	</form>

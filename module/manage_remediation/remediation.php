@@ -44,18 +44,15 @@ function get_field() {
 		</div>
 	</div>
 	
-	<?php 
+	<?php 	
+	$user_infos2=array();
+	$remediation_action_id="";
 	
-	if(!empty($_POST['host'])){
-		$remediation_action="";
-		foreach($_POST['host'] as $selected){
-			/*$sql=sqlrequest($database_notifier,"SELECT id FROM remediation_action WHERE remediationID='".$selected."'");
-			if(mysqli_result($sql,0)!=FALSE) {
-				$select=mysqli_result($sql,0);
-				$rule_method_ids.=$select.",";
-			}*/
+	if(!empty($_POST['remediation_actions_id'])){
+		foreach($_POST['remediation_actions_id'] as $selected){
+			$remediation_action_id .= $selected.",";
 		}
-		$remediation_action=rtrim($remediation_action,",");
+		$remediation_action_id=rtrim($remediation_action_id,",");
 	}
 	
 	// General data
@@ -68,37 +65,65 @@ function get_field() {
 		
 	}
 	
-	// Get post data
-	//$remediation_id=retrieve_form_data("id",null);
-	$remediation_name=retrieve_form_data("name",null);  
+	// get infos for updates
+	$remediation_id = retrieve_form_data("id",null);
+	$remediation_name = retrieve_form_data("name",null);
+	
+	if($remediation_id != null && !isset($_POST['add']) && !isset($_POST['update'])){
+		$user_infos=sqlrequest("eorweb", "SELECT * from remediation where id='".$remediation_id."'");
+		$user_infos2=sqlrequest("eorweb", "SELECT description from remediation_action where remediationID='".$remediation_id."'");
+		
+		// Retrieve Information from database
+		$remediation_name=mysqli_result($user_infos,0,"name");
+		
+		while ($line = mysqli_fetch_array($user_infos2)){
+			$remediation_action_id .= $line[0].",";
+		}
+		$remediation_action_id = substr($remediation_action_id, 0, -1);
+	}
 
 	if(isset($_POST["add"]) || isset($_POST["update"])) {
 		if(!$remediation_name || $remediation_name==""){
 			message(7," : Your remediation need a name",'warning');
 		}
-		elseif(empty($_POST['rule_host']) || $_POST['rule_host']==null){
+		elseif(empty($remediation_action_id) || $remediation_action_id==null){
 			message(7," : Your remediation need at least 1 remediation action",'warning');
 		}elseif(isset($_POST["add"])){
-			
 			// insert values for add
 			$sql_add = "INSERT INTO remediation  (name,user_id,date_demand) VALUES('".$remediation_name."','".$user_id."','".$date_demand."')";
 			$remediation_id = sqlrequest("eorweb",$sql_add,true);
-			/*$methodze=explode(",",$rule_method_ids);
-			foreach($methodze as $selected){
-				sqlrequest($database_notifier,"INSERT INTO remediation_action VALUES('".$remediation_id."', '".$selected."')",true);
-			}*/
+			$remediation_ids=explode(",",$remediation_action_id);
+		
+			foreach($remediation_ids as $selected){
+				sqlrequest("eorweb","UPDATE remediation_action SET remediationID = '".$remediation_id."' where description='".$selected."'");
+			}
 			
 			message(6," : Remediation have been created",'ok');
 			
 		}elseif(isset($_POST["update"])){
+			$sql_modify = "UPDATE remediation SET name='".$remediation_name."' where id='".$remediation_id."'";
+			sqlrequest("eorweb",$sql_modify);
+			
+			$Infos=explode(",", $remediation_action_id);	
+			for($i=0; $i<count($Infos);$i++){
+				$value = mysqli_result(sqlrequest("eorweb", "SELECT id from remediation_action where description='".$Infos[$i]."'"), 0,"id");
+				array_push($user_infos2,$value);
+			}
+
+			foreach($user_infos2 as $selected){
+				sqlrequest("eorweb","UPDATE remediation_action SET remediationID = '".$remediation_id."' where id='".$selected."'",true);
+				
+			}
+
 			message(6," : Remediation have been updated",'ok');
 		}
 	}
 	
+	
 	?> 
 				
 	<form id="form_remediation" action='./remediation.php' method='POST' name='form_remediation'>
-		<input type='hidden' name='user_id' value='<?php echo $user_id?>'>
+		<input type='hidden' name='id' value='<?php echo $remediation_id?>'>
 		<div class="row form-group">
 			<label class="col-md-3"><?php echo getLabel("label.manage_remediation.remediation_name"); ?></label>
 			<div class="col-md-9">
@@ -116,12 +141,13 @@ function get_field() {
 						<input class="btn btn-danger" id="rule_host_button_del" type="button" value="<?php echo getLabel("action.clear");?>">
 					</span>
 				</div>
-				<select class="form-control" id="host" name="host[]" size=4 multiple="multiple">
+				<select class="form-control" id="remediation_actions_id" name="remediation_actions_id[]" size=4 multiple="multiple">
 				<?php 
-					if(isset($remediation_action)){
-						$division=explode(",", $remediation_action);
-						foreach($division as $selected){
-							echo "<option selected='selected' value='".$selected."'>".$selected."</option> ";
+					if(isset($remediation_action_id)){
+						$division=explode(",", $remediation_action_id);
+						
+						for($i=0; $i<count($division);$i++){
+							echo "<option selected='selected' value='".$division[$i]."'>".$division[$i]."</option> ";
 						}
 					}
 				?>
@@ -152,13 +178,13 @@ function get_field() {
    // Add
 	$('#rule_host_button').on('click',function(){
 		var o = new Option($("#rule_host1").val(),$("#rule_host1").val(),true,true);
-		$("#host").append(o);
+		$("#remediation_actions_id").append(o);
 	});
 	
 	// Delete
 	$('#rule_host_button_del').on('click',function(){
-		$("#host").find('option:selected').remove();
-		$("#host").find("option").attr('selected','selected');
+		$("#remediation_actions_id").find('option:selected').remove();
+		$("#remediation_actions_id").find("option").attr('selected','selected');
 	});
 	
 	/*$('#ajout').on('submit', 'form', function(e) {

@@ -51,8 +51,9 @@ if(isset($_GET["action"])) {
 					// Get remediation_action name
 					$user_res=sqlrequest("$database_eorweb","select name from remediation where id='$remediation_action_selected[$i]'");
 					$remediation=mysqli_result($user_res,0,"user_name");
-					// Delete user in eorweb
+					// Delete 
 					sqlrequest("$database_eorweb","delete from remediation where id='$remediation_selected[$i]'");
+					sqlrequest("$database_eorweb","delete from remediation_action where remediationID='$remediation_selected[$i]'");
 					
 					// Logging action
 					logging("manage_remediation","DELETE : $remediation_selected[$i]");
@@ -241,7 +242,7 @@ if(isset($_GET["action"])) {
 					?>
 						<tr>
 							<td class="text-center"><label><input type="checkbox" class="checkbox" name="remediation_selected[]" value="<?php echo $line["id"]; ?>"></label></td>
-							<td><a href="methods.php?id=<?php echo $line["id"]; ?>"><?php echo $line["name"]; ?></a></td>
+							<td><a href="manage_remediation.php?id=<?php echo $line["id"]; ?>"><?php echo $line["name"]; ?></a></td>
 							<td><?php echo mysqli_result(sqlrequest("eorweb","SELECT user_name from users where user_id='".$line["user_id"]."'"),0,"user_name"); ?></td>
 							<td><?php echo $line["date_demand"]; ?></td>
 							<td><?php echo $line["date_validation"]; ?></td>
