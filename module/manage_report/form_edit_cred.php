@@ -81,7 +81,7 @@ include("../../side.php");
 			$file_tmp = $_FILES['filename']['tmp_name'];
 			$file_dst = "/srv/eyesofreport/report/" . basename($_FILES['filename']['name']);
 			if (move_uploaded_file($file_tmp, $file_dst)) {
-				message(5,getLabel("label.manage_report.upload_success"). $file_dst ." : ".getLabel("label.manage_report.upload_success2"),"ok");
+				message(6,getLabel("label.manage_report.upload_success"). $file_dst ." : ".getLabel("label.manage_report.upload_success2"),"ok");
 			} else {
 				message(5,getLabel("label.manage_report.upload_error5"),"critical");
 			}

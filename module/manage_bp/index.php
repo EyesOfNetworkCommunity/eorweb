@@ -304,16 +304,10 @@ function display_other_source_bp(){
 				</button>
 			</div>
 			<div class="form-group">
-				<button type="button" class="btn btn-success" onclick="AddingComponent();">
+				<button type="button" class="btn btn-primary" onclick="AddingComponent();">
 					<?php echo getLabel("action.add_new_component"); ?>
 				</button>
 			</div> 
-			<div class="form-group">
-				<button type="button" class="btn btn-primary" onclick="ShowModalApplyConfiguration();">
-					<?php echo getLabel("action.apply_conf"); ?>
-				</button>
-			</div>
-
 		</div>
 
 		<!-- affichage des bps de la source global_nagiosbp -->
