@@ -88,7 +88,8 @@ function display_bp($bp,$bp_racine,$source) {
 			<div class="tree-line">
 				<i class="glyphicon-link glyphicon"></i>
 				<b class="bp_presentation"><?php echo $display_bp; ?></b>
-				<b class="condition_presentation"><?php echo $priority; ?></b>
+				<b class="condition_presentation"><?php echo rtrim($source,"_nagiosbp"); ?></b>
+				<b class="condition_presentation"><?php echo "display".$priority; ?></b>
 				<b class="condition_presentation"><?php echo $rule_type." ".$min_value; ?></b>
 				<input name="bp-name" type="hidden" value="<?php echo $bp; ?>">
 				<input name="bp-source" type="hidden" value="<?php echo $source; ?>">

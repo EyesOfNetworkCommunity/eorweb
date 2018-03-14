@@ -124,7 +124,7 @@ include("../../side.php");
 								<option><?php echo (isset($bp_prior)?$bp_prior: getLabel("label.none")); ?>
 								</option>
 								<?php
-								if (!$type_app){ ?>
+								if (!$type_app && !isset($bp_prior)){ ?>
 									<option selected="selected">0</option>
 								<?php }
 								for ($i=1; $i <= 5; $i++) { 

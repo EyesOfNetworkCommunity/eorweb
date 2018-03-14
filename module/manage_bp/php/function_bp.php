@@ -61,7 +61,7 @@ elseif ($action == 'add_process'){
 }
 
 elseif ($action == 'add_application'){
-	add_application($uniq_name_orig,$uniq_name,$process_name,$display,$url,$command,$type,$min_value,$source_name,$source_type,$bdd);
+	add_application($uniq_name_orig,$uniq_name,$process_name,$display,$url,$command,$type,$min_value,$source_name,$source_type);
 }
 
 elseif ($action == 'build_file'){
@@ -157,23 +157,27 @@ function add_application($uniq_name_orig,$uniq_name,$process_name,$display,$url,
 			}
 			// Update global 
 			else {
-				$sql = "SELECT count(*) FROM bp_category WHERE bp_name = ?;";
-				$req = $bdd->prepare($sql);
-				$req->execute(array($uniq_name_orig));
-				$bp_cat = $req->fetch();
-				
-				// If category
-				if($escape && $bp_cat[0]!=0) {
-					$sql = "UPDATE bp_category set bp_name = ? WHERE bp_name = ?";
-					$req = $bdd_global->prepare($sql);
-					$req->execute(array($uniq_name,$uniq_name_orig));
-				} else {
+				if(!$escape) {
+					// Contracts
 					$sql = "UPDATE contract_context_application SET APPLICATION_NAME = ? WHERE APPLICATION_NAME = ? AND APPLICATION_SOURCE = ?";
 					$req = $bdd_global->prepare($sql);
 					$req->execute(array($uniq_name,$uniq_name_orig,$source_name));
+				
+					// Category
+					$sql = "SELECT count(*) FROM bp_category WHERE (bp_name = ? OR bp_name = ?);";
+					$req = $bdd_global->prepare($sql);
+					$req->execute(array($uniq_name_orig."_CI",$uniq_name_orig."_CI"));
+					$bp_cat = $req->fetch();
 					
-					add_application($uniq_name_orig."_CI",$uniq_name."_CI",$uniq_name."_CI",2,$url,$command,$type,$min_value,$source_name,"bp",true);
-					add_application($uniq_name_orig."_CA",$uniq_name."_CA",$uniq_name."_CA",2,$url,$command,$type,$min_value,$source_name,"bp",true);
+					// If category
+					if($bp_cat[0]!=0) {
+						add_application($uniq_name_orig."_CI",$uniq_name."_CI",$uniq_name."_CI",2,$url,$command,$type,$min_value,$source_name,"bp",true);
+						add_application($uniq_name_orig."_CA",$uniq_name."_CA",$uniq_name."_CA",2,$url,$command,$type,$min_value,$source_name,"bp",true);
+					}
+				} else {
+					$sql = "UPDATE bp_category set bp_name = ? WHERE bp_name = ?";
+					$req = $bdd_global->prepare($sql);
+					$req->execute(array($uniq_name,$uniq_name_orig));
 				}
 			}
 		}
@@ -214,24 +218,26 @@ function delete_bp($bp,$bp_source,$bdd,$bdd_global,$escape=false) {
 	} 
 	// Delete contracts contexts links
 	else {
-		
-		$sql = "SELECT count(*) FROM bp_category WHERE bp_name = ?;";
-		$req = $bdd->prepare($sql);
-		$req->execute(array($bp));
-		$bp_cat = $req->fetch();
-		
-		// If category
-		if($escape && $bp_cat[0]!=0) {
-			$sql = "DELETE FROM bp_category WHERE bp_name = ?";
-			$req = $bdd_global->prepare($sql);
-			$req->execute(array($bp));
-		} else {
+		if(!$escape) {
+			// Contracts
 			$sql = "DELETE FROM contract_context_application WHERE APPLICATION_NAME = ? and APPLICATION_SOURCE = ?";
 			$req = $bdd_global->prepare($sql);
 			$req->execute(array($bp, $bp_source));
 		
-			delete_bp($bp."_CA",$bp_source,$bdd,$bdd_global,true);
-			delete_bp($bp."_CI",$bp_source,$bdd,$bdd_global,true); 
+			// Category
+			$sql = "SELECT count(*) FROM bp_category WHERE (bp_name = ? OR bp_name = ?) ;";
+			$req = $bdd_global->prepare($sql);
+			$req->execute(array($bp."_CI",$bp."_CA"));
+			$bp_cat = $req->fetch();
+			
+			if($bp_cat[0]!=0) {
+				delete_bp($bp."_CA",$bp_source,$bdd,$bdd_global,true);
+				delete_bp($bp."_CI",$bp_source,$bdd,$bdd_global,true); 
+			}
+		} else {
+			$sql = "DELETE FROM bp_category WHERE bp_name = ?";
+			$req = $bdd_global->prepare($sql);
+			$req->execute(array($bp));
 		}
 	}
 	
