@@ -21,32 +21,31 @@
 
 $(document).ready(function() {
 	$("input").change(function(){
-		if($("#uniq_name").val() != "" && $("#process_name").val() != "" && $('select[name="type"]').val() != "" && $('select[name="display"]').val() != "None"){
+		if($("#uniq_name").val() != "" && $('select[name="type"]').val() != "" && $('select[name="display"]').val() != "None"){
 			$('#submit').prop('disabled', false);
 		}
 		else{
 			$('#submit').prop('disabled', true);
 		}
 		if($('select[name="type"]').val() == "MIN" && $('select[name="min_value"]').val() == ""){
-            $('#submit').prop('disabled', true);
-        }
+			$('#submit').prop('disabled', true);
+		}
 	});
 
 	$('select').change(function(){
-        if($("#uniq_name").val() != "" && $("#process_name").val() != "" && $('select[name="type"]').val() != "" && $('select[name="display"]').val() != "None"){
-            $('#submit').prop('disabled', false);
-        }
-        else{
-            $('#submit').prop('disabled', true);
-        }
+		if($("#uniq_name").val() != "" && $('select[name="type"]').val() != "" && $('select[name="display"]').val() != "None"){
+			$('#submit').prop('disabled', false);
+		}
+		else{
+			$('#submit').prop('disabled', true);
+		}
 		if($('select[name="type"]').val() == "MIN" && $('select[name="min_value"]').val() == ""){
 			$('#submit').prop('disabled', true);
 		}
-    });
-
+	});
+	
 	$('#submit').click(function(event){
 		event.preventDefault();
-
 		var uniq_name_orig = $("#uniq_name_orig").val();
 		var uniq_name = $("#uniq_name").val();
 		var process_name = $("#process_name").val();
@@ -56,12 +55,12 @@ $(document).ready(function() {
 		var type = $('select[name="type"]').val();
 		var min_value = $('select[name="min_value"]').val();
 		var source_name = $('select[name=source_name]').val();
-
-		if (source_name == "undefined"){
+		var source_type = "bp";
+		
+		if (!source_name){
 			source_name = "global_nagiosbp";
+			source_type = "app";
 		}
-
-		alert(source_name);
 
 		// check if a BP already exists, if this is the case we stop here !
 		if(uniq_name!=uniq_name_orig) {
@@ -85,17 +84,17 @@ $(document).ready(function() {
 				command: command,
 				type: type,
 				min_value: min_value,
-				source_name: source_name
+				source_name: source_name,
+				source_type: source_type
 			},
 			function return_value(value){
 				setTimeout(function(){
-                	//$(location).attr('href',"add_services.php?bp_name=" + uniq_name + "&display=" + display + "&source=" + source_name);
-                	},
-                	500
-            	);
+					$(location).attr('href',"add_services.php?bp_name=" + uniq_name + "&display=" + display + "&source=" + source_name);
+                },500);
 			}
 		);
 	});
+	
 });
 
 function message(msg, type, target)
@@ -131,7 +130,6 @@ function bpAlreadyExists(bp_name)
 
 	return tmp;
 }
-
 
 function disable_min(value) {
     if (value.value == "MIN") {

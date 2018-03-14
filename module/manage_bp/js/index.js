@@ -2,7 +2,7 @@
 #########################################
 #
 # Copyright (C) 2018 EyesOfNetwork Team
-# DEV NAME : Michael Aubertin
+# DEV NAME : Jean-Philippe Levy
 # VERSION : 2.0
 # APPLICATION : eorweb for eyesofreport project
 #
@@ -22,6 +22,11 @@
 $(document).ready(function () {
 	
 	hasBeenClicked = false;
+	
+	// Edit BP
+	$('a[name=edit-bp]').click(function () {
+		hasBeenClicked = true;
+	});
 	
 	// Delete BP
 	$('button[name=delete-bp]').click(function () {
@@ -94,8 +99,6 @@ function findIt(){
 	}
 }
 
-var n = 0;
-
 function ShowHight($search_text){
 	$("ul:contains('" + $search_text +"') li.son").show();
 	$("ul:contains('" + $search_text +"') li.end").show();
@@ -109,14 +112,6 @@ function ShowAll(){
 function HideAll(){
 	$('.tree li.son').hide();
 	$('.tree li.end').hide();
-}
-
-function AddingApplication(){
-	$(location).attr('href',"./add_application.php");
-}
-
-function AddingComponent(){
-	$(location).attr('href',"./add_application.php?app");
 }
 
 function ShowModalDeleteBP(bp,source){
@@ -143,29 +138,6 @@ function DeleteBP(bpname,bpsource){
 		},
 		function ReturnAction(){
 			location.reload();
-		}
-	);
-
-	// and close the modal
-	$("#popup_confirmation").modal('hide');
-}
-
-function ShowModalApplyConfiguration(){
-	$("#popup_confirmation .modal-title").html(dictionnary["action.apply_conf"]);
-	$("#popup_confirmation .modal-body").html(dictionnary["action.apply_conf"]+' ?');
-	$("#popup_confirmation button").hide();
-	$("#modal-confirmation-apply-conf").show();
-	$("#action-cancel").show();
-	$("#popup_confirmation").modal('show');
-}
-
-function ApplyConfiguration(){
-	$.get(
-		'./php/function_bp.php',
-		{
-			action: 'build_file'
-		},
-		function ReturnValue(value){
 		}
 	);
 

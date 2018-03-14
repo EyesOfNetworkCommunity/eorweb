@@ -302,14 +302,14 @@ function display_other_source_bp(){
 		
 		<div class="form-inline">
 			<div class="form-group">		                   
-				<button type="button" class="btn btn-success" onclick="AddingApplication();">
+				<a role="button" id="add-bp-app" type="button" class="btn btn-success" href="add_application.php?app">
 					<?php echo getLabel("action.add_new_app"); ?>
-				</button>
+				</a>
 			</div>
 			<div class="form-group">
-				<button type="button" class="btn btn-primary" onclick="AddingComponent();">
+				<a role="button" id="add-bp" type="button" class="btn btn-primary" href="add_application.php">
 					<?php echo getLabel("action.add_new_component"); ?>
-				</button>
+				</a>
 			</div> 
 		</div>
 

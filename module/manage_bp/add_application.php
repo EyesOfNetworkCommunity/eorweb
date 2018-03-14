@@ -36,9 +36,9 @@ include("../../side.php");
     
     <?php
     if (isset($_GET['app'])) {
-        $type_app = false;
-    } else {
         $type_app = true;
+    } else {
+        $type_app = false;
     }
 
     if(isset($_GET['bp_name'])){
@@ -67,7 +67,6 @@ include("../../side.php");
     	$bp_type = $info['type'];
     	$bp_command = $info['command'];
     	$bp_minvalue = $info['min_value'];
-    	echo $bp_minvalue;
     } ?>
 
     <div class="panel panel-default">
@@ -82,7 +81,7 @@ include("../../side.php");
                         <div class="form-group">
                             <label style="font-weight:normal" class="col-xs-3 control-label"><?php echo getLabel("label.manage_bp.database_source"); ?></label>
                             <div class="col-xs-8">
-                                <select class="form-control" name="source_name">
+                                <select class="form-control" name="source_name" <?php if(isset($bp_name)) { echo "disabled"; } ?>>
                                 <?php 
                                 $db_list = sqlrequest($database_vanillabp,"SELECT db_names, nick_name FROM bp_sources");
                                 while ($row = mysqli_fetch_array($db_list)) {
@@ -102,7 +101,7 @@ include("../../side.php");
                 	<div class="form-group">
                     	<label style="font-weight:normal" class="col-xs-3 control-label"><?php echo getLabel("label.manage_bp.unique_name"); ?></label>
                         <div class="col-xs-8">
-							<input type="hidden" id="uniq_name_orig" value=" echo (isset($bp_name)?$bp_name:'');">
+							<input type="hidden" id="uniq_name_orig" value="<?php echo (isset($bp_name)?$bp_name:''); ?>">
                         	<input type="text" class="form-control" id="uniq_name" onkeyup="this.value=this.value.replace(/[^éèàêâç0-9a-zA-Z-_ \/\*]/g,'')" value="<?php echo (isset($bp_name)?$bp_name:''); ?>">
                         </div>
         			</div>
@@ -126,7 +125,7 @@ include("../../side.php");
 								</option>
 								<?php
 								if (!$type_app){ ?>
-									<option>0</option>
+									<option selected="selected">0</option>
 								<?php }
 								for ($i=1; $i <= 5; $i++) { 
                                     if ($type_app && $i==1){ ?>
