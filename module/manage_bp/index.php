@@ -90,9 +90,12 @@ function display_bp($bp,$bp_racine,$source) {
 				<b class="bp_presentation"><?php echo $display_bp; ?></b>
 				<b class="condition_presentation"><?php echo $priority; ?></b>
 				<b class="condition_presentation"><?php echo $rule_type." ".$min_value; ?></b>
-				<button type="button" class="btn_presentation pull-right btn btn-xs btn-danger" onclick="ShowModalDeleteBP('<?php echo $bp; ?>,<?php echo $source; ?>');"><i class="glyphicon glyphicon-trash"></i></button>
-				<button type="button" class="btn_presentation pull-right btn btn-xs btn-info" onclick="location.href='add_application.php?bp_name=<?php echo $bp; ?>&source=<?php echo $source; ?>'"><i class="glyphicon glyphicon-pencil"></i></button>
-				<button type="button" class="btn_presentation pull-right btn btn-xs btn-success" onclick="location.href='add_services.php?bp_name=<?php echo $bp; ?>&display=<?php echo $priority; ?>&source=<?php echo $source; ?>'"><i class="glyphicon glyphicon-plus"></i></button>
+				<input name="bp-name" type="hidden" value="<?php echo $bp; ?>">
+				<input name="bp-source" type="hidden" value="<?php echo $source; ?>">
+				<input name="bp-priority" type="hidden" value="<?php echo $priority; ?>">
+				<button name="delete-bp" type="button" class="btn_presentation pull-right btn btn-xs btn-danger"><i class="glyphicon glyphicon-trash"></i></button>
+				<a name="edit-bp" role="button" class="btn_presentation pull-right btn btn-xs btn-info" href="add_application.php?bp_name=<?php echo $bp; ?>&source=<?php echo $source; ?>"><i class="glyphicon glyphicon-pencil"></i></a>
+				<a name="edit-bp" role="button" class="btn_presentation pull-right btn btn-xs btn-success" href="add_services.php?bp_name=<?php echo $bp; ?>&display=<?php echo $priority; ?>&source=<?php echo $source; ?>"><i class="glyphicon glyphicon-plus"></i></a>
 			</div>
 		</div>
 	</li>				
@@ -281,8 +284,8 @@ function display_other_source_bp(){
 		<div class="form-inline">
 			<div class="form-group">
 				<div class="btn-group">
-					<button class="btn btn-info" type="button" onclick="ShowAll();"><?php echo getLabel("action.show_all") ?></button>
-					<button class="btn btn-info" type="button" onclick="HideAll();"><?php echo getLabel("action.hide_all") ?></button>
+					<button id="show-all" class="btn btn-info" type="button"><?php echo getLabel("action.show_all") ?></button>
+					<button id="hide-all" class="btn btn-info" type="button"><?php echo getLabel("action.hide_all") ?></button>
 				</div><!-- /btn-group -->
 				
 			</div>

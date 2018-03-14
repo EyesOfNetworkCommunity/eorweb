@@ -19,7 +19,7 @@ $url = isset($_GET['url']) ? $_GET['url'] : false;
 $command = isset($_GET['command']) ? $_GET['command'] : false;
 $type = isset($_GET['type']) ? $_GET['type'] : false;
 $min_value = isset($_GET['min_value']) ? $_GET['min_value'] : false;
-$source_name = isset($_GET['source_name']) ? $_GET['source_name'] : "global_nagiosbp";
+$source_name = isset($_GET['source_name']) ? $_GET['source_name'] : $database_vanillabp;
 
 try {
 	$bdd = new PDO('mysql:host=localhost;dbname='.$source_name, $database_username, $database_password);
@@ -40,8 +40,7 @@ if($action == 'verify_services'){
 }
 
 elseif($action == 'delete_bp'){
-	delete_bp($bp_name,$bdd);
-	delete_bp($bp_name,$bdd_global);
+	delete_bp($bp_name,$source_name,$bdd,$bdd_global);
 }
 
 elseif($action == 'list_services'){
@@ -85,10 +84,11 @@ function verify_services($bp,$host,$bdd) {
 	echo $bp . "::" . $host . "::" . $number_services . "::" . $service;
 }
 
-function delete_bp($bp,$bdd) {
+function delete_bp($bp,$bp_source,$bdd,$bdd_global) {
+	
 	$sql = "DELETE FROM bp WHERE name = ?";
 	$req = $bdd->prepare($sql);
-	$req->exec(array($bp));
+	$req->execute(array($bp));
 
 	$sql = "DELETE FROM bp_services WHERE bp_name = ?";
 	$req = $bdd->prepare($sql);
@@ -101,6 +101,20 @@ function delete_bp($bp,$bdd) {
 	$sql = "DELETE FROM bp_links WHERE bp_link = ?";
 	$req = $bdd->prepare($sql);
 	$req->execute(array($bp));
+
+	// Delete links in global
+	if($bp_source != "global") {
+		$sql = "DELETE FROM bp_links WHERE bp_link = ? and bp_source = ?";
+		$req = $bdd_global->prepare($sql);
+		$req->execute(array($bp, rtrim($bp_source,"_nagiosbp")));
+	} 
+	// Delete contracts contexts links
+	else {
+		$sql = "DELETE FROM contract_context_application WHERE APPLICATION_NAME = ? and APPLICATION_SOURCE = ?";
+		$req = $bdd_global->prepare($sql);
+		$req->execute(array($bp, $bp_source));
+	}
+	
 }
 
 function list_services($host_name) {

@@ -20,16 +20,33 @@
 */
 
 $(document).ready(function () {
+	
+	hasBeenClicked = false;
+	
+	// Delete BP
+	$('button[name=delete-bp]').click(function () {
+		bpname = $(this).parent().children("input[name=bp-name]").val();
+		bpsource = $(this).parent().children("input[name=bp-source]").val();
+		ShowModalDeleteBP(bpname,bpsource);
+		hasBeenClicked = true;
+	});
+	
+	// Toggle line
 	$('.tree li.son').toggle();
-	$('.tree li.end').toggle();
+	$('.tree li.end').toggle();	
 	$('.tree-line').click(function () {
-		$(this).parent().parent().parent().children('.tree li.end').toggle();
-		$(this).parent().parent().parent().children('.tree li.son').toggle();
+		if(!hasBeenClicked) {
+			$(this).parent().parent().parent().children('.tree li.end').toggle();
+			$(this).parent().parent().parent().children('.tree li.son').toggle();
+		}
+		hasBeenClicked = false;
 	});
 	$("[data-toggle=tooltip]").tooltip();
-
+	
+	// display bps
 	$("#body").show();
 	
+	// find bp
 	$(document).keypress(function press_enter(e){
     	if(e.which == 13){
 			e.preventDefault();
@@ -37,12 +54,22 @@ $(document).ready(function () {
     	}
 	});
 
+	// show all bps
+	$('#show-all').on('click', function(){
+		ShowAll();
+	});
+	
+	// hide all bps
+	$('#hide-all').on('click', function(){
+		HideAll();
+	});
+	
 	// event when we confirm the modal
 	$('#modal-confirmation-apply-conf').on('click', function(){
 		ApplyConfiguration();
 	});
 	$('#modal-confirmation-del-bp').on('click', function(){
-		DeleteBP();
+		DeleteBP(bpname,bpsource);
 	});
 });
 
@@ -92,10 +119,7 @@ function AddingComponent(){
 	$(location).attr('href',"./add_application.php?app");
 }
 
-function ShowModalDeleteBP(info){
-	var info_parts = info.split(',');
-	var bp = info_parts[0];
-	var source = info_parts[1];
+function ShowModalDeleteBP(bp,source){
 	var nickname_parts = source.split('_nagiosbp');
 	var nickname = nickname_parts[0];
 	
@@ -107,22 +131,18 @@ function ShowModalDeleteBP(info){
 	$("#popup_confirmation").modal('show');
 }
 
-function DeleteBP(){
-	var message = $(".modal-body").html();
-	var message_parts = message.split('  ');
-	var bp_name = message_parts[1];
-	var source_name = message_parts[3] + "_nagiosbp";
+function DeleteBP(bpname,bpsource){
 
-	$('div[id="' + bp_name + '"]').remove();
+	$('div[id="' + bpname + '"]').remove();
 	$.get(
 		'./php/function_bp.php',
 		{
 			action: 'delete_bp',
-			source_name: source_name,
-			bp_name: bp_name
+			source_name: bpsource,
+			bp_name: bpname
 		},
 		function ReturnAction(){
-				location.reload();
+			location.reload();
 		}
 	);
 
