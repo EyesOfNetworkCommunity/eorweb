@@ -88,9 +88,9 @@ $(document).ready(function () {
 	});
 
 	$('select').change(function(){
-		var element_bp_name = $('.bp_name').html();
-        var bp_name = element_bp_name.split(" : ")[1];
+        var bp_name = $('#bp_name').val();
 		var nb_display = $('select[name="display"]').val();
+		var source_name = $('#source_name').val();
 		if(nb_display % 1 === 0) {
 			$('#process').html(dictionnary["label.manage_bp.process_for_display"]+' ' + nb_display + '');
 		} else {
@@ -102,7 +102,8 @@ $(document).ready(function () {
             {
             	action: 'list_process',
 				bp_name: bp_name,
-				display: nb_display
+				display: nb_display,
+				source_name: source_name
 			},
             function ReturnValue(list_process){
 				$('#draggablePanelListProcess').children().remove();
@@ -286,14 +287,15 @@ function ApplyService(){
 }
 
 function ApplyProcess(){
-    var element = $('h1.page-header').html();
-    var bp_name = element.split(" : ")[1];
+	var bp_name = $('#bp_name').val();
+	var source_name = $('#source_name').val();
     $.get(
         './php/function_bp.php',
         {
             action: 'add_process',
             bp_name: bp_name,
-            new_services: $list_new_services
+            new_services: $list_new_services,
+			source_name: source_name
         },
         function ReturnError(){
             setTimeout(function(){

@@ -276,11 +276,66 @@ function list_services($host_name) {
     echo json_encode($tabServices);
 }
 
+// List sources informations
+function list_sources($bp_source=false) {
+	
+	global $bdd_global;
+	
+	if($bp_source) {
+		$sql = "SELECT db_names,nick_name,thruk_idx FROM bp_sources where db_names = ?";
+		$req = $bdd_global->prepare($sql);
+		$req->execute(array($bp_source));
+	} else {
+		$sql = "SELECT db_names,nick_name,thruk_idx FROM bp_sources";
+		$req = $bdd_global->prepare($sql);
+		$req->execute();
+	}
+	
+	$sources = $req->fetchall();
+	return $sources;
+	
+}
+
+// List BPs
 function list_process($bp,$display,$bdd) {
-	$sql = "SELECT name FROM bp WHERE is_define = 1 AND name!=? AND priority = ?";
-	$req = $bdd->prepare($sql);
-	$req->execute(array($bp,$display));
-	$process = $req->fetchall();
+	
+	global $database_vanillabp, $source_name, $bdd_global;
+	
+	// If global
+	if($source_name == $database_vanillabp) {
+				
+		$sources = list_sources();
+		$sql="";
+		$prepare=array();
+		
+		foreach($sources as $source) {
+			$app="";
+			if($source["db_names"] == $database_vanillabp) {
+				$app="AND name not in(select distinct LEFT(bp_name,LOCATE('_C',bp_name) - 1) from bp_category)";
+			}
+			$sql.="SELECT name FROM ".$source["db_names"].".bp WHERE name!=? AND priority = ? $app
+					AND name not in(select bp_name from global_nagiosbp.bp_links where bp_link=?) 
+					AND name not in(select bp_link from global_nagiosbp.bp_links where bp_name=?) UNION ";
+			$prepare[]=$bp;
+			$prepare[]=$display;
+			$prepare[]=$bp;
+			$prepare[]=$bp;
+		}
+		$sql=rtrim($sql," UNION ");
+		
+		$req = $bdd->prepare($sql);
+		$req->execute($prepare);
+		$process = $req->fetchall();
+		
+	}
+	else {
+		$sql = "SELECT name FROM bp WHERE name!=? AND priority = ?
+				AND name not in(select bp_name from global_nagiosbp.bp_links where bp_link=?) 
+				AND name not in(select bp_link from global_nagiosbp.bp_links where bp_name=?)";
+		$req = $bdd->prepare($sql);
+		$req->execute(array($bp,$display,$bp,$bp));
+		$process = $req->fetchall();
+	}
 
     echo json_encode($process);
 }
@@ -326,6 +381,7 @@ function add_services($bp,$services,$bdd) {
 }
 
 function add_process($bp,$process,$bdd) {
+		
 	$sql = "DELETE FROM bp_links WHERE bp_name = ?";
 	$req = $bdd->prepare($sql);
 	$req->execute(array($bp));
@@ -360,115 +416,6 @@ function check_app_exists($uniq_name, $bdd) {
 		echo "true";
 	} else {
 		echo "false";
-	}
-}
-
-function build_file($bdd) {
-	
-	$bp_sons=array();
-	
-	$sql = "SELECT * FROM bp WHERE is_define ='1'";
-	$req = $bdd->query($sql);
-	$bps_informations = $req->fetchall();
-	$file = "../../../../nagiosbp/etc/nagios-bp.conf";
-	$backup_file = "../../../../nagiosbp/etc/nagios-bp.conf_old";
-	copy($file,$backup_file);
-	$bp_file = fopen($file, "w");
-	fputs($bp_file, "#\n");
-	fputs($bp_file, "# EyesOfReport\n");
-	fputs($bp_file, "#\n");
-	
-	foreach($bps_informations as $bp_informations){
-		if(!in_array($bp_informations['name'],$bp_sons,true)) {
-			$bp_sons=build_file_recursive($bdd,$bp_file,$bp_informations,$bp_sons);
-		}
-	}
-	fclose($bp_file);
-}
-
-function build_file_recursive($bdd,$bp_file,$bp_informations,$bp_sons) {
-
-	$sql = "SELECT bp_link FROM bp_links WHERE bp_name=?";
-	$req = $bdd->prepare($sql);
-	$req->execute(array($bp_informations['name']));
-	if($req->rowCount() == 0) {
-		$bp_sons[]=$bp_informations['name'];
-		build_file_bp($bdd,$bp_file, $bp_informations);
-	} else {
-		$bp_links = $req->fetchall();
-		foreach($bp_links as $bp_link){
-			$sql = "SELECT * FROM bp WHERE is_define ='1' and name=?";
-			$req = $bdd->prepare($sql);
-			$req->execute(array($bp_link["bp_link"]));
-			$bps_sons_informations = $req->fetchall();
-			foreach($bps_sons_informations as $bp_sons_informations){
-				if(!in_array($bp_sons_informations['name'],$bp_sons,true)) {
-					$bp_sons=build_file_recursive($bdd,$bp_file,$bp_sons_informations,$bp_sons);
-				}
-			}
-		}
-		$bp_sons[]=$bp_informations['name'];
-		build_file_bp($bdd,$bp_file, $bp_informations);
-	}
-	return $bp_sons;
-}
-
-function build_file_bp($bdd,$bp_file, $bp_informations) {
-	fputs($bp_file, $bp_informations['name'] . " = ");
-	if($bp_informations['type'] == 'ET'){
-		$type = "&";
-	}
-	elseif($bp_informations['type'] == 'OU'){
-		$type = "|";
-	}
-	else{
-		$type = "+";
-		fputs($bp_file, $bp_informations['min_value'] . " of: ");
-	}
-	$sql = "SELECT host,service FROM bp_services WHERE bp_name = ?";
-	$req = $bdd->prepare($sql);
-	$req->execute(array($bp_informations['name']));
-	$host_services = $req->fetchall();
-
-	$counter1 = count($host_services);
-	$counter2 = 0;
-
-	foreach($host_services as $services){
-		fputs($bp_file,$services['host'] . ";" . $services['service']);
-		$counter2 += 1;
-
-		if($counter2 < $counter1){
-			fputs($bp_file, " " . $type . " ");
-		}
-	}
-
-	$sql = "SELECT bp_link FROM bp_links WHERE bp_name = ?";
-	$req = $bdd->prepare($sql);
-	$req->execute(array($bp_informations['name']));
-	$link_informations = $req->fetchall();
-
-	$counter1 = count($link_informations);
-	$counter2 = 0;
-
-	foreach($link_informations as $link_infos){
-		fputs($bp_file,$link_infos['bp_link']);
-		$counter2 += 1;
-
-		if($counter2 < $counter1){
-			fputs($bp_file, " " . $type . " ");
-		}
-	}
-
-	fputs($bp_file, "\n");
-
-	fputs($bp_file, "display " . $bp_informations['priority'] . ";" . $bp_informations['name'] . ";" . $bp_informations['description'] . "\n");
-
-	if(! empty($bp_informations['url'])){
-		fputs($bp_file, "info_url " . $bp_informations['name'] . ";" . $bp_informations['url'] . "\n");
-	}
-
-	if(! empty($bp_informations['command'])){
-		fputs($bp_file, "external_info " . $bp_informations['name'] . ";" . $bp_informations['command'] . "\n");
 	}
 }
 

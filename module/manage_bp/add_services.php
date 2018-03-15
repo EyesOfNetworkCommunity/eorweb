@@ -47,8 +47,9 @@ catch(Exception $e) {
 	<div class="row">
 		<div class="col-md-6">
 			<?php echo"<form onsubmit=\"return false;\">"; ?>
-			<input type="hidden" id="bp_name" name="bp_name" value="<?php $bp_name ?>">
-			<input type="hidden" id="display" name="display" value="<?php $display_actually_bp ?>">
+			<input type="hidden" id="bp_name" name="bp_name" value="<?php echo $bp_name; ?>">
+			<input type="hidden" id="bp_display" name="bp_display" value="<?php echo $display_actually_bp; ?>">
+			<input type="hidden" id="source_name" name="source_name" value="<?php echo $source; ?>">
 			<?php 
 				if($display_actually_bp == 0) {	
 					?>
