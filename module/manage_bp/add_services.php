@@ -118,18 +118,25 @@ catch(Exception $e) {
 				<div id="container-drop_zone" class="container-drop_zone">
 					<?php 
 					if($display_actually_bp > 0){
-						$sql = "SELECT bp_link FROM bp_links WHERE bp_name = '$bp_name'";
+						if($source==$database_vanillabp) {
+							$sql = "SELECT bp_link,bp_source FROM bp_links WHERE bp_name = '$bp_name'";
+						} else {
+							$sql = "SELECT bp_link FROM bp_links WHERE bp_name = '$bp_name'";
+						}
 						$req = $bdd->query($sql);
 						$count = 0;
 
 						while($row = $req->fetch()){
 		               		$bp_name_linked = $row['bp_link'];
+							if($source==$database_vanillabp) {
+								$bp_name_linked .= "||".$row['bp_source'];
+							}
 		               		?>
 							<div id="<?php echo "$bp_name::--;;$bp_name_linked"; ?>" class="text-info well well-sm" style="font-size:16px;">
 								<button type="button" class="btn btn-xs btn-danger button-addbp" onclick="DeleteService('<?php echo "$bp_name::--;;$bp_name_linked"; ?>');">
 									<span class="glyphicon glyphicon-trash"></span>
 								</button>
-								<?php echo $bp_name_linked; ?>
+								<?php echo $row['bp_link']; ?>
 							</div>
 							<?php $count += 1;
 						}

@@ -37,7 +37,6 @@ $(document).ready(function () {
 		var information = id_element.split("::")[1];
 		var host_name = information.split(";;")[0];
 		var service_name = information.split(";;")[1];
-
 		$list_new_services.push(host_name + "::" + service_name);
 	}
 

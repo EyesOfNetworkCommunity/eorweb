@@ -331,8 +331,8 @@ function list_process($bp,$display,$bdd) {
 				$app="AND name not in(select distinct LEFT(bp_name,LOCATE('_C',bp_name) - 1) from bp_category)";
 			}
 			$sql.="SELECT name FROM ".$source["db_names"].".bp WHERE name!=? AND priority = ? $app
-					AND name not in(select bp_name from ".$source["db_names"].".bp_links where bp_link=?) 
-					AND name not in(select bp_link from ".$source["db_names"].".bp_links where bp_name=?) UNION ";
+					AND name not in(select bp_name from ".$database_vanillabp.".bp_links where bp_link=?) 
+					AND name not in(select bp_link from ".$database_vanillabp.".bp_links where bp_name=?) UNION ";
 			$prepare[]=$bp;
 			$prepare[]=$display;
 			$prepare[]=$bp;
@@ -415,12 +415,14 @@ function add_process($bp,$process,$bdd) {
 		
 		foreach($process as $values){
 			$value = explode("::", $values);
-			$bp_link = $value[1];
-
+			$bp_infos = explode("||", $value[1]);
+			$bp_link = $bp_infos[0];
+			$bp_source = $bp_infos[1];
+			
 			if($source_name==$database_vanillabp) {
 				$sql = "INSERT INTO bp_links (bp_name,bp_link,bp_source) VALUES(?,?,?)";
 				$req = $bdd->prepare($sql);
-				$req->execute(array($bp,$bp_link,rtrim($source_name,"_nagiosbp")));
+				$req->execute(array($bp,$bp_link,rtrim($bp_source,"_nagiosbp")));
 			} else {
 				$sql = "INSERT INTO bp_links (bp_name,bp_link) VALUES(?,?)";
 				$req = $bdd->prepare($sql);
