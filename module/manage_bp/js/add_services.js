@@ -132,8 +132,7 @@ $(document).scroll(function(){
 function AddService(name)
 {
 	$('#primary_drop_zone').remove();
-	var element_bp_name = $('.bp_name').html();
-    var bp_name = element_bp_name.split(" : ")[1];
+    var bp_name = $("#bp_name").val();
 
 	if($("#container_service").length){
 		$element = $('div[id="drop_zone::' + $('#host').val() + '"]');
@@ -288,6 +287,7 @@ function ApplyService(){
 function ApplyProcess(){
 	var bp_name = $('#bp_name').val();
 	var source_name = $('#source_name').val();
+
     $.get(
         './php/function_bp.php',
         {

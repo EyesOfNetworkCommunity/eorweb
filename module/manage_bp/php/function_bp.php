@@ -399,7 +399,7 @@ function add_services($bp,$services,$bdd) {
 
 function add_process($bp,$process,$bdd) {
 		
-	global $source_name;
+	global $source_name, $database_vanillabp;
 	
 	$sql = "DELETE FROM bp_links WHERE bp_name = ?";
 	$req = $bdd->prepare($sql);
@@ -412,15 +412,20 @@ function add_process($bp,$process,$bdd) {
 		$sql = "UPDATE bp set is_define = 1 WHERE name = ?";
 		$req = $bdd->prepare($sql);
 		$req->execute(array($bp));
-	
+		
 		foreach($process as $values){
 			$value = explode("::", $values);
 			$bp_link = $value[1];
 
-			$sql = "INSERT INTO bp_links (bp_name,bp_link,bp_source) VALUES(?,?,?)";
-
-			$req = $bdd->prepare($sql);
-			$req->execute(array($bp,$bp_link,rtrim($source_name,"_nagiosbp")));
+			if($source_name==$database_vanillabp) {
+				$sql = "INSERT INTO bp_links (bp_name,bp_link,bp_source) VALUES(?,?,?)";
+				$req = $bdd->prepare($sql);
+				$req->execute(array($bp,$bp_link,rtrim($source_name,"_nagiosbp")));
+			} else {
+				$sql = "INSERT INTO bp_links (bp_name,bp_link) VALUES(?,?)";
+				$req = $bdd->prepare($sql);
+				$req->execute(array($bp,$bp_link));
+			}
 		}	
 	}
 }
