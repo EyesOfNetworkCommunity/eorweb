@@ -128,7 +128,7 @@ catch(Exception $e) {
 								<button type="button" class="btn btn-xs btn-danger button-addbp" onclick="DeleteService('$bp_name::--;;$bp_name_linked');">
 									<span class="glyphicon glyphicon-trash"></span>
 								</button>
-								<?php $bp_name_linked ?>
+								<?php echo $bp_name_linked; ?>
 							</div>
 							<?php $count += 1;
 						}
@@ -168,7 +168,7 @@ catch(Exception $e) {
 								<button type="button" class="btn btn-xs btn-danger button-addbp" onclick="DeleteService('<?php $bp_name."::".$host.";;".$service ?>');">
 								<span class="glyphicon glyphicon-trash"></span>
 								</button>
-								<?php $service ?>
+								<?php echo $service; ?>
 								</div>
 							<?php } ?>
 							</div>
