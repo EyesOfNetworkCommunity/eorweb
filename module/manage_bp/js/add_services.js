@@ -29,8 +29,7 @@ function display_dropzone_element(id, text) {
 }
 
 $(document).ready(function () {
-	var element_bp_name = $('.page-header').html();
-    var bp_name = element_bp_name.split(" : ")[1];
+    var bp_name = $("#bp_name").val();
 	var all_element_match = $('div[id^="' + bp_name + '::"');
 
 	for(i=0;i<all_element_match.length;i++){
@@ -233,8 +232,8 @@ function DeleteService(line_service){
 	}
 	// PROCESS !!!
 	else {
-		var element_bp_name = $('.bp_name').html();
-	    var bp_name = element_bp_name.split(" : ")[1];
+	    var bp_name = $('#bp_name').val();
+		var source_name = $('#source_name').val();
 		var nb_display = $('select[name="display"]').val();
 		if(nb_display % 1 === 0) {
 			$('#process').html(dictionnary["label.manage_bp.process_for_display"]+' ' + nb_display + '');
@@ -245,16 +244,16 @@ function DeleteService(line_service){
 		$.get(
 			'./php/function_bp.php',
 	        {
-	        	action: 'list_process',
+	        	action: 'list_process_all',
 				bp_name: bp_name,
-				display: nb_display
+				display: nb_display,
+				source_name: source_name
 			},
 	        function ReturnValue(list_process){
 				$('#draggablePanelListProcess').children().remove();
 				for(i=0;i<list_process.length;i++){
 					$process = list_process[i]['name'];
 					var element = $('div[id$=";;' + $process + '"]');
-
 					if(! element.length){
 						$('#draggablePanelListProcess').append($('<div id="drag_' + $process +'" class="draggable well well-sm ui-front"><button type="button" class="btn btn-xs btn-success button-addbp"><i class="glyphicon glyphicon-plus"></i></button>' + $process + '</div>').draggable({ snap: true, revert: "invalid" }));
 					}

@@ -52,6 +52,10 @@ elseif($action == 'list_process'){
 	list_process($bp_name,$display,$bdd);
 }
 
+elseif($action == 'list_process_all'){
+	list_process_all($bp_name,$display,$bdd);
+}
+
 elseif ($action == 'add_services'){
 	add_services($bp_name,$new_services,$bdd);
 }
@@ -218,6 +222,11 @@ function delete_bp($bp,$bp_source,$bdd,$bdd_global,$escape=false) {
 	} 
 	// Delete contracts contexts links
 	else {
+		
+		$sql = "DELETE FROM bp_category WHERE bp_name = ?";
+		$req = $bdd_global->prepare($sql);
+		$req->execute(array($bp));
+		
 		if(!$escape) {
 			// Contracts
 			$sql = "DELETE FROM contract_context_application WHERE APPLICATION_NAME = ? and APPLICATION_SOURCE = ?";
@@ -234,10 +243,6 @@ function delete_bp($bp,$bp_source,$bdd,$bdd_global,$escape=false) {
 				delete_bp($bp."_CA",$bp_source,$bdd,$bdd_global,true);
 				delete_bp($bp."_CI",$bp_source,$bdd,$bdd_global,true); 
 			}
-		} else {
-			$sql = "DELETE FROM bp_category WHERE bp_name = ?";
-			$req = $bdd_global->prepare($sql);
-			$req->execute(array($bp));
 		}
 	}
 	
@@ -296,6 +301,18 @@ function list_sources($bp_source=false) {
 	
 }
 
+// List BPLinked
+function list_process_all($bp,$display,$bdd) {
+
+	$sql = "SELECT name FROM bp WHERE name!=? AND priority = ?";
+	$req = $bdd->prepare($sql);
+	$req->execute(array($bp,$display));
+	$process = $req->fetchall();
+
+    echo json_encode($process);
+	
+}
+
 // List BPs
 function list_process($bp,$display,$bdd) {
 	
@@ -314,8 +331,8 @@ function list_process($bp,$display,$bdd) {
 				$app="AND name not in(select distinct LEFT(bp_name,LOCATE('_C',bp_name) - 1) from bp_category)";
 			}
 			$sql.="SELECT name FROM ".$source["db_names"].".bp WHERE name!=? AND priority = ? $app
-					AND name not in(select bp_name from global_nagiosbp.bp_links where bp_link=?) 
-					AND name not in(select bp_link from global_nagiosbp.bp_links where bp_name=?) UNION ";
+					AND name not in(select bp_name from ".$source["db_names"].".bp_links where bp_link=?) 
+					AND name not in(select bp_link from ".$source["db_names"].".bp_links where bp_name=?) UNION ";
 			$prepare[]=$bp;
 			$prepare[]=$display;
 			$prepare[]=$bp;
@@ -330,8 +347,8 @@ function list_process($bp,$display,$bdd) {
 	}
 	else {
 		$sql = "SELECT name FROM bp WHERE name!=? AND priority = ?
-				AND name not in(select bp_name from global_nagiosbp.bp_links where bp_link=?) 
-				AND name not in(select bp_link from global_nagiosbp.bp_links where bp_name=?)";
+				AND name not in(select bp_name from bp_links where bp_link=?) 
+				AND name not in(select bp_link from bp_links where bp_name=?)";
 		$req = $bdd->prepare($sql);
 		$req->execute(array($bp,$display,$bp,$bp));
 		$process = $req->fetchall();
@@ -382,6 +399,8 @@ function add_services($bp,$services,$bdd) {
 
 function add_process($bp,$process,$bdd) {
 		
+	global $source_name;
+	
 	$sql = "DELETE FROM bp_links WHERE bp_name = ?";
 	$req = $bdd->prepare($sql);
 	$req->execute(array($bp));
@@ -398,10 +417,10 @@ function add_process($bp,$process,$bdd) {
 			$value = explode("::", $values);
 			$bp_link = $value[1];
 
-			$sql = "INSERT INTO bp_links (bp_name,bp_link) VALUES(?,?)";
+			$sql = "INSERT INTO bp_links (bp_name,bp_link,bp_source) VALUES(?,?,?)";
 
 			$req = $bdd->prepare($sql);
-			$req->execute(array($bp,$bp_link));
+			$req->execute(array($bp,$bp_link,rtrim($source_name,"_nagiosbp")));
 		}	
 	}
 }

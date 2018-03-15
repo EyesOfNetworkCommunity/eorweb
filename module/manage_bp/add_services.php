@@ -125,8 +125,8 @@ catch(Exception $e) {
 						while($row = $req->fetch()){
 		               		$bp_name_linked = $row['bp_link'];
 		               		?>
-							<div id="$bp_name::--;;$bp_name_linked" class="text-info well well-sm" style="font-size:16px;">
-								<button type="button" class="btn btn-xs btn-danger button-addbp" onclick="DeleteService('$bp_name::--;;$bp_name_linked');">
+							<div id="<?php echo "$bp_name::--;;$bp_name_linked"; ?>" class="text-info well well-sm" style="font-size:16px;">
+								<button type="button" class="btn btn-xs btn-danger button-addbp" onclick="DeleteService('<?php echo "$bp_name::--;;$bp_name_linked"; ?>');">
 									<span class="glyphicon glyphicon-trash"></span>
 								</button>
 								<?php echo $bp_name_linked; ?>
@@ -165,8 +165,8 @@ catch(Exception $e) {
 									$old_host=$host;
 									$old_host_count++;
 								} ?>								
-								<div id="$bp_name::$host;;$service" class="text-info well well-sm" style="font-size:16px;">
-								<button type="button" class="btn btn-xs btn-danger button-addbp" onclick="DeleteService('<?php $bp_name."::".$host.";;".$service ?>');">
+								<div id="<?php echo "$bp_name::$host;;$service"; ?>" class="text-info well well-sm" style="font-size:16px;">
+								<button type="button" class="btn btn-xs btn-danger button-addbp" onclick="DeleteService('<?php echo $bp_name."::".$host.";;".$service; ?>');">
 								<span class="glyphicon glyphicon-trash"></span>
 								</button>
 								<?php echo $service; ?>
