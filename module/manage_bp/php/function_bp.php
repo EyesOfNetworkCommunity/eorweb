@@ -52,10 +52,6 @@ elseif($action == 'list_process'){
 	list_process($bp_name,$display,$bdd);
 }
 
-elseif($action == 'list_process_all'){
-	list_process_all($bp_name,$display,$bdd);
-}
-
 elseif ($action == 'add_services'){
 	add_services($bp_name,$new_services,$bdd);
 }
@@ -301,18 +297,6 @@ function list_sources($bp_source=false) {
 	
 }
 
-// List BPLinked
-function list_process_all($bp,$display,$bdd) {
-
-	$sql = "SELECT name FROM bp WHERE name!=? AND priority = ?";
-	$req = $bdd->prepare($sql);
-	$req->execute(array($bp,$display));
-	$process = $req->fetchall();
-
-    echo json_encode($process);
-	
-}
-
 // List BPs
 function list_process($bp,$display,$bdd) {
 	
@@ -330,7 +314,7 @@ function list_process($bp,$display,$bdd) {
 			if($source["db_names"] == $database_vanillabp) {
 				$app="AND name not in(select distinct LEFT(bp_name,LOCATE('_C',bp_name) - 1) from bp_category)";
 			}
-			$sql.="SELECT name FROM ".$source["db_names"].".bp WHERE name!=? AND priority = ? $app
+			$sql.="SELECT name,'".$source["db_names"]."' as source_name FROM ".$source["db_names"].".bp WHERE name!=? AND priority = ? $app
 					AND name not in(select bp_name from ".$database_vanillabp.".bp_links where bp_link=?) 
 					AND name not in(select bp_link from ".$database_vanillabp.".bp_links where bp_name=?) UNION ";
 			$prepare[]=$bp;
@@ -346,7 +330,7 @@ function list_process($bp,$display,$bdd) {
 		
 	}
 	else {
-		$sql = "SELECT name FROM bp WHERE name!=? AND priority = ?
+		$sql = "SELECT name,'".$source_name."' as source_name FROM bp WHERE name!=? AND priority = ?
 				AND name not in(select bp_name from bp_links where bp_link=?) 
 				AND name not in(select bp_link from bp_links where bp_name=?)";
 		$req = $bdd->prepare($sql);

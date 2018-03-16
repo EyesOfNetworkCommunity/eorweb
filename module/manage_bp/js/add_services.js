@@ -21,10 +21,13 @@
 
 $list_new_services = [];
 
-function display_dropzone_element(id, text) {
-	return '<div id="' + id + '" class="text-info well well-sm" style=\"font-size:16px;\">\
-		<button type="button" class="btn btn-xs btn-danger button-addbp" onclick="DeleteService(\''+id+'\');"><span class="glyphicon glyphicon-trash"></span></button>\
-		'+text+'\
+function display_dropzone_element(id, text, source_name) {
+	return '<div id="' + id + '" class="well well-sm ui-front">\
+		<button type="button" class="btn btn-xs btn-danger button-addbp" onclick="DeleteService(\''+id+'\',\''+source_name+'\');">\
+			<span class="glyphicon glyphicon-trash"></span>\
+		</button>\
+		<b>'+text+'</b>\
+		<b class="condition_presentation" style="margin-left:5px;">' + $bp_source + '</b>\
 	</div>';
 }
 
@@ -41,8 +44,9 @@ $(document).ready(function () {
 	}
 
 	$(document).on('click', 'button.btn-success.button-addbp', function(){
-		var name = $(this).parent().text();
-		AddService(name);
+		var name = $(this).parent().children(".addprocess").text();
+		var bp_source = $(this).parent().children(".condition_presentation").text();
+		AddService(name,bp_source);
 	});
 
 	$('#host').autocomplete({
@@ -80,8 +84,9 @@ $(document).ready(function () {
 	$('#container-drop_zone').droppable({
 		hoverClass : "ui-state-hover",
     	drop : function(event, ui){
-    		var name = ui.draggable.text();
-			AddService(name);
+    		var name = ui.draggable.children(".addprocess").text();
+			var bp_source = ui.draggable.children(".condition_presentation").text();
+			AddService(name,bp_source);
     	}
 	});
 
@@ -107,10 +112,19 @@ $(document).ready(function () {
 				$('#draggablePanelListProcess').children().remove();
 				for(i=0;i<list_process.length;i++){
 					$process = list_process[i]['name'];
+					$bp_source = list_process[i]['source_name'].split("_nagiosbp")[0];
 					var element = $('div[id$=";;' + $process + '"]');
 
 					if(! element.length){
-						$('#draggablePanelListProcess').append($('<div id="drag_' + $process +'" class="draggable well well-sm ui-front"><button type="button" class="btn btn-xs btn-success button-addbp"><i class="glyphicon glyphicon-plus"></i></button>' + $process + '</div>').draggable({ snap: true, revert: "invalid" }));
+						$('#draggablePanelListProcess').append($(
+							'<div id="drag_' + $process +'" class="draggable well well-sm ui-front"> \
+								<button type="button" class="btn btn-xs btn-success button-addbp"> \
+									<i class="glyphicon glyphicon-plus"></i> \
+								</button>\
+								<b class="addprocess">'+ $process +'</b>\
+								<b class="condition_presentation" style="margin-left:5px;">' + $bp_source + '</b> \
+							</div> \
+							').draggable({ snap: true, revert: "invalid" }));
 					}
                 }
             },
@@ -128,7 +142,7 @@ $(document).scroll(function(){
 
 
 // function declaration !!!
-function AddService(name)
+function AddService(name,bp_source)
 {
 	$('#primary_drop_zone').remove();
     var bp_name = $("#bp_name").val();
@@ -138,7 +152,7 @@ function AddService(name)
     	var id_panel = "" + bp_name + '::' + $("#host").val() + ';;' + name + "";
     	
 		if($element.length){
-			$(display_dropzone_element(id_panel,name)).appendTo($element);
+			$(display_dropzone_element(id_panel,name,bp_source)).appendTo($element);
 		}
 
 		else{
@@ -150,8 +164,8 @@ function AddService(name)
 				$('#container-drop_zone').append('\
 				<div id="drop_zone::' + $("#host").val() + '" class="ui-widget-content panel panel-info">\
 					<div class="panel-heading panel-title" id="panel::' +$("#host").val()+ '">' + $("#host").val() + '</div>\
-					'+display_dropzone_element(id_panel_hoststatus,'Hoststatus')+'\
-					'+display_dropzone_element(id_panel,name)+'\
+					'+display_dropzone_element(id_panel_hoststatus,'Hoststatus',bp_source)+'\
+					'+display_dropzone_element(id_panel,name,bp_source)+'\
 				</div>');
 				
 				$list_new_services.push($('#host').val() + "::Hoststatus");
@@ -159,7 +173,7 @@ function AddService(name)
 				$('#container-drop_zone').append('\
 				<div id="drop_zone::' + $("#host").val() + '" class="ui-widget-content panel panel-info">\
 					<div class="panel-heading panel-title" id="panel::' +$("#host").val()+ '">' + $("#host").val() + '</div>\
-					'+display_dropzone_element(id_panel,name)+'\
+					'+display_dropzone_element(id_panel,name,bp_source)+'\
 				</div>');
 			}
 		}
@@ -168,15 +182,14 @@ function AddService(name)
 	}
 
 	else{
-		var id_panel = "" + bp_name + '::--;;' + name + "";
-
-		$('#container-drop_zone').append(display_dropzone_element(id_panel,name));
-		$list_new_services.push("--::" + name);
-		$('div[id$="drag_' + name + '"]').remove();
+		var id_panel = "" + bp_name + '::--;;' + name + "||"+bp_source;
+		$('#container-drop_zone').append(display_dropzone_element(id_panel,name,bp_source));
+		$list_new_services.push("--::" + name + "||" + bp_source);
+		$('div[id="drag_'+ name +'"]').remove();
 	}
 }
 
-function DeleteService(line_service){
+function DeleteService(line_service,bp_source){
     $('div[id="' + line_service +'"]').remove();
     var information = line_service.split("::");
     var global_bp = information[0];
@@ -220,7 +233,15 @@ function DeleteService(line_service){
 						var element = $('div[id$="::' + $("#host").val() + ';;' + $services[i] + '"]');
 						
 						if(! element.length){
-							$('#draggablePanelList').append($('<div id="drag_' + $('#host').val() + '::' + $services[i] +'" class="draggable ui-front well well-sm"><button type="button" class="btn btn-xs btn-success button-addbp"><i class="glyphicon glyphicon-plus"></i></button>' + $services[i] + '</div>').draggable({ snap: true, revert: "invalid" }));
+							$('#draggablePanelList').append($(
+								'<div id="drag_' + $('#host').val() + '::' + $services[i] +'" class="draggable ui-front well well-sm ui-front">\
+									<button type="button" class="btn btn-xs btn-success button-addbp">\
+										<i class="glyphicon glyphicon-plus"></i>\
+									</button>\
+									<b class="addprocess">'+ $services[i] +'</b>\
+									<b class="condition_presentation" style="margin-left:5px;">' + bp_source + '</b>\
+									</div>'
+								).draggable({ snap: true, revert: "invalid" }));
 						}
 					}
 				}
@@ -230,7 +251,6 @@ function DeleteService(line_service){
 	}
 	// PROCESS !!!
 	else {
-	    var bp_name = $('#bp_name').val();
 		var source_name = $('#source_name').val();
 		var nb_display = $('select[name="display"]').val();
 		if(nb_display % 1 === 0) {
@@ -242,8 +262,8 @@ function DeleteService(line_service){
 		$.get(
 			'./php/function_bp.php',
 	        {
-	        	action: 'list_process_all',
-				bp_name: bp_name,
+	        	action: 'list_process',
+				bp_name: '',
 				display: nb_display,
 				source_name: source_name
 			},
@@ -251,9 +271,18 @@ function DeleteService(line_service){
 				$('#draggablePanelListProcess').children().remove();
 				for(i=0;i<list_process.length;i++){
 					$process = list_process[i]['name'];
+					$source_name = list_process[i]['source_name'];
 					var element = $('div[id$=";;' + $process + '"]');
 					if(! element.length){
-						$('#draggablePanelListProcess').append($('<div id="drag_' + $process +'" class="draggable well well-sm ui-front"><button type="button" class="btn btn-xs btn-success button-addbp"><i class="glyphicon glyphicon-plus"></i></button>' + $process + '</div>').draggable({ snap: true, revert: "invalid" }));
+						$('#draggablePanelListProcess').append($(
+							'<div id="drag_' + $process +'" class="draggable well well-sm ui-front">\
+								<button type="button" class="btn btn-xs btn-success button-addbp">\
+									<i class="glyphicon glyphicon-plus"></i>\
+								</button>\
+								<b class="addprocess">'+ $process +'</b>\
+								<b class="condition_presentation" style="margin-left:5px;">' + $source_name.split("_nagiosbp")[0] + '</b>\
+							</div>'
+							).draggable({ snap: true, revert: "invalid" }));
 					}
 	            }
 	        },

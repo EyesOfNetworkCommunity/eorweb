@@ -132,11 +132,12 @@ catch(Exception $e) {
 								$bp_name_linked .= "||".$row['bp_source'];
 							}
 		               		?>
-							<div id="<?php echo "$bp_name::--;;$bp_name_linked"; ?>" class="text-info well well-sm" style="font-size:16px;">
-								<button type="button" class="btn btn-xs btn-danger button-addbp" onclick="DeleteService('<?php echo "$bp_name::--;;$bp_name_linked"; ?>');">
+							<div id="<?php echo "$bp_name::--;;$bp_name_linked"; ?>" class="well well-sm ui-front">
+								<button type="button" class="btn btn-xs btn-danger button-addbp" onclick="DeleteService('<?php echo "$bp_name::--;;$bp_name_linked"; ?>','<?php echo $row['bp_source']; ?>');">
 									<span class="glyphicon glyphicon-trash"></span>
 								</button>
-								<?php echo $row['bp_link']; ?>
+								<b><?php echo $row['bp_link']; ?></b>
+								<b class="condition_presentation" style="margin-left:5px;"><?php echo $row['bp_source']; ?></b>
 							</div>
 							<?php $count += 1;
 						}
