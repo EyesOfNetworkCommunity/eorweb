@@ -794,6 +794,7 @@
 	"message.error.wrong_step_group2": "Le seuil maximum ne peut excéder 100%",
 	"message.kettle_apps.date_error": "Sélectionnez deux dates du même mois",
 	"message.loading": "Chargement, veuillez patienter ...",
+	"message.manage_bp.bp_already_exists": "Ce processus métier a déjà été ajouté",
 	"message.manage_contracts.application.already_add": "Cette application a déjà été ajoutée",
 	"message.manage_contracts.application.no_application_selected": "Vous n'avez pas sélectionné d'application",
 	"message.manage_contracts.application.no_context": "Vous devez créer une fiche de contexte de contrat avant de pouvoir créer une application",

@@ -416,13 +416,23 @@ function add_process($bp,$process,$bdd) {
 	}
 }
 
+// Check app exists in all sources
 function check_app_exists($uniq_name, $bdd) {
-	$sql = "SELECT count(*) FROM bp WHERE name = ?;";
-	$req = $bdd->prepare($sql);
-	$req->execute(array($uniq_name));
-	$bp_exist = $req->fetch(PDO::FETCH_NUM);
 	
-	if($bp_exist[0] == 1){
+	$sources = list_sources();
+	$sql = "";
+	$prepare = array();
+	foreach($sources as $source) {
+		$sql.="SELECT name FROM ".$source["db_names"].".bp WHERE name=? UNION ";
+		$prepare[]=$uniq_name;
+	}
+	$sql=rtrim($sql," UNION ");
+
+	$req = $bdd->prepare($sql);
+	$req->execute($prepare);
+	$bp_exist = $req->rowCount();
+
+	if($bp_exist == 1){
 		echo "true";
 	} else {
 		echo "false";
