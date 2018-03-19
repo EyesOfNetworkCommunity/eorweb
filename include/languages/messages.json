@@ -429,7 +429,7 @@
 	"label.manage_bp.linked_to_bp": "linked to BP",
 	"label.manage_bp.min_value": "Minimum value",
 	"label.manage_bp.process_for_display": "Process for display",
-	"label.manage_bp.process_name": "Process name",
+	"label.manage_bp.process_name": "Full name",
 	"label.manage_bp.process_title": "Business processes configuration",
 	"label.manage_bp.select_display": "Select display",
 	"label.manage_bp.serv_linked_to_host": "Services linked to host",

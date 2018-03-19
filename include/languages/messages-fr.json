@@ -429,7 +429,7 @@
 	"label.manage_bp.linked_to_bp": "liés au BP",
 	"label.manage_bp.min_value": "Valeur minimum",
 	"label.manage_bp.process_for_display": "Processus pour le display",
-	"label.manage_bp.process_name": "Nom du process",
+	"label.manage_bp.process_name": "Nom complet",
 	"label.manage_bp.process_title": "Configuration des processus métiers",
 	"label.manage_bp.select_display": "Choisir un display",
 	"label.manage_bp.serv_linked_to_host": "Services liés à l'équipement",
