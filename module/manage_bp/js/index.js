@@ -24,7 +24,7 @@ $(document).ready(function () {
 	hasBeenClicked = false;
 	
 	// Edit BP
-	$('a[name=edit-bp]').click(function () {
+	$('div.tree-line a.btn_presentation').click(function () {
 		hasBeenClicked = true;
 	});
 	
@@ -128,7 +128,6 @@ function ShowModalDeleteBP(bp,source){
 
 function DeleteBP(bpname,bpsource){
 
-	$('div[id="' + bpname + '"]').remove();
 	$.get(
 		'./php/function_bp.php',
 		{

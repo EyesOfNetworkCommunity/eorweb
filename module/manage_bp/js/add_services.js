@@ -32,7 +32,8 @@ function display_dropzone_element(id, text, source_name) {
 }
 
 $(document).ready(function () {
-    var bp_name = $("#bp_name").val();
+	var bp_name = $("#bp_name").val();
+	var source_name = $("#source_name").val();
 	var all_element_match = $('div[id^="' + bp_name + '::"');
 
 	for(i=0;i<all_element_match.length;i++){
@@ -49,12 +50,12 @@ $(document).ready(function () {
 		AddService(name,bp_source);
 	});
 
-	$('#host').autocomplete({
-		serviceUrl: './php/auto_completion.php',
-		dataType: 'json',
-		// Nom de la table ou taper
-		params: {table_name:'nagios_host'},
-		onSelect: function(suggestion){
+	// Autocomplete
+	$('#host').autocomplete({ 
+		source: './php/auto_completion.php?source_name='+source_name 
+	});
+
+		/*onSelect: function(suggestion){
 			$.get(
 				'./php/function_bp.php',
 				{
@@ -79,7 +80,7 @@ $(document).ready(function () {
 				'json'
 			);
 		}
-	});
+	});*/
 
 	$('#container-drop_zone').droppable({
 		hoverClass : "ui-state-hover",

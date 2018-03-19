@@ -22,7 +22,6 @@
 ?>
 
 <script src="/bower_components/bootstrap-select/dist/js/bootstrap-select.min.js"></script>
-<script src="./js/jquery.autocomplete.min.js"></script>
 <script src="./js/jquery.jmHighlight.min.js"></script>
 
 <?php
