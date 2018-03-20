@@ -3,7 +3,7 @@
 #########################################
 #
 # Copyright (C) 2018 EyesOfNetwork Team
-# DEV NAME : Michael Aubertin
+# DEV NAME : Jean-Philippe LEVY
 # VERSION : 5.2
 # APPLICATION : eorweb for eyesofreport project
 #
