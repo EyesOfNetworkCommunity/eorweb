@@ -720,6 +720,7 @@
 	"menu.link.report_declaration": "Déclaration de rapport",
 	"menu.link.reporting": "Génération de rapports",
 	"menu.link.reports": "Vos rapports",
+	"menu.link.reports_etl": "Rapports ETL",
 	"menu.link.saves": "Sauvegardes",
 	"menu.link.service_contracts": "Contrats de service",
 	"menu.link.service_group": "Groupes de services",
