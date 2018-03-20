@@ -58,7 +58,7 @@ catch(Exception $e) {
 						<div>
 							<div class="row col-md-12">
 								<div class="input-group">
-									<span class="input-group-addon" id="sizing-addon1"><img src="./images/server.png" height="20" width="25" alt="server"></span>
+									<span class="input-group-addon" id="sizing-addon1"><i class="fa fa-server"></i></span>
 									<input type="text" class="form-control" id="host" placeholder="Hostname" aria-describedby="sizing-addon1" autocomplete="off">
 								</div>
 							</div>
