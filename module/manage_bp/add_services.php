@@ -193,12 +193,14 @@ catch(Exception $e) {
 					} 
 				//fermeture du div container-drop_zone ?>
 				</div> 
-				<br>
+				
 				<div class="btn-group btn-group-justified">
-				<a class="btn btn-success" onclick="<?php echo (($display_actually_bp == 0)?'ApplyService();':'ApplyProcess();'); ?>">
-		    	<?php echo getLabel("action.apply"); ?>
-		    	</a>
-				<a class="btn btn-primary" onclick="window.location = '/module/manage_bp/index.php';"><?php echo getLabel("action.cancel"); ?></a>
+					<a class="btn btn-success" onclick="<?php echo (($display_actually_bp == 0)?'ApplyService();':'ApplyProcess();'); ?>">
+						<?php echo getLabel("action.apply"); ?>
+					</a>
+					<a class="btn btn-primary" onclick="window.location = '/module/manage_bp/index.php';">
+						<?php echo getLabel("action.cancel"); ?>
+					</a>
 				</div>
 			</form>
 		</div>
