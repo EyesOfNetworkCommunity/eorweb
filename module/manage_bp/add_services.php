@@ -167,7 +167,7 @@ catch(Exception $e) {
 									}
 									?>
 									<div id="drop_zone::<?php echo $host; ?>" class="ui-widget-content panel panel-info">
-									<div id="panel::<?php $host ?>" class="panel-heading panel-title"><?php echo $host; ?></div>
+									<div id="panel::<?php echo $host; ?>" class="panel-heading panel-title"><?php echo $host; ?></div>
 									<div class="pannel-body">
 									<?php
 									$old_host=$host;
