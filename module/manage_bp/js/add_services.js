@@ -2,7 +2,7 @@
 #########################################
 #
 # Copyright (C) 2018 EyesOfNetwork Team
-# DEV NAME : Michael Aubertin
+# DEV NAME : Jean-Philippe LEVY
 # VERSION : 2.0
 # APPLICATION : eorweb for eyesofreport project
 #
@@ -23,11 +23,11 @@ $list_new_services = [];
 
 function display_dropzone_element(id, text, source_name) {
 	return '<div id="' + id + '" class="well well-sm ui-front">\
-		<button type="button" class="btn btn-xs btn-danger button-addbp" onclick="DeleteService(\''+id+'\',\''+source_name+'\');">\
+		<button type="button" class="btn btn-xs btn-danger" onclick="DeleteService(\''+id+'\',\''+source_name+'\');">\
 			<span class="glyphicon glyphicon-trash"></span>\
 		</button>\
 		<b>'+text+'</b>\
-		<b class="condition_presentation" style="margin-left:5px;">' + $bp_source + '</b>\
+		<b class="condition_presentation" style="margin-left:5px;">' + source_name + '</b>\
 	</div>';
 }
 
@@ -44,27 +44,32 @@ $(document).ready(function () {
 		$list_new_services.push(host_name + "::" + service_name);
 	}
 
+	// Add service in bp
 	$(document).on('click', 'button.btn-success.button-addbp', function(){
 		var name = $(this).parent().children(".addprocess").text();
 		var bp_source = $(this).parent().children(".condition_presentation").text();
 		AddService(name,bp_source);
 	});
 
-	// Autocomplete
-	$('#host').autocomplete({ 
-		source: './php/auto_completion.php?source_name='+source_name 
+	// Add service in bp with drag and drop
+	$('#container-drop_zone').droppable({
+		hoverClass : "ui-state-hover",
+		drop : function(event, ui){
+		var name = ui.draggable.children(".addprocess").text();
+			var bp_source = ui.draggable.children(".condition_presentation").text();
+			AddService(name,bp_source);
+		}
 	});
-
-		/*onSelect: function(suggestion){
+	
+	// Autocomplete thruk hosts
+	$('#host').autocomplete({ 
+		source: './php/auto_completion.php?source_type=hosts&source_name='+source_name,
+		select: function(event, ui){
 			$.get(
-				'./php/function_bp.php',
-				{
-					action: 'list_services',
-					host_name: suggestion['value']
-				},
+				'./php/auto_completion.php?source_type=services&source_name='+source_name+'&term='+ui.item.value,
 				function ReturnValue(list_services){
 					
-					$services = list_services['service'];
+					$services = list_services;
 
 					$('#draggablePanelList').children().remove();
 					$('#process').html(dictionnary["label.manage_bp.serv_linked_to_host"]+' ' + $('#host').val());
@@ -73,24 +78,24 @@ $(document).ready(function () {
 						var element = $('div[id$="::' + $("#host").val() + ';;' + $services[i] + '"]');
 						
 						if(! element.length){
-							$('#draggablePanelList').append($('<div id="drag_' + $('#host').val() + '::' + $services[i] +'" class="draggable well well-sm ui-front"><button type="button" class="btn btn-xs btn-success button-addbp"><i class="glyphicon glyphicon-plus"></i></button>' + $services[i] + '</div>').draggable({ snap: true, revert: "invalid" }));
+							$('#draggablePanelList').append($(
+								'<div id="drag_' + $('#host').val() + '::' + $services[i] +'" class="draggable well well-sm ui-front">\
+									<button type="button" class="btn btn-xs btn-success button-addbp">\
+										<i class="glyphicon glyphicon-plus"></i>\
+									</button>\
+									<b class="addprocess">'+ $services[i] +'</b>\
+									<b class="condition_presentation" style="margin-left:5px;">' + source_name + '</b>\
+								</div>').draggable({ snap: true, revert: "invalid" })
+							);
 						}
 					}
 				},
 				'json'
 			);
 		}
-	});*/
-
-	$('#container-drop_zone').droppable({
-		hoverClass : "ui-state-hover",
-    	drop : function(event, ui){
-    		var name = ui.draggable.children(".addprocess").text();
-			var bp_source = ui.draggable.children(".condition_presentation").text();
-			AddService(name,bp_source);
-    	}
 	});
 
+	// Show linkable bps by display selection
 	$('select').change(function(){
         var bp_name = $('#bp_name').val();
 		var nb_display = $('select[name="display"]').val();
@@ -135,14 +140,17 @@ $(document).ready(function () {
 
 });
 
+// Resize draggable zone
 $(document).scroll(function(){
 	if($(document).scrollTop()>$('#form_drop').height()){
 		$('#form_drop').css('top',$(document).scrollTop() -$('#form_drop').height());
 	}
 });
 
+// -----------------------------------------------------
+// Functions
+// -----------------------------------------------------
 
-// function declaration !!!
 function AddService(name,bp_source)
 {
 	$('#primary_drop_zone').remove();
@@ -159,6 +167,7 @@ function AddService(name,bp_source)
 		else{
 			var id_panel_hoststatus = "" + bp_name + '::' + $("#host").val() + ';;Hoststatus' + "";
 			
+			console.log(name);
 			
 			$('div[id="drag_'+$('#host').val()+'::Hoststatus"]').remove();
 			if(name != "Hoststatus"){

@@ -2,7 +2,7 @@
 #########################################
 #
 # Copyright (C) 2018 EyesOfNetwork Team
-# DEV NAME : Jean-Philippe Levy
+# DEV NAME : Jean-Philippe LEVY
 # VERSION : 2.0
 # APPLICATION : eorweb for eyesofreport project
 #
