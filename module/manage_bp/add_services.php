@@ -47,8 +47,9 @@ catch(Exception $e) {
 	<div class="row">
 		<div class="col-md-6">
 			<?php echo"<form onsubmit=\"return false;\">"; ?>
-			<input type="hidden" id="bp_name" name="bp_name" value="<?php $bp_name ?>">
-			<input type="hidden" id="display" name="display" value="<?php $display_actually_bp ?>">
+			<input type="hidden" id="bp_name" name="bp_name" value="<?php echo $bp_name; ?>">
+			<input type="hidden" id="bp_display" name="bp_display" value="<?php echo $display_actually_bp; ?>">
+			<input type="hidden" id="source_name" name="source_name" value="<?php echo $source; ?>">
 			<?php 
 				if($display_actually_bp == 0) {	
 					?>
@@ -58,7 +59,7 @@ catch(Exception $e) {
 							<div class="row col-md-12">
 								<div class="input-group">
 									<span class="input-group-addon" id="sizing-addon1"><img src="./images/server.png" height="20" width="25" alt="server"></span>
-									<input type="text" class="form-control" id="host" placeholder="Hostname" aria-describedby="sizing-addon1">
+									<input type="text" class="form-control" id="host" placeholder="Hostname" aria-describedby="sizing-addon1" autocomplete="off">
 								</div>
 							</div>
 						</div>
@@ -117,18 +118,26 @@ catch(Exception $e) {
 				<div id="container-drop_zone" class="container-drop_zone">
 					<?php 
 					if($display_actually_bp > 0){
-						$sql = "SELECT bp_link FROM bp_links WHERE bp_name = '$bp_name'";
+						if($source==$database_vanillabp) {
+							$sql = "SELECT bp_link,bp_source FROM bp_links WHERE bp_name = '$bp_name'";
+						} else {
+							$sql = "SELECT bp_link FROM bp_links WHERE bp_name = '$bp_name'";
+						}
 						$req = $bdd->query($sql);
 						$count = 0;
 
 						while($row = $req->fetch()){
 		               		$bp_name_linked = $row['bp_link'];
+							if($source==$database_vanillabp) {
+								$bp_name_linked .= "||".$row['bp_source'];
+							}
 		               		?>
-							<div id="$bp_name::--;;$bp_name_linked" class="text-info well well-sm" style="font-size:16px;">
-								<button type="button" class="btn btn-xs btn-danger button-addbp" onclick="DeleteService('$bp_name::--;;$bp_name_linked');">
+							<div id="<?php echo "$bp_name::--;;$bp_name_linked"; ?>" class="well well-sm ui-front">
+								<button type="button" class="btn btn-xs btn-danger button-addbp" onclick="DeleteService('<?php echo "$bp_name::--;;$bp_name_linked"; ?>','<?php echo $row['bp_source']; ?>');">
 									<span class="glyphicon glyphicon-trash"></span>
 								</button>
-								<?php echo $bp_name_linked; ?>
+								<b><?php echo $row['bp_link']; ?></b>
+								<b class="condition_presentation" style="margin-left:5px;"><?php echo $row['bp_source']; ?></b>
 							</div>
 							<?php $count += 1;
 						}
@@ -164,8 +173,8 @@ catch(Exception $e) {
 									$old_host=$host;
 									$old_host_count++;
 								} ?>								
-								<div id="$bp_name::$host;;$service" class="text-info well well-sm" style="font-size:16px;">
-								<button type="button" class="btn btn-xs btn-danger button-addbp" onclick="DeleteService('<?php $bp_name."::".$host.";;".$service ?>');">
+								<div id="<?php echo "$bp_name::$host;;$service"; ?>" class="text-info well well-sm" style="font-size:16px;">
+								<button type="button" class="btn btn-xs btn-danger button-addbp" onclick="DeleteService('<?php echo $bp_name."::".$host.";;".$service; ?>');">
 								<span class="glyphicon glyphicon-trash"></span>
 								</button>
 								<?php echo $service; ?>

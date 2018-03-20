@@ -38,23 +38,6 @@
             "id":"3",
             "name":"menu.tab.configuration",
             "icon":"fa fa-wrench",
-            "menusubtab":[
-                {
-                    "name":"menu.subtab.business",
-                    "link":[
-                        {
-                            "name":"menu.link.business",
-                            "url":"/module/manage_bp.old/",
-                            "target":"main"
-                        },
-                        {
-                            "name":"menu.link.business_tree",
-                            "url":"/module/manage_bp.old/process_tree.php",
-                            "target":"main"
-                        }
-                    ]
-                }
-            ],
             "link": [
                 {
                     "name":"menu.link.business",

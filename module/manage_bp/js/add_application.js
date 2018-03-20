@@ -20,6 +20,11 @@
 */
 
 $(document).ready(function() {
+	
+	if($('select[name="source_name"]').val()=="global_nagiosbp") {
+		$('select[name="display"]').find('option[value=0]').hide();
+	}
+	
 	$("input").change(function(){
 		if($("#uniq_name").val() != "" && $('select[name="type"]').val() != "" && $('select[name="display"]').val() != "None"){
 			$('#submit').prop('disabled', false);
@@ -33,6 +38,11 @@ $(document).ready(function() {
 	});
 
 	$('select').change(function(){
+		if($('select[name="source_name"]').val()=="global_nagiosbp") {
+			$('select[name="display"]').find('option[value=0]').hide();
+		} else {
+			$('select[name="display"]').find('option[value=0]').show();
+		}
 		if($("#uniq_name").val() != "" && $('select[name="type"]').val() != "" && $('select[name="display"]').val() != "None"){
 			$('#submit').prop('disabled', false);
 		}

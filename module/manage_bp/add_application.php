@@ -28,49 +28,59 @@ include("../../side.php");
 
 	<div class="row">
 		<div class="col-lg-12">
-              <h1 class="page-header"><?php echo getLabel("label.manage_bp.process_title"); ?></h1>			
+			<h1 class="page-header"><?php echo getLabel("label.manage_bp.process_title"); ?></h1>
 		</div>
 	</div>
 
-    <div id="error-message"></div>
-    
-    <?php
-    if (isset($_GET['app'])) {
-        $type_app = true;
-    } else {
-        $type_app = false;
-    }
+	<div id="error-message"></div>
 
-    if(isset($_GET['bp_name'])){
-        $bp_name = $_GET['bp_name'];
-    }
+	<?php
+	if (isset($_GET['app'])) {
+		$type_app = true;
+	} else {
+		$type_app = false;
+	}
 
-    if (isset($_GET['source'])) {
-    	$source = $_GET['source'];
-    }
+	if(isset($_GET['bp_name'])){
+		$bp_name = $_GET['bp_name'];
+	}
 
-    if(! empty($bp_name) &&  ! empty($source)){
-    	try {
-        	$bdd = new PDO("mysql:host=$database_host;dbname=$source", $database_username, $database_password);
-        }
-    	catch(Exception $e) {
-        	echo "Connection failed: " . $e->getMessage();
-        	exit('Impossible de se connecter à la base de données.');
-    	}
+	if (isset($_GET['source'])) {
+		$source = $_GET['source'];
+	}
 
-    	$sql = "SELECT * FROM bp WHERE name = '" . $bp_name . "'";
-    	$req = $bdd->query($sql);
-    	$info = $req->fetch();
-    	$bp_desc = $info['description'];
-    	$bp_url = $info['url'];
-    	$bp_prior = $info['priority'];
-    	$bp_type = $info['type'];
-    	$bp_command = $info['command'];
-    	$bp_minvalue = $info['min_value'];
-    } ?>
+	if(! empty($bp_name) &&  ! empty($source)){
+		try {
+			$bdd = new PDO("mysql:host=$database_host;dbname=$source", $database_username, $database_password);
+		}
+		catch(Exception $e) {
+			echo "Connection failed: " . $e->getMessage();
+			exit('Impossible de se connecter à la base de données.');
+		}
+
+		$sql = "SELECT * FROM bp WHERE name = '" . $bp_name . "'";
+		$req = $bdd->query($sql);
+		$info = $req->fetch();
+		$bp_desc = $info['description'];
+		$bp_url = $info['url'];
+		$bp_prior = $info['priority'];
+		$bp_type = $info['type'];
+		$bp_command = $info['command'];
+		$bp_minvalue = $info['min_value'];
+	} 
+	?>
 
     <div class="panel panel-default">
-        <div class="panel-heading"><?php echo getLabel("action.add_new_app"); ?></div>
+        <div class="panel-heading">
+			<?php 
+			if ($type_app) { 
+				echo getLabel("action.add_new_app");
+			}
+			else {
+				echo getLabel("action.add_new_component");	
+			}
+			?>
+		</div>
         <div class="panel-body">
         	<form class="form-horizontal col-md-8 col-md-offset-2">
                 
@@ -116,26 +126,20 @@ include("../../side.php");
                     </div>
                 </div>
 
-				<div class="row">
+				<div class="row" <?php if ($type_app){ echo "style=display:none;"; } ?>>
 					<div class="form-group">
 						<label style="font-weight:normal" class="col-xs-3 control-label"><?php echo getLabel("label.manage_bp.display"); ?></label>
 						<div class="col-xs-8">
-							<select class="form-control" name="display" <?php $disabled ?> >
-								<option><?php echo (isset($bp_prior)?$bp_prior: getLabel("label.none")); ?>
-								</option>
+							<select class="form-control" name="display">
+								<option value="None"><?php echo getLabel("label.none"); ?></option>
 								<?php
-								if (!$type_app && !isset($bp_prior)){ ?>
-									<option selected="selected">0</option>
-								<?php }
-								for ($i=1; $i <= 5; $i++) { 
-                                    if ($type_app && $i==1){ ?>
-                                        <option selected="selected">1</option>
-                                    <?php }
-									if (isset($bp_prior) && $i != $bp_prior) { ?>
-										<option><?php echo $i; ?></option>
-									<?php } else { ?>
-                                        <option><?php echo $i; ?></option>
-                                    <?php }
+								if ($type_app){ ?>
+									<option value="1" selected="selected">1</option>
+								<?php } 
+								else {
+									for ($i=0; $i <= 5; $i++) { ?>
+										<option value="<?php echo $i; ?>" <?php if(isset($bp_prior) && $i == $bp_prior){ ?> selected="selected" <?php } ?>><?php echo $i; ?></option>
+									<?php } 
 								} ?>
 							</select>
 						</div>
@@ -143,7 +147,7 @@ include("../../side.php");
 				</div>
 
         		<div class="row">
-                    <div class="form-group">
+                    <div class="form-group" <?php if ($type_app){ echo "style=display:none;"; } ?>>
                         <label style="font-weight:normal" class="col-xs-3 control-label"><?php echo getLabel("label.manage_bp.url"); ?></label>
                         <div class="col-xs-8">
                             <input type="text" class="form-control" id="url" value="<?php echo (isset($bp_url)?$bp_url:''); ?>">
@@ -151,7 +155,7 @@ include("../../side.php");
                     </div>
                 </div>
 
-        		<div class="row">
+        		<div class="row" <?php if ($type_app){ echo "style=display:none;"; } ?>>
                     <div class="form-group">
                         <label style="font-weight:normal" class="col-xs-3 control-label"><?php echo getLabel("label.manage_bp.command"); ?></label>
                         <div class="col-xs-8">
@@ -160,26 +164,31 @@ include("../../side.php");
                     </div>
                 </div>
 
-				<div class="row">
+				<div class="row" <?php if ($type_app){ echo "style=display:none;"; } ?>>
 					<div class="form-group">
 						<label style="font-weight:normal" class="col-xs-3 control-label"><?php echo getLabel("label.manage_bp.type"); ?></label>
 						<div class="col-xs-8">
 							<select class="form-control" name="type" onchange="javascript:disable_min(this);">
 								<?php
-								$list_type = array('ET','OU','MIN');
-								foreach($list_type as $type){
-									if(isset($bp_type) && $type == $bp_type){ ?>
-										<option selected="selected"><?php echo $type; ?></option>
-									<?php } else { ?>
-										<option><?php echo $type; ?></option>
-									<?php }
+								if ($type_app){ ?>
+									<option selected="selected">ET</option>
+								<?php } 
+								else {
+									$list_type = array('ET','OU','MIN');
+									foreach($list_type as $type){
+										if(isset($bp_type) && $type == $bp_type){ ?>
+											<option selected="selected"><?php echo $type; ?></option>
+										<?php } else { ?>
+											<option><?php echo $type; ?></option>
+										<?php }
+									} 
 								} ?>
 							</select>
 						</div>
 						</div>
 				</div>
 
-				<div class="row" id="container_select_minimum">
+				<div class="row" id="container_select_minimum" <?php if ($type_app){ echo "style=display:none;"; } ?>>
 					<div class="form-group">
 						<label style="font-weight:normal" class="col-xs-3 control-label"><?php echo getLabel("label.manage_bp.min_value"); ?></label>
 						<div class="col-xs-8">

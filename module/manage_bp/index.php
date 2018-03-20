@@ -84,7 +84,7 @@ function display_bp($bp,$bp_racine,$source) {
 	} ?>	
 
 	<li>
-		<div id="<?php echo $bp; ?>" class="tree-toggle">
+		<div class="tree-toggle">
 			<div class="tree-line">
 				<i class="glyphicon-link glyphicon"></i>
 				<b class="bp_presentation"><?php echo $display_bp; ?></b>
@@ -95,8 +95,8 @@ function display_bp($bp,$bp_racine,$source) {
 				<input name="bp-source" type="hidden" value="<?php echo $source; ?>">
 				<input name="bp-priority" type="hidden" value="<?php echo $priority; ?>">
 				<button name="delete-bp" type="button" class="btn_presentation pull-right btn btn-xs btn-danger"><i class="glyphicon glyphicon-trash"></i></button>
-				<a name="edit-bp" role="button" class="btn_presentation pull-right btn btn-xs btn-info" href="add_application.php?bp_name=<?php echo $bp; ?>&source=<?php echo $source; ?>"><i class="glyphicon glyphicon-pencil"></i></a>
-				<a name="edit-bp" role="button" class="btn_presentation pull-right btn btn-xs btn-success" href="add_services.php?bp_name=<?php echo $bp; ?>&display=<?php echo $priority; ?>&source=<?php echo $source; ?>"><i class="glyphicon glyphicon-plus"></i></a>
+				<a role="button" class="btn_presentation pull-right btn btn-xs btn-info" href="add_application.php?bp_name=<?php echo $bp; ?>&source=<?php echo $source; ?>"><i class="glyphicon glyphicon-pencil"></i></a>
+				<a role="button" class="btn_presentation pull-right btn btn-xs btn-success" href="add_services.php?bp_name=<?php echo $bp; ?>&display=<?php echo $priority; ?>&source=<?php echo $source; ?>"><i class="glyphicon glyphicon-plus"></i></a>
 			</div>
 		</div>
 	</li>				
@@ -303,12 +303,12 @@ function display_other_source_bp(){
 		
 		<div class="form-inline">
 			<div class="form-group">		                   
-				<a role="button" id="add-bp-app" type="button" class="btn btn-success" href="add_application.php?app">
+				<a role="button" id="add-bp-app" class="btn btn-success" href="add_application.php?app">
 					<?php echo getLabel("action.add_new_app"); ?>
 				</a>
 			</div>
 			<div class="form-group">
-				<a role="button" id="add-bp" type="button" class="btn btn-primary" href="add_application.php">
+				<a role="button" id="add-bp" class="btn btn-primary" href="add_application.php">
 					<?php echo getLabel("action.add_new_component"); ?>
 				</a>
 			</div> 

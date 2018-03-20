@@ -24,7 +24,6 @@ $(document).ready(function(){
 	$.get(
 		'./php/check_if_entry.php',
 		function returnNumber(number){
-			console.log[number];
 			if(parseInt(number[0]) == 0){
 				$('#welcome').css("display", "inline");
 			}
