@@ -26,7 +26,7 @@
 }
 
 .tree > li.son {
-	margin-top: 15px;
+	margin-top: 5px;
 }
 
 .tree > li > ul {
@@ -41,6 +41,16 @@
 .tree > li > ul > li.end {
 	margin-left:55px;
 	margin-bottom: 5px;
+}
+
+.tree-line {
+	padding: 5px;
+}
+
+.tree-line:hover {
+	background-color: #f9f9f9;
+	border-radius: 5px;
+	padding: 5px;
 }
 
 .nav-header {
