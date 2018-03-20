@@ -33,6 +33,7 @@ $database_port="3306";
 
 $database_username="eyesofreport";
 $database_password="SaintThomas,2014";
+$database_thruk="thruk";
 $database_eorweb="eorweb";
 $database_nagios="nagiosbp";
 $database_vanillabp="global_nagiosbp";
