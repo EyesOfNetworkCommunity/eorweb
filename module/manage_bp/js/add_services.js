@@ -199,16 +199,22 @@ function AddService(name,bp_source)
 }
 
 function DeleteService(line_service,bp_source){
-    $('div[id="' + line_service +'"]').remove();
-    var information = line_service.split("::");
-    var global_bp = information[0];
-    var host = information[1].split(";;")[0];
-    var service = information[1].split(";;")[1];
+  
+	var information = line_service.split("::");
+	var global_bp = information[0];
+	var host = information[1].split(";;")[0];
+	var service = information[1].split(";;")[1];
+
+	if(service == 'Hoststatus') {
+		$('div[id="drop_zone::' + host +'"]').remove();
+	} else {
+		$('div[id="' + line_service +'"]').remove();
+	}
 
 	//on supprime le service dans la liste
 	$list_new_services = jQuery.grep($list_new_services, function(value) {
-  		return value != host + "::" + service;
-		});
+		return value != host + "::" + service;
+	});
 
 	var all_element_match = $('div[id^="' + global_bp + '::' + host + '"]');
 
