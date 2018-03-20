@@ -166,18 +166,19 @@ catch(Exception $e) {
 										<?php  //fermeture du div du host
 									}
 									?>
-									<div id="drop_zone::$host" class="ui-widget-content panel panel-info">
-									<div id="panel::<?php $host ?>" class="panel-heading panel-title"><?php $host ?></div>
+									<div id="drop_zone::<?php echo $host; ?>" class="ui-widget-content panel panel-info">
+									<div id="panel::<?php $host ?>" class="panel-heading panel-title"><?php echo $host; ?></div>
 									<div class="pannel-body">
 									<?php
 									$old_host=$host;
 									$old_host_count++;
 								} ?>								
-								<div id="<?php echo "$bp_name::$host;;$service"; ?>" class="text-info well well-sm" style="font-size:16px;">
-								<button type="button" class="btn btn-xs btn-danger button-addbp" onclick="DeleteService('<?php echo $bp_name."::".$host.";;".$service; ?>');">
+								<div id="<?php echo "$bp_name::$host;;$service"; ?>" class="well well-sm ui-front">
+								<button type="button" class="btn btn-xs btn-danger button-addbp" onclick="DeleteService('<?php echo $bp_name."::".$host.";;".$service; ?>','<?php echo $source; ?>');">
 								<span class="glyphicon glyphicon-trash"></span>
 								</button>
-								<?php echo $service; ?>
+								<b><?php echo $service; ?></b>
+								<b class="condition_presentation" style="margin-left:5px;"><?php echo rtrim($source,"_nagiosbp"); ?></b>
 								</div>
 							<?php } ?>
 							</div>

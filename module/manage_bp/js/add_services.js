@@ -23,7 +23,7 @@ $list_new_services = [];
 
 function display_dropzone_element(id, text, source_name) {
 	return '<div id="' + id + '" class="well well-sm ui-front">\
-		<button type="button" class="btn btn-xs btn-danger" onclick="DeleteService(\''+id+'\',\''+source_name+'\');">\
+		<button type="button" class="btn btn-xs btn-danger button-addbp" onclick="DeleteService(\''+id+'\',\''+source_name+'\');">\
 			<span class="glyphicon glyphicon-trash"></span>\
 		</button>\
 		<b>'+text+'</b>\
@@ -70,6 +70,7 @@ $(document).ready(function () {
 				function ReturnValue(list_services){
 					
 					$services = list_services;
+					$bp_source = source_name.split("_nagiosbp")[0];
 
 					$('#draggablePanelList').children().remove();
 					$('#process').html(dictionnary["label.manage_bp.serv_linked_to_host"]+' ' + $('#host').val());
@@ -84,7 +85,7 @@ $(document).ready(function () {
 										<i class="glyphicon glyphicon-plus"></i>\
 									</button>\
 									<b class="addprocess">'+ $services[i] +'</b>\
-									<b class="condition_presentation" style="margin-left:5px;">' + source_name + '</b>\
+									<b class="condition_presentation" style="margin-left:5px;">' + $bp_source + '</b>\
 								</div>').draggable({ snap: true, revert: "invalid" })
 							);
 						}
@@ -167,8 +168,6 @@ function AddService(name,bp_source)
 		else{
 			var id_panel_hoststatus = "" + bp_name + '::' + $("#host").val() + ';;Hoststatus' + "";
 			
-			console.log(name);
-			
 			$('div[id="drag_'+$('#host').val()+'::Hoststatus"]').remove();
 			if(name != "Hoststatus"){
 				$('#container-drop_zone').append('\
@@ -227,14 +226,11 @@ function DeleteService(line_service,bp_source){
 	// SERVICE !!!
 	if($("input#host").length > 0 && $('#host').val()){
 		$.get(
-			'./php/function_bp.php',
-			{
-				action: 'list_services',
-				host_name: $("input#host").val()
-			},
+			'./php/auto_completion.php?source_type=services&source_name='+bp_source+'&term='+$("input#host").val(),
 			function ReturnValue(list_services){
-				$services = list_services['service'];
-				// add Hoststatus if necessary
+				
+				$services = list_services;
+
 				$('#draggablePanelList').children().remove();
 
 				if($services !== undefined){
@@ -302,15 +298,16 @@ function DeleteService(line_service,bp_source){
 }
 
 function ApplyService(){
-	var element = $('h1.page-header').html();
-	var bp_name = element.split(" : ")[1];
+	var bp_name = $('#bp_name').val();
+	var source_name = $('#source_name').val();
 	
 	$.get(
 		'./php/function_bp.php',
 		{
 			action: 'add_services',
 			bp_name: bp_name,
-			new_services: $list_new_services
+			new_services: $list_new_services,
+			source_name: source_name
 		},
 		function ReturnError(values){
 			setTimeout(function(){

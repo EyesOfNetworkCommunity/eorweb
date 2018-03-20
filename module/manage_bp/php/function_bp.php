@@ -342,15 +342,18 @@ function list_process($bp,$display,$bdd) {
 }
 
 function add_services($bp,$services,$bdd) {
+
 	$list_services = array();
 	$old_list_services = array();
-	
+		
 	if(is_array($services)) {
 		foreach($services as $values){
 			$value = explode("::", $values);
 			$service = $value[1];
 			$list_services[] = $service;
 		}
+	} else {
+		$services = array();
 	}
 
 	$sql = "DELETE FROM bp_services WHERE bp_name = ?";
