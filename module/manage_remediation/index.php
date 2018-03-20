@@ -76,6 +76,31 @@ if(isset($_GET["action"])) {
 				}
 			}
 			break;
+		case "validation":
+			if(isset($remediation_selected[0])){
+				for ($i = 0; $i < count($remediation_selected); $i++){
+					// Update remediations state
+					sqlrequest("$database_eorweb","UPDATE remediation SET state='approved', date_validation='".date("Y-m-d G:i")."' where id='$remediation_selected[$i]'");
+					
+					message(8," : Remediation pack selected have been updated",'ok');
+				}
+			}
+			break;
+		case "execution":
+			if(isset($remediation_selected[0])){
+				for ($i = 0; $i < count($remediation_selected); $i++){
+					$RemediationExec=sqlrequest("$database_eorweb","select * from remediation_action where remediationID='$remediation_selected[$i]'");
+					
+					// Create CSV files with infos in DB
+					
+					
+					// Update remediations state
+					//sqlrequest("$database_eorweb","UPDATE remediation SET state='approved', date_validation='".date("Y-m-d G:i")."' where id='$remediation_selected[$i]'");
+					
+					message(8," : Remediation pack have been activated",'ok');
+				}
+			}
+			break;
 	}
 	
 	
@@ -135,7 +160,7 @@ if(isset($_GET["action"])) {
 			<div class="form-group">
 				<a href="./remediation.php" class="btn btn-success" role="button"><?php echo getLabel("action.add");?></a>
 				<button class="btn btn-danger" type="submit" name="actions" value="del_method"><?php echo getLabel("action.clear");?></button>
-				<a href="./remediation.php" class="btn btn-default" role="button">Valider</a>
+				<button class="btn btn-default" type="submit" name="actions" value="validation">Valider</button
 			</div>
 		</div>
 	</form>
@@ -220,7 +245,7 @@ if(isset($_GET["action"])) {
 		</div>
 	</div>
 	
-	<form action="./index.php" method="POST">
+	<form action="./index.php?action=apply_pack" method="POST">
 		<div class="dataTable_wrapper">
 			<div class="table-responsive">
 				<table class="table table-striped datatable-eorweb table-condensed">
@@ -254,8 +279,8 @@ if(isset($_GET["action"])) {
 				</table>
 			</div>
 			<div class="form-group">
-				<a href="./remediation.php" class="btn btn-success" role="button">Executer</a>
-				<a href="./remediation.php" class="btn btn-default" role="button">Annuler</a>
+				<button class="btn btn-success" type="submit" name="actions" value="execution">Executer</button>
+				<button class="btn btn-default" type="submit" name="actions" value="annulation">Annuler</button
 			</div>
 		</div>
 	</form>
