@@ -35,25 +35,12 @@ function get_field_autocomplete($service=false) {
 	
 	while ($inf = mysqli_fetch_array($infs)){ 
 		if($inf[0] != "NR"){
-			if($service != false){
-				$requests="SELECT DISTINCT service_description FROM $inf[0]_service";
-			}else{
-				$requests="SELECT DISTINCT host_name FROM $inf[0]_host";
-			}
-			$result = sqlrequest($database_thruk,$requests);
-			
-			while ($line = mysqli_fetch_array($result)){ 
-				if($service != false){
-					$autocomplete[]=$line[0];
-				}else{
-					$autocomplete[]=$inf[0]."--".$line[0];
-				}
-			}
+			$autocomplete = $inf;
 		}
 	}
-	error_log( print_r($autocomplete, TRUE) );
 		
 	$autocomplete= array_unique($autocomplete);
+	
 	echo json_encode($autocomplete);
 }
 
@@ -67,20 +54,24 @@ function get_field_autocomplete($service=false) {
 	
 	<?php 
 	// get infos for updates
-	$id = retrieve_form_data("id",null);
+	$remediation_id = retrieve_form_data("id",null);
 	$invalid=false;
 	
-	if($id != null){
-		$user_infos=sqlrequest("eorweb", "SELECT * from remediation_action where id='".$id."'");
+	if(isset($_GET["id"]) && $_GET["id"] != null){
+		$user_infos=sqlrequest("eorweb", "SELECT * from remediation_action where id='".$remediation_id."'");
 		
 		// Retrieve Information from database
 		$remediation_name=mysqli_result($user_infos,0,"description");
-		$remediation_host==mysqli_result($user_infos,0,"host");
-		$remediation_service==mysqli_result($user_infos,0,"service");
+		$remediation_host=mysqli_result($user_infos,0,"host");
+		$remediation_service=mysqli_result($user_infos,0,"service");
 		$remediation_type=mysqli_result($user_infos,0,"type");
 		$remediation_dateDebut=mysqli_result($user_infos,0,"DateDebut");
 		$remediation_dateFin=mysqli_result($user_infos,0,"DateFin");
-		$action=mysqli_result($user_infos,0,"Action");
+		$remediation_action=mysqli_result($user_infos,0,"Action");
+		$remediation_source=mysqli_result($user_infos,0,"source");
+		
+		$reqState=sqlrequest("eorweb", "SELECT state from remediation where id='".mysqli_result($user_infos,0,"remediationID")."'");
+		$remediation_satut=mysqli_result($reqState,0,"state");
 	}else{	
 		$remediation_name=retrieve_form_data("name",null);
 		$remediation_host=retrieve_form_data("host",null);
@@ -88,6 +79,8 @@ function get_field_autocomplete($service=false) {
 		$remediation_type=retrieve_form_data("type",null);
 		$remediation_dateDebut=retrieve_form_data("start",null);
 		$remediation_dateFin=retrieve_form_data("end",null);
+		$remediation_source=retrieve_form_data("source",null);
+		$remediation_action=retrieve_form_data("action",null);
 	}
 	
 	if(isset($_POST["add"]) || isset($_POST["update"])) {
@@ -102,6 +95,8 @@ function get_field_autocomplete($service=false) {
 		}
 		elseif(!$remediation_service || $remediation_service==""){
 			message(7," : Your remediation need a service",'warning');
+		}elseif(!$remediation_source || $remediation_source==""){
+			message(7," : Your remediation need a source",'warning');
 		}
 		/*elseif($remediation_dateDebut>$remediation_dateFin){
 			message(7," : Wrong order in your dates",'warning');
@@ -117,12 +112,13 @@ function get_field_autocomplete($service=false) {
 			
 			if(!$invalid){
 				// insert values for add
-				$sql_add = "INSERT INTO remediation_action (description,type,DateDebut,DateFin,Action,host,service) VALUES('".$remediation_name."','".$remediation_type."','".$remediation_dateDebut."','".$remediation_dateFin."', 'add','".$remediation_host."','".$remediation_service."')";
+				$sql_add = "INSERT INTO remediation_action (description,type,DateDebut,DateFin,Action,host,service,source) VALUES('".$remediation_name."','".$remediation_type."','".$remediation_dateDebut."','".$remediation_dateFin."', '".$remediation_action."','".$remediation_host."','".$remediation_service."','".$remediation_source."')";
 				$remediation_id = sqlrequest("eorweb",$sql_add,true);
 				
 				message(6," : Remediation have been created",'ok');
 			}
 		}elseif(isset($_POST["update"])){
+			$sql_add = sqlrequest("eorweb","UPDATE remediation_action SET description='".$remediation_name."', type='".$remediation_type."', DateDebut='".$remediation_dateDebut."', DateFin='".$remediation_dateFin."', source='".$remediation_source."', host='".$remediation_host."', service='".$remediation_service."', Action='".$remediation_action."' WHERE id='".$remediation_id."'");
 			
 			message(6," : Remediation have been updated",'ok');
 		}
@@ -133,19 +129,43 @@ function get_field_autocomplete($service=false) {
 		<div class="row form-group">
 			<label class="col-md-3"><?php echo getLabel("label.manage_remediation.remediation_action_name"); ?></label>
 			<div class="col-md-9">
+				<input class="form-control hidden" type='text' name='id'  value='<?php if(isset($remediation_id)){echo $remediation_id; }?>'>
 				<input class="form-control" type='text' name='name'  value='<?php echo $remediation_name?>'>
+			</div>
+		</div>
+		<div class="row form-group">
+			<label class="col-md-3">Source</label>
+			<div class="col-md-9">
+				<input class="form-control" type='text' id='source' name='source'  value='<?php echo $remediation_source?>'>
 			</div>
 		</div>
 		<div class="row form-group">
 			<label class="col-md-3">Host</label>
 			<div class="col-md-9">
-				<input class="form-control" type='text' id='host' name='host'  value='<?php echo $remediation_host?>' onFocus='$(this).autocomplete({source: <?php echo get_field_autocomplete(); ?>})'>
+				<input class="form-control" type='text' id='host' name='host'  value='<?php echo $remediation_host?>'>
 			</div>
 		</div>
 		<div class="row form-group">
 			<label class="col-md-3">Service</label>
 			<div class="col-md-9">
-				<input class="form-control" type='text' id='service' name='service' value='<?php echo $remediation_service?>' onFocus='$(this).autocomplete({source: <?php echo get_field_autocomplete(true); ?>})'>
+				<input class="form-control" type='text' id='service' name='service' value='<?php echo $remediation_service?>'>
+			</div>
+		</div>
+		
+		<div class="row form-group">
+			<label class="col-md-3"><?php echo getLabel("label.manage_remediation.type"); ?></label>
+			<div class="col-md-9">
+				<select class="form-control" name='action' size=1>
+					<?php
+						if ($remediation_action == "delete"){
+							echo "<OPTION value='add'>Ajout </OPTION>";
+							echo "<OPTION value='delete' SELECTED>Suppression </OPTION>";
+						}else{
+							echo "<OPTION value='add' SELECTED>Ajout </OPTION>";
+							echo "<OPTION value='delete'>Suppression </OPTION>";
+						}
+					?>
+				</select>
 			</div>
 		</div>
 
@@ -155,11 +175,11 @@ function get_field_autocomplete($service=false) {
 				<select class="form-control" name='type' size=1>
 					<?php
 						if ($remediation_type == "incident"){
-							echo "<OPTION value='OUTAGE'>Maintenance </OPTION>";
-							echo "<OPTION value='DOWNTIME' SELECTED>incident </OPTION>";
+							echo "<OPTION value='maintenance'>Maintenance </OPTION>";
+							echo "<OPTION value='incident' SELECTED>incident </OPTION>";
 						}else{
-							echo "<OPTION value='OUTAGE' SELECTED>Maintenance </OPTION>";
-							echo "<OPTION value='DOWNTIME'>Incident </OPTION>";
+							echo "<OPTION value='maintenance' SELECTED>Maintenance </OPTION>";
+							echo "<OPTION value='incident'>Incident </OPTION>";
 						}
 					?>
 				</select>
@@ -180,7 +200,19 @@ function get_field_autocomplete($service=false) {
 		
 		<div class="form-group">
 			<?php
-				echo "<button class='btn btn-primary' type='submit' name='add' value='add'>".getLabel("action.add")."</button>";
+				if (isset($remediation_id) && $remediation_id != null) {
+					if(isset($remediation_satut)){
+						if($remediation_satut == "inactive" || $remediation_satut == "refused" || $remediation_satut == ""){
+							echo "<input class='btn btn-primary' type='submit' name='update' value=".getLabel('action.update').">";
+						}else{
+							echo "<input disabled class='btn btn-primary' type='submit' name='update' value=".getLabel('action.update').">";
+						}
+					}else{
+						echo "<input class='btn btn-primary' type='submit' name='update' value=".getLabel('action.update').">";
+					}
+				}else{
+					echo "<button class='btn btn-primary' type='submit' name='add' value='add'>".getLabel("action.add")."</button>";
+				}
 				echo "<button class='btn btn-default' style='margin-left: 10px;' type='button' name='back' value='back' onclick='location.href=\"index.php?action=remediation_action\"'>".getLabel("action.cancel")."</button>";
 			?>
 		</div>

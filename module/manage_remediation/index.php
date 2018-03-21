@@ -86,19 +86,64 @@ if(isset($_GET["action"])) {
 				}
 			}
 			break;
-		case "execution":
+		case "refus":
 			if(isset($remediation_selected[0])){
 				for ($i = 0; $i < count($remediation_selected); $i++){
+					// Update remediations state
+					sqlrequest("$database_eorweb","UPDATE remediation SET state='refused', date_validation='".date("Y-m-d G:i")."' where id='$remediation_selected[$i]'");
+					
+					message(8," : Remediation pack selected have been updated",'ok');
+				}
+			}
+			break;
+		case "demand":
+			if(isset($remediation_selected[0])){
+				for ($i = 0; $i < count($remediation_selected); $i++){
+					// Update remediations state
+					sqlrequest("$database_eorweb","UPDATE remediation SET state='en attente', date_validation='".date("Y-m-d G:i")."' where id='$remediation_selected[$i]'");
+					
+					message(8," : Remediation pack selected have been updated",'ok');
+				}
+			}
+			break;
+		case "execution":
+			if(isset($remediation_selected[0])){
+				/*// Create CSV files with infos in DB
+				$array = array('Valid','"Date debut"','"Heure debut"','"Date fin"','"Heure fin"','Type','Host','Service');
+				$array = str_replace('"', '', $array);
+
+				// Paramétrage de l'écriture du futur fichier CSV
+				$chemin = '/srv/eyesofreport/etl/injection/InjectRemediation'.$remediation_selected[0].'.csv';
+				$delimiteur = ';'; 
+
+				// Création du fichier csv
+				$fichier_csv = fopen($chemin, 'w+');
+				
+				for ($i = 0; $i < count($remediation_selected); $i++){
 					$RemediationExec=sqlrequest("$database_eorweb","select * from remediation_action where remediationID='$remediation_selected[$i]'");
+					$result = $RemediationExec->fetch_array(MYSQLI_ASSOC);
 					
-					// Create CSV files with infos in DB
 					
+					
+					$dateDebut = split(" ", $result["DateDebut"]);
+					$dateFin = split(" ", $result["DateFin"]);
+					
+					$lignes[] = array('O', $dateDebut[0], $dateDebut[1], $dateFin[0], $dateFin[1], $result["type"], $result["host"], $result["service"]);
 					
 					// Update remediations state
 					//sqlrequest("$database_eorweb","UPDATE remediation SET state='approved', date_validation='".date("Y-m-d G:i")."' where id='$remediation_selected[$i]'");
 					
 					message(8," : Remediation pack have been activated",'ok');
 				}
+				
+				fputs($fichier_csv, implode($array, ';')."\n");
+				foreach($lignes as $ligne){
+					fputcsv($fichier_csv, $ligne, $delimiteur);
+				}
+
+				fclose($fichier_csv);
+				
+				exec("");*/
 			}
 			break;
 	}
@@ -160,7 +205,11 @@ if(isset($_GET["action"])) {
 			<div class="form-group">
 				<a href="./remediation.php" class="btn btn-success" role="button"><?php echo getLabel("action.add");?></a>
 				<button class="btn btn-danger" type="submit" name="actions" value="del_method"><?php echo getLabel("action.clear");?></button>
-				<button class="btn btn-default" type="submit" name="actions" value="validation">Valider</button
+				<!-- Si les droits de remediation de l'utilisateur son limité -->
+				<button class="btn btn-default" type="submit" name="actions" value="demand">Envoyé demande</button>
+				<!-- Si l'utilisateur a tous les droits de remediation -->
+				<button class="btn btn-default" type="submit" name="actions" value="validation">Valider</button>
+				<button class="btn btn-danger" type="submit" name="actions" value="refus">Refuser</button>
 			</div>
 		</div>
 	</form>
