@@ -2,7 +2,7 @@
 #########################################
 #
 # Copyright (C) 2018 EyesOfNetwork Team
-# DEV NAME : Michael Aubertin
+# DEV NAME : Jean-Philippe LEVY
 # VERSION : 2.0
 # APPLICATION : eorweb for eyesofreport project
 #
@@ -27,7 +27,7 @@ function display_dropzone_element(id, text, source_name) {
 			<span class="glyphicon glyphicon-trash"></span>\
 		</button>\
 		<b>'+text+'</b>\
-		<b class="condition_presentation" style="margin-left:5px;">' + $bp_source + '</b>\
+		<b class="condition_presentation" style="margin-left:5px;">' + source_name + '</b>\
 	</div>';
 }
 
@@ -44,27 +44,33 @@ $(document).ready(function () {
 		$list_new_services.push(host_name + "::" + service_name);
 	}
 
+	// Add service in bp
 	$(document).on('click', 'button.btn-success.button-addbp', function(){
 		var name = $(this).parent().children(".addprocess").text();
 		var bp_source = $(this).parent().children(".condition_presentation").text();
 		AddService(name,bp_source);
 	});
 
-	// Autocomplete
-	$('#host').autocomplete({ 
-		source: './php/auto_completion.php?source_name='+source_name 
+	// Add service in bp with drag and drop
+	$('#container-drop_zone').droppable({
+		hoverClass : "ui-state-hover",
+		drop : function(event, ui){
+		var name = ui.draggable.children(".addprocess").text();
+			var bp_source = ui.draggable.children(".condition_presentation").text();
+			AddService(name,bp_source);
+		}
 	});
-
-		/*onSelect: function(suggestion){
+	
+	// Autocomplete thruk hosts
+	$('#host').autocomplete({ 
+		source: './php/auto_completion.php?source_type=hosts&source_name='+source_name,
+		select: function(event, ui){
 			$.get(
-				'./php/function_bp.php',
-				{
-					action: 'list_services',
-					host_name: suggestion['value']
-				},
+				'./php/auto_completion.php?source_type=services&source_name='+source_name+'&term='+ui.item.value,
 				function ReturnValue(list_services){
 					
-					$services = list_services['service'];
+					$services = list_services;
+					$bp_source = source_name.split("_nagiosbp")[0];
 
 					$('#draggablePanelList').children().remove();
 					$('#process').html(dictionnary["label.manage_bp.serv_linked_to_host"]+' ' + $('#host').val());
@@ -73,24 +79,24 @@ $(document).ready(function () {
 						var element = $('div[id$="::' + $("#host").val() + ';;' + $services[i] + '"]');
 						
 						if(! element.length){
-							$('#draggablePanelList').append($('<div id="drag_' + $('#host').val() + '::' + $services[i] +'" class="draggable well well-sm ui-front"><button type="button" class="btn btn-xs btn-success button-addbp"><i class="glyphicon glyphicon-plus"></i></button>' + $services[i] + '</div>').draggable({ snap: true, revert: "invalid" }));
+							$('#draggablePanelList').append($(
+								'<div id="drag_' + $('#host').val() + '::' + $services[i] +'" class="draggable well well-sm ui-front">\
+									<button type="button" class="btn btn-xs btn-success button-addbp">\
+										<i class="glyphicon glyphicon-plus"></i>\
+									</button>\
+									<b class="addprocess">'+ $services[i] +'</b>\
+									<b class="condition_presentation" style="margin-left:5px;">' + $bp_source + '</b>\
+								</div>').draggable({ snap: true, revert: "invalid" })
+							);
 						}
 					}
 				},
 				'json'
 			);
 		}
-	});*/
-
-	$('#container-drop_zone').droppable({
-		hoverClass : "ui-state-hover",
-    	drop : function(event, ui){
-    		var name = ui.draggable.children(".addprocess").text();
-			var bp_source = ui.draggable.children(".condition_presentation").text();
-			AddService(name,bp_source);
-    	}
 	});
 
+	// Show linkable bps by display selection
 	$('select').change(function(){
         var bp_name = $('#bp_name').val();
 		var nb_display = $('select[name="display"]').val();
@@ -135,14 +141,17 @@ $(document).ready(function () {
 
 });
 
+// Resize draggable zone
 $(document).scroll(function(){
 	if($(document).scrollTop()>$('#form_drop').height()){
 		$('#form_drop').css('top',$(document).scrollTop() -$('#form_drop').height());
 	}
 });
 
+// -----------------------------------------------------
+// Functions
+// -----------------------------------------------------
 
-// function declaration !!!
 function AddService(name,bp_source)
 {
 	$('#primary_drop_zone').remove();
@@ -158,7 +167,6 @@ function AddService(name,bp_source)
 
 		else{
 			var id_panel_hoststatus = "" + bp_name + '::' + $("#host").val() + ';;Hoststatus' + "";
-			
 			
 			$('div[id="drag_'+$('#host').val()+'::Hoststatus"]').remove();
 			if(name != "Hoststatus"){
@@ -191,16 +199,22 @@ function AddService(name,bp_source)
 }
 
 function DeleteService(line_service,bp_source){
-    $('div[id="' + line_service +'"]').remove();
-    var information = line_service.split("::");
-    var global_bp = information[0];
-    var host = information[1].split(";;")[0];
-    var service = information[1].split(";;")[1];
+  
+	var information = line_service.split("::");
+	var global_bp = information[0];
+	var host = information[1].split(";;")[0];
+	var service = information[1].split(";;")[1];
+
+	if(service == 'Hoststatus') {
+		$('div[id="drop_zone::' + host +'"]').remove();
+	} else {
+		$('div[id="' + line_service +'"]').remove();
+	}
 
 	//on supprime le service dans la liste
 	$list_new_services = jQuery.grep($list_new_services, function(value) {
-  		return value != host + "::" + service;
-		});
+		return value != host + "::" + service;
+	});
 
 	var all_element_match = $('div[id^="' + global_bp + '::' + host + '"]');
 
@@ -218,14 +232,11 @@ function DeleteService(line_service,bp_source){
 	// SERVICE !!!
 	if($("input#host").length > 0 && $('#host').val()){
 		$.get(
-			'./php/function_bp.php',
-			{
-				action: 'list_services',
-				host_name: $("input#host").val()
-			},
+			'./php/auto_completion.php?source_type=services&source_name='+bp_source+'&term='+$("input#host").val(),
 			function ReturnValue(list_services){
-				$services = list_services['service'];
-				// add Hoststatus if necessary
+				
+				$services = list_services;
+
 				$('#draggablePanelList').children().remove();
 
 				if($services !== undefined){
@@ -293,15 +304,16 @@ function DeleteService(line_service,bp_source){
 }
 
 function ApplyService(){
-	var element = $('h1.page-header').html();
-	var bp_name = element.split(" : ")[1];
+	var bp_name = $('#bp_name').val();
+	var source_name = $('#source_name').val();
 	
 	$.get(
 		'./php/function_bp.php',
 		{
 			action: 'add_services',
 			bp_name: bp_name,
-			new_services: $list_new_services
+			new_services: $list_new_services,
+			source_name: source_name
 		},
 		function ReturnError(values){
 			setTimeout(function(){

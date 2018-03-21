@@ -28,7 +28,7 @@
                     "target":"frame"
                 },
                 {
-                    "name":"menu.link.reports",
+                    "name":"menu.link.reports_etl",
                     "url":"/module/birt_apps/index.php?etl",
                     "target":"main"
                 }

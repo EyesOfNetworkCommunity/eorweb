@@ -58,7 +58,7 @@ catch(Exception $e) {
 						<div>
 							<div class="row col-md-12">
 								<div class="input-group">
-									<span class="input-group-addon" id="sizing-addon1"><img src="./images/server.png" height="20" width="25" alt="server"></span>
+									<span class="input-group-addon" id="sizing-addon1"><i class="fa fa-server"></i></span>
 									<input type="text" class="form-control" id="host" placeholder="Hostname" aria-describedby="sizing-addon1" autocomplete="off">
 								</div>
 							</div>
@@ -166,18 +166,19 @@ catch(Exception $e) {
 										<?php  //fermeture du div du host
 									}
 									?>
-									<div id="drop_zone::$host" class="ui-widget-content panel panel-info">
-									<div id="panel::<?php $host ?>" class="panel-heading panel-title"><?php $host ?></div>
+									<div id="drop_zone::<?php echo $host; ?>" class="ui-widget-content panel panel-info">
+									<div id="panel::<?php echo $host; ?>" class="panel-heading panel-title"><?php echo $host; ?></div>
 									<div class="pannel-body">
 									<?php
 									$old_host=$host;
 									$old_host_count++;
 								} ?>								
-								<div id="<?php echo "$bp_name::$host;;$service"; ?>" class="text-info well well-sm" style="font-size:16px;">
-								<button type="button" class="btn btn-xs btn-danger button-addbp" onclick="DeleteService('<?php echo $bp_name."::".$host.";;".$service; ?>');">
+								<div id="<?php echo "$bp_name::$host;;$service"; ?>" class="well well-sm ui-front">
+								<button type="button" class="btn btn-xs btn-danger button-addbp" onclick="DeleteService('<?php echo $bp_name."::".$host.";;".$service; ?>','<?php echo $source; ?>');">
 								<span class="glyphicon glyphicon-trash"></span>
 								</button>
-								<?php echo $service; ?>
+								<b><?php echo $service; ?></b>
+								<b class="condition_presentation" style="margin-left:5px;"><?php echo rtrim($source,"_nagiosbp"); ?></b>
 								</div>
 							<?php } ?>
 							</div>
@@ -194,10 +195,12 @@ catch(Exception $e) {
 				</div> 
 				<br>
 				<div class="btn-group btn-group-justified">
-				<a class="btn btn-success" onclick="<?php echo (($display_actually_bp == 0)?'ApplyService();':'ApplyProcess();'); ?>">
-		    	<?php echo getLabel("action.apply"); ?>
-		    	</a>
-				<a class="btn btn-primary" onclick="window.location = '/module/manage_bp/index.php';"><?php echo getLabel("action.cancel"); ?></a>
+					<a class="btn btn-success" onclick="<?php echo (($display_actually_bp == 0)?'ApplyService();':'ApplyProcess();'); ?>">
+						<?php echo getLabel("action.apply"); ?>
+					</a>
+					<a class="btn btn-primary" onclick="window.location = '/module/manage_bp/index.php';">
+						<?php echo getLabel("action.cancel"); ?>
+					</a>
 				</div>
 			</form>
 		</div>

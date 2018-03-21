@@ -2,7 +2,7 @@
 #########################################
 #
 # Copyright (C) 2018 EyesOfNetwork Team
-# DEV NAME : Jean-Philippe Levy
+# DEV NAME : Jean-Philippe LEVY
 # VERSION : 2.0
 # APPLICATION : eorweb for eyesofreport project
 #
@@ -83,8 +83,8 @@ $('#FindIt').on('click', findIt());
 function findIt(){
 	HideAll()
 	$search_text = $('#SearchFor').val();
-	$('.tree-toggle').jmRemoveHighlight();
-    $('.tree-toggle').jmHighlight($search_text);
+	$('.tree-toggle').unmark();
+    $('.tree-toggle').mark($search_text,{ "className": "highlight" });
 	ShowHight($search_text);
 	
 	var offset = $("ul:contains('" + $search_text +"')").offset();

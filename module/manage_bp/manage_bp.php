@@ -3,7 +3,7 @@
 #########################################
 #
 # Copyright (C) 2018 EyesOfNetwork Team
-# DEV NAME : Quentin HOARAU
+# DEV NAME : Jean-Philippe LEVY
 # VERSION : 2.0
 # APPLICATION : eorweb for eyesofreport project
 #
@@ -22,7 +22,7 @@
 ?>
 
 <script src="/bower_components/bootstrap-select/dist/js/bootstrap-select.min.js"></script>
-<script src="./js/jquery.jmHighlight.min.js"></script>
+<script src="/bower_components/mark.js/dist/jquery.mark.min.js"></script>
 
 <?php
 $filejs="./js/".basename($_SERVER['PHP_SELF'],".php").".js";

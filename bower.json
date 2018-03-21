@@ -22,7 +22,8 @@
     "jquery-ui": "^1.12.1",
     "bootstrap-daterangepicker": "^2.1.27",
     "bootstrap-select": "^1.12.4",
-    "jquery-appear": "^0.2.6"
+    "jquery-appear": "^0.2.6",
+    "mark.js": "jmHighlight#^8.11.1"
   },
   "resolutions": {
     "font-awesome": "^4.7.0"

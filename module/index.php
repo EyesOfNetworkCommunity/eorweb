@@ -43,7 +43,7 @@ include("../side.php");
 
 	<div class="row">
 		<div class="col-lg-12">
-			<h1 class="page-header"><?php echo getLabel("label.home_about.title"); ?></h1>
+			<h1 class="page-header"><?php echo getLabel("label.help_about.title"); ?></h1>
 		</div>
 	</div>
 
