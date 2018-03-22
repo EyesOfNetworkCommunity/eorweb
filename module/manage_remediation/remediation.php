@@ -75,6 +75,7 @@ function get_field() {
 		
 		// Retrieve Information from database
 		$remediation_name=mysqli_result($user_infos,0,"name");
+		$remediation_satut=mysqli_result($user_infos,0,"state");
 		
 		while ($line = mysqli_fetch_array($user_infos2)){
 			$remediation_action_id .= $line[0].",";
@@ -158,7 +159,11 @@ function get_field() {
 		<div class="form-group">
 			<?php
 				if (isset($remediation_id) && $remediation_id != null) {
-					echo "<input class='btn btn-primary' type='submit' name='update' value=".getLabel('action.update').">";
+					if($remediation_satut == "inactive" || $remediation_satut == "refused"){
+						echo "<input class='btn btn-primary' type='submit' name='update' value=".getLabel('action.update').">";
+					}else{
+						echo "<input disabled class='btn btn-primary' type='submit' name='update' value=".getLabel('action.update').">";
+					}
 				}
 				else {
 					echo "<input class='btn btn-primary' type='submit' name='add' value=".getLabel('action.add').">";
@@ -172,26 +177,3 @@ function get_field() {
 
 <?php include("../../footer.php"); ?>
 
-
-<script type="text/javascript">
-
-   // Add
-	$('#rule_host_button').on('click',function(){
-		var o = new Option($("#rule_host1").val(),$("#rule_host1").val(),true,true);
-		$("#remediation_actions_id").append(o);
-	});
-	
-	// Delete
-	$('#rule_host_button_del').on('click',function(){
-		$("#remediation_actions_id").find('option:selected').remove();
-		$("#remediation_actions_id").find("option").attr('selected','selected');
-	});
-	
-	/*$('#ajout').on('submit', 'form', function(e) {
-		var self = this;
-		e.preventDefault();
-		$("#timeperiods option").prop("selected",true);
-		self.submit();
-	});*/
-
-</script>
