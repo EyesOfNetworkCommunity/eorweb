@@ -24,6 +24,7 @@ include("../../header.php");
 include("../../side.php");
 
 global $database_eorweb;
+global $database_thruk;
 
 // Init action
 $action=null;
@@ -57,7 +58,7 @@ if(isset($_GET["action"])) {
 					
 					// Logging action
 					logging("manage_remediation","DELETE : $remediation_selected[$i]");
-					message(8," : Remediation $remediation removed",'ok');
+					message(6," : Remediation $remediation removed",'ok');
 				}
 			}
 			break;
@@ -72,7 +73,7 @@ if(isset($_GET["action"])) {
 					
 					// Logging action
 					logging("manage_remediation","DELETE : $remediation_action_selected[$i]");
-					message(8," : Remediation pack $remediation_action removed",'ok');
+					message(6," : Remediation pack $remediation_action removed",'ok');
 				}
 			}
 			break;
@@ -82,7 +83,7 @@ if(isset($_GET["action"])) {
 					// Update remediations state
 					sqlrequest("$database_eorweb","UPDATE remediation SET state='approved', date_validation='".date("Y-m-d G:i")."' where id='$remediation_selected[$i]'");
 					
-					message(8," : Remediation pack selected have been updated",'ok');
+					message(6," : Remediation pack selected have been updated",'ok');
 				}
 			}
 			break;
@@ -92,7 +93,7 @@ if(isset($_GET["action"])) {
 					// Update remediations state
 					sqlrequest("$database_eorweb","UPDATE remediation SET state='refused', date_validation='".date("Y-m-d G:i")."' where id='$remediation_selected[$i]'");
 					
-					message(8," : Remediation pack selected have been updated",'ok');
+					message(6," : Remediation pack selected have been updated",'ok');
 				}
 			}
 			break;
@@ -102,48 +103,69 @@ if(isset($_GET["action"])) {
 					// Update remediations state
 					sqlrequest("$database_eorweb","UPDATE remediation SET state='en attente', date_validation='".date("Y-m-d G:i")."' where id='$remediation_selected[$i]'");
 					
-					message(8," : Remediation pack selected have been updated",'ok');
+					message(6," : Remediation pack selected have been updated",'ok');
 				}
 			}
 			break;
 		case "execution":
 			if(isset($remediation_selected[0])){
-				/*// Create CSV files with infos in DB
+				// Create CSV files with infos in DB
 				$array = array('Valid','"Date debut"','"Heure debut"','"Date fin"','"Heure fin"','Type','Host','Service');
 				$array = str_replace('"', '', $array);
-
-				// Paramétrage de l'écriture du futur fichier CSV
-				$chemin = '/srv/eyesofreport/etl/injection/InjectRemediation'.$remediation_selected[0].'.csv';
-				$delimiteur = ';'; 
-
-				// Création du fichier csv
-				$fichier_csv = fopen($chemin, 'w+');
 				
 				for ($i = 0; $i < count($remediation_selected); $i++){
 					$RemediationExec=sqlrequest("$database_eorweb","select * from remediation_action where remediationID='$remediation_selected[$i]'");
-					$result = $RemediationExec->fetch_array(MYSQLI_ASSOC);
+					//$result = $RemediationExec->fetch_array(MYSQLI_ASSOC);
 					
-					
-					
-					$dateDebut = split(" ", $result["DateDebut"]);
-					$dateFin = split(" ", $result["DateFin"]);
-					
-					$lignes[] = array('O', $dateDebut[0], $dateDebut[1], $dateFin[0], $dateFin[1], $result["type"], $result["host"], $result["service"]);
+					while($line = mysqli_fetch_array($RemediationExec)){
+						if($line['Action']=="add"){
+							// Paramétrage de l'écriture du futur fichier CSV
+							$chemin = '/srv/eyesofreport/etl/injection/Inject'.$line['type'].$line['id'].'.csv';
+							$delimiteur = ';'; 
+
+							// Création du fichier csv
+							$fichier_csv = fopen($chemin, 'w+');
+							
+							$dateDebut = split(" ", date('d/m/Y h:i:s', strtotime($line["DateDebut"])));
+							$dateFin = split(" ", date('d/m/Y h:i:s', strtotime($line["DateFin"])));
+							
+							$lignes[] = array('O', $dateDebut[0], $dateDebut[1], $dateFin[0], $dateFin[1], $line["type"], $line["host"], $line["service"]);
+							
+							fputs($fichier_csv, implode($array, ';')."\n");
+							foreach($lignes as $ligne){
+								fputcsv($fichier_csv, $ligne, $delimiteur);
+							}
+
+							fclose($fichier_csv);
+							
+							if($line["type"] == "maintenance"){
+								$type="Downtime";
+							}else{
+								$type="Outage";
+							}
+							
+							exec("/srv/eyesofreport/etl/scripts/massive_inject_HOST_downtime-or-outage.sh root root66 ".$line['source']." ".$type." ".'Inject'.$line['type'].$line['id'].'.csv', $output);
+							
+							var_dump($output);
+							
+						// si delete incident, faire requete
+						}elseif($line['Action']=="delete" && $line['type']=="incident"){
+							// suppression d'incident incomplète
+							if($line['service'] != "" || $line['service'] != null){
+								sqlrequest("$database_thruk","UPDATE ".$line['source']."_log set message=7930, state=0 where time between ".strtotime($line['DateDebut'])." and ".strtotime($line['DateFin'])." and state_type='HARD' and host_id='".$line['host']."' and service_id='".$line['service']."'");
+								echo "UPDATE ".$line['source']."_log set message=7930, state=0 where time between ".strtotime($line['DateDebut'])." and ".strtotime($line['DateFin'])." and state_type='HARD' and host_id='".$line['host']."' and service_id='".$line['service']."'";
+							}else{
+								sqlrequest("$database_thruk","UPDATE ".$line['source']."_log set message=7930, state=0 where time between ".strtotime($line['DateDebut'])." and ".strtotime($line['DateFin'])." and state_type='HARD' and host_id='".$line['host']."'");
+							}
+							
+						}
+					}
 					
 					// Update remediations state
-					//sqlrequest("$database_eorweb","UPDATE remediation SET state='approved', date_validation='".date("Y-m-d G:i")."' where id='$remediation_selected[$i]'");
+					sqlrequest("$database_eorweb","UPDATE remediation SET state='executed', date_validation='".date("Y-m-d G:i")."' where id='$remediation_selected[$i]'");
 					
-					message(8," : Remediation pack have been activated",'ok');
+					message(6," : Remediation pack ".$remediation_selected[$i]." have been activated",'ok');
 				}
-				
-				fputs($fichier_csv, implode($array, ';')."\n");
-				foreach($lignes as $ligne){
-					fputcsv($fichier_csv, $ligne, $delimiteur);
-				}
-
-				fclose($fichier_csv);
-				
-				exec("");*/
 			}
 			break;
 	}
@@ -279,7 +301,7 @@ if(isset($_GET["action"])) {
 	*************** Apply remediation 
 	*/
 	} elseif($action=="apply_pack") {
-		$rules_sql="SELECT * FROM remediation WHERE state='approved'";
+		$rules_sql="SELECT * FROM remediation WHERE state='approved' or state='executed'";
 	?>	
 	
 	<div class="row">
@@ -316,7 +338,7 @@ if(isset($_GET["action"])) {
 					?>
 						<tr>
 							<td class="text-center"><label><input type="checkbox" class="checkbox" name="remediation_selected[]" value="<?php echo $line["id"]; ?>"></label></td>
-							<td><a href="manage_remediation.php?id=<?php echo $line["id"]; ?>"><?php echo $line["name"]; ?></a></td>
+							<td><a href="remediation.php?id=<?php echo $line["id"]; ?>"><?php echo $line["name"]; ?></a></td>
 							<td><?php echo mysqli_result(sqlrequest("eorweb","SELECT user_name from users where user_id='".$line["user_id"]."'"),0,"user_name"); ?></td>
 							<td><?php echo $line["date_demand"]; ?></td>
 							<td><?php echo $line["date_validation"]; ?></td>
@@ -329,7 +351,6 @@ if(isset($_GET["action"])) {
 			</div>
 			<div class="form-group">
 				<button class="btn btn-success" type="submit" name="actions" value="execution">Executer</button>
-				<button class="btn btn-default" type="submit" name="actions" value="annulation">Annuler</button
 			</div>
 		</div>
 	</form>
