@@ -45,10 +45,6 @@ $(document).ready(function() {
 
   $.get(
 		'./php/select_all_applications.php',
-		{
-			table_name:"bp"
-		},
-
 		function ReturnAllApplications(values){
 			$.each(values, function(v, k){
 				$name = k['name'];
