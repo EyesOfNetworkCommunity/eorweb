@@ -23,28 +23,8 @@
 include("../../header.php");
 include("../../side.php");
 
-// Get hosts or services by autocompletion
-function get_field_autocomplete($service=false) {
-	global $database_vanillabp;
-	global $database_thruk;
-	
-	$autocomplete=array();
-	
-	$request="SELECT distinct thruk_idx FROM bp_sources";
-	$infs=sqlrequest($database_vanillabp,$request);
-	
-	while ($inf = mysqli_fetch_array($infs)){ 
-		if($inf[0] != "NR"){
-			$autocomplete = $inf;
-		}
-	}
-		
-	$autocomplete= array_unique($autocomplete);
-	
-	echo json_encode($autocomplete);
-}
-
 ?>
+
 <div id="page-wrapper">
 	<div class="row">
 		<div class="col-lg-12">
@@ -134,9 +114,26 @@ function get_field_autocomplete($service=false) {
 			</div>
 		</div>
 		<div class="row form-group">
-			<label class="col-md-3">Source</label>
+			<label class="col-md-3"><?php echo "Source" ?></label>
 			<div class="col-md-9">
-				<input class="form-control" type='text' id='source' name='source'  value='<?php echo $remediation_source?>'>
+				<select class="form-control" id='source' name='source' size=1>
+					<?php
+						$request="SELECT distinct thruk_idx FROM bp_sources";
+						$result=sqlrequest($database_vanillabp,$request);
+						
+						echo "<OPTION value='none'>Choisissez une source </OPTION>";
+						
+						while ($line = mysqli_fetch_array($result)){
+							if($line[0] != "NR"){
+								if(isset($remediation_source) && $remediation_source == $line[0]){
+									echo "<OPTION value='$line[0]' SELECTED>$line[0] </OPTION>";
+								}else{
+									echo "<OPTION value='$line[0]'>$line[0] </OPTION>";
+								}
+							}
+						}
+					?>
+				</select>
 			</div>
 		</div>
 		<div class="row form-group">
@@ -153,7 +150,7 @@ function get_field_autocomplete($service=false) {
 		</div>
 		
 		<div class="row form-group">
-			<label class="col-md-3"><?php echo getLabel("label.manage_remediation.type"); ?></label>
+			<label class="col-md-3"><?php echo "Action" ?></label>
 			<div class="col-md-9">
 				<select class="form-control" name='action' size=1>
 					<?php

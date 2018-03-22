@@ -27,21 +27,17 @@ global $database_thruk, $database_vanillabp;
 
 $autocomplete=array();
 
-if(isset($_GET['source_type'])){
-	if($_GET['source_type'] == 'services'){
-		$req="SELECT host_id FROM ".$_GET['source_name']."_host where host_name='".$_GET['source_host']."'";
-		$ids = sqlrequest($database_thruk,$req);
-		$id = mysqli_result($ids,0,"host_id");
-		
-		$requests="SELECT DISTINCT service_description FROM ".$_GET['source_name']."_service WHERE host_id=".$id;
-	}else{
-		$requests="SELECT DISTINCT host_name FROM ".$_GET['source_name']."_host";
-	}
-	$result = sqlrequest($database_thruk,$requests);
+if($_GET['source_type'] == 'services'){
+	$req="SELECT host_id FROM ".$_GET['source_name']."_host where host_name='".$_GET['source_host']."'";
+	$ids = sqlrequest($database_thruk,$req);
+	$id = mysqli_result($ids,0,"host_id");
+	
+	$requests="SELECT DISTINCT service_description FROM ".$_GET['source_name']."_service WHERE host_id=".$id;
 }else{
-	$request="SELECT distinct thruk_idx FROM bp_sources";
-	$result=sqlrequest($database_vanillabp,$request);
+	$requests="SELECT DISTINCT host_name FROM ".$_GET['source_name']."_host";
 }
+$result = sqlrequest($database_thruk,$requests);
+
 
 while ($line = mysqli_fetch_array($result)){
 	if($line[0] != "NR"){

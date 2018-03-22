@@ -28,8 +28,17 @@
 <script type="text/javascript">
 	// on page load
     $(document).ready(function() {
+
 		var start = moment().format('YYYY-MM-DD HH:mm:ss');
 		var end = moment().add(2, 'hours').format('YYYY-MM-DD HH:mm:ss');
+
+		if($("#datepickerStart").val() != ""){
+			start = $("#datepickerStart").val();
+		}
+		
+		if($("#datepickerEnd").val() != ""){
+			end = $("#datepickerEnd").val();
+		}
 
 		var locale = 
 		{
@@ -80,5 +89,9 @@
 			singleDatePicker: true,
 			showDropdowns: true
 		})
+		
+		$("#datepickerStart").on('focusin',function () {
+			$(this).datepicker('setDate', $(this).val());
+		});
     });
 </script>

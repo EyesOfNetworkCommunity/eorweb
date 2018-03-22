@@ -31,22 +31,30 @@ $(document).ready(function() {
 		$("#remediation_actions_id").find('option:selected').remove();
 		$("#remediation_actions_id").find("option").attr('selected','selected');
 	});
-
-	$('#source').autocomplete({
-		source: './php/auto_completion.php',
-		select: function(event, ui){
-			source_name = ui.item.value;
-			
+	
+	source_name = $('#source').val();
+	$('#source').on('change', function() {
+	  source_name = this.value;
+	})
+		
+	$("#host").on('focusin',function () {
+		if(source_name != 'none'){
 			$('#host').autocomplete({ 				
-				source: './php/auto_completion.php?source_type=hosts&source_name='+source_name,
-				select: function(event, di){
-					val = di.item.value;
-					
-					$('#service').autocomplete({ 
-						source: './php/auto_completion.php?source_host='+val+'&source_type=services&source_name='+source_name
-					});
-				}
+				source: './php/auto_completion.php?source_type=hosts&source_name='+source_name
 			});
+		}else{
+			$('#host').autocomplete({source: [""]});
+		}
+	});
+	
+	$("#service").on('focusin',function () {
+		val = $("#host").val();
+		if(val != ""){
+			$('#service').autocomplete({ 
+				source: './php/auto_completion.php?source_host='+val+'&source_type=services&source_name='+source_name
+			});
+		}else{
+			$('#service').autocomplete({source: [""]});
 		}
 	});
 });
