@@ -40,7 +40,8 @@ $(document).ready(function() {
 	$("#host").on('focusin',function () {
 		if(source_name != 'none'){
 			$('#host').autocomplete({ 				
-				source: './php/auto_completion.php?source_type=hosts&source_name='+source_name
+				source: './php/auto_completion.php?source_type=hosts&source_name='+source_name,
+				 minLength: 1
 			});
 		}else{
 			$('#host').autocomplete({source: [""]});
