@@ -207,18 +207,20 @@ if(isset($_GET["action"])) {
 					<?php
 					// Get remediation_pack
 					$methods=sqlrequest($database_eorweb,$rules_sql);
-
-					while ($line = mysqli_fetch_array($methods)) {
-					?>
-						<tr>
-							<td class="text-center"><label><input type="checkbox" class="checkbox" name="remediation_selected[]" value="<?php echo $line["id"]; ?>"></label></td>
-							<td><a href="remediation.php?id=<?php echo $line["id"]; ?>"><?php echo $line["name"]; ?></a></td>
-							<td><?php echo mysqli_result(sqlrequest("eorweb","SELECT user_name from users where user_id='".$line["user_id"]."'"),0,"user_name"); ?></td>
-							<td><?php echo $line["date_demand"]; ?></td>
-							<td><?php echo $line["date_validation"]; ?></td>
-							<td><?php echo $line["state"]; ?></td>
-						</tr>
-					<?php
+					
+					if($methods) {
+						while ($line = mysqli_fetch_array($methods)) {
+						?>
+							<tr>
+								<td class="text-center"><label><input type="checkbox" class="checkbox" name="remediation_selected[]" value="<?php echo $line["id"]; ?>"></label></td>
+								<td><a href="remediation.php?id=<?php echo $line["id"]; ?>"><?php echo $line["name"]; ?></a></td>
+								<td><?php echo mysqli_result(sqlrequest("eorweb","SELECT user_name from users where user_id='".$line["user_id"]."'"),0,"user_name"); ?></td>
+								<td><?php echo $line["date_demand"]; ?></td>
+								<td><?php echo $line["date_validation"]; ?></td>
+								<td><?php echo $line["state"]; ?></td>
+							</tr>
+						<?php
+						}
 					}
 					?>
 					</tbody>
@@ -228,10 +230,10 @@ if(isset($_GET["action"])) {
 				<a href="./remediation.php" class="btn btn-success" role="button"><?php echo getLabel("action.add");?></a>
 				<button class="btn btn-danger" type="submit" name="actions" value="del_method"><?php echo getLabel("action.clear");?></button>
 				<!-- Si les droits de remediation de l'utilisateur son limité -->
-				<button class="btn btn-default" type="submit" name="actions" value="demand">Envoyé demande</button>
+				<button class="btn btn-default" type="submit" name="actions" value="demand"><?php echo getLabel("action.submit");?></button>
 				<!-- Si l'utilisateur a tous les droits de remediation -->
-				<button class="btn btn-default" type="submit" name="actions" value="validation">Valider</button>
-				<button class="btn btn-danger" type="submit" name="actions" value="refus">Refuser</button>
+				<button class="btn btn-default" type="submit" name="actions" value="validation"><?php echo getLabel("action.validate");?></button>
+				<button class="btn btn-danger" type="submit" name="actions" value="refus"><?php echo getLabel("action.refuse");?></button>
 			</div>
 		</div>
 	</form>
@@ -242,7 +244,7 @@ if(isset($_GET["action"])) {
 	*/
 	} elseif($action=="remediation_action") {
 		$rules_sql="SELECT * FROM remediation_action";
-	?>	
+	?>
 	
 	<div class="row">
 		<div class="col-lg-12">
@@ -273,17 +275,19 @@ if(isset($_GET["action"])) {
 					<?php
 					// Get remediation_pack
 					$methods=sqlrequest($database_eorweb,$rules_sql);
-
+					
+					if($methods) {
 					while ($line = mysqli_fetch_array($methods)) {
-					?>
-						<tr>
-							<td class="text-center"><label><input type="checkbox" class="checkbox" name="remediation_action_selected[]" value="<?php echo $line["id"]; ?>"></label></td>
-							<td><a href="remediation_action.php?id=<?php echo $line["id"]; ?>"><?php echo $line["description"]; ?></a></td>
-							<td><?php echo $line["type"]; ?></td>
-							<td><?php echo $line["DateDebut"]; ?></td>
-							<td><?php echo $line["DateFin"]; ?></td>
-						</tr>
-					<?php
+						?>
+							<tr>
+								<td class="text-center"><label><input type="checkbox" class="checkbox" name="remediation_action_selected[]" value="<?php echo $line["id"]; ?>"></label></td>
+								<td><a href="remediation_action.php?id=<?php echo $line["id"]; ?>"><?php echo $line["description"]; ?></a></td>
+								<td><?php echo $line["type"]; ?></td>
+								<td><?php echo $line["DateDebut"]; ?></td>
+								<td><?php echo $line["DateFin"]; ?></td>
+							</tr>
+						<?php
+						}
 					}
 					?>
 					</tbody>
@@ -333,17 +337,18 @@ if(isset($_GET["action"])) {
 					<?php
 					// Get remediation_pack
 					$methods=sqlrequest($database_eorweb,$rules_sql);
-
-					while ($line = mysqli_fetch_array($methods)) {
-					?>
-						<tr>
-							<td class="text-center"><label><input type="checkbox" class="checkbox" name="remediation_selected[]" value="<?php echo $line["id"]; ?>"></label></td>
-							<td><a href="remediation.php?id=<?php echo $line["id"]; ?>"><?php echo $line["name"]; ?></a></td>
-							<td><?php echo mysqli_result(sqlrequest("eorweb","SELECT user_name from users where user_id='".$line["user_id"]."'"),0,"user_name"); ?></td>
-							<td><?php echo $line["date_demand"]; ?></td>
-							<td><?php echo $line["date_validation"]; ?></td>
-						</tr>
-					<?php
+					if($methods) {
+						while ($line = mysqli_fetch_array($methods)) {
+						?>
+							<tr>
+								<td class="text-center"><label><input type="checkbox" class="checkbox" name="remediation_selected[]" value="<?php echo $line["id"]; ?>"></label></td>
+								<td><a href="remediation.php?id=<?php echo $line["id"]; ?>"><?php echo $line["name"]; ?></a></td>
+								<td><?php echo mysqli_result(sqlrequest("eorweb","SELECT user_name from users where user_id='".$line["user_id"]."'"),0,"user_name"); ?></td>
+								<td><?php echo $line["date_demand"]; ?></td>
+								<td><?php echo $line["date_validation"]; ?></td>
+							</tr>
+						<?php
+						}
 					}
 					?>
 					</tbody>

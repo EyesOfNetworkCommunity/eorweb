@@ -53,7 +53,12 @@
                     "name":"menu.link.service_contracts",
                     "url":"/module/manage_contracts/index.php",
                     "target":"main"
-                }   
+                },
+                {
+                    "name":"menu.link.remediations",
+                    "url":"/module/manage_remediation/index.php",
+                    "target":"main"
+                }
             ]
         },   
         {

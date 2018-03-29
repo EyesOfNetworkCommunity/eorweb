@@ -1,4 +1,4 @@
- {
+{
 	"action.ack": "Acknowledge",
 	"action.add": "Add",
 	"action.add_new_app": "Add new application",
@@ -36,6 +36,7 @@
 	"action.submit": "Submit",
 	"action.unselect_all": "Unselect all",
 	"action.update": "Update",
+	"action.validate": "Validate",
 	"action.verify": "Verify",
 	"action.view": "View",
 	"calendar.april": "April",
@@ -487,6 +488,7 @@
 	"label.manage_remediation.list_remediations": "Remediations packs list",
 	"label.manage_remediation.list_remediations_action": "Remediations list",
 	"label.manage_remediation.name": "Name",
+	"label.manage_remediation.options": "Options",
 	"label.manage_remediation.remediation_action_add": "Remediation action add",
 	"label.manage_remediation.remediation_action_name": "Remediation action name",
 	"label.manage_remediation.remediation_action_new": "New remediation action",
@@ -717,6 +719,7 @@
 	"menu.link.process": "Process",
 	"menu.link.recurring_planned_downtime": "Recurring planned downtimes",
 	"menu.link.relay": "Relay",
+	"menu.link.remediations": "Remediations",
 	"menu.link.report_declaration": "Report declaration",
 	"menu.link.reporting": "Reporting",
 	"menu.link.reports": "Your reports",
