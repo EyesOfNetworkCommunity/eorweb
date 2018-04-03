@@ -118,7 +118,7 @@ catch(Exception $e) {
 				<div id="container-drop_zone" class="container-drop_zone">
 					<?php 
 					if($display_actually_bp > 0){
-						if($source==$database_vanillabp) {
+						if($source == $database_vanillabp) {
 							$sql = "SELECT bp_link,bp_source FROM bp_links WHERE bp_name = '$bp_name'";
 						} else {
 							$sql = "SELECT bp_link FROM bp_links WHERE bp_name = '$bp_name'";
@@ -128,7 +128,7 @@ catch(Exception $e) {
 
 						while($row = $req->fetch()){
 		               		$bp_name_linked = $row['bp_link'];
-							if($source==$database_vanillabp) {
+							if($source == $database_vanillabp) {
 								$bp_name_linked .= "||".$row['bp_source'];
 							}
 		               		?>
@@ -138,7 +138,7 @@ catch(Exception $e) {
 								</button>
 								<b><?php echo $row['bp_link']; ?></b>
 								<?php 
-								if($source==$database_vanillabp) { 
+								if($source == $database_vanillabp) { 
 									?>
 									<b class="condition_presentation" style="margin-left:5px;"><?php echo $row['bp_source']; ?></b>
 								<?php

@@ -99,7 +99,7 @@ function display_bp($bp,$bp_racine,$source) {
 				<a role="button" class="btn_presentation pull-right btn btn-xs btn-success" href="add_services.php?bp_name=<?php echo $bp; ?>&display=<?php echo $priority; ?>&source=<?php echo $source; ?>"><i class="glyphicon glyphicon-plus"></i></a>
 			</div>
 		</div>
-	</li>				
+	</li>
 <?php }
 
 function display_service($host_service,$bp_racine) {

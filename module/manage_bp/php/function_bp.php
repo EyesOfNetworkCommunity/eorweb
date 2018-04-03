@@ -124,7 +124,7 @@ function add_application($uniq_name_orig,$uniq_name,$process_name,$display,$url,
 		$req = $bdd->prepare($sql);
 		$req->execute(array($uniq_name,$process_name,$display,$type,$command,$url,$min_value));
 	
-		// if application crate CI and CA
+		// if application create CI and CA
 		if($source_type == "app") {
 			
 			// set app defined
@@ -429,7 +429,7 @@ function add_process($bp,$process,$bdd) {
 			if($source_name==$database_vanillabp) {
 				$sql = "INSERT INTO bp_links (bp_name,bp_link,bp_source) VALUES(?,?,?)";
 				$req = $bdd->prepare($sql);
-				$req->execute(array($bp,$bp_link,substr($source_name,0,-9)));
+				$req->execute(array($bp,$bp_link,$bp_source));
 			} else {
 				$sql = "INSERT INTO bp_links (bp_name,bp_link) VALUES(?,?)";
 				$req = $bdd->prepare($sql);
