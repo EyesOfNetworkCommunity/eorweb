@@ -118,7 +118,7 @@ include("../../side.php");
 			<div class="col-md-9">
 				<select class="form-control" id='source' name='source' size=1>
 					<?php
-						$request="SELECT distinct thruk_idx FROM bp_sources";
+						$request="SELECT distinct thruk_idx,nick_name FROM bp_sources";
 						$result=sqlrequest($database_vanillabp,$request);
 						
 						echo "<OPTION value='none'>".getLabel("label.manage_remediation.remediation_action.source_select")."</OPTION>";
@@ -126,9 +126,9 @@ include("../../side.php");
 						while ($line = mysqli_fetch_array($result)){
 							if($line[0] != "NR"){
 								if(isset($remediation_source) && $remediation_source == $line[0]){
-									echo "<OPTION value='$line[0]' SELECTED>$line[0] </OPTION>";
+									echo "<OPTION value='$line[0]' SELECTED>$line[1]</OPTION>";
 								}else{
-									echo "<OPTION value='$line[0]'>$line[0] </OPTION>";
+									echo "<OPTION value='$line[0]'>$line[1]</OPTION>";
 								}
 							}
 						}

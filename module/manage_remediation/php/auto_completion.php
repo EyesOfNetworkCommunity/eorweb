@@ -25,19 +25,20 @@ include("/srv/eyesofnetwork/eorweb/include/function.php");
 
 global $database_thruk, $database_vanillabp;
 
+extract($_GET);
 $autocomplete=array();
+$source_name = htmlspecialchars($source_name);
 
-if($_GET['source_type'] == 'services'){
-	$req="SELECT host_id FROM ".$_GET['source_name']."_host where host_name='".$_GET['source_host']."'";
-	$ids = sqlrequest($database_thruk,$req);
+if($source_type == 'services'){
+	$req="SELECT host_id FROM ".$source_name."_host where host_name=?";
+	$ids = sqlrequest($database_thruk,$req,false,array("s",(string)$source_host));
 	$id = mysqli_result($ids,0,"host_id");
-	
-	$requests="SELECT DISTINCT service_description FROM ".$_GET['source_name']."_service WHERE host_id=".$id;
-}else{
-	$requests="SELECT DISTINCT host_name FROM ".$_GET['source_name']."_host";
-}
-$result = sqlrequest($database_thruk,$requests);
 
+	$requests="SELECT DISTINCT service_description FROM ".$source_name."_service WHERE host_id=".$id." AND service_description like ?";
+}else{
+	$requests="SELECT DISTINCT host_name FROM ".$source_name."_host WHERE host_name like ?";
+}
+$result = sqlrequest($database_thruk,$requests,false,array("s","%$term%"));
 
 while ($line = mysqli_fetch_array($result)){
 	if($line[0] != "NR"){
@@ -45,8 +46,6 @@ while ($line = mysqli_fetch_array($result)){
 	}
 }
 
-$autocomplete= array_unique($autocomplete);
-	
 echo json_encode($autocomplete);
 
 ?>
