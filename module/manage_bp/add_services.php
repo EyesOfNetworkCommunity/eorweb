@@ -178,7 +178,7 @@ catch(Exception $e) {
 								<span class="glyphicon glyphicon-trash"></span>
 								</button>
 								<b><?php echo $service; ?></b>
-								<b class="condition_presentation" style="margin-left:5px;"><?php echo rtrim($source,"_nagiosbp"); ?></b>
+								<b class="condition_presentation" style="margin-left:5px;"><?php echo substr($source,0,-9); ?></b>
 								</div>
 							<?php } ?>
 							</div>
