@@ -85,10 +85,10 @@ function get_field() {
 
 	if(isset($_POST["add"]) || isset($_POST["update"])) {
 		if(!$remediation_name || $remediation_name==""){
-			message(7," : Your remediation need a name",'warning');
+			message(7," : Your remediation request need a name",'warning');
 		}
 		elseif(empty($remediation_action_id) || $remediation_action_id==null){
-			message(7," : Your remediation need at least 1 remediation action",'warning');
+			message(7," : Your remediation request need at least 1 remediation action",'warning');
 		}elseif(isset($_POST["add"])){
 			// insert values for add
 			$sql_add = "INSERT INTO remediation  (name,user_id,date_demand) VALUES('".$remediation_name."','".$user_id."','".$date_demand."')";
@@ -99,7 +99,7 @@ function get_field() {
 				sqlrequest("eorweb","UPDATE remediation_action SET remediationID = '".$remediation_id."' where description='".$selected."'");
 			}
 			
-			message(6," : Remediation have been created",'ok');
+			message(6," : Remediation request has been created",'ok');
 			
 		}elseif(isset($_POST["update"])){
 			$sql_modify = "UPDATE remediation SET name='".$remediation_name."' where id='".$remediation_id."'";
@@ -116,7 +116,7 @@ function get_field() {
 				
 			}
 
-			message(6," : Remediation have been updated",'ok');
+			message(6," : Remediation request has been updated",'ok');
 		}
 	}
 	
@@ -139,7 +139,7 @@ function get_field() {
 					<input class="form-control" id="rule_host1" type="text" name="rule_host" onFocus='$(this).autocomplete({source: <?php echo get_field(); ?>})'>
 					<span class="input-group-btn">
 						<input class="btn btn-success" id="rule_host_button" type="button" value="<?php echo getLabel("action.add");?>">
-						<input class="btn btn-danger" id="rule_host_button_del" type="button" value="<?php echo getLabel("action.clear");?>">
+						<input class="btn btn-danger" id="rule_host_button_del" type="button" value="<?php echo getLabel("action.delete");?>">
 					</span>
 				</div>
 				<select class="form-control" id="remediation_actions_id" name="remediation_actions_id[]" size=4 multiple="multiple">
@@ -147,7 +147,7 @@ function get_field() {
 					if(isset($remediation_action_id)){
 						$division=explode(",", $remediation_action_id);
 						
-						for($i=0; $i<count($division);$i++){
+						for($i=1; $i<count($division);$i++){
 							echo "<option selected='selected' value='".$division[$i]."'>".$division[$i]."</option> ";
 						}
 					}

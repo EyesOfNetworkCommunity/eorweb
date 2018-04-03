@@ -114,14 +114,14 @@ include("../../side.php");
 			</div>
 		</div>
 		<div class="row form-group">
-			<label class="col-md-3"><?php echo "Source" ?></label>
+			<label class="col-md-3"><?php echo getLabel("label.manage_remediation.remediation_action.source"); ?></label>
 			<div class="col-md-9">
 				<select class="form-control" id='source' name='source' size=1>
 					<?php
 						$request="SELECT distinct thruk_idx FROM bp_sources";
 						$result=sqlrequest($database_vanillabp,$request);
 						
-						echo "<OPTION value='none'>Choisissez une source </OPTION>";
+						echo "<OPTION value='none'>".getLabel("label.manage_remediation.remediation_action.source_select")."</OPTION>";
 						
 						while ($line = mysqli_fetch_array($result)){
 							if($line[0] != "NR"){
@@ -137,29 +137,29 @@ include("../../side.php");
 			</div>
 		</div>
 		<div class="row form-group">
-			<label class="col-md-3">Host</label>
+			<label class="col-md-3"><?php echo getLabel("label.host"); ?></label>
 			<div class="col-md-9">
 				<input class="form-control" type='text' id='host' name='host'  value='<?php echo $remediation_host?>'>
 			</div>
 		</div>
 		<div class="row form-group">
-			<label class="col-md-3">Service</label>
+			<label class="col-md-3"><?php echo getLabel("label.service"); ?></label>
 			<div class="col-md-9">
 				<input class="form-control" type='text' id='service' name='service' value='<?php echo $remediation_service?>'>
 			</div>
 		</div>
 		
 		<div class="row form-group">
-			<label class="col-md-3"><?php echo "Action" ?></label>
+			<label class="col-md-3"><?php echo getLabel("label.manage_remediation.action"); ?></label>
 			<div class="col-md-9">
 				<select class="form-control" name='action' size=1>
 					<?php
 						if ($remediation_action == "delete"){
-							echo "<OPTION value='add'>Ajout </OPTION>";
-							echo "<OPTION value='delete' SELECTED>Suppression </OPTION>";
+							echo "<OPTION value='add'>".getLabel("label.manage_remediation.remediation_action.add")."</OPTION>";
+							echo "<OPTION value='delete' SELECTED>".getLabel("label.manage_remediation.remediation_action.remove")."</OPTION>";
 						}else{
-							echo "<OPTION value='add' SELECTED>Ajout </OPTION>";
-							echo "<OPTION value='delete'>Suppression </OPTION>";
+							echo "<OPTION value='add' SELECTED>".getLabel("label.manage_remediation.remediation_action.add")."</OPTION>";
+							echo "<OPTION value='delete'>".getLabel("label.manage_remediation.remediation_action.remove")."</OPTION>";
 						}
 					?>
 				</select>
@@ -172,7 +172,7 @@ include("../../side.php");
 				<select class="form-control" name='type' size=1>
 					<?php
 						if ($remediation_type == "incident"){
-							echo "<OPTION value='maintenance'>Maintenance </OPTION>";
+							echo "<OPTION value='maintenance'>".getLabel("label.manage_remediation.remediation_action.downtime")."</OPTION>";
 							echo "<OPTION value='incident' SELECTED>incident </OPTION>";
 						}else{
 							echo "<OPTION value='maintenance' SELECTED>Maintenance </OPTION>";

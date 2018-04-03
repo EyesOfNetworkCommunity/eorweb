@@ -6,7 +6,7 @@
 			"link":[
 				{
 					"name":"action.list",
-					"url":"/module/manage_remediation/index.php?action=remediation"
+					"url":"/module/manage_remediation/index.php"
 				},
 				{
 					"name":"action.add",
@@ -15,7 +15,7 @@
 			]
 		},
 		{
-			"name":"label.manage_remediation.remediations",
+			"name":"label.manage_remediation.remediations_action",
 			"link":[
 				{
 					"name":"action.list",

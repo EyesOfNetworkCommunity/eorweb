@@ -174,7 +174,7 @@ if(isset($_GET["action"])) {
 
 	if($action==null or $action =="remediation") {
 		// SQL get rules
-		$rules_sql="SELECT * FROM remediation";
+		$rules_sql="SELECT * FROM remediation ORDER BY date_demand, name";
 	?>
 
 	<div class="row">
@@ -182,13 +182,7 @@ if(isset($_GET["action"])) {
 			<h1 class="page-header"><?php echo getLabel("label.manage_remediation.list_remediations"); ?></h1>
 		</div>
 	</div>
-	
-	<div class="row">
-		<div class="col-lg-12">
-			<h2><?php echo getLabel("label.manage_remediation.remediations"); ?></h2>
-		</div>
-	</div>
-	
+		
 	<form action="./index.php" method="POST">
 		<div class="dataTable_wrapper">
 			<div class="table-responsive">
@@ -228,7 +222,7 @@ if(isset($_GET["action"])) {
 			</div>
 			<div class="form-group">
 				<a href="./remediation.php" class="btn btn-success" role="button"><?php echo getLabel("action.add");?></a>
-				<button class="btn btn-danger" type="submit" name="actions" value="del_method"><?php echo getLabel("action.clear");?></button>
+				<button class="btn btn-danger" type="submit" name="actions" value="del_method"><?php echo getLabel("action.delete");?></button>
 				<!-- Si les droits de remediation de l'utilisateur son limité -->
 				<button class="btn btn-default" type="submit" name="actions" value="demand"><?php echo getLabel("action.submit");?></button>
 				<!-- Si l'utilisateur a tous les droits de remediation -->
@@ -249,12 +243,6 @@ if(isset($_GET["action"])) {
 	<div class="row">
 		<div class="col-lg-12">
 			<h1 class="page-header"><?php echo getLabel("label.manage_remediation.list_remediations_action"); ?></h1>
-		</div>
-	</div>
-	
-	<div class="row">
-		<div class="col-lg-12">
-			<h2><?php echo getLabel("label.manage_remediation.remediations_action"); ?></h2>
 		</div>
 	</div>
 	
@@ -295,7 +283,7 @@ if(isset($_GET["action"])) {
 			</div>
 			<div class="form-group">
 				<a href="./remediation_action.php" class="btn btn-success" role="button"><?php echo getLabel("action.add");?></a>
-				<button class="btn btn-danger" type="submit" name="actions" value="del_method_remediation"><?php echo getLabel("action.clear");?></button>
+				<button class="btn btn-danger" type="submit" name="actions" value="del_method_remediation"><?php echo getLabel("action.delete");?></button>
 			</div>
 		</div>	
 	</form>
@@ -312,12 +300,6 @@ if(isset($_GET["action"])) {
 	<div class="col-lg-12">
 		<h1 class="page-header"><?php echo getLabel("label.manage_remediation.list_accepted_remediations"); ?></h1>
 	</div>
-	</div>
-	
-	<div class="row">
-		<div class="col-lg-12">
-			<h2><?php echo getLabel("label.manage_remediation.remediations"); ?></h2>
-		</div>
 	</div>
 	
 	<form action="./index.php?action=apply_pack" method="POST">
