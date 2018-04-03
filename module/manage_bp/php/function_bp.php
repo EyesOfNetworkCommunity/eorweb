@@ -173,7 +173,7 @@ function add_application($uniq_name_orig,$uniq_name,$process_name,$display,$url,
 			if($source_name != $database_vanillabp) {
 				$sql = "UPDATE bp_links set bp_link = ? WHERE bp_link = ? and bp_source = ?";
 				$req = $bdd_global->prepare($sql);
-				$req->execute(array($uniq_name,$uniq_name_orig,substr($source,0,-9)));
+				$req->execute(array($uniq_name,$uniq_name_orig,substr($source_name,0,-9)));
 			}
 			// Update global 
 			else {
@@ -234,7 +234,7 @@ function delete_bp($bp,$bp_source,$bdd,$bdd_global,$escape=false) {
 	if($bp_source != $database_vanillabp) {
 		$sql = "DELETE FROM bp_links WHERE bp_link = ? and bp_source = ?";
 		$req = $bdd_global->prepare($sql);
-		$req->execute(array($bp, substr($source,0,-9)));
+		$req->execute(array($bp, substr($bp_source,0,-9)));
 	} 
 	// Delete contracts contexts links
 	else {
@@ -429,7 +429,7 @@ function add_process($bp,$process,$bdd) {
 			if($source_name==$database_vanillabp) {
 				$sql = "INSERT INTO bp_links (bp_name,bp_link,bp_source) VALUES(?,?,?)";
 				$req = $bdd->prepare($sql);
-				$req->execute(array($bp,$bp_link,substr($source,0,-9)));
+				$req->execute(array($bp,$bp_link,substr($source_name,0,-9)));
 			} else {
 				$sql = "INSERT INTO bp_links (bp_name,bp_link) VALUES(?,?)";
 				$req = $bdd->prepare($sql);

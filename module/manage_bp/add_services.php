@@ -137,7 +137,17 @@ catch(Exception $e) {
 									<span class="glyphicon glyphicon-trash"></span>
 								</button>
 								<b><?php echo $row['bp_link']; ?></b>
-								<b class="condition_presentation" style="margin-left:5px;"><?php echo $row['bp_source']; ?></b>
+								<?php 
+								if($source==$database_vanillabp) { 
+									?>
+									<b class="condition_presentation" style="margin-left:5px;"><?php echo $row['bp_source']; ?></b>
+								<?php
+								} else {
+									?>
+									<b class="condition_presentation" style="margin-left:5px;"><?php echo substr($source,0,-9); ?></b>
+								<?php
+								}
+								?>
 							</div>
 							<?php $count += 1;
 						}
