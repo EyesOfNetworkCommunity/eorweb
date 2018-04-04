@@ -88,12 +88,12 @@ function get_field() {
 		if(!$remediation_name || $remediation_name == ""){
 			message(7," : ".getLabel("message.error.remediation_request_name"),'warning');
 		}
-		elseif(empty($remediation_action_id) || $remediation_action_id==null){
+		elseif(empty($remediation_action_id) || $remediation_action_id == null) {
 			message(7," : ".getLabel("message.error.remediation_request_action"),'warning');
 		}
 		elseif(isset($_POST["add"])){
 			// insert values for add
-			$sql_add = "INSERT INTO remediation  (name,user_id,date_demand) VALUES('".$remediation_name."','".$user_id."','".$date_demand."')";
+			$sql_add = "INSERT INTO remediation (name,user_id,date_demand) VALUES('".$remediation_name."','".$user_id."','".$date_demand."')";
 			$remediation_satut = "inactive";
 			$remediation_id = sqlrequest("eorweb",$sql_add,true);
 			$remediation_ids=explode(",",$remediation_action_id);
@@ -165,7 +165,7 @@ function get_field() {
 		<div class="form-group">
 			<?php
 				if (isset($remediation_id) && $remediation_id != null) {
-					if($remediation_satut == "inactive" || $remediation_satut == "refused"){
+					if(isset($remediation_satut) && ($remediation_satut == "inactive" || $remediation_satut == "refused")) {
 						echo "<input class='btn btn-primary' type='submit' name='update' value=".getLabel('action.update').">";
 					}else{
 						echo "<input disabled class='btn btn-primary' type='submit' name='update' value=".getLabel('action.update').">";

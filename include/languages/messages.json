@@ -848,6 +848,10 @@
 	"message.no_host_value": "Cannot get host value",
 	"message.not_implemented": "Not implemented yet...",
 	"message.remediation.create": "Remediation have been created",
+	"message.remediation.delete": "Remediation removed",
+	"message.remediation.execute": "Remediation pack has been activated",
+	"message.remediation.pack_delete": "Remediation pack removed",
+	"message.remediation.pack_update": "Remediation pack selected have been updated",
 	"message.remediation.update": "Remediation have been updated",
 	"message.tool_all.select_host": "Please select a host",
 	"message.tool_all.select_tool": "Please select a tool"

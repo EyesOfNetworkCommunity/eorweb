@@ -848,6 +848,10 @@
 	"message.no_host_value": "Aucun host choisi",
 	"message.not_implemented": "Pas encore implémenté...",
 	"message.remediation.create": "La remédiation a été créé",
+	"message.remediation.delete": "La remédiation a été supprimé",
+	"message.remediation.pack_delete": "Le lot de remédiations séléctioné a été supprimé",
+	"message.remediation.execute": "Le lot de remédiations a été activé",
+	"message.remediation.pack_update": "L'ensemble des remédiations séléctionées a été mis à jour",
 	"message.remediation.update": "La remédiation a été mise à jour",
 	"message.tool_all.select_host": "Sélectionnez un host svp",
 	"message.tool_all.select_tool": "Sélectionnez un outil svp"
