@@ -803,9 +803,7 @@
 	"message.error.remediation_host": "Your remediation need a host",
 	"message.error.remediation_name": "Your remediation need a name",
 	"message.error.remediation_request_action": "Your remediation request need at least 1 remediation action",
-	"message.error.remediation_request_created": "Remediation request has been created",
 	"message.error.remediation_request_name": "Your remediation request need a name",
-	"message.error.remediation_request_updated": "Remediation request has been updated",
 	"message.error.remediation_service": "Your remediation need a service",
 	"message.error.remediation_source": "Your remediation need a source",
 	"message.error.remediation_type": "Your remediation need a type",
@@ -852,6 +850,8 @@
 	"message.remediation.execute": "Remediation pack has been activated",
 	"message.remediation.pack_delete": "Remediation pack removed",
 	"message.remediation.pack_update": "Remediation pack selected have been updated",
+	"message.remediation.request_created": "Remediation request has been created",
+	"message.remediation.request_updated": "Remediation request has been updated",
 	"message.remediation.update": "Remediation have been updated",
 	"message.tool_all.select_host": "Please select a host",
 	"message.tool_all.select_tool": "Please select a tool"

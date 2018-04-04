@@ -803,9 +803,7 @@
 	"message.error.remediation_host": "La remédiation n'a pas d'host",
 	"message.error.remediation_name": "La remédiation n'a pas de nom",
 	"message.error.remediation_request_action": "Il faut au moins une action pour la demande de remédiation",
-	"message.error.remediation_request_created": "La remédiation a été créé ",
 	"message.error.remediation_request_name": "La demande de remédiation n'a pas de nom",
-	"message.error.remediation_request_updated": "La demande de remédiation a été mise à jour",
 	"message.error.remediation_service": "La remédiation n'a pas de service",
 	"message.error.remediation_source": "La remédiation n'a pas de source",
 	"message.error.remediation_type": "La remédiation n'a pas de type",
@@ -852,6 +850,8 @@
 	"message.remediation.pack_delete": "Le lot de remédiations séléctioné a été supprimé",
 	"message.remediation.execute": "Le lot de remédiations a été activé",
 	"message.remediation.pack_update": "L'ensemble des remédiations séléctionées a été mis à jour",
+	"message.remediation.request_created": "La demande de remédiation a été créé ",
+	"message.remediation.request_updated": "La demande de remédiation a été mise à jour",
 	"message.remediation.update": "La remédiation a été mise à jour",
 	"message.tool_all.select_host": "Sélectionnez un host svp",
 	"message.tool_all.select_tool": "Sélectionnez un outil svp"

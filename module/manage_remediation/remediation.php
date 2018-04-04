@@ -101,9 +101,10 @@ function get_field() {
 			foreach($remediation_ids as $selected){
 				sqlrequest("eorweb","UPDATE remediation_action SET remediationID = '".$remediation_id."' WHERE description='".$selected."'");
 			}
+			message(6," : ".getLabel("message.remediation.request_created"),'ok');
 			
-			message(6," : ".getLabel("message.error.remediation_request_created"),'ok');
 			
+
 		}
 		elseif(isset($_POST["update"])){
 			$user_infos = sqlrequest("eorweb", "SELECT * FROM remediation WHERE id='".$remediation_id."'");
@@ -119,10 +120,9 @@ function get_field() {
 
 			foreach($user_infos2 as $selected){
 				sqlrequest("eorweb","UPDATE remediation_action SET remediationID = '".$remediation_id."' WHERE id='".$selected."'",true);
-				
 			}
 
-			message(6," : ".getLabel("message.error.remediation_request_updated"),'ok');
+			message(6," : ".getLabel("message.remediation.request_updated"),'ok');
 		}
 	}
 	
@@ -167,11 +167,10 @@ function get_field() {
 				if (isset($remediation_id) && $remediation_id != null) {
 					if(isset($remediation_satut) && ($remediation_satut == "inactive" || $remediation_satut == "refused")) {
 						echo "<input class='btn btn-primary' type='submit' name='update' value=".getLabel('action.update').">";
-					}else{
+					} else {
 						echo "<input disabled class='btn btn-primary' type='submit' name='update' value=".getLabel('action.update').">";
 					}
-				}
-				else {
+				} else {
 					echo "<input class='btn btn-primary' type='submit' name='add' value=".getLabel('action.add').">";
 				}
 				echo "<button class='btn btn-default' style='margin-left: 10px;' type='button' name='back' value='back' onclick='location.href=\"index.php\"'>".getLabel("action.cancel")."</button>";
@@ -182,4 +181,3 @@ function get_field() {
 </div>
 
 <?php include("../../footer.php"); ?>
-

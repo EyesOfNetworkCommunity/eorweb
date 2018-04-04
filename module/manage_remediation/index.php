@@ -46,13 +46,33 @@ if(isset($_GET["action"])) {
 	$remediation_selected = retrieve_form_data("remediation_selected",null);
 	?>
 
-	<div class="row">
-		<div class="col-lg-12">
-			<h1 class="page-header"><?php echo getLabel("label.manage_remediation.list_remediations"); ?></h1>
-		</div>
-	</div>
-
 	<?php
+	if($action == null or $action == "remediation") {
+	?>
+		<div class="row">
+			<div class="col-lg-12">
+				<h1 class="page-header"><?php echo getLabel("label.manage_remediation.list_remediations"); ?></h1>
+			</div>
+		</div>
+	<?php
+	} elseif($action == "remediation_action") {
+	?>
+		<div class="row">
+			<div class="col-lg-12">
+				<h1 class="page-header"><?php echo getLabel("label.manage_remediation.list_remediations_action"); ?></h1>
+			</div>
+		</div>
+	<?php 
+	} elseif($action == "apply_pack") {
+	?>	
+		<div class="row">
+			<div class="col-lg-12">
+				<h1 class="page-header"><?php echo getLabel("label.manage_remediation.list_accepted_remediations"); ?></h1>
+			</div>
+		</div>
+	<?php 
+	}
+
 	switch($actions){
 		case "del_method":
 			if (isset($remediation_selected[0])) {
@@ -232,8 +252,10 @@ if(isset($_GET["action"])) {
 			<div class="form-group">
 				<a href="./remediation.php" class="btn btn-success" role="button"><?php echo getLabel("action.add");?></a>
 				<button class="btn btn-danger" type="submit" name="actions" value="del_method"><?php echo getLabel("action.delete");?></button>
+				
 				<!-- Si les droits de remediation de l'utilisateur sont limités -->
 				<button class="btn btn-default" type="submit" name="actions" value="demand"><?php echo getLabel("action.submit");?></button>
+				
 				<!-- Si l'utilisateur a tous les droits de remediation -->
 				<button class="btn btn-default" type="submit" name="actions" value="validation"><?php echo getLabel("action.validate");?></button>
 				<button class="btn btn-danger" type="submit" name="actions" value="refus"><?php echo getLabel("action.refuse");?></button>
@@ -248,12 +270,6 @@ if(isset($_GET["action"])) {
 	} elseif($action == "remediation_action") {
 		$rules_sql = "SELECT * FROM remediation_action";
 	?>
-	
-	<div class="row">
-		<div class="col-lg-12">
-			<h1 class="page-header"><?php echo getLabel("label.manage_remediation.list_remediations_action"); ?></h1>
-		</div>
-	</div>
 	
 	<form action="./index.php?action=remediation_action" method="POST">
 		<div class="dataTable_wrapper">
@@ -303,13 +319,7 @@ if(isset($_GET["action"])) {
 	*/
 	} elseif($action == "apply_pack") {
 		$rules_sql = "SELECT * FROM remediation WHERE state = 'approved' OR state = 'executed'";
-	?>	
-	
-	<div class="row">
-	<div class="col-lg-12">
-		<h1 class="page-header"><?php echo getLabel("label.manage_remediation.list_accepted_remediations"); ?></h1>
-	</div>
-	</div>
+	?>
 	
 	<form action="./index.php?action=apply_pack" method="POST">
 		<div class="dataTable_wrapper">
