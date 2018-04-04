@@ -48,6 +48,7 @@ function get_field() {
 	$user_infos2=array();
 	$remediation_action_id="";
 	
+	// concatenation of actions send by post
 	if(!empty($_POST['remediation_actions_id'])){
 		foreach($_POST['remediation_actions_id'] as $selected){
 			$remediation_action_id .= $selected.",";
@@ -70,12 +71,12 @@ function get_field() {
 	$remediation_name = retrieve_form_data("name",null);
 	
 	if($remediation_id != null && !isset($_POST['add']) && !isset($_POST['update'])){
-		$user_infos=sqlrequest("eorweb", "SELECT * from remediation where id='".$remediation_id."'");
-		$user_infos2=sqlrequest("eorweb", "SELECT description from remediation_action where remediationID='".$remediation_id."'");
+		$user_infos = sqlrequest("eorweb", "SELECT * FROM remediation WHERE id='".$remediation_id."'");
+		$user_infos2 = sqlrequest("eorweb", "SELECT description FROM remediation_action WHERE remediationID='".$remediation_id."'");
 		
 		// Retrieve Information from database
-		$remediation_name=mysqli_result($user_infos,0,"name");
-		$remediation_satut=mysqli_result($user_infos,0,"state");
+		$remediation_name = mysqli_result($user_infos,0,"name");
+		$remediation_satut = mysqli_result($user_infos,0,"state");
 		
 		while ($line = mysqli_fetch_array($user_infos2)){
 			$remediation_action_id .= $line[0].",";
@@ -84,39 +85,44 @@ function get_field() {
 	}
 
 	if(isset($_POST["add"]) || isset($_POST["update"])) {
-		if(!$remediation_name || $remediation_name==""){
-			message(7," : Your remediation request need a name",'warning');
+		if(!$remediation_name || $remediation_name == ""){
+			message(7," : ".getLabel("message.error.remediation_request_name"),'warning');
 		}
 		elseif(empty($remediation_action_id) || $remediation_action_id==null){
-			message(7," : Your remediation request need at least 1 remediation action",'warning');
-		}elseif(isset($_POST["add"])){
+			message(7," : ".getLabel("message.error.remediation_request_action"),'warning');
+		}
+		elseif(isset($_POST["add"])){
 			// insert values for add
 			$sql_add = "INSERT INTO remediation  (name,user_id,date_demand) VALUES('".$remediation_name."','".$user_id."','".$date_demand."')";
+			$remediation_satut = "inactive";
 			$remediation_id = sqlrequest("eorweb",$sql_add,true);
 			$remediation_ids=explode(",",$remediation_action_id);
 		
 			foreach($remediation_ids as $selected){
-				sqlrequest("eorweb","UPDATE remediation_action SET remediationID = '".$remediation_id."' where description='".$selected."'");
+				sqlrequest("eorweb","UPDATE remediation_action SET remediationID = '".$remediation_id."' WHERE description='".$selected."'");
 			}
 			
-			message(6," : Remediation request has been created",'ok');
+			message(6," : ".getLabel("message.error.remediation_request_created"),'ok');
 			
-		}elseif(isset($_POST["update"])){
-			$sql_modify = "UPDATE remediation SET name='".$remediation_name."' where id='".$remediation_id."'";
+		}
+		elseif(isset($_POST["update"])){
+			$user_infos = sqlrequest("eorweb", "SELECT * FROM remediation WHERE id='".$remediation_id."'");
+			$remediation_satut = mysqli_result($user_infos,0,"state");
+			$sql_modify = "UPDATE remediation SET name='".$remediation_name."' WHERE id='".$remediation_id."'";
 			sqlrequest("eorweb",$sql_modify);
 			
 			$Infos=explode(",", $remediation_action_id);	
 			for($i=0; $i<count($Infos);$i++){
-				$value = mysqli_result(sqlrequest("eorweb", "SELECT id from remediation_action where description='".$Infos[$i]."'"), 0,"id");
+				$value = mysqli_result(sqlrequest("eorweb", "SELECT id FROM remediation_action WHERE description='".$Infos[$i]."'"), 0,"id");
 				array_push($user_infos2,$value);
 			}
 
 			foreach($user_infos2 as $selected){
-				sqlrequest("eorweb","UPDATE remediation_action SET remediationID = '".$remediation_id."' where id='".$selected."'",true);
+				sqlrequest("eorweb","UPDATE remediation_action SET remediationID = '".$remediation_id."' WHERE id='".$selected."'",true);
 				
 			}
 
-			message(6," : Remediation request has been updated",'ok');
+			message(6," : ".getLabel("message.error.remediation_request_updated"),'ok');
 		}
 	}
 	

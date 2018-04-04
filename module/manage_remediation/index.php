@@ -50,15 +50,15 @@ if(isset($_GET["action"])) {
 			if (isset($remediation_selected[0])){
 				for ($i = 0; $i < count($remediation_selected); $i++){
 					// Get remediation_action name
-					$user_res=sqlrequest("$database_eorweb","select name from remediation where id='$remediation_action_selected[$i]'");
+					$user_res=sqlrequest("$database_eorweb","SELECT name FROM remediation WHERE id='$remediation_action_selected[$i]'");
 					$remediation=mysqli_result($user_res,0,"user_name");
 					// Delete 
-					sqlrequest("$database_eorweb","delete from remediation where id='$remediation_selected[$i]'");
-					sqlrequest("$database_eorweb","delete from remediation_action where remediationID='$remediation_selected[$i]'");
+					sqlrequest("$database_eorweb","DELETE FROM remediation WHERE id='$remediation_selected[$i]'");
+					sqlrequest("$database_eorweb","DELETE FROM remediation_action WHERE remediationID='$remediation_selected[$i]'");
 					
 					// Logging action
 					logging("manage_remediation","DELETE : $remediation_selected[$i]");
-					message(6," : Remediation $remediation removed",'ok');
+					message(6," : ".getLabel("message.remediation.delete")."( $remediation )",'ok');
 				}
 			}
 			break;
@@ -66,10 +66,10 @@ if(isset($_GET["action"])) {
 			if(isset($remediation_action_selected[0])){
 				for ($i = 0; $i < count($remediation_action_selected); $i++){
 					// Get remediation_action name
-					$user_res=sqlrequest("$database_eorweb","select description from remediation_action where id='$remediation_action_selected[$i]'");
+					$user_res=sqlrequest("$database_eorweb","SELECT description FROM remediation_action WHERE id='$remediation_action_selected[$i]'");
 					$remediation_action=mysqli_result($user_res,0,"user_name");
 					// Delete user in eorweb
-					sqlrequest("$database_eorweb","delete from remediation_action where id='$remediation_action_selected[$i]'");
+					sqlrequest("$database_eorweb","DELETE FROM remediation_action WHERE id='$remediation_action_selected[$i]'");
 					
 					// Logging action
 					logging("manage_remediation","DELETE : $remediation_action_selected[$i]");
@@ -81,7 +81,7 @@ if(isset($_GET["action"])) {
 			if(isset($remediation_selected[0])){
 				for ($i = 0; $i < count($remediation_selected); $i++){
 					// Update remediations state
-					sqlrequest("$database_eorweb","UPDATE remediation SET state='approved', date_validation='".date("Y-m-d G:i")."' where id='$remediation_selected[$i]'");
+					sqlrequest("$database_eorweb","UPDATE remediation SET state='approved', date_validation='".date("Y-m-d G:i")."' WHERE id='$remediation_selected[$i]'");
 					
 					message(6," : Remediation pack selected have been updated",'ok');
 				}
@@ -91,7 +91,7 @@ if(isset($_GET["action"])) {
 			if(isset($remediation_selected[0])){
 				for ($i = 0; $i < count($remediation_selected); $i++){
 					// Update remediations state
-					sqlrequest("$database_eorweb","UPDATE remediation SET state='refused', date_validation='".date("Y-m-d G:i")."' where id='$remediation_selected[$i]'");
+					sqlrequest("$database_eorweb","UPDATE remediation SET state='refused', date_validation='".date("Y-m-d G:i")."' WHERE id='$remediation_selected[$i]'");
 					
 					message(6," : Remediation pack selected have been updated",'ok');
 				}
@@ -101,7 +101,7 @@ if(isset($_GET["action"])) {
 			if(isset($remediation_selected[0])){
 				for ($i = 0; $i < count($remediation_selected); $i++){
 					// Update remediations state
-					sqlrequest("$database_eorweb","UPDATE remediation SET state='en attente', date_validation='".date("Y-m-d G:i")."' where id='$remediation_selected[$i]'");
+					sqlrequest("$database_eorweb","UPDATE remediation SET state='en attente', date_validation='".date("Y-m-d G:i")."' WHERE id='$remediation_selected[$i]'");
 					
 					message(6," : Remediation pack selected have been updated",'ok');
 				}
@@ -114,7 +114,7 @@ if(isset($_GET["action"])) {
 				$array = str_replace('"', '', $array);
 				
 				for ($i = 0; $i < count($remediation_selected); $i++){
-					$RemediationExec=sqlrequest("$database_eorweb","select * from remediation_action where remediationID='$remediation_selected[$i]'");
+					$RemediationExec=sqlrequest("$database_eorweb","SELECT * FROM remediation_action WHERE remediationID='$remediation_selected[$i]'");
 					//$result = $RemediationExec->fetch_array(MYSQLI_ASSOC);
 					
 					while($line = mysqli_fetch_array($RemediationExec)){
@@ -152,17 +152,17 @@ if(isset($_GET["action"])) {
 						}elseif($line['Action']=="delete" && $line['type']=="incident"){
 							// suppression d'incident incomplète
 							if($line['service'] != "" || $line['service'] != null){
-								sqlrequest("$database_thruk","UPDATE ".$line['source']."_log set message=7930, state=0 where time between ".strtotime($line['DateDebut'])." and ".strtotime($line['DateFin'])." and state_type='HARD' and host_id='".$line['host']."' and service_id='".$line['service']."'");
-								echo "UPDATE ".$line['source']."_log set message=7930, state=0 where time between ".strtotime($line['DateDebut'])." and ".strtotime($line['DateFin'])." and state_type='HARD' and host_id='".$line['host']."' and service_id='".$line['service']."'";
+								sqlrequest("$database_thruk","UPDATE ".$line['source']."_log SET message=7930, state=0 WHERE time between ".strtotime($line['DateDebut'])." AND ".strtotime($line['DateFin'])." AND state_type='HARD' AND host_id='".$line['host']."' AND service_id='".$line['service']."'");
+								echo "UPDATE ".$line['source']."_log SET message=7930, state=0 WHERE time between ".strtotime($line['DateDebut'])." AND ".strtotime($line['DateFin'])." AND state_type='HARD' AND host_id='".$line['host']."' AND service_id='".$line['service']."'";
 							}else{
-								sqlrequest("$database_thruk","UPDATE ".$line['source']."_log set message=7930, state=0 where time between ".strtotime($line['DateDebut'])." and ".strtotime($line['DateFin'])." and state_type='HARD' and host_id='".$line['host']."'");
+								sqlrequest("$database_thruk","UPDATE ".$line['source']."_log SET message=7930, state=0 WHERE time between ".strtotime($line['DateDebut'])." AND ".strtotime($line['DateFin'])." AND state_type='HARD' AND host_id='".$line['host']."'");
 							}
 							
 						}
 					}
 					
 					// Update remediations state
-					sqlrequest("$database_eorweb","UPDATE remediation SET state='executed', date_validation='".date("Y-m-d G:i")."' where id='$remediation_selected[$i]'");
+					sqlrequest("$database_eorweb","UPDATE remediation SET state='executed', date_validation='".date("Y-m-d G:i")."' WHERE id='$remediation_selected[$i]'");
 					
 					message(6," : Remediation pack ".$remediation_selected[$i]." have been activated",'ok');
 				}
@@ -172,9 +172,9 @@ if(isset($_GET["action"])) {
 	
 	
 
-	if($action==null or $action =="remediation") {
+	if($action == null or $action == "remediation") {
 		// SQL get rules
-		$rules_sql="SELECT * FROM remediation ORDER BY date_demand, name";
+		$rules_sql = "SELECT * FROM remediation ORDER BY date_demand, name";
 	?>
 
 	<div class="row">
@@ -208,7 +208,7 @@ if(isset($_GET["action"])) {
 							<tr>
 								<td class="text-center"><label><input type="checkbox" class="checkbox" name="remediation_selected[]" value="<?php echo $line["id"]; ?>"></label></td>
 								<td><a href="remediation.php?id=<?php echo $line["id"]; ?>"><?php echo $line["name"]; ?></a></td>
-								<td><?php echo mysqli_result(sqlrequest("eorweb","SELECT user_name from users where user_id='".$line["user_id"]."'"),0,"user_name"); ?></td>
+								<td><?php echo mysqli_result(sqlrequest("eorweb","SELECT user_name FROM users WHERE user_id='".$line["user_id"]."'"),0,"user_name"); ?></td>
 								<td><?php echo $line["date_demand"]; ?></td>
 								<td><?php echo $line["date_validation"]; ?></td>
 								<td><?php echo $line["state"]; ?></td>
@@ -293,7 +293,7 @@ if(isset($_GET["action"])) {
 	*************** Apply remediation 
 	*/
 	} elseif($action=="apply_pack") {
-		$rules_sql="SELECT * FROM remediation WHERE state='approved' or state='executed'";
+		$rules_sql="SELECT * FROM remediation WHERE state='approved' OR state='executed'";
 	?>	
 	
 	<div class="row">
@@ -325,7 +325,7 @@ if(isset($_GET["action"])) {
 							<tr>
 								<td class="text-center"><label><input type="checkbox" class="checkbox" name="remediation_selected[]" value="<?php echo $line["id"]; ?>"></label></td>
 								<td><a href="remediation.php?id=<?php echo $line["id"]; ?>"><?php echo $line["name"]; ?></a></td>
-								<td><?php echo mysqli_result(sqlrequest("eorweb","SELECT user_name from users where user_id='".$line["user_id"]."'"),0,"user_name"); ?></td>
+								<td><?php echo mysqli_result(sqlrequest("eorweb","SELECT user_name FROM users WHERE user_id='".$line["user_id"]."'"),0,"user_name"); ?></td>
 								<td><?php echo $line["date_demand"]; ?></td>
 								<td><?php echo $line["date_validation"]; ?></td>
 							</tr>

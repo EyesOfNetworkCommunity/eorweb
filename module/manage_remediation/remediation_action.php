@@ -65,27 +65,27 @@ include("../../side.php");
 	
 	if(isset($_POST["add"]) || isset($_POST["update"])) {
 		if(!$remediation_name || $remediation_name==""){
-			message(7," : Your remediation need a name",'warning');
+			message(7," : ".getLabel("message.error.remediation_name"),'warning');
 		}
 		elseif(!$remediation_type || $remediation_type==""){
-			message(7," : Your remediation need a type",'warning');
+			message(7," : ".getLabel("message.error.remediation_type"),'warning');
 		}
 		elseif(!$remediation_host || $remediation_host==""){
-			message(7," : Your remediation need a host",'warning');
+			message(7," : ".getLabel("message.error.remediation_host"),'warning');
 		}
 		elseif(!$remediation_service || $remediation_service==""){
-			message(7," : Your remediation need a service",'warning');
-		}elseif(!$remediation_source || $remediation_source==""){
-			message(7," : Your remediation need a source",'warning');
+			message(7," : ".getLabel("message.error.remediation_service"),'warning');
+		}elseif(!$remediation_source || $remediation_source=="" || $remediation_source=="none"){
+			message(7," : ".getLabel("message.error.remediation_source"),'warning');
 		}
 		/*elseif($remediation_dateDebut>$remediation_dateFin){
 			message(7," : Wrong order in your dates",'warning');
 		}*/
 		elseif(isset($_POST["add"])){
-			$desciptionExist = sqlrequest("eorweb","SELECT description from remediation_action");
+			$desciptionExist = sqlrequest("eorweb","SELECT description FROM remediation_action");
 			while ($line = mysqli_fetch_array($desciptionExist)){
 				if($line[0] == $remediation_name){
-					message(7," : Your description already exist",'warning');
+					message(7," : ".getLabel("message.error.remediation_descr"),'warning');
 					$invalid=true;
 				}
 			}
@@ -95,12 +95,12 @@ include("../../side.php");
 				$sql_add = "INSERT INTO remediation_action (description,type,DateDebut,DateFin,Action,host,service,source) VALUES('".$remediation_name."','".$remediation_type."','".$remediation_dateDebut."','".$remediation_dateFin."', '".$remediation_action."','".$remediation_host."','".$remediation_service."','".$remediation_source."')";
 				$remediation_id = sqlrequest("eorweb",$sql_add,true);
 				
-				message(6," : Remediation have been created",'ok');
+				message(6," : ".getLabel("message.remediation.create"),'ok');
 			}
 		}elseif(isset($_POST["update"])){
 			$sql_add = sqlrequest("eorweb","UPDATE remediation_action SET description='".$remediation_name."', type='".$remediation_type."', DateDebut='".$remediation_dateDebut."', DateFin='".$remediation_dateFin."', source='".$remediation_source."', host='".$remediation_host."', service='".$remediation_service."', Action='".$remediation_action."' WHERE id='".$remediation_id."'");
 			
-			message(6," : Remediation have been updated",'ok');
+			message(6," : ".getLabel("message.remediation.update"),'ok');
 		}
 	}
 	
@@ -121,14 +121,14 @@ include("../../side.php");
 						$request="SELECT distinct thruk_idx,nick_name FROM bp_sources";
 						$result=sqlrequest($database_vanillabp,$request);
 						
-						echo "<OPTION value='none'>".getLabel("label.manage_remediation.remediation_action.source_select")."</OPTION>";
+						echo "<option value='none'>".getLabel("label.manage_remediation.remediation_action.source_select")."</option>";
 						
 						while ($line = mysqli_fetch_array($result)){
 							if($line[0] != "NR"){
 								if(isset($remediation_source) && $remediation_source == $line[0]){
-									echo "<OPTION value='$line[0]' SELECTED>$line[1]</OPTION>";
+									echo "<option value='$line[0]' SELECTED>$line[1]</option>";
 								}else{
-									echo "<OPTION value='$line[0]'>$line[1]</OPTION>";
+									echo "<option value='$line[0]'>$line[1]</option>";
 								}
 							}
 						}
@@ -155,11 +155,11 @@ include("../../side.php");
 				<select class="form-control" name='action' size=1>
 					<?php
 						if ($remediation_action == "delete"){
-							echo "<OPTION value='add'>".getLabel("label.manage_remediation.remediation_action.add")."</OPTION>";
-							echo "<OPTION value='delete' SELECTED>".getLabel("label.manage_remediation.remediation_action.remove")."</OPTION>";
+							echo "<option value='add'>".getLabel("label.manage_remediation.remediation_action.add")."</option>";
+							echo "<option value='delete' SELECTED>".getLabel("label.manage_remediation.remediation_action.remove")."</option>";
 						}else{
-							echo "<OPTION value='add' SELECTED>".getLabel("label.manage_remediation.remediation_action.add")."</OPTION>";
-							echo "<OPTION value='delete'>".getLabel("label.manage_remediation.remediation_action.remove")."</OPTION>";
+							echo "<option value='add' SELECTED>".getLabel("label.manage_remediation.remediation_action.add")."</option>";
+							echo "<option value='delete'>".getLabel("label.manage_remediation.remediation_action.remove")."</option>";
 						}
 					?>
 				</select>
@@ -172,11 +172,11 @@ include("../../side.php");
 				<select class="form-control" name='type' size=1>
 					<?php
 						if ($remediation_type == "incident"){
-							echo "<OPTION value='maintenance'>".getLabel("label.manage_remediation.remediation_action.downtime")."</OPTION>";
-							echo "<OPTION value='incident' SELECTED>incident </OPTION>";
+							echo "<option value='maintenance'>".getLabel("label.manage_remediation.remediation_action.downtime")."</option>";
+							echo "<option value='incident' SELECTED>".getLabel("label.manage_remediation.remediation_action.incident")."</option>";
 						}else{
-							echo "<OPTION value='maintenance' SELECTED>Maintenance </OPTION>";
-							echo "<OPTION value='incident'>Incident </OPTION>";
+							echo "<option value='maintenance' SELECTED>".getLabel("label.manage_remediation.remediation_action.downtime")."</option>";
+							echo "<option value='incident'>".getLabel("label.manage_remediation.remediation_action.incident")."</option>";
 						}
 					?>
 				</select>
