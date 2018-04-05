@@ -23,6 +23,8 @@
 include("../../header.php");
 include("../../side.php");
 
+global $database_eorweb;
+
 ?>
 <div id="page-wrapper">
 	<div class="row">
@@ -58,8 +60,8 @@ include("../../side.php");
 	$remediation_name = retrieve_form_data("name",null);
 	
 	if($remediation_id != null && !isset($_POST['add']) && !isset($_POST['update'])){
-		$user_infos = sqlrequest("eorweb", "SELECT * FROM remediation WHERE id='".$remediation_id."'");
-		$user_infos2 = sqlrequest("eorweb", "SELECT description FROM remediation_action WHERE remediationID='".$remediation_id."'");
+		$user_infos = sqlrequest($database_eorweb, "SELECT * FROM remediation WHERE id='".$remediation_id."'");
+		$user_infos2 = sqlrequest($database_eorweb, "SELECT description FROM remediation_action WHERE remediationID='".$remediation_id."'");
 		
 		// Retrieve Information from database
 		$remediation_name = mysqli_result($user_infos,0,"name");
@@ -82,37 +84,33 @@ include("../../side.php");
 			// insert values for add
 			$sql_add = "INSERT INTO remediation (name,user_id,date_demand) VALUES('".$remediation_name."','".$user_id."','".$date_demand."')";
 			$remediation_satut = "inactive";
-			$remediation_id = sqlrequest("eorweb",$sql_add,true);
+			$remediation_id = sqlrequest($database_eorweb,$sql_add,true);
 			$remediation_ids=explode(",",$remediation_action_id);
 		
 			foreach($remediation_ids as $selected){
-				sqlrequest("eorweb","UPDATE remediation_action SET remediationID = '".$remediation_id."' WHERE description='".$selected."'");
+				sqlrequest($database_eorweb,"UPDATE remediation_action SET remediationID = '".$remediation_id."' WHERE description='".$selected."'");
 			}
-			message(6," : ".getLabel("message.remediation.request_created"),'ok');
-			
-			
-
+			message(6," : ".getLabel("message.remediation.request_created"),'ok');		
 		}
 		elseif(isset($_POST["update"])){
-			$user_infos = sqlrequest("eorweb", "SELECT * FROM remediation WHERE id='".$remediation_id."'");
+			$user_infos = sqlrequest($database_eorweb, "SELECT * FROM remediation WHERE id='".$remediation_id."'");
 			$remediation_satut = mysqli_result($user_infos,0,"state");
 			$sql_modify = "UPDATE remediation SET name='".$remediation_name."' WHERE id='".$remediation_id."'";
-			sqlrequest("eorweb",$sql_modify);
+			sqlrequest($database_eorweb,$sql_modify);
 			
 			$Infos=explode(",", $remediation_action_id);	
 			for($i=0; $i<count($Infos);$i++){
-				$value = mysqli_result(sqlrequest("eorweb", "SELECT id FROM remediation_action WHERE description='".$Infos[$i]."'"), 0,"id");
+				$value = mysqli_result(sqlrequest($database_eorweb, "SELECT id FROM remediation_action WHERE description='".$Infos[$i]."'"), 0,"id");
 				array_push($user_infos2,$value);
 			}
 
 			foreach($user_infos2 as $selected){
-				sqlrequest("eorweb","UPDATE remediation_action SET remediationID = '".$remediation_id."' WHERE id='".$selected."'",true);
+				sqlrequest($database_eorweb,"UPDATE remediation_action SET remediationID = '".$remediation_id."' WHERE id='".$selected."'",true);
 			}
 
 			message(6," : ".getLabel("message.remediation.request_updated"),'ok');
 		}
 	}
-	
 	
 	?> 
 				
@@ -135,12 +133,12 @@ include("../../side.php");
 						<input class="btn btn-danger" id="rule_host_button_del" type="button" value="<?php echo getLabel("action.delete");?>">
 					</span>
 				</div>
-				<select class="form-control" id="remediation_actions_id" name="remediation_actions_id[]" size=4 multiple="multiple">
+				<select class="form-control" id="remediation_actions_id" name="remediation_actions_id[]" multiple size=4 >
 				<?php 
-					if(isset($remediation_action_id)){
-						$division=explode(",", $remediation_action_id);
+					if($remediation_action_id != ""){
+						$division = explode(",", $remediation_action_id);
 						
-						for($i=1; $i<count($division);$i++){
+						for($i=0; $i<sizeof($division);$i++){
 							echo "<option selected='selected' value='".$division[$i]."'>".$division[$i]."</option> ";
 						}
 					}
