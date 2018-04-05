@@ -44,7 +44,7 @@ elseif ($source_type == "hosts") {
 	$result = sqlrequest($database_thruk,$requests,false,array("s","%$term%"));
 } 
 else {
-	$requests = "SELECT description FROM remediation_action WHERE description like ?";
+	$requests = "SELECT description FROM remediation_action WHERE remediationID NOT IN (SELECT id FROM remediation) AND description like ?";
 	$result = sqlrequest($database_eorweb,$requests,false,array("s","%$term%"));
 }
 
