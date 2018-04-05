@@ -41,9 +41,9 @@ $(document).ready(function() {
 		if(source_name != 'none'){
 			$('#host').autocomplete({ 				
 				source: './php/auto_completion.php?source_type=hosts&source_name='+source_name,
-				 minLength: 1
+				minLength: 1
 			});
-		}else{
+		} else {
 			$('#host').autocomplete({source: [""]});
 		}
 	});
@@ -54,8 +54,18 @@ $(document).ready(function() {
 			$('#service').autocomplete({ 
 				source: './php/auto_completion.php?source_host='+val+'&source_type=services&source_name='+source_name
 			});
-		}else{
+		} else {
 			$('#service').autocomplete({source: [""]});
+		}
+	});
+
+	$("#rule_host1").on('focusin',function () {
+		if($('input[name=name]').val() != ""){
+			$('#rule_host1').autocomplete({
+				source: './php/auto_completion.php?source_type=remediation_actions'
+			});
+		} else {
+			$('#rule_host1').autocomplete({source: [""]});
 		}
 	});
 

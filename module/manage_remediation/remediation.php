@@ -23,19 +23,6 @@
 include("../../header.php");
 include("../../side.php");
 
-function get_field() {
-	$autocomplete=array();
-	
-	$request="SELECT description FROM remediation_action";
-	$result=sqlrequest("eorweb",$request);
-	
- 	while ($line = mysqli_fetch_array($result)){ 
-		$autocomplete[]=$line[0];
-	}
-	$autocomplete= array_unique($autocomplete);
-	echo json_encode($autocomplete);
-}
-
 ?>
 <div id="page-wrapper">
 	<div class="row">
@@ -142,7 +129,7 @@ function get_field() {
 			<label class="col-md-3"><?php echo getLabel("label.manage_remediation.remediation_action_add"); ?></label>
 			<div class="col-md-9">
 				<div class="form-group input-group">
-					<input class="form-control" id="rule_host1" type="text" name="rule_host" onFocus='$(this).autocomplete({source: <?php echo get_field(); ?>})'>
+					<input class="form-control" id="rule_host1" type="text" name="rule_host">
 					<span class="input-group-btn">
 						<input class="btn btn-success" id="rule_host_button" type="button" value="<?php echo getLabel("action.add");?>">
 						<input class="btn btn-danger" id="rule_host_button_del" type="button" value="<?php echo getLabel("action.delete");?>">

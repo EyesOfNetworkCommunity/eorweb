@@ -139,7 +139,7 @@ include("../../side.php");
 		<div class="row form-group">
 			<label class="col-md-3"><?php echo getLabel("label.host"); ?></label>
 			<div class="col-md-9">
-				<input class="form-control" type='text' id='host' name='host'  value='<?php echo $remediation_host?>'>
+				<input class="form-control" type='text' id='host' name='host' value='<?php echo $remediation_host?>'>
 			</div>
 		</div>
 		<div class="row form-group">
