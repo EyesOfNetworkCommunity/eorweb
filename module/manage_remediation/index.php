@@ -356,7 +356,7 @@ if(isset($_GET["action"])) {
 				</table>
 			</div>
 			<div class="form-group">
-				<button class="btn btn-success" type="submit" name="actions" value="execution">Executer</button>
+				<button class="btn btn-success" type="submit" name="actions" value="execution"><?php echo getLabel("action.apply"); ?></button>
 			</div>
 		</div>
 	</form>
