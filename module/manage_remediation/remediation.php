@@ -90,7 +90,7 @@ global $database_eorweb;
 			foreach($remediation_ids as $selected){
 				sqlrequest($database_eorweb,"UPDATE remediation_action SET remediationID = '".$remediation_id."' WHERE description='".$selected."'");
 			}
-			message(6," : ".getLabel("message.remediation.request_created"),'ok');		
+			message(6," : ".getLabel("message.manage_remediation.request_created"),'ok');		
 		}
 		elseif(isset($_POST["update"])){
 			$user_infos = sqlrequest($database_eorweb, "SELECT * FROM remediation WHERE id='".$remediation_id."'");
@@ -104,6 +104,7 @@ global $database_eorweb;
 				array_push($user_infos2,$value);
 			}
 
+			sqlrequest($database_eorweb,"UPDATE remediation_action SET remediationID = '0' WHERE remediationID='".$remediation_id."'",true);
 			foreach($user_infos2 as $selected){
 				sqlrequest($database_eorweb,"UPDATE remediation_action SET remediationID = '".$remediation_id."' WHERE id='".$selected."'",true);
 			}

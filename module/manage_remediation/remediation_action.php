@@ -65,18 +65,18 @@ include("../../side.php");
 	
 	if(isset($_POST["add"]) || isset($_POST["update"])) {
 		if(!$remediation_name || $remediation_name==""){
-			message(7," : ".getLabel("message.error.remediation_name"),'warning');
+			message(7," : ".getLabel("message.error.remediation_action_name"),'warning');
 		}
 		elseif(!$remediation_type || $remediation_type==""){
-			message(7," : ".getLabel("message.error.remediation_type"),'warning');
+			message(7," : ".getLabel("message.error.remediation_action_type"),'warning');
 		}
 		elseif(!$remediation_host || $remediation_host==""){
-			message(7," : ".getLabel("message.error.remediation_host"),'warning');
+			message(7," : ".getLabel("message.error.remediation_action_host"),'warning');
 		}
 		elseif(!$remediation_service || $remediation_service==""){
-			message(7," : ".getLabel("message.error.remediation_service"),'warning');
+			message(7," : ".getLabel("message.error.remediation_action_service"),'warning');
 		}elseif(!$remediation_source || $remediation_source=="" || $remediation_source=="none"){
-			message(7," : ".getLabel("message.error.remediation_source"),'warning');
+			message(7," : ".getLabel("message.error.remediation_action_source"),'warning');
 		}
 		/*elseif($remediation_dateDebut>$remediation_dateFin){
 			message(7," : Wrong order in your dates",'warning');
@@ -85,7 +85,7 @@ include("../../side.php");
 			$desciptionExist = sqlrequest("eorweb","SELECT description FROM remediation_action");
 			while ($line = mysqli_fetch_array($desciptionExist)){
 				if($line[0] == $remediation_name){
-					message(7," : ".getLabel("message.error.remediation_descr"),'warning');
+					message(7," : ".getLabel("message.error.remediation_action_descr"),'warning');
 					$invalid=true;
 				}
 			}
@@ -95,12 +95,12 @@ include("../../side.php");
 				$sql_add = "INSERT INTO remediation_action (description,type,DateDebut,DateFin,Action,host,service,source) VALUES('".$remediation_name."','".$remediation_type."','".$remediation_dateDebut."','".$remediation_dateFin."', '".$remediation_action."','".$remediation_host."','".$remediation_service."','".$remediation_source."')";
 				$remediation_id = sqlrequest("eorweb",$sql_add,true);
 				
-				message(6," : ".getLabel("message.remediation.create"),'ok');
+				message(6," : ".getLabel("message.manage_remediation.action_create"),'ok');
 			}
 		}elseif(isset($_POST["update"])){
 			$sql_add = sqlrequest("eorweb","UPDATE remediation_action SET description='".$remediation_name."', type='".$remediation_type."', DateDebut='".$remediation_dateDebut."', DateFin='".$remediation_dateFin."', source='".$remediation_source."', host='".$remediation_host."', service='".$remediation_service."', Action='".$remediation_action."' WHERE id='".$remediation_id."'");
 			
-			message(6," : ".getLabel("message.remediation.update"),'ok');
+			message(6," : ".getLabel("message.manage_remediation.action_update"),'ok');
 		}
 	}
 	

@@ -54,10 +54,10 @@ include("../../side.php");
 					for ($i = 0; $i < count($group_selected); $i++)
 					{
 						// Get group name
-						$group_res=sqlrequest("$database_eorweb","select group_name from groups where group_id='$group_selected[$i]'");
+						$group_res=sqlrequest("$database_eorweb","SELECT group_name FROM groups WHERE group_id='$group_selected[$i]'");
 						$group_name=mysqli_result($group_res,0,"group_name");
 						// Get users in group
-						$users_in=sqlrequest("$database_eorweb","select user_name from users where group_id='$group_selected[$i]'");
+						$users_in=sqlrequest("$database_eorweb","SELECT user_name FROM users WHERE group_id='$group_selected[$i]'");
 						$users_in_names="";
 						while ($line = mysqli_fetch_array($users_in))	
 							$users_in_names=$line[0]." ".$users_in_names;
@@ -65,8 +65,8 @@ include("../../side.php");
 						// Delete group if no users in
 						if($users_in_names==""){
 							// Delete in eorweb
-							sqlrequest("$database_eorweb","delete from groupright where group_id='$group_selected[$i]'");
-							sqlrequest("$database_eorweb","delete from groups where group_id='$group_selected[$i]'");
+							sqlrequest("$database_eorweb","DELETE FROM groupright WHERE group_id='$group_selected[$i]'");
+							sqlrequest("$database_eorweb","DELETE FROM groups WHERE group_id='$group_selected[$i]'");
 						}
 						else
 							message(8," : Group $group_name contains users : $users_in_names",'warning');
@@ -127,7 +127,7 @@ include("../../side.php");
 	}
 
 	//Get the name group and description group
-	$group_name_descr=sqlrequest("$database_eorweb","SELECT group_name,group_descr,group_id,group_type FROM groups ORDER BY group_name");
+	$group_name_descr=sqlrequest("$database_eorweb","SELECT group_name,group_descr,group_id,group_type,validator FROM groups ORDER BY group_name");
 	
 	// determine if there is LDAP conf
 	$request = sqlrequest($database_eorweb, "SELECT auth_type FROM auth_settings");
@@ -143,6 +143,7 @@ include("../../side.php");
 					<th class="col-md-2 text-center"><?php echo getLabel("label.admin_group.select"); ?></th>
 					<th><?php echo getLabel("label.admin_group.group_name"); ?></th>
 					<th><?php echo getLabel("label.admin_group.group_type"); ?></th>
+					<th><?php echo getLabel("label.admin_group.group_validator"); ?></th>
 					<th><?php echo getLabel("label.admin_group.group_desc"); ?></th>
 				</tr>
 				</thead>
@@ -171,6 +172,14 @@ include("../../side.php");
 					</td>
 					<td>
 						<?php echo $type ?>
+					</td>
+					<td>
+						<?php 
+						if($line['validator']){
+							echo getLabel("label.yes");
+						} else {
+							echo getLabel("label.no");
+						} ?>
 					</td>
 					<td>
 						<?php echo "$line[1]";?>

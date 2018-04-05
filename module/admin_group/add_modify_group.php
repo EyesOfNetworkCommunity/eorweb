@@ -107,11 +107,11 @@ function retrieve_allowed_menu($array_tabs,$group_id)
 function retrieve_group_info($group_id)
 {
 	global $database_eorweb;
-	return sqlrequest("$database_eorweb","SELECT group_name, group_descr, group_type, group_dn FROM groups WHERE group_id='$group_id'");
+	return sqlrequest("$database_eorweb","SELECT group_name, group_descr, group_type, group_dn, validator FROM groups WHERE group_id='$group_id'");
 }
 
 // Update Group Information & Right
-function update_group($count_menu_item,$group_id,$group_name,$group_descr,$group_type,$ldap_group_name,$message,$old_group=false)
+function update_group($count_menu_item,$group_id,$group_name,$group_descr,$group_type,$ldap_group_name,$group_validator,$message,$old_group=false)
 {
 	global $database_eorweb;
 	global $database_lilac;
@@ -123,7 +123,7 @@ function update_group($count_menu_item,$group_id,$group_name,$group_descr,$group
 	
 	// Check if group exist
 	if($group_name!=$old_group)
-			$group_exist=mysqli_result(sqlrequest("$database_eorweb","SELECT count('group_name') from groups where group_name='$group_name';"),0);
+			$group_exist=mysqli_result(sqlrequest("$database_eorweb","SELECT count('group_name') FROM groups WHERE group_name='$group_name';"),0);
 	else
 			$group_exist=0;
 
@@ -131,19 +131,26 @@ function update_group($count_menu_item,$group_id,$group_name,$group_descr,$group
 	if($group_descr=="")
 			$group_descr=$group_name;
 	
+	//check remediation validator
+	if ($group_validator) {
+		sqlrequest("$database_eorweb","UPDATE groups SET validator = TRUE WHERE group_id='$group_id'");
+	} else {
+		sqlrequest("$database_eorweb","UPDATE groups SET validator = FALSE WHERE group_id='$group_id'");
+	}
+
 	if (($group_id != "") && ($group_id != null) && ($group_name != "") && ($group_name != null) && ($group_exist == 0 || $old_group==false))
 	{
 		for ($i=1;$i<$count_menu_item +1;$i++)
 		{
 			if (isset ($_POST["tab_$i"]))
-				sqlrequest("$database_eorweb","UPDATE groupright set tab_$i='1' where group_id='$group_id'");
+				sqlrequest("$database_eorweb","UPDATE groupright SET tab_$i='1' WHERE group_id='$group_id'");
 			else
-				sqlrequest("$database_eorweb","UPDATE groupright set tab_$i='0' where group_id='$group_id'");
+				sqlrequest("$database_eorweb","UPDATE groupright SET tab_$i='0' WHERE group_id='$group_id'");
 		}
 		
 		// get the DN of the ldap group !
 		$group_dn = "";
-		$group_ldap=sqlrequest("$database_eorweb","SELECT dn from ldap_groups_extended where group_name='$group_name';");
+		$group_ldap=sqlrequest("$database_eorweb","SELECT dn FROM ldap_groups_extended WHERE group_name='$group_name';");
 		if(mysqli_num_rows($group_ldap) > 0){
 			$group_dn = mysqli_result($group_ldap, 0);
 		}
@@ -152,7 +159,7 @@ function update_group($count_menu_item,$group_id,$group_name,$group_descr,$group
 		}
 		
 		// Update into eorweb
-		sqlrequest("$database_eorweb","UPDATE groups set group_name='$group_name', group_descr='$group_descr', group_type='$group_type', group_dn='$group_dn' where group_id='$group_id'");
+		sqlrequest("$database_eorweb","UPDATE groups SET group_name='$group_name', group_descr='$group_descr', group_type='$group_type', group_dn='$group_dn' WHERE group_id='$group_id'");
 		// Update into lilac
 		sqlrequest("$database_lilac", "UPDATE nagios_contact_group SET name='$group_name', alias='$group_descr' WHERE name='$old_group'");
 		logging("admin_group","UPDATE : $group_id $group_name $group_descr");
@@ -165,18 +172,18 @@ function update_group($count_menu_item,$group_id,$group_name,$group_descr,$group
 }
 
 // Insert Group Information
-function insert_group($group_name,$group_descr,$group_type,$ldap_group_name)
+function insert_group($group_name,$group_descr,$group_type,$ldap_group_name,$group_validator)
 {
 	global $database_eorweb;
 	global $database_lilac;
-	$group_id=null;
+	$group_id = null;
 
 	// Check if group exist
 	if(!$group_name)
 	{
 		$group_name = $ldap_group_name;
 	}
-	$group_exist=mysqli_result(sqlrequest("$database_eorweb","SELECT count('group_name') from groups where group_name='$group_name';"),0);
+	$group_exist=mysqli_result(sqlrequest("$database_eorweb","SELECT count('group_name') FROM groups WHERE group_name='$group_name';"),0);
 	
 	// Check group descr
 	if($group_descr=="")
@@ -186,7 +193,7 @@ function insert_group($group_name,$group_descr,$group_type,$ldap_group_name)
 	{
 		// get the DN of the ldap group !
 		$group_dn = "";
-		$group_ldap=sqlrequest("$database_eorweb","SELECT dn from ldap_groups_extended where group_name='$group_name';");
+		$group_ldap=sqlrequest("$database_eorweb","SELECT dn FROM ldap_groups_extended WHERE group_name='$group_name';");
 		if(mysqli_num_rows($group_ldap) > 0){
 			$group_dn = ldap_escape(mysqli_result($group_ldap,0));
 		}
@@ -195,12 +202,12 @@ function insert_group($group_name,$group_descr,$group_type,$ldap_group_name)
 		}
 		
 		// Insert into eorweb
-		sqlrequest("$database_eorweb","INSERT INTO groups (group_name,group_descr,group_type,group_dn) VALUES('$group_name', '$group_descr', '$group_type', '$group_dn')");
-		$group_id=mysqli_result(sqlrequest("$database_eorweb","SELECT group_id, group_descr FROM groups WHERE group_name='$group_name'"),0,"group_id");
+		sqlrequest("$database_eorweb","INSERT INTO groups (group_name,group_descr,group_type,group_dn,validator) VALUES('$group_name', '$group_descr', '$group_type', '$group_dn', '$group_validator')");
+		$group_id = mysqli_result(sqlrequest("$database_eorweb","SELECT group_id, group_descr FROM groups WHERE group_name='$group_name'"),0,"group_id");
 		sqlrequest("$database_eorweb","INSERT INTO groupright (group_id) VALUES('$group_id')");
 		// Insert into lilac
 		sqlrequest("$database_lilac", "INSERT INTO nagios_contact_group (id, name, alias) VALUES('', '$group_name', '$group_descr')");
-		logging("admin_group","INSERT : $group_id $group_name $group_descr $group_type");
+		logging("admin_group","INSERT : $group_id $group_name $group_descr $group_type $group_validator");
 		message(8," : Group inserted",'ok');
 	}
 	elseif($group_exist != 0)
@@ -221,6 +228,7 @@ $group_name = mysqli_result(sqlrequest("$database_eorweb","SELECT group_name FRO
 $group_descr = mysqli_result(sqlrequest("$database_eorweb","SELECT group_descr FROM groups WHERE group_id='$group_id'"),0,"group_descr");
 $group_type = mysqli_result(sqlrequest("$database_eorweb","SELECT group_type FROM groups WHERE group_id='$group_id'"),0,"group_type");
 $group_location = mysqli_result(sqlrequest("$database_eorweb","SELECT group_name FROM groups WHERE group_id='$group_id'"),0,"group_name");
+$group_validator = mysqli_result(sqlrequest("$database_eorweb","SELECT validator FROM groups WHERE group_id='$group_id'"),0,"validator");
 
 if ($group_id == null) 
 {
@@ -235,9 +243,10 @@ if ($group_id == null)
 		$group_descr = retrieve_form_data("group_descr","");
 		$group_type = retrieve_form_data("group_type", "");
 		$ldap_group_name = retrieve_form_data("group_location", "");
-		$group_id=insert_group($group_name,$group_descr,$group_type,$ldap_group_name);
+		$group_validator = retrieve_form_data("group_validator", false);
+		$group_id = insert_group($group_name,$group_descr,$group_type,$ldap_group_name,$group_validator);
 		if ($group_id != null)
-			update_group($count_menu_item,$group_id,$group_name,$group_descr,$group_type,$ldap_group_name, false);
+			update_group($count_menu_item,$group_id,$group_name,$group_descr,$group_type,$ldap_group_name,$group_validator, false);
 	}
 }
 else
@@ -254,16 +263,19 @@ else
 		$group_descr = retrieve_form_data("group_descr","");
 		$group_type = retrieve_form_data("group_type", "");
 		$ldap_group_name = retrieve_form_data("group_location", "");
-		update_group($count_menu_item,$group_id,$group_name,$group_descr,$group_type,$ldap_group_name,true,$old_group);
+		$group_validator = retrieve_form_data("group_validator", false);
+		update_group($count_menu_item,$group_id,$group_name,$group_descr,$group_type,$ldap_group_name,$group_validator, true,$old_group);
 	}
 }
 
 // Retrieve Group Information from database
 $group_name_descr = retrieve_group_info($group_id);
-$group_name=mysqli_result($group_name_descr,0,"group_name");
-$group_descr=mysqli_result($group_name_descr,0,"group_descr");
-$group_type=mysqli_result($group_name_descr,0,"group_type");
-$group_location=mysqli_result($group_name_descr,0,"group_name");
+$group_name = mysqli_result($group_name_descr,0,"group_name");
+$group_descr = mysqli_result($group_name_descr,0,"group_descr");
+$group_type = mysqli_result($group_name_descr,0,"group_type");
+$group_location = mysqli_result($group_name_descr,0,"group_name");
+$group_validator = mysqli_result($group_name_descr,0,"validator");
+
 if($group_type == 0){
 	$group_location = "";
 }
@@ -307,6 +319,19 @@ if($group_type == 0){
 			<label class="col-md-3"><?php echo getLabel("label.admin_group.group_desc"); ?></label>
 			<div class="col-md-9">
 				<?php echo "<input class='form-control' type='text' name='group_descr' value='$group_descr' size=50>";?>
+			</div>
+		</div>
+		<br>
+		<div class="row">
+			<label class="col-md-3"><?php echo getLabel("label.admin_group.validator"); ?></label>
+			<div class="col-md-9">
+				<?php
+				if ($group_validator) {
+					echo "<input type='checkbox' class='checkbox' name='group_validator' checked><br>";
+				} else {
+					echo "<input type='checkbox' class='checkbox' name='group_validator'><br>";
+				}
+				?>
 			</div>
 		</div>
 		<br>

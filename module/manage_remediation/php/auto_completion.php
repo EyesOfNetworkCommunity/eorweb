@@ -20,8 +20,8 @@
 #########################################
 */
 
-include("/srv/eyesofnetwork/eorweb/include/config.php");
-include("/srv/eyesofnetwork/eorweb/include/function.php");
+include("../../../include/config.php");
+include("../../../include/function.php");
 
 global $database_thruk, $database_eorweb;
 

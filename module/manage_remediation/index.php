@@ -79,19 +79,19 @@ if(isset($_GET["action"])) {
 				$total_remediation = "";
 				for ($i = 0; $i < sizeof($remediation_selected); $i++) {
 					// Get remediation_action name
-					$user_res = sqlrequest("$database_eorweb","SELECT name FROM remediation WHERE id = '$remediation_selected[$i]'");
+					$user_res = sqlrequest($database_eorweb,"SELECT name FROM remediation WHERE id = '$remediation_selected[$i]'");
 					$remediation = mysqli_result($user_res,0,"name");
 					$total_remediation .= $remediation.", ";
 
 					// Delete 
-					sqlrequest("$database_eorweb","DELETE FROM remediation WHERE id = '$remediation_selected[$i]'");
-					sqlrequest("$database_eorweb","DELETE FROM remediation_action WHERE remediationID = '$remediation_selected[$i]'");
+					sqlrequest($database_eorweb,"DELETE FROM remediation WHERE id = '$remediation_selected[$i]'");
+					sqlrequest($database_eorweb,"DELETE FROM remediation_action WHERE remediationID = '$remediation_selected[$i]'");
 					
 					// Logging action
 					logging("manage_remediation","DELETE : $remediation_selected[$i]");
 				}
 				$total_remediation = substr($total_remediation,0,-2);
-				message(6," : ".getLabel("message.remediation.delete")." ( $total_remediation )",'ok');
+				message(6," : ".getLabel("message.manage_remediation.request_delete")." ( $total_remediation )",'ok');
 			}
 			break;
 		case "del_method_remediation":
@@ -99,45 +99,45 @@ if(isset($_GET["action"])) {
 				$total_remediation_action = "";
 				for ($i = 0; $i < sizeof($remediation_action_selected); $i++) {
 					// Get remediation_action name
-					$user_res = sqlrequest("$database_eorweb","SELECT description FROM remediation_action WHERE id='$remediation_action_selected[$i]'");
+					$user_res = sqlrequest($database_eorweb,"SELECT description FROM remediation_action WHERE id='$remediation_action_selected[$i]'");
 					$remediation_action = mysqli_result($user_res,0,"description");
 					
 					// Delete user in eorweb
-					sqlrequest("$database_eorweb","DELETE FROM remediation_action WHERE id='$remediation_action_selected[$i]'");
+					sqlrequest($database_eorweb,"DELETE FROM remediation_action WHERE id='$remediation_action_selected[$i]'");
 					
 					// Logging action
 					logging("manage_remediation","DELETE : $remediation_action_selected[$i]");
 					$total_remediation_action .= $remediation_action.", ";
 				}
 				$total_remediation_action = substr($total_remediation_action,0,-2);
-				message(6," : ".getLabel("message.remediation.pack_delete")." ( $total_remediation_action )",'ok');
+				message(6," : ".getLabel("message.manage_remediation.action_delete")." ( $total_remediation_action )",'ok');
 			}
 			break;
 		case "validation":
 			if(isset($remediation_selected[0])) {
 				for ($i = 0; $i < sizeof($remediation_selected); $i++) {
 					// Update remediations state
-					sqlrequest("$database_eorweb","UPDATE remediation SET state='approved', date_validation='".date("Y-m-d G:i")."' WHERE id='$remediation_selected[$i]'");
+					sqlrequest($database_eorweb,"UPDATE remediation SET state='approved', date_validation='".date("Y-m-d G:i")."' WHERE id='$remediation_selected[$i]'");
 				}
-				message(6," : ".getLabel("message.remediation.pack_update"),'ok');
+				message(6," : ".getLabel("message.manage_remediation.request_update"),'ok');
 			}
 			break;
 		case "refus":
 			if(isset($remediation_selected[0])) {
 				for ($i = 0; $i < sizeof($remediation_selected); $i++) {
 					// Update remediations state
-					sqlrequest("$database_eorweb","UPDATE remediation SET state='refused', date_validation='".date("Y-m-d G:i")."' WHERE id='$remediation_selected[$i]'");
+					sqlrequest($database_eorweb,"UPDATE remediation SET state='refused', date_validation='".date("Y-m-d G:i")."' WHERE id='$remediation_selected[$i]'");
 				}
-				message(6," : ".getLabel("message.remediation.pack_update"),'ok');
+				message(6," : ".getLabel("message.manage_remediation.request_update"),'ok');
 			}
 			break;
 		case "demand":
 			if(isset($remediation_selected[0])) {
 				for ($i = 0; $i < sizeof($remediation_selected); $i++) {
 					// Update remediations state
-					sqlrequest("$database_eorweb","UPDATE remediation SET state='en attente', date_validation='".date("Y-m-d G:i")."' WHERE id='$remediation_selected[$i]'");
+					sqlrequest($database_eorweb,"UPDATE remediation SET state='en attente', date_validation='".date("Y-m-d G:i")."' WHERE id='$remediation_selected[$i]'");
 				}
-				message(6," : ".getLabel("message.remediation.pack_update"),'ok');
+				message(6," : ".getLabel("message.manage_remediation.request_update"),'ok');
 			}
 			break;
 		case "execution":
@@ -148,7 +148,10 @@ if(isset($_GET["action"])) {
 				
 				$total_execute = "";
 				for ($i = 0; $i < sizeof($remediation_selected); $i++) {
-					$RemediationExec=sqlrequest("$database_eorweb","SELECT * FROM remediation_action WHERE remediationID='$remediation_selected[$i]'");
+					$remediation_request_name = sqlrequest($database_eorweb, "SELECT name FROM remediation WHERE id = '$remediation_selected[$i]'");
+					$result_request_remediation_name = mysqli_result($remediation_request_name,0,"name");
+
+					$RemediationExec = sqlrequest($database_eorweb,"SELECT * FROM remediation_action WHERE remediationID='$remediation_selected[$i]'");
 					//$result = $RemediationExec->fetch_array(MYSQLI_ASSOC);
 					
 					while($line = mysqli_fetch_array($RemediationExec)) {
@@ -196,11 +199,12 @@ if(isset($_GET["action"])) {
 					}
 					
 					// Update remediations state
-					sqlrequest("$database_eorweb","UPDATE remediation SET state='executed', date_validation='".date("Y-m-d G:i")."' WHERE id='$remediation_selected[$i]'");
+					sqlrequest($database_eorweb,"UPDATE remediation SET state='executed', date_validation='".date("Y-m-d G:i")."' WHERE id='$remediation_selected[$i]'");
 					
-					$total_execute .= $remediation_selected[$i].", ";
+					$total_execute .= $result_request_remediation_name.", ";
 				}
-				message(6," : ".getLabel("message.remediation.execute")." ( $total_execute )",'ok');
+				$total_execute = substr($total_execute,0,-2);
+				message(6," : ".getLabel("message.manage_remediation.request_execute")." ( $total_execute )",'ok');
 			}
 			break;
 	}
@@ -229,7 +233,7 @@ if(isset($_GET["action"])) {
 					<tbody>
 					<?php
 					// Get remediation_pack
-					$methods=sqlrequest($database_eorweb,$rules_sql);
+					$methods = sqlrequest($database_eorweb,$rules_sql);
 					
 					if($methods) {
 						while ($line = mysqli_fetch_array($methods)) {
@@ -254,11 +258,19 @@ if(isset($_GET["action"])) {
 				<button class="btn btn-danger" type="submit" name="actions" value="del_method"><?php echo getLabel("action.delete");?></button>
 				
 				<!-- Si les droits de remediation de l'utilisateur sont limités -->
-				<button class="btn btn-default" type="submit" name="actions" value="demand"><?php echo getLabel("action.submit");?></button>
-				
-				<!-- Si l'utilisateur a tous les droits de remediation -->
-				<button class="btn btn-default" type="submit" name="actions" value="validation"><?php echo getLabel("action.validate");?></button>
-				<button class="btn btn-danger" type="submit" name="actions" value="refus"><?php echo getLabel("action.refuse");?></button>
+				<?php 
+				$req = "SELECT validator FROM groups WHERE group_id = ?";
+				$validator_bool = sqlrequest($database_eorweb,$req,false,array("i",(int)$_COOKIE['group_id']));
+				$result = mysqli_result($validator_bool,0,"validator");
+				if (!$result) {
+				?>
+					<button class="btn btn-default" type="submit" name="actions" value="demand"><?php echo getLabel("action.submit");?></button>
+				<?php
+				} else { ?>
+					<!-- Si l'utilisateur a tous les droits de remediation -->
+					<button class="btn btn-default" type="submit" name="actions" value="validation"><?php echo getLabel("action.validate");?></button>
+					<button class="btn btn-danger" type="submit" name="actions" value="refus"><?php echo getLabel("action.refuse");?></button>
+				<?php } ?>
 			</div>
 		</div>
 	</form>
