@@ -109,7 +109,7 @@ global $database_eorweb;
 				sqlrequest($database_eorweb,"UPDATE remediation_action SET remediationID = '".$remediation_id."' WHERE id='".$selected."'",true);
 			}
 
-			message(6," : ".getLabel("message.remediation.request_updated"),'ok');
+			message(6," : ".getLabel("message.manage_remediation.request_update"),'ok');
 		}
 	}
 	
