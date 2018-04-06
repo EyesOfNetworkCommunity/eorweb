@@ -39,6 +39,12 @@
 			$id_kpi = explode(" ", $id_kpi);
 		}
 
+		$id_step_group = $_GET['id_step_group'];
+		if (empty($id_step_group)) {
+			echo "false";
+			exit;
+		}
+
 		$sql = "update contract_context SET NAME='".$name."',ALIAS='".$alias."',ID_CONTRACT=".$id_contract.",ID_TIME_PERIOD=".$id_time_period.",ID_KPI=".$id_kpi.",ID_STEP_GROUP=".$id_step_group." where ".$id_name." = ".$id_number;
 	}
 

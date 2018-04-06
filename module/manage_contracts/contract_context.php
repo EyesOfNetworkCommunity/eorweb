@@ -90,7 +90,7 @@ include("../../side.php");
 				</div>
 			</div>
 		</div>
-		<div class="row form-group" id="display_step_group" style="display:none">
+		<div class="row form-group" id="display_step_group">
 			<div class="col-md-6">
 	            <div class="has-feedback">
                     <label for="name_step_group"><?php echo getLabel("label.manage_contracts.indicator_associate"); ?></label>

@@ -175,6 +175,7 @@ $(document).ready(function() {
 				{
 					table_name: 'contract_context',
 					name: $('#name').val(),
+					alias: $("#desc").val(),
 					id_number: UrlParam('id_number'),
 					id_contract: $('#id_contract').val(),
 					id_time_period: $('#id_time_period').val(),
