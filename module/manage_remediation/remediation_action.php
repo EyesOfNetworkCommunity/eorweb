@@ -155,10 +155,10 @@ include("../../side.php");
 				<select class="form-control" name='action' size=1>
 					<?php
 						if ($remediation_action == "delete"){
-							echo "<option value='add'>".getLabel("label.manage_remediation.remediation_action.add")."</option>";
+							echo "<option value='add'>".getLabel("action.add")."</option>";
 							echo "<option value='delete' SELECTED>".getLabel("label.manage_remediation.remediation_action.remove")."</option>";
 						}else{
-							echo "<option value='add' SELECTED>".getLabel("label.manage_remediation.remediation_action.add")."</option>";
+							echo "<option value='add' SELECTED>".getLabel("action.add")."</option>";
 							echo "<option value='delete'>".getLabel("label.manage_remediation.remediation_action.remove")."</option>";
 						}
 					?>

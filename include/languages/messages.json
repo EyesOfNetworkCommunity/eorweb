@@ -493,7 +493,6 @@
 	"label.manage_remediation.list_remediations_action": "Remediations actions list",
 	"label.manage_remediation.name": "Name",
 	"label.manage_remediation.options": "Options",
-	"label.manage_remediation.remediation_action.add": "Add",
 	"label.manage_remediation.remediation_action.downtime": "Downtime",
 	"label.manage_remediation.remediation_action.incident": "Incident",
 	"label.manage_remediation.remediation_action.remove": "Remove",
