@@ -506,7 +506,7 @@
 	"label.manage_remediation.remediations": "Remédiations",
 	"label.manage_remediation.remediations_action": "Actions de remédiations",
 	"label.manage_remediation.remediations_apply_action.menu": "Application des remédiations",
-	"label.manage_remediation.remediations_apply_request.menu": "Exécution des remédiations",
+	"label.manage_remediation.remediations_apply_request.menu": "Exécuter",
 	"label.manage_remediation.remediations_request": "Demandes de remédiations",
 	"label.manage_remediation.status": "Statut",
 	"label.manage_remediation.type": "Type",

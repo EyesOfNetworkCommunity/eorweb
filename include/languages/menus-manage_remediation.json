@@ -11,6 +11,10 @@
 				{
 					"name":"action.add",
 					"url":"/module/manage_remediation/remediation.php"
+				},
+				{
+					"name":"label.manage_remediation.remediations_apply_request.menu",
+					"url":"/module/manage_remediation/index.php?action=apply_pack"
 				}
 			]
 		},
@@ -24,15 +28,6 @@
 				{
 					"name":"action.add",
 					"url":"/module/manage_remediation/remediation_action.php"
-				}
-			]
-		},
-		{
-			"name":"label.manage_remediation.options",
-			"link":[
-				{
-					"name":"label.manage_remediation.remediations_apply_request.menu",
-					"url":"/module/manage_remediation/index.php?action=apply_pack"
 				}
 			]
 		}
