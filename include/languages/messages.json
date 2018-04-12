@@ -844,6 +844,7 @@
 	"message.manage_remediation.request_created": "Remediation request has been created",
 	"message.manage_remediation.request_delete": "Remediation request removed",
 	"message.manage_remediation.request_execute": "Remediation request has been executed",
+	"message.manage_remediation.request_not_update": "Remediation request has already been executed",
 	"message.manage_remediation.request_update": "Remediation request has been updated",
 	"message.manage_report.report_suppress": "Delete this report ?",
 	"message.module.not_installed": "Module",
