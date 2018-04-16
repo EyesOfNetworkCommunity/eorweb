@@ -27,6 +27,9 @@ global $database_thruk, $database_eorweb;
 
 extract($_GET);
 $autocomplete = array();
+if ($source_type == "services") {
+	array_push($autocomplete, "Hoststatus");
+}
 if (isset($source_name)) {
 	$source_name = htmlspecialchars($source_name);
 }
@@ -56,9 +59,6 @@ while ($line = mysqli_fetch_array($result)){
 	if($line[0] != "NR"){
 		$autocomplete[] = $line[0];
 	}
-}
-if ($source_type == "services") {
-	array_push($autocomplete, "Hoststatus");
 }
 
 echo json_encode($autocomplete);

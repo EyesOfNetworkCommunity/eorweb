@@ -173,37 +173,19 @@ if(isset($_GET["action"])) {
 							$dateDebut = explode(" ", date('d/m/Y H:i:s', strtotime($line["DateDebut"])));
 							$dateFin = explode(" ", date('d/m/Y H:i:s', strtotime($line["DateFin"])));
 
-							if ($line['service'] != "Hoststatus") {
-								// Paramétrage de l'écriture du futur fichier CSV
-								$chemin = '/srv/eyesofreport/etl/injection/Inject'.$line['type'].$line['id'].'.csv';
-
-								// Création du fichier csv
-								$fichier_csv = fopen($chemin, 'w+');
-								$lignes[] = array('O', $dateDebut[0], $dateDebut[1], $dateFin[0], $dateFin[1], $line["type"], $line["host"], $line["service"]);
-								fputs($fichier_csv, implode($array, $delimiteur)."\n");
-								foreach($lignes as $ligne){
-									fputcsv($fichier_csv, $ligne, $delimiteur);
-								}
-								fclose($fichier_csv);
-								exec("/srv/eyesofreport/etl/scripts/massive_inject_HOST_downtime-or-outage.sh root root66 ".$line['source']." ".$type." ".'Inject'.$line['type'].$line['id'].'.csv', $output);
-							}
-
-							// Paramétrage de l'écriture du futur fichier CSV pour le hoststatus
-							$chemin_hoststatus = '/srv/eyesofreport/etl/injection/Inject'.$line['type'].$line['id'].'_hoststatus.csv';
+							// Paramétrage de l'écriture du futur fichier CSV
+							$chemin = '/srv/eyesofreport/etl/injection/Inject'.$line['type'].$line['id'].'.csv';
 
 							// Création du fichier csv
-							$fichier_csv_hoststatus = fopen($chemin_hoststatus, 'w+');
-							$lignes[] = array('O', $dateDebut[0], $dateDebut[1], $dateFin[0], $dateFin[1], $line["type"], $line["host"], 'Hoststatus');
-							fputs($fichier_csv_hoststatus, implode($array, $delimiteur)."\n");
+							$fichier_csv = fopen($chemin, 'w+');
+							$lignes[] = array('O', $dateDebut[0], $dateDebut[1], $dateFin[0], $dateFin[1], $line["type"], $line["host"], $line["service"]);
+							fputs($fichier_csv, implode($array, $delimiteur)."\n");
 							foreach($lignes as $ligne){
-								fputcsv($fichier_csv_hoststatus, $ligne, $delimiteur);
+								fputcsv($fichier_csv, $ligne, $delimiteur);
 							}
-							fclose($fichier_csv_hoststatus);
-							exec("/srv/eyesofreport/etl/scripts/massive_inject_HOST_downtime-or-outage.sh root root66 ".$line['source']." ".$type." ".'Inject'.$line['type'].$line['id'].'_hoststatus.csv', $output);
-							
-						// remove a downtime
-						} elseif($line['Action'] == "delete" && $line['type'] == "maintenance") {
-							
+							fclose($fichier_csv);
+							exec("/srv/eyesofreport/etl/scripts/massive_inject_HOST_downtime-or-outage.sh root root66 ".$line['source']." ".$type." ".'Inject'.$line['type'].$line['id'].'.csv', $output);
+
 						// si delete incident, faire requete	
 						} elseif($line['Action'] == "delete" && $line['type'] == "incident") {
 							$host_id = mysqli_result(sqlrequest($database_thruk, "SELECT host_id FROM ".$line['source']."_host WHERE host_name = '".$line['host']."'"),0,"host_id");
@@ -214,9 +196,10 @@ if(isset($_GET["action"])) {
 								if ($line['service'] != null) {
 									sqlrequest($database_thruk,"UPDATE ".$line['source']."_log SET message = 614 WHERE  time BETWEEN ".strtotime($line['DateDebut'])." AND ".strtotime($line['DateFin'])." AND state_type ='HARD' AND host_id =".$host_id." AND service_id = ".$service_id);
 									sqlrequest($database_thruk,"UPDATE ".$line['source']."_log SET state = 0 WHERE  time BETWEEN ".strtotime($line['DateDebut'])." AND ".strtotime($line['DateFin'])." AND state_type ='HARD' AND host_id =".$host_id." AND service_id = ".$service_id);
+								} else {
+									sqlrequest($database_thruk,"UPDATE ".$line['source']."_log SET message = 614 WHERE  time BETWEEN ".strtotime($line['DateDebut'])." AND ".strtotime($line['DateFin'])." AND state_type ='HARD' AND host_id =".$host_id." AND service_id IS null");
+									sqlrequest($database_thruk,"UPDATE ".$line['source']."_log SET state = 0 WHERE  time BETWEEN ".strtotime($line['DateDebut'])." AND ".strtotime($line['DateFin'])." AND state_type ='HARD' AND host_id =".$host_id." AND service_id IS null");
 								}
-								sqlrequest($database_thruk,"UPDATE ".$line['source']."_log SET message = 614 WHERE  time BETWEEN ".strtotime($line['DateDebut'])." AND ".strtotime($line['DateFin'])." AND state_type ='HARD' AND host_id =".$host_id." AND service_id IS null");
-								sqlrequest($database_thruk,"UPDATE ".$line['source']."_log SET state = 0 WHERE  time BETWEEN ".strtotime($line['DateDebut'])." AND ".strtotime($line['DateFin'])." AND state_type ='HARD' AND host_id =".$host_id." AND service_id IS null");
 							}
 						}
 					}
