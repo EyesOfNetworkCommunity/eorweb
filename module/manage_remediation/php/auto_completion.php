@@ -44,7 +44,11 @@ elseif ($source_type == "hosts") {
 	$result = sqlrequest($database_thruk,$requests,false,array("s","%$term%"));
 } 
 else {
-	$requests = "SELECT description FROM remediation_action WHERE remediationID NOT IN (SELECT id FROM remediation) AND description like ?";
+	if (isset($id)) {
+		$requests = "SELECT description FROM remediation_action WHERE remediationID NOT IN (SELECT id FROM remediation WHERE id != ".$id.") AND description like ?";
+	} else {
+		$requests = "SELECT description FROM remediation_action WHERE remediationID NOT IN (SELECT id FROM remediation) AND description like ?";
+	}
 	$result = sqlrequest($database_eorweb,$requests,false,array("s","%$term%"));
 }
 
@@ -52,6 +56,9 @@ while ($line = mysqli_fetch_array($result)){
 	if($line[0] != "NR"){
 		$autocomplete[] = $line[0];
 	}
+}
+if ($source_type == "services") {
+	array_push($autocomplete, "Hoststatus");
 }
 
 echo json_encode($autocomplete);

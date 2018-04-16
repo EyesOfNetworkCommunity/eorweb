@@ -30,12 +30,10 @@ global $database_thruk;
 $action=null;
 if(isset($_GET["action"])) {
 	$action=$_GET["action"];
-}
-?> 
+} ?> 
 
 <div id="page-wrapper">
 	<?php
-	
 	if(isset($_POST["actions"])) {
 		$actions=$_POST["actions"];
 	} else {
@@ -124,11 +122,22 @@ if(isset($_GET["action"])) {
 			break;
 		case "refus":
 			if(isset($remediation_selected[0])) {
+				$message_update = false;
 				for ($i = 0; $i < sizeof($remediation_selected); $i++) {
-					// Update remediations state
-					sqlrequest($database_eorweb,"UPDATE remediation SET state='refused', date_validation='".date("Y-m-d G:i")."' WHERE id='$remediation_selected[$i]'");
+					$req = sqlrequest($database_eorweb, "SELECT state FROM remediation WHERE id='$remediation_selected[$i]'");
+					$execute_request = mysqli_result($req,0,"state");
+					// Update remediations state if request-remediation has not been executed
+					if ($execute_request != "executed") {
+						sqlrequest($database_eorweb,"UPDATE remediation SET state='refused', date_validation='".date("Y-m-d G:i")."' WHERE id='$remediation_selected[$i]'");
+						$message_update = true;
+					}
 				}
-				message(6," : ".getLabel("message.manage_remediation.request_update"),'ok');
+				// display message if a request_remdiation has been updated
+				if ($message_update) {
+					message(6," : ".getLabel("message.manage_remediation.request_update"),'ok');
+				} else {
+					message(6," : ".getLabel("message.manage_remediation.request_not_update"),'warning');
+				}
 			}
 			break;
 		case "demand":
@@ -145,56 +154,70 @@ if(isset($_GET["action"])) {
 				// Create CSV files with infos in DB
 				$array = array('Valid','"Date debut"','"Heure debut"','"Date fin"','"Heure fin"','Type','Host','Service');
 				$array = str_replace('"', '', $array);
-				
 				$total_execute = "";
+
 				for ($i = 0; $i < sizeof($remediation_selected); $i++) {
 					$remediation_request_name = sqlrequest($database_eorweb, "SELECT name FROM remediation WHERE id = '$remediation_selected[$i]'");
 					$result_request_remediation_name = mysqli_result($remediation_request_name,0,"name");
-
 					$RemediationExec = sqlrequest($database_eorweb,"SELECT * FROM remediation_action WHERE remediationID='$remediation_selected[$i]'");
-					//$result = $RemediationExec->fetch_array(MYSQLI_ASSOC);
 					
 					while($line = mysqli_fetch_array($RemediationExec)) {
 						if($line['Action'] == "add") {
-							// Paramétrage de l'écriture du futur fichier CSV
-							$chemin = '/srv/eyesofreport/etl/injection/Inject'.$line['type'].$line['id'].'.csv';
-							$delimiteur = ';'; 
-
-							// Création du fichier csv
-							$fichier_csv = fopen($chemin, 'w+');
-							
-							$dateDebut = split(" ", date('d/m/Y h:i:s', strtotime($line["DateDebut"])));
-							$dateFin = split(" ", date('d/m/Y h:i:s', strtotime($line["DateFin"])));
-							
-							$lignes[] = array('O', $dateDebut[0], $dateDebut[1], $dateFin[0], $dateFin[1], $line["type"], $line["host"], $line["service"]);
-							
-							fputs($fichier_csv, implode($array, ';')."\n");
-							foreach($lignes as $ligne){
-								fputcsv($fichier_csv, $ligne, $delimiteur);
-							}
-
-							fclose($fichier_csv);
-							
+					
+							$delimiteur = ';';
 							if($line["type"] == "maintenance"){
 								$type = "Downtime";
-							}else{
+							} else {
 								$type = "Outage";
 							}
-							
-							exec("/srv/eyesofreport/etl/scripts/massive_inject_HOST_downtime-or-outage.sh root root66 ".$line['source']." ".$type." ".'Inject'.$line['type'].$line['id'].'.csv', $output);
-							
-							var_dump($output);
-							
-						// si delete incident, faire requete
-						} elseif($line['Action'] == "delete" && $line['type'] == "incident") {
-							// suppression d'incident incomplète
-							if($line['service'] != "" || $line['service'] != null){
-								sqlrequest("$database_thruk","UPDATE ".$line['source']."_log SET message=7930, state=0 WHERE time between ".strtotime($line['DateDebut'])." AND ".strtotime($line['DateFin'])." AND state_type='HARD' AND host_id='".$line['host']."' AND service_id='".$line['service']."'");
-								echo "UPDATE ".$line['source']."_log SET message=7930, state=0 WHERE time between ".strtotime($line['DateDebut'])." AND ".strtotime($line['DateFin'])." AND state_type='HARD' AND host_id='".$line['host']."' AND service_id='".$line['service']."'";
-							} else {
-								sqlrequest("$database_thruk","UPDATE ".$line['source']."_log SET message=7930, state=0 WHERE time between ".strtotime($line['DateDebut'])." AND ".strtotime($line['DateFin'])." AND state_type='HARD' AND host_id='".$line['host']."'");
+							$dateDebut = explode(" ", date('d/m/Y H:i:s', strtotime($line["DateDebut"])));
+							$dateFin = explode(" ", date('d/m/Y H:i:s', strtotime($line["DateFin"])));
+
+							if ($line['service'] != "Hoststatus") {
+								// Paramétrage de l'écriture du futur fichier CSV
+								$chemin = '/srv/eyesofreport/etl/injection/Inject'.$line['type'].$line['id'].'.csv';
+
+								// Création du fichier csv
+								$fichier_csv = fopen($chemin, 'w+');
+								$lignes[] = array('O', $dateDebut[0], $dateDebut[1], $dateFin[0], $dateFin[1], $line["type"], $line["host"], $line["service"]);
+								fputs($fichier_csv, implode($array, $delimiteur)."\n");
+								foreach($lignes as $ligne){
+									fputcsv($fichier_csv, $ligne, $delimiteur);
+								}
+								fclose($fichier_csv);
+								exec("/srv/eyesofreport/etl/scripts/massive_inject_HOST_downtime-or-outage.sh root root66 ".$line['source']." ".$type." ".'Inject'.$line['type'].$line['id'].'.csv', $output);
 							}
+
+							// Paramétrage de l'écriture du futur fichier CSV pour le hoststatus
+							$chemin_hoststatus = '/srv/eyesofreport/etl/injection/Inject'.$line['type'].$line['id'].'_hoststatus.csv';
+
+							// Création du fichier csv
+							$fichier_csv_hoststatus = fopen($chemin_hoststatus, 'w+');
+							$lignes[] = array('O', $dateDebut[0], $dateDebut[1], $dateFin[0], $dateFin[1], $line["type"], $line["host"], 'Hoststatus');
+							fputs($fichier_csv_hoststatus, implode($array, $delimiteur)."\n");
+							foreach($lignes as $ligne){
+								fputcsv($fichier_csv_hoststatus, $ligne, $delimiteur);
+							}
+							fclose($fichier_csv_hoststatus);
+							exec("/srv/eyesofreport/etl/scripts/massive_inject_HOST_downtime-or-outage.sh root root66 ".$line['source']." ".$type." ".'Inject'.$line['type'].$line['id'].'_hoststatus.csv', $output);
 							
+						// remove a downtime
+						} elseif($line['Action'] == "delete" && $line['type'] == "maintenance") {
+							
+						// si delete incident, faire requete	
+						} elseif($line['Action'] == "delete" && $line['type'] == "incident") {
+							$host_id = mysqli_result(sqlrequest($database_thruk, "SELECT host_id FROM ".$line['source']."_host WHERE host_name = '".$line['host']."'"),0,"host_id");
+							$service_id = mysqli_result(sqlrequest($database_thruk, "SELECT service_id FROM ".$line['source']."_service WHERE service_description = '".$line['service']."' AND host_id = '".$host_id."'"),0,"service_id");
+
+							// delete outage service
+							if($line['service'] != "") {
+								if ($line['service'] != null) {
+									sqlrequest($database_thruk,"UPDATE ".$line['source']."_log SET message = 614 WHERE  time BETWEEN ".strtotime($line['DateDebut'])." AND ".strtotime($line['DateFin'])." AND state_type ='HARD' AND host_id =".$host_id." AND service_id = ".$service_id);
+									sqlrequest($database_thruk,"UPDATE ".$line['source']."_log SET state = 0 WHERE  time BETWEEN ".strtotime($line['DateDebut'])." AND ".strtotime($line['DateFin'])." AND state_type ='HARD' AND host_id =".$host_id." AND service_id = ".$service_id);
+								}
+								sqlrequest($database_thruk,"UPDATE ".$line['source']."_log SET message = 614 WHERE  time BETWEEN ".strtotime($line['DateDebut'])." AND ".strtotime($line['DateFin'])." AND state_type ='HARD' AND host_id =".$host_id." AND service_id IS null");
+								sqlrequest($database_thruk,"UPDATE ".$line['source']."_log SET state = 0 WHERE  time BETWEEN ".strtotime($line['DateDebut'])." AND ".strtotime($line['DateFin'])." AND state_type ='HARD' AND host_id =".$host_id." AND service_id IS null");
+							}
 						}
 					}
 					
@@ -213,7 +236,7 @@ if(isset($_GET["action"])) {
 
 	if($action == null or $action == "remediation") {
 		// SQL get rules
-		$rules_sql = "SELECT * FROM remediation ORDER BY date_demand, name";
+		$rules_sql = "SELECT *, DATE_FORMAT(date_demand, '%d-%m-%Y %Hh%i') AS date_demand, DATE_FORMAT(date_validation, '%d-%m-%Y %Hh%i') AS date_validation FROM remediation ORDER BY date_demand DESC, name";
 	?>
 		
 	<form action="./index.php" method="POST">
@@ -240,10 +263,10 @@ if(isset($_GET["action"])) {
 						<tr>
 							<td class="text-center"><label><input type="checkbox" class="checkbox" name="remediation_selected[]" value="<?php echo $line["id"]; ?>"></label></td>
 							<td><a href="remediation.php?id=<?php echo $line["id"]; ?>"><?php echo $line["name"]; ?></a></td>
-							<td><?php echo mysqli_result(sqlrequest("eorweb","SELECT user_name FROM users WHERE user_id='".$line["user_id"]."'"),0,"user_name"); ?></td>
+							<td><?php echo mysqli_result(sqlrequest($database_eorweb,"SELECT user_name FROM users WHERE user_id='".$line["user_id"]."'"),0,"user_name"); ?></td>
 							<td><?php echo $line["date_demand"]; ?></td>
 							<td><?php echo $line["date_validation"]; ?></td>
-							<td><?php echo $line["state"]; ?></td>
+							<td><?php echo getLabel("label.manage_remediation.state_".$line["state"]); ?></td>
 						</tr>
 					<?php
 					}
@@ -278,7 +301,7 @@ if(isset($_GET["action"])) {
 	*************** REMEDIATION_ACTION 
 	*/
 	} elseif($action == "remediation_action") {
-		$rules_sql = "SELECT * FROM remediation_action";
+		$rules_sql = "SELECT *, DATE_FORMAT(DateDebut, '%d-%m-%Y %Hh%i') AS DateDebut, DATE_FORMAT(DateFin, '%d-%m-%Y %Hh%i') AS DateFin FROM remediation_action GROUP BY description ORDER BY id DESC";
 	?>
 	
 	<form action="./index.php?action=remediation_action" method="POST">
@@ -326,7 +349,7 @@ if(isset($_GET["action"])) {
 	*************** Apply remediation 
 	*/
 	} elseif($action == "apply_pack") {
-		$rules_sql = "SELECT * FROM remediation WHERE state = 'approved' OR state = 'executed'";
+		$rules_sql = "SELECT *, DATE_FORMAT(date_demand, '%d-%m-%Y %Hh%i') AS date_demand, DATE_FORMAT(date_validation, '%d-%m-%Y %Hh%i') AS date_validation FROM remediation WHERE state = 'approved' OR state = 'executed' ORDER BY id DESC";
 	?>
 	
 	<form action="./index.php?action=apply_pack" method="POST">
@@ -351,7 +374,7 @@ if(isset($_GET["action"])) {
 						<tr>
 							<td class="text-center"><label><input type="checkbox" class="checkbox" name="remediation_selected[]" value="<?php echo $line["id"]; ?>"></label></td>
 							<td><a href="remediation.php?id=<?php echo $line["id"]; ?>"><?php echo $line["name"]; ?></a></td>
-							<td><?php echo mysqli_result(sqlrequest("eorweb","SELECT user_name FROM users WHERE user_id='".$line["user_id"]."'"),0,"user_name"); ?></td>
+							<td><?php echo mysqli_result(sqlrequest($database_eorweb,"SELECT user_name FROM users WHERE user_id='".$line["user_id"]."'"),0,"user_name"); ?></td>
 							<td><?php echo $line["date_demand"]; ?></td>
 							<td><?php echo $line["date_validation"]; ?></td>
 						</tr>

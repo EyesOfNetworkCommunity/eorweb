@@ -19,13 +19,17 @@
 #########################################
 */
 
-$(document).ready(function() {
-	// Add
-	$('#rule_host_button').on('click',function(){
-		var o = new Option($("#rule_host1").val(),$("#rule_host1").val(),true,true);
-		$("#remediation_actions_id").append(o);
-	});
+function selectType(action){
+ 	if (action == "incident") {
+ 		$("select[name=action]").empty().append("<option value='add'>" + dictionnary["action.add"] + "</option>\
+ 										<option value='delete'>" + dictionnary["label.manage_remediation.remediation_action.remove"] + "</option>");
+  	} else {
+		$("select[name=action]").empty().append("<option value='add'>" + dictionnary["action.add"] + "</option>");
+ 	}
+ }
 
+$(document).ready(function() {
+	
 	// Delete
 	$('#rule_host_button_del').on('click',function(){
 		$("#remediation_actions_id").find('option:selected').remove();
@@ -37,38 +41,72 @@ $(document).ready(function() {
 	  source_name = this.value;
 	})
 		
+	// autocomplete for the host in remediation_action
 	$("#host").on('focusin',function () {
-		if(source_name != 'none'){
+		if (source_name != 'none'){
 			$('#host').autocomplete({ 				
 				source: './php/auto_completion.php?source_type=hosts&source_name='+source_name,
-				minLength: 1
+				minLength: 0
 			});
 		} else {
 			$('#host').autocomplete({source: [""]});
 		}
 	});
+	$("#host").on('click',function () {
+		if (source_name != 'none'){
+			$("#host").autocomplete("search","");
+		}
+		// if host is change, service is reset 
+		if ($("#host").val() != "") {
+			$("#service").val("");
+		}
+	});
 	
+	// autocomplete for the service in remdiation_action
 	$("#service").on('focusin',function () {
 		val = $("#host").val();
-		if(val != ""){
+		if (val != ""){
 			$('#service').autocomplete({ 
-				source: './php/auto_completion.php?source_host='+val+'&source_type=services&source_name='+source_name
+				source: './php/auto_completion.php?source_host='+val+'&source_type=services&source_name='+source_name,
+				minLength: 0
+
 			});
 		} else {
 			$('#service').autocomplete({source: [""]});
 		}
 	});
+	$("#service").on('click',function () {
+		if ($("#host").val() != ""){
+			$("#service").autocomplete("search","");
+		}
+	});
 
+	// autocomplete for the remediation_action's name in remediation 
 	$("#rule_host1").on('focusin',function () {
+		if ( $("input[name=id]").val() != "") {
+			remediation_id = $("input[name=id]").val();
+		} else {
+			remediation_id = -1;	
+		}
 		if($('input[name=name]').val() != ""){
 			$('#rule_host1').autocomplete({
-				source: './php/auto_completion.php?source_type=remediation_actions'
+				source: './php/auto_completion.php?source_type=remediation_actions&id=' + remediation_id,
+				minLength: 0,
+				select: function(event, ui) {
+					var o = new Option(ui.item.value,ui.item.value,true,true);
+					$("#remediation_actions_id").append(o);
+					return false;
+				}
 			});
 		} else {
 			$('#rule_host1').autocomplete({source: [""]});
 		}
 	});
-
+	$("#rule_host1").on('click',function () {
+		if($('input[name=name]').val() != ""){
+			$("#rule_host1").autocomplete("search","");
+		}
+	});
 });
 
 		

@@ -31,12 +31,12 @@
 <script src="/bower_components/moment/min/moment.min.js"></script>
 <script src="/bower_components/bootstrap-daterangepicker/daterangepicker.js"></script>
 
-<script type="text/javascript">
+<script>
 	// on page load
     $(document).ready(function() {
-
-		var start = moment().format('YYYY-MM-DD HH:mm:ss');
-		var end = moment().add(2, 'hours').format('YYYY-MM-DD HH:mm:ss');
+    
+    	var start = moment().format('YYYY-MM-DD HH:mm');
+		var end = moment().add(2, 'hours').format('YYYY-MM-DD HH:mm');
 
 		if($("#datepickerStart").val() != ""){
 			start = $("#datepickerStart").val();
@@ -48,7 +48,7 @@
 
 		var locale = 
 		{
-			format: 'YYYY-MM-DD HH:mm:ss',
+			format: 'YYYY-MM-DD HH:mm',
 			applyLabel: dictionnary['action.apply'],
 			cancelLabel: dictionnary['action.clear'],
 			customRangeLabel: dictionnary['label.custom'],
@@ -77,27 +77,27 @@
 				dictionnary["calendar.december"]
 			]
 		};
-		
-		$('.datepicker_start').daterangepicker({
-			locale: locale,
-			startDate: start,
-			timePicker: true,
-			timePicker24Hour: true,
-			singleDatePicker: true,
-			showDropdowns: true
-		})
-		
-		$('.datepicker_end').daterangepicker({
-			locale: locale,
-			startDate: end,
-			timePicker: true,
-			timePicker24Hour: true,
-			singleDatePicker: true,
-			showDropdowns: true
-		})
-		
-		$("#datepickerStart").on('focusin',function () {
-			$(this).datepicker('setDate', $(this).val());
+
+		$('#validity_date').daterangepicker(
+		{
+			dateLimit: {
+				days: 30
+			},
+		    locale: locale,
+		    timePicker: true,
+			timePicker24Hour: true
+		}, function(start,end){
+			$("#datepickerStart").val(start.format("YYYY-MM-DD HH:mm"));
+			$("#datepickerEnd").val(end.format("YYYY-MM-DD HH:mm"));
 		});
-    });
+
+		if ($("#datepickerStart").val() != null) {
+			$('#validity_date').data('daterangepicker').setStartDate(start);
+			$("#datepickerStart").val(start);
+		}
+		if ($("#datepickerEnd").val() != null) {
+			$('#validity_date').data('daterangepicker').setEndDate(end);
+			$("#datepickerEnd").val(end);
+		}
+	});
 </script>

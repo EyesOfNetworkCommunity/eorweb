@@ -50,9 +50,6 @@ global $database_eorweb;
 	if(isset($_POST["add"])){
 		$remediation_id = NULL;
 		$date_demand = date("Y-m-d G:i");
-	}elseif(isset($_POST["update"])){
-		// Get the remediation id and date of insertion
-		
 	}
 	
 	// get infos for updates
@@ -65,7 +62,7 @@ global $database_eorweb;
 		
 		// Retrieve Information from database
 		$remediation_name = mysqli_result($user_infos,0,"name");
-		$remediation_satut = mysqli_result($user_infos,0,"state");
+		$remediation_statut = mysqli_result($user_infos,0,"state");
 		
 		while ($line = mysqli_fetch_array($user_infos2)){
 			$remediation_action_id .= $line[0].",";
@@ -83,7 +80,7 @@ global $database_eorweb;
 		elseif(isset($_POST["add"])){
 			// insert values for add
 			$sql_add = "INSERT INTO remediation (name,user_id,date_demand) VALUES('".$remediation_name."','".$user_id."','".$date_demand."')";
-			$remediation_satut = "inactive";
+			$remediation_statut = "inactive";
 			$remediation_id = sqlrequest($database_eorweb,$sql_add,true);
 			$remediation_ids=explode(",",$remediation_action_id);
 		
@@ -94,7 +91,7 @@ global $database_eorweb;
 		}
 		elseif(isset($_POST["update"])){
 			$user_infos = sqlrequest($database_eorweb, "SELECT * FROM remediation WHERE id='".$remediation_id."'");
-			$remediation_satut = mysqli_result($user_infos,0,"state");
+			$remediation_statut = mysqli_result($user_infos,0,"state");
 			$sql_modify = "UPDATE remediation SET name='".$remediation_name."' WHERE id='".$remediation_id."'";
 			sqlrequest($database_eorweb,$sql_modify);
 			
@@ -108,19 +105,19 @@ global $database_eorweb;
 			foreach($user_infos2 as $selected){
 				sqlrequest($database_eorweb,"UPDATE remediation_action SET remediationID = '".$remediation_id."' WHERE id='".$selected."'",true);
 			}
+			?> <div id="remediation_id" hidden value="<?php echo $remediation_id; ?>"></div> <?php
 
 			message(6," : ".getLabel("message.manage_remediation.request_update"),'ok');
 		}
 	}
+	?>
 	
-	?> 
-				
 	<form id="form_remediation" action='./remediation.php' method='POST' name='form_remediation'>
-		<input type='hidden' name='id' value='<?php echo $remediation_id?>'>
+		<input type='hidden' name='id' value='<?php echo $remediation_id; ?>'>
 		<div class="row form-group">
 			<label class="col-md-3"><?php echo getLabel("label.manage_remediation.remediation_name"); ?></label>
 			<div class="col-md-9">
-				<input class="form-control" type='text' name='name' value="<?php echo $remediation_name; ?>" autofocus>
+				<input class="form-control" type='text' name='name' value="<?php echo $remediation_name; ?>" maxlength="25" autofocus>
 			</div>
 		</div>
 		
@@ -130,15 +127,21 @@ global $database_eorweb;
 				<div class="form-group input-group">
 					<input class="form-control" id="rule_host1" type="text" name="rule_host">
 					<span class="input-group-btn">
-						<input class="btn btn-success" id="rule_host_button" type="button" value="<?php echo getLabel("action.add");?>">
-						<input class="btn btn-danger" id="rule_host_button_del" type="button" value="<?php echo getLabel("action.delete");?>">
+						<?php  
+						$req = "SELECT validator FROM groups WHERE group_id = ?";
+						$validator_bool = sqlrequest($database_eorweb,$req,false,array("i",(int)$_COOKIE['group_id']));
+						$result = mysqli_result($validator_bool,0,"validator");
+						if(isset($remediation_statut) && ($remediation_statut == "executed" || ($remediation_statut == "approved" && !$result)) ) { ?>
+							<input class="btn btn-danger" disabled id="rule_host_button_del" type="button" value="<?php echo getLabel("action.delete");?>">
+						<?php } else { ?>
+							<input class="btn btn-danger" id="rule_host_button_del" type="button" value="<?php echo getLabel("action.delete");?>">
+						<?php } ?>
 					</span>
 				</div>
-				<select class="form-control" id="remediation_actions_id" name="remediation_actions_id[]" multiple size=4 >
+				<select class="form-control" id="remediation_actions_id" name="remediation_actions_id[]" multiple size=4>
 				<?php 
 					if($remediation_action_id != ""){
 						$division = explode(",", $remediation_action_id);
-						
 						for($i=0; $i<sizeof($division);$i++){
 							echo "<option selected='selected' value='".$division[$i]."'>".$division[$i]."</option> ";
 						}
@@ -150,17 +153,17 @@ global $database_eorweb;
 		
 		<div class="form-group">
 			<?php
-				if (isset($remediation_id) && $remediation_id != null) {
-					if(isset($remediation_satut) && ($remediation_satut == "inactive" || $remediation_satut == "refused")) {
-						echo "<input class='btn btn-primary' type='submit' name='update' value=".getLabel('action.update').">";
-					} else {
-						echo "<input disabled class='btn btn-primary' type='submit' name='update' value=".getLabel('action.update').">";
-					}
-				} else {
+				if (isset($remediation_id) && $remediation_id != null) { ?>
+					<?php if(isset($remediation_statut) && ($remediation_statut == "executed" || ($remediation_statut == "approved" && !$result)) ) { ?>
+						<input class="btn btn-primary" type="submit" name="update" value="<?php echo getLabel('action.update'); ?>" disabled>
+					<?php } else { ?>
+						<input class="btn btn-primary" type="submit" name="update" value="<?php echo getLabel('action.update'); ?>">
+					<?php } ?>
+				<?php } else {
 					echo "<input class='btn btn-primary' type='submit' name='add' value=".getLabel('action.add').">";
 				}
-				echo "<button class='btn btn-default' style='margin-left: 10px;' type='button' name='back' value='back' onclick='location.href=\"index.php\"'>".getLabel("action.cancel")."</button>";
 			?>
+			<button class="btn btn-default" style="margin-left: 10px;" type="button" name="back" value="back" onclick='location.href="index.php"'><?php echo getLabel("action.cancel"); ?></button>
 		</div>
 	</form>
 
