@@ -144,7 +144,7 @@ if(isset($_GET["action"])) {
 			if(isset($remediation_selected[0])) {
 				for ($i = 0; $i < sizeof($remediation_selected); $i++) {
 					// Update remediations state
-					sqlrequest($database_eorweb,"UPDATE remediation SET state='en attente', date_validation='".date("Y-m-d G:i")."' WHERE id='$remediation_selected[$i]'");
+					sqlrequest($database_eorweb,"UPDATE remediation SET state='waiting', date_validation='".date("Y-m-d G:i")."' WHERE id='$remediation_selected[$i]'");
 				}
 				message(6," : ".getLabel("message.manage_remediation.request_update"),'ok');
 			}
@@ -284,7 +284,7 @@ if(isset($_GET["action"])) {
 	*************** REMEDIATION_ACTION 
 	*/
 	} elseif($action == "remediation_action") {
-		$rules_sql = "SELECT *, DATE_FORMAT(DateDebut, '%d-%m-%Y %Hh%i') AS DateDebut, DATE_FORMAT(DateFin, '%d-%m-%Y %Hh%i') AS DateFin FROM remediation_action GROUP BY description ORDER BY id DESC";
+		$rules_sql = "SELECT *, DATE_FORMAT(DateDebut, '%d-%m-%Y %Hh%i') AS DateDebut, DATE_FORMAT(DateFin, '%d-%m-%Y %Hh%i') AS DateFin FROM remediation_action, remediation WHERE remediation.id =remediation_action.remediationID GROUP BY description ORDER BY remediation.id DESC";
 	?>
 	
 	<form action="./index.php?action=remediation_action" method="POST">
@@ -297,6 +297,8 @@ if(isset($_GET["action"])) {
 						<th> <?php echo getLabel("label.manage_remediation.type"); ?> </th>
 						<th> <?php echo getLabel("label.manage_remediation.date_beginning"); ?> </th>
 						<th> <?php echo getLabel("label.manage_remediation.date_ending"); ?> </th>
+						<th> <?php echo getLabel("label.manage_remediation.remediation_name"); ?> </th>
+						<th> <?php echo getLabel("label.manage_remediation.status"); ?> </th>
 					</tr>
 				</thead>
 				<tbody>
@@ -313,6 +315,8 @@ if(isset($_GET["action"])) {
 							<td><?php echo getLabel("label.manage_remediation.type_".$line["type"]); ?></td>
 							<td><?php echo $line["DateDebut"]; ?></td>
 							<td><?php echo $line["DateFin"]; ?></td>
+							<td><a href="remediation.php?id=<?php echo $line["id"]; ?>"><?php echo $line["name"]; ?></a></td>
+							<td><?php echo getLabel("label.manage_remediation.state_".$line["state"]); ?></td>
 						</tr>
 					<?php
 					}

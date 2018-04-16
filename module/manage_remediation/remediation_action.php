@@ -39,7 +39,7 @@ global $database_eorweb;
 	$invalid=false;
 	
 	if(isset($_GET["id"]) && $_GET["id"] != null){
-		$user_infos=sqlrequest($database_eorweb, "SELECT * from remediation_action where id='".$remediation_id."'");
+		$user_infos=sqlrequest($database_eorweb, "SELECT * from remediation_action, remediation where remediation.id = remediation_action.remediationID AND remediation.id='".$remediation_id."'");
 		
 		// Retrieve Information from database
 		$remediation_name=mysqli_result($user_infos,0,"description");
@@ -50,9 +50,7 @@ global $database_eorweb;
 		$remediation_dateFin=mysqli_result($user_infos,0,"DateFin");
 		$remediation_action=mysqli_result($user_infos,0,"Action");
 		$remediation_source=mysqli_result($user_infos,0,"source");
-		
-		$reqState=sqlrequest($database_eorweb, "SELECT state from remediation where id='".mysqli_result($user_infos,0,"remediationID")."'");
-		$remediation_statut=mysqli_result($reqState,0,"state");
+		$remediation_statut=mysqli_result($user_infos,0,"state");
 	} else {	
 		$remediation_name=retrieve_form_data("name",null);
 		$remediation_host=retrieve_form_data("host",null);
@@ -214,11 +212,8 @@ global $database_eorweb;
 		<div class="form-group">
 			<?php
 				if (isset($remediation_id) && $remediation_id != null) {
-					$req = "SELECT validator FROM groups WHERE group_id = ?";
-					$validator_bool = sqlrequest($database_eorweb,$req,false,array("i",(int)$_COOKIE['group_id']));
-					$result = mysqli_result($validator_bool,0,"validator");
 					if(isset($remediation_statut)){
-						if($remediation_statut == "executed" || ($remediation_statut == "approved" && !$result) ) {
+						if($remediation_statut == "executed" || $remediation_statut == "approved" || $remediation_statut == "waiting") {
 							echo "<input disabled class='btn btn-primary' type='submit' name='update' value=".getLabel('action.update').">";
 						}else{
 							echo "<input class='btn btn-primary' type='submit' name='update' value=".getLabel('action.update').">";

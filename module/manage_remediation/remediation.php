@@ -128,10 +128,7 @@ global $database_eorweb;
 					<input class="form-control" id="rule_host1" type="text" name="rule_host">
 					<span class="input-group-btn">
 						<?php  
-						$req = "SELECT validator FROM groups WHERE group_id = ?";
-						$validator_bool = sqlrequest($database_eorweb,$req,false,array("i",(int)$_COOKIE['group_id']));
-						$result = mysqli_result($validator_bool,0,"validator");
-						if(isset($remediation_statut) && ($remediation_statut == "executed" || ($remediation_statut == "approved" && !$result)) ) { ?>
+						if(isset($remediation_statut) && ($remediation_statut == "executed" || $remediation_statut == "approved" || $remediation_statut == "waiting") ) { ?>
 							<input class="btn btn-danger" disabled id="rule_host_button_del" type="button" value="<?php echo getLabel("action.delete");?>">
 						<?php } else { ?>
 							<input class="btn btn-danger" id="rule_host_button_del" type="button" value="<?php echo getLabel("action.delete");?>">
@@ -154,7 +151,7 @@ global $database_eorweb;
 		<div class="form-group">
 			<?php
 				if (isset($remediation_id) && $remediation_id != null) { ?>
-					<?php if(isset($remediation_statut) && ($remediation_statut == "executed" || ($remediation_statut == "approved" && !$result)) ) { ?>
+					<?php if(isset($remediation_statut) && ($remediation_statut == "executed" || $remediation_statut == "approved" || $remediation_statut == "waiting") ) { ?>
 						<input class="btn btn-primary" type="submit" name="update" value="<?php echo getLabel('action.update'); ?>" disabled>
 					<?php } else { ?>
 						<input class="btn btn-primary" type="submit" name="update" value="<?php echo getLabel('action.update'); ?>">

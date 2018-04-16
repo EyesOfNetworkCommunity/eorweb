@@ -512,6 +512,7 @@
 	"label.manage_remediation.state_executed": "Executed",
 	"label.manage_remediation.state_inactive": "Inactive",
 	"label.manage_remediation.state_refused": "Refused",
+	"label.manage_remediation.state_waiting": "Waiting",
 	"label.manage_remediation.status": "Status",
 	"label.manage_remediation.type": "Type",
 	"label.manage_remediation.type_incident": "Incident",
