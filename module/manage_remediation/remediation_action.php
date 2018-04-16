@@ -52,7 +52,7 @@ global $database_eorweb;
 		$remediation_source=mysqli_result($user_infos,0,"source");
 		
 		$reqState=sqlrequest($database_eorweb, "SELECT state from remediation where id='".mysqli_result($user_infos,0,"remediationID")."'");
-		$remediation_satut=mysqli_result($reqState,0,"state");
+		$remediation_statut=mysqli_result($reqState,0,"state");
 	} else {	
 		$remediation_name=retrieve_form_data("name",null);
 		$remediation_host=retrieve_form_data("host",null);
@@ -214,11 +214,14 @@ global $database_eorweb;
 		<div class="form-group">
 			<?php
 				if (isset($remediation_id) && $remediation_id != null) {
-					if(isset($remediation_satut)){
-						if($remediation_satut == "inactive" || $remediation_satut == "refused" || $remediation_satut == ""){
-							echo "<input class='btn btn-primary' type='submit' name='update' value=".getLabel('action.update').">";
-						}else{
+					$req = "SELECT validator FROM groups WHERE group_id = ?";
+					$validator_bool = sqlrequest($database_eorweb,$req,false,array("i",(int)$_COOKIE['group_id']));
+					$result = mysqli_result($validator_bool,0,"validator");
+					if(isset($remediation_statut)){
+						if($remediation_statut == "executed" || ($remediation_statut == "approved" && !$result) ) {
 							echo "<input disabled class='btn btn-primary' type='submit' name='update' value=".getLabel('action.update').">";
+						}else{
+							echo "<input class='btn btn-primary' type='submit' name='update' value=".getLabel('action.update').">";
 						}
 					}else{
 						echo "<input class='btn btn-primary' type='submit' name='update' value=".getLabel('action.update').">";

@@ -310,7 +310,7 @@ if(isset($_GET["action"])) {
 						<tr>
 							<td class="text-center"><label><input type="checkbox" class="checkbox" name="remediation_action_selected[]" value="<?php echo $line["id"]; ?>"></label></td>
 							<td><a href="remediation_action.php?id=<?php echo $line["id"]; ?>"><?php echo $line["description"]; ?></a></td>
-							<td><?php echo $line["type"]; ?></td>
+							<td><?php echo getLabel("label.manage_remediation.type_".$line["type"]); ?></td>
 							<td><?php echo $line["DateDebut"]; ?></td>
 							<td><?php echo $line["DateFin"]; ?></td>
 						</tr>

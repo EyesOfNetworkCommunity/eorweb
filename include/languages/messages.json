@@ -514,6 +514,8 @@
 	"label.manage_remediation.state_refused": "Refused",
 	"label.manage_remediation.status": "Status",
 	"label.manage_remediation.type": "Type",
+	"label.manage_remediation.type_incident": "Incident",
+	"label.manage_remediation.type_maintenance": "Downtime",
 	"label.manage_remediation.user": "Requester",
 	"label.manage_remediation.validation": "Validation",
 	"label.manage_report.add_report": "Add a report",
