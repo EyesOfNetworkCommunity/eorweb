@@ -81,7 +81,7 @@
 		$('#validity_date').daterangepicker(
 		{
 			dateLimit: {
-				days: 30
+				days: 31
 			},
 		    locale: locale,
 		    timePicker: true,
