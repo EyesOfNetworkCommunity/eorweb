@@ -239,19 +239,20 @@ if(isset($_GET["action"])) {
 				<?php
 				// Get remediation_pack
 				$methods = sqlrequest($database_eorweb,$rules_sql);
-				
 				if($methods) {
 					while ($line = mysqli_fetch_array($methods)) {
-					?>
-						<tr>
-							<td class="text-center"><label><input type="checkbox" class="checkbox" name="remediation_selected[]" value="<?php echo $line["id"]; ?>"></label></td>
-							<td><a href="remediation.php?id=<?php echo $line["id"]; ?>"><?php echo $line["name"]; ?></a></td>
-							<td><?php echo mysqli_result(sqlrequest($database_eorweb,"SELECT user_name FROM users WHERE user_id='".$line["user_id"]."'"),0,"user_name"); ?></td>
-							<td><?php echo $line["date_demand"]; ?></td>
-							<td><?php echo $line["date_validation"]; ?></td>
-							<td><?php echo getLabel("label.manage_remediation.state_".$line["state"]); ?></td>
-						</tr>
-					<?php
+						if ( !($line["user_id"] != $_COOKIE["user_id"] && $line["state"] == "inactive") ) {
+						?>
+							<tr>
+								<td class="text-center"><label><input type="checkbox" class="checkbox" name="remediation_selected[]" value="<?php echo $line["id"]; ?>"></label></td>
+								<td><a href="remediation.php?id=<?php echo $line["id"]; ?>"><?php echo $line["name"]; ?></a></td>
+								<td><?php echo mysqli_result(sqlrequest($database_eorweb,"SELECT user_name FROM users WHERE user_id='".$line["user_id"]."'"),0,"user_name"); ?></td>
+								<td><?php echo $line["date_demand"]; ?></td>
+								<td><?php echo $line["date_validation"]; ?></td>
+								<td><?php echo getLabel("label.manage_remediation.state_".$line["state"]); ?></td>
+							</tr>
+						<?php
+						}
 					}
 				}
 				?>
@@ -307,18 +308,20 @@ if(isset($_GET["action"])) {
 				$methods=sqlrequest($database_eorweb,$rules_sql);
 				
 				if($methods) {
-				while ($line = mysqli_fetch_array($methods)) {
-					?>
-						<tr>
-							<td class="text-center"><label><input type="checkbox" class="checkbox" name="remediation_action_selected[]" value="<?php echo $line["id"]; ?>"></label></td>
-							<td><a href="remediation_action.php?id=<?php echo $line["id"]; ?>"><?php echo $line["description"]; ?></a></td>
-							<td><?php echo getLabel("label.manage_remediation.type_".$line["type"]); ?></td>
-							<td><?php echo $line["DateDebut"]; ?></td>
-							<td><?php echo $line["DateFin"]; ?></td>
-							<td><a href="remediation.php?id=<?php echo $line["id"]; ?>"><?php echo $line["name"]; ?></a></td>
-							<td><?php echo getLabel("label.manage_remediation.state_".$line["state"]); ?></td>
-						</tr>
-					<?php
+					while ($line = mysqli_fetch_array($methods)) {
+						if ( !($line["user_id"] != $_COOKIE["user_id"] && $line["state"] == "inactive") ) {
+						?>
+							<tr>
+								<td class="text-center"><label><input type="checkbox" class="checkbox" name="remediation_action_selected[]" value="<?php echo $line["id"]; ?>"></label></td>
+								<td><a href="remediation_action.php?id=<?php echo $line["id"]; ?>"><?php echo $line["description"]; ?></a></td>
+								<td><?php echo getLabel("label.manage_remediation.type_".$line["type"]); ?></td>
+								<td><?php echo $line["DateDebut"]; ?></td>
+								<td><?php echo $line["DateFin"]; ?></td>
+								<td><a href="remediation.php?id=<?php echo $line["id"]; ?>"><?php echo $line["name"]; ?></a></td>
+								<td><?php echo getLabel("label.manage_remediation.state_".$line["state"]); ?></td>
+							</tr>
+						<?php
+						}
 					}
 				}
 				?>
