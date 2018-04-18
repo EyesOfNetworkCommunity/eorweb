@@ -285,7 +285,11 @@ if(isset($_GET["action"])) {
 	*************** REMEDIATION_ACTION 
 	*/
 	} elseif($action == "remediation_action") {
-		$rules_sql = "SELECT *, DATE_FORMAT(DateDebut, '%d-%m-%Y %Hh%i') AS DateDebut, DATE_FORMAT(DateFin, '%d-%m-%Y %Hh%i') AS DateFin FROM remediation_action, remediation WHERE remediation.id =remediation_action.remediationID GROUP BY description ORDER BY remediation.id DESC";
+		$rules_sql = "SELECT *, DATE_FORMAT(DateDebut, '%d-%m-%Y %Hh%i') AS DateDebut, DATE_FORMAT(DateFin, '%d-%m-%Y %Hh%i') AS DateFin
+						FROM remediation_action
+						LEFT JOIN remediation ON remediation.id =remediation_action.remediationID
+						GROUP BY description
+						ORDER BY remediation.id DESC";
 	?>
 	
 	<form action="./index.php?action=remediation_action" method="POST">
@@ -318,7 +322,7 @@ if(isset($_GET["action"])) {
 								<td><?php echo $line["DateDebut"]; ?></td>
 								<td><?php echo $line["DateFin"]; ?></td>
 								<td><a href="remediation.php?id=<?php echo $line["id"]; ?>"><?php echo $line["name"]; ?></a></td>
-								<td><?php echo getLabel("label.manage_remediation.state_".$line["state"]); ?></td>
+								<td><?php if ($line["state"]) { echo getLabel("label.manage_remediation.state_".$line["state"]); } ?></td>
 							</tr>
 						<?php
 						}
