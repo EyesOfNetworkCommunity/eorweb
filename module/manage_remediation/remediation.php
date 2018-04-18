@@ -117,7 +117,7 @@ global $database_eorweb;
 		<div class="row form-group">
 			<label class="col-md-3"><?php echo getLabel("label.manage_remediation.remediation_name"); ?></label>
 			<div class="col-md-9">
-				<input class="form-control" type='text' name='name' value="<?php echo $remediation_name; ?>" maxlength="25" autofocus>
+				<input class="form-control" type='text' name='name' value="<?php echo $remediation_name; ?>" maxlength="50" autofocus>
 			</div>
 		</div>
 		
