@@ -1,6 +1,6 @@
 CREATE TABLE `remediation` (
 	`id` INT(11) NOT NULL AUTO_INCREMENT,
-	`name` VARCHAR(25) NOT NULL,
+	`name` VARCHAR(50) NOT NULL,
 	`user_id` INT(11) NOT NULL,
 	`date_demand` DATETIME NOT NULL,
 	`date_validation` DATETIME NULL DEFAULT NULL,
@@ -15,7 +15,7 @@ AUTO_INCREMENT=42
 CREATE TABLE `remediation_action` (
 	`id` INT(11) NOT NULL AUTO_INCREMENT,
 	`remediationID` INT(11) NOT NULL,
-	`description` VARCHAR(25) NOT NULL,
+	`description` VARCHAR(50) NOT NULL,
 	`type` VARCHAR(25) NOT NULL,
 	`DateDebut` DATETIME NOT NULL,
 	`DateFin` DATETIME NOT NULL,

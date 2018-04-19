@@ -185,6 +185,11 @@ if(isset($_GET["action"])) {
 							}
 							fclose($fichier_csv);
 							exec("/srv/eyesofreport/etl/scripts/massive_inject_HOST_downtime-or-outage.sh root root66 ".$line['source']." ".$type." ".'Inject'.$line['type'].$line['id'].'.csv', $output);
+							$file='/tmp/Inject'.$line['type'].$line['id'].'.log';
+							file_put_contents($file, "/srv/eyesofreport/etl/scripts/massive_inject_HOST_downtime-or-outage.sh root root66 ".$line['source']." ".$type." ".'Inject'.$line['type'].$line['id'].".csv\n");
+							foreach($output as $output_val) {
+								file_put_contents($file, $output_val."\n", FILE_APPEND);
+							}
 
 						// si delete incident, faire requete	
 						} elseif($line['Action'] == "delete" && $line['type'] == "incident") {

@@ -118,7 +118,7 @@ global $database_eorweb;
 			<label class="col-md-3"><?php echo getLabel("label.manage_remediation.remediation_action_name"); ?></label>
 			<div class="col-md-9">
 				<input class="form-control hidden" type='text' name='id'  value='<?php if(isset($remediation_id)){echo $remediation_id; }?>'>
-				<input class="form-control" type='text' name='name'  value='<?php echo $remediation_name?>' maxlength="25">
+				<input class="form-control" type='text' name='name'  value='<?php echo $remediation_name?>' maxlength="50">
 			</div>
 		</div>
 		<div class="row form-group">
