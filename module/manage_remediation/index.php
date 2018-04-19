@@ -162,6 +162,7 @@ if(isset($_GET["action"])) {
 					$RemediationExec = sqlrequest($database_eorweb,"SELECT * FROM remediation_action WHERE remediationID='$remediation_selected[$i]'");
 					
 					while($line = mysqli_fetch_array($RemediationExec)) {
+						
 						if($line['Action'] == "add") {
 					
 							$delimiteur = ';';
@@ -214,7 +215,7 @@ if(isset($_GET["action"])) {
 
 							// delete outage service
 							if($line['service'] != "Hoststatus") {
-								sqlrequest($database_thruk,"delete from ".$line['source']."_log where host_id = ".$host_id." and service_id = ".$service_id." and type like '%DOWNTIME%' and time between $EPOCHSTART and $EPOCHEND;");
+								sqlrequest($database_thruk,"delete from ".$line['source']."_log where host_id = ".$host_id." and service_id = ".$service_id." and type like '%DOWNTIME%' and time between ".strtotime($line['DateDebut'])." AND ".strtotime($line['DateFin']).";");
 							}
 							else {
 								sqlrequest($database_thruk,"delete from ".$line['source']."_log where host_id = ".$host_id." and service_id is null and type like '%DOWNTIME%' and time between ".strtotime($line['DateDebut'])." AND ".strtotime($line['DateFin']).";");
