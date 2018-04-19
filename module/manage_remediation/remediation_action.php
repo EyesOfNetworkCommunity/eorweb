@@ -172,7 +172,7 @@ global $database_eorweb;
 		<div class="row form-group">
 			<label class="col-md-3"><?php echo getLabel("label.manage_remediation.type"); ?></label>
 			<div class="col-md-9">
-				<select class="form-control" name='type' size=1 onchange="selectType(this.value)">
+				<select class="form-control" name='type' size=1>
 					<?php
 						if ($remediation_type == "incident"){
 							echo "<option value='maintenance'>".getLabel("label.manage_remediation.remediation_action.downtime")."</option>";
@@ -193,14 +193,10 @@ global $database_eorweb;
 					<?php
 						if ($remediation_action == "delete"){
 							echo "<option value='add'>".getLabel("action.add")."</option>";
-							if ($remediation_type == "incident"){
-								echo "<option value='delete' SELECTED>".getLabel("label.manage_remediation.remediation_action.remove")."</option>";
-							}
+							echo "<option value='delete' SELECTED>".getLabel("label.manage_remediation.remediation_action.remove")."</option>";
 						} else {
 							echo "<option value='add' SELECTED>".getLabel("action.add")."</option>";
-							if ($remediation_type == "incident"){
-								echo "<option value='delete'>".getLabel("label.manage_remediation.remediation_action.remove")."</option>";
-							}
+							echo "<option value='delete'>".getLabel("label.manage_remediation.remediation_action.remove")."</option>";
 						}
 					?>
 				</select>

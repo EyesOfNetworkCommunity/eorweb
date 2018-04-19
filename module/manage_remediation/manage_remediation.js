@@ -19,15 +19,6 @@
 #########################################
 */
 
-function selectType(action){
- 	if (action == "incident") {
- 		$("select[name=action]").empty().append("<option value='add'>" + dictionnary["action.add"] + "</option>\
- 										<option value='delete'>" + dictionnary["label.manage_remediation.remediation_action.remove"] + "</option>");
-  	} else {
-		$("select[name=action]").empty().append("<option value='add'>" + dictionnary["action.add"] + "</option>");
- 	}
- }
-
 $(document).ready(function() {
 	
 	// Delete
