@@ -39,7 +39,12 @@ global $database_eorweb;
 	$invalid=false;
 	
 	if(isset($_GET["id"]) && $_GET["id"] != null){
-		$user_infos=sqlrequest($database_eorweb, "SELECT * from remediation_action, remediation where remediation.id = remediation_action.remediationID AND remediation.id='".$remediation_id."'");
+		$sql = "SELECT remediation_action.*, remediation.state
+				FROM remediation_action
+				LEFT JOIN remediation ON remediation.id =remediation_action.remediationID
+				WHERE remediation_action.id=?";
+
+		$user_infos=sqlrequest($database_eorweb, $sql, false, array("i",(int)$remediation_id));
 		
 		// Retrieve Information from database
 		$remediation_name=mysqli_result($user_infos,0,"description");
@@ -63,10 +68,14 @@ global $database_eorweb;
 	}
 
 	if ($remediation_source != "none" && $remediation_source != "") {
-		$array_host = array();
-		$result = sqlrequest($database_thruk, "SELECT DISTINCT host_name FROM ".$remediation_source."_host");
-		while ($line = mysqli_fetch_array($result)){
-			array_push($array_host, $line[0]);
+		$result = sqlrequest($database_thruk, "SELECT host_name,host_id FROM ".$remediation_source."_host WHERE host_name=?",false,array("s",(string)$remediation_host));
+		$array_host=mysqli_fetch_row($result);
+		
+		if($array_host && $remediation_service!="Hoststatus") {
+			$result = sqlrequest($database_thruk, "SELECT service_description FROM ".$remediation_source."_service WHERE host_id=? and service_description=?",false,array("is",(int)$array_host[1],(string)$remediation_service));
+			$array_service=mysqli_fetch_row($result);
+		} elseif($remediation_service=="Hoststatus") {
+			$array_service[0]="Hoststatus";
 		}
 	}
 	
@@ -83,11 +92,14 @@ global $database_eorweb;
 		elseif(!$remediation_host || $remediation_host==""){
 			message(7," : ".getLabel("message.error.remediation_action_host"),'warning');
 		}
-		elseif(!in_array($remediation_host, $array_host) ){
+		elseif($remediation_host != $array_host[0]){
 			message(7," : ".getLabel("message.error.remediation_action_host_name"),'warning');
 		}
 		elseif(!$remediation_service || $remediation_service==""){
 			message(7," : ".getLabel("message.error.remediation_action_service"),'warning');
+		}
+		elseif($remediation_service != $array_service[0]){
+			message(7," : ".getLabel("message.error.remediation_action_service_description"),'warning');
 		}
 		elseif(isset($_POST["add"])){
 			$desciptionExist = sqlrequest($database_eorweb,"SELECT description FROM remediation_action");

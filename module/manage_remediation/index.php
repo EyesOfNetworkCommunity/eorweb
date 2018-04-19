@@ -100,7 +100,7 @@ if(isset($_GET["action"])) {
 					$user_res = sqlrequest($database_eorweb,"SELECT description FROM remediation_action WHERE id='$remediation_action_selected[$i]'");
 					$remediation_action = mysqli_result($user_res,0,"description");
 					
-					// Delete user in eorweb
+					// Delete remediation action
 					sqlrequest($database_eorweb,"DELETE FROM remediation_action WHERE id='$remediation_action_selected[$i]'");
 					
 					// Logging action
@@ -288,7 +288,7 @@ if(isset($_GET["action"])) {
 	*************** REMEDIATION_ACTION 
 	*/
 	} elseif($action == "remediation_action") {
-		$rules_sql = "SELECT *, DATE_FORMAT(DateDebut, '%d-%m-%Y %Hh%i') AS DateDebut, DATE_FORMAT(DateFin, '%d-%m-%Y %Hh%i') AS DateFin
+		$rules_sql = "SELECT remediation_action.*, remediation.name, remediation.state, remediation.user_id, DATE_FORMAT(DateDebut, '%d-%m-%Y %Hh%i') AS DateDebut, DATE_FORMAT(DateFin, '%d-%m-%Y %Hh%i') AS DateFin
 						FROM remediation_action
 						LEFT JOIN remediation ON remediation.id =remediation_action.remediationID
 						GROUP BY description
@@ -324,7 +324,7 @@ if(isset($_GET["action"])) {
 								<td><?php echo getLabel("label.manage_remediation.type_".$line["type"]); ?></td>
 								<td><?php echo $line["DateDebut"]; ?></td>
 								<td><?php echo $line["DateFin"]; ?></td>
-								<td><a href="remediation.php?id=<?php echo $line["id"]; ?>"><?php echo $line["name"]; ?></a></td>
+								<td><a href="remediation.php?id=<?php echo $line["remediationID"]; ?>"><?php echo $line["name"]; ?></a></td>
 								<td><?php if ($line["state"]) { echo getLabel("label.manage_remediation.state_".$line["state"]); } ?></td>
 							</tr>
 						<?php
