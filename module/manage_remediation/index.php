@@ -213,12 +213,15 @@ if(isset($_GET["action"])) {
 							$host_id = mysqli_result(sqlrequest($database_thruk, "SELECT host_id FROM ".$line['source']."_host WHERE host_name = '".$line['host']."'"),0,"host_id");
 							$service_id = mysqli_result(sqlrequest($database_thruk, "SELECT service_id FROM ".$line['source']."_service WHERE service_description = '".$line['service']."' AND host_id = '".$host_id."'"),0,"service_id");
 
+							$DateDebutD = strtotime($line['DateDebut']) - 5;
+							$DateFinD = strtotime($line['DateFin']) + 60;
+							
 							// delete outage service
 							if($line['service'] != "Hoststatus") {
-								sqlrequest($database_thruk,"delete from ".$line['source']."_log where host_id = ".$host_id." and service_id = ".$service_id." and type like '%DOWNTIME%' and time between ".strtotime($line['DateDebut'])." AND ".strtotime($line['DateFin']).";");
+								sqlrequest($database_thruk,"delete from ".$line['source']."_log where host_id = ".$host_id." and service_id = ".$service_id." and type like '%DOWNTIME%' and time between ".$DateDebutD." AND ".$DateFinD.";");
 							}
 							else {
-								sqlrequest($database_thruk,"delete from ".$line['source']."_log where host_id = ".$host_id." and service_id is null and type like '%DOWNTIME%' and time between ".strtotime($line['DateDebut'])." AND ".strtotime($line['DateFin']).";");
+								sqlrequest($database_thruk,"delete from ".$line['source']."_log where host_id = ".$host_id." and service_id is null and type like '%DOWNTIME%' and time between ".$DateDebutD." AND ".$DateFinD.";");
 							}
 						}
 					}
