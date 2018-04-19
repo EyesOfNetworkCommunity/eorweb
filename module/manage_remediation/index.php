@@ -197,14 +197,12 @@ if(isset($_GET["action"])) {
 							$service_id = mysqli_result(sqlrequest($database_thruk, "SELECT service_id FROM ".$line['source']."_service WHERE service_description = '".$line['service']."' AND host_id = '".$host_id."'"),0,"service_id");
 
 							// delete outage service
-							if($line['service'] != "") {
-								if ($line['service'] != null) {
-									sqlrequest($database_thruk,"UPDATE ".$line['source']."_log SET message = 614 WHERE  time BETWEEN ".strtotime($line['DateDebut'])." AND ".strtotime($line['DateFin'])." AND state_type ='HARD' AND host_id =".$host_id." AND service_id = ".$service_id);
-									sqlrequest($database_thruk,"UPDATE ".$line['source']."_log SET state = 0 WHERE  time BETWEEN ".strtotime($line['DateDebut'])." AND ".strtotime($line['DateFin'])." AND state_type ='HARD' AND host_id =".$host_id." AND service_id = ".$service_id);
-								} else {
-									sqlrequest($database_thruk,"UPDATE ".$line['source']."_log SET message = 614 WHERE  time BETWEEN ".strtotime($line['DateDebut'])." AND ".strtotime($line['DateFin'])." AND state_type ='HARD' AND host_id =".$host_id." AND service_id IS null");
-									sqlrequest($database_thruk,"UPDATE ".$line['source']."_log SET state = 0 WHERE  time BETWEEN ".strtotime($line['DateDebut'])." AND ".strtotime($line['DateFin'])." AND state_type ='HARD' AND host_id =".$host_id." AND service_id IS null");
-								}
+							if($line['service'] != "Hoststatus") {
+								sqlrequest($database_thruk,"UPDATE ".$line['source']."_log SET message = 614 WHERE  time BETWEEN ".strtotime($line['DateDebut'])." AND ".strtotime($line['DateFin'])." AND state_type ='HARD' AND host_id =".$host_id." AND service_id = ".$service_id);
+								sqlrequest($database_thruk,"UPDATE ".$line['source']."_log SET state = 0 WHERE  time BETWEEN ".strtotime($line['DateDebut'])." AND ".strtotime($line['DateFin'])." AND state_type ='HARD' AND host_id =".$host_id." AND service_id = ".$service_id);
+							} else {
+								sqlrequest($database_thruk,"UPDATE ".$line['source']."_log SET message = 614 WHERE  time BETWEEN ".strtotime($line['DateDebut'])." AND ".strtotime($line['DateFin'])." AND state_type ='HARD' AND host_id =".$host_id." AND service_id IS null");
+								sqlrequest($database_thruk,"UPDATE ".$line['source']."_log SET state = 0 WHERE  time BETWEEN ".strtotime($line['DateDebut'])." AND ".strtotime($line['DateFin'])." AND state_type ='HARD' AND host_id =".$host_id." AND service_id IS null");
 							}
 						}
 					}
