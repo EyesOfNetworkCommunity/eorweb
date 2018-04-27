@@ -123,7 +123,7 @@ $array_resolve_action_option = array(
 
 $array_serv_system = array (
         "Docker" => array (
-                "status" => "pidof -o $$ -o %PPID -x dockerd-current",
+                "status" => "pidof -o $$ -o %PPID dockerd-current docker",
                 "proc_act" => array (
                         "start" => "sudo /bin/systemctl start docker ; sudo /bin/systemctl status docker",
                         "stop" => "sudo /bin/systemctl stop docker ; sudo /bin/systemctl status docker",
