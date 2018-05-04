@@ -168,11 +168,13 @@ if(isset($_GET["action"])) {
 							$delimiteur = ';';
 							if($line["type"] == "maintenance"){
 								$type = "Downtime";
+								$dateDebut = explode(" ", date('d/m/Y H:i:s', strtotime($line["DateDebut"])+5));
+								$dateFin = explode(" ", date('d/m/Y H:i:s', strtotime($line["DateFin"])-60));
 							} else {
 								$type = "Outage";
+								$dateDebut = explode(" ", date('d/m/Y H:i:s', strtotime($line["DateDebut"])));
+								$dateFin = explode(" ", date('d/m/Y H:i:s', strtotime($line["DateFin"])));
 							}
-							$dateDebut = explode(" ", date('d/m/Y H:i:s', strtotime($line["DateDebut"])));
-							$dateFin = explode(" ", date('d/m/Y H:i:s', strtotime($line["DateFin"])));
 
 							// Paramétrage de l'écriture du futur fichier CSV
 							$chemin = '/srv/eyesofreport/etl/injection/Inject'.$line['type'].$line['id'].'.csv';
@@ -213,8 +215,8 @@ if(isset($_GET["action"])) {
 							$host_id = mysqli_result(sqlrequest($database_thruk, "SELECT host_id FROM ".$line['source']."_host WHERE host_name = '".$line['host']."'"),0,"host_id");
 							$service_id = mysqli_result(sqlrequest($database_thruk, "SELECT service_id FROM ".$line['source']."_service WHERE service_description = '".$line['service']."' AND host_id = '".$host_id."'"),0,"service_id");
 
-							$DateDebutD = strtotime($line['DateDebut']) - 5;
-							$DateFinD = strtotime($line['DateFin']) + 60;
+							$DateDebutD = strtotime($line['DateDebut']);
+							$DateFinD = strtotime($line['DateFin']);
 							
 							// delete outage service
 							if($line['service'] != "Hoststatus") {
