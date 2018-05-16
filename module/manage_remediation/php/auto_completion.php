@@ -35,15 +35,15 @@ if (isset($source_name)) {
 }
 
 if($source_type == "services") {
-	$req = "SELECT host_id FROM ".$source_name."_host where host_name=?";
+	$req = "SELECT host_id FROM ".$source_name."_host where lower(host_name)=lower(?)";
 	$ids = sqlrequest($database_thruk,$req,false,array("s",(string)$source_host));
 	$id = mysqli_result($ids,0,"host_id");
 
-	$requests = "SELECT DISTINCT service_description FROM ".$source_name."_service WHERE host_id=".$id." AND service_description like ?";
+	$requests = "SELECT DISTINCT service_description FROM ".$source_name."_service WHERE host_id=".$id." AND lower(service_description) like lower(?)";
 	$result = sqlrequest($database_thruk,$requests,false,array("s","%$term%"));
 } 
 elseif ($source_type == "hosts") {
-	$requests = "SELECT DISTINCT host_name FROM ".$source_name."_host WHERE host_name like ?";
+	$requests = "SELECT DISTINCT host_name FROM ".$source_name."_host WHERE lower(host_name) like lower(?)";
 	$result = sqlrequest($database_thruk,$requests,false,array("s","%$term%"));
 } 
 else {
