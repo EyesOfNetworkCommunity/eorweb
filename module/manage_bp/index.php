@@ -31,7 +31,7 @@ include("../../side.php");
 			<h1 class="page-header"><?php echo getLabel("label.manage_bp.title"); ?></h1>
 		</div>
 	</div>
-
+	
 	<?php
 	global $database_vanillabp;
 	global $database_host;
