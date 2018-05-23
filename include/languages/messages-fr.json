@@ -424,6 +424,7 @@
 	"label.ldap_usr_list": "Liste des utilisateurs LDAP",
 	"label.locale": "fr",
 	"label.manage_bp.business_process": "Processus métier",
+	"label.manage_bp.category": "Categorie",
 	"label.manage_bp.command": "Commande",
 	"label.manage_bp.database_source": "Source de la base de données",
 	"label.manage_bp.delete_bp": "Voulez vous supprimer cette application ?",

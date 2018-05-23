@@ -66,10 +66,13 @@ $(document).ready(function() {
 		var min_value = $('select[name="min_value"]').val();
 		var source_name = $('select[name=source_name]').val();
 		var source_type = "bp";
-		
+		var category = $("#category").prop("checked");
+
 		if (!source_name){
 			source_name = "global_nagiosbp";
-			source_type = "app";
+			if (category) {
+				source_type = "app";
+			}
 		}
 
 		// check if a BP already exists, if this is the case we stop here !
@@ -100,7 +103,7 @@ $(document).ready(function() {
 			function return_value(value){
 				setTimeout(function(){
 					$(location).attr('href',"add_services.php?bp_name=" + uniq_name + "&display=" + display + "&source=" + source_name);
-                },500);
+				},500);
 			}
 		);
 	});
