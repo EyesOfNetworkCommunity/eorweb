@@ -135,6 +135,15 @@ include("../../side.php");
 					</div>
 				</div>
 
+				<div class="row" <?php if (!$type_app){ echo "style=display:none;"; } ?>>
+					<div class="row form-group">
+						<label style="font-weight:normal" class="col-xs-3 control-label"><?php echo getLabel("label.manage_bp.category"); ?></label>
+						<div class="col-md-9">
+							<input type='checkbox' class='checkbox' name='category' value='1' $checked onclick=''>
+						</div>
+					</div>
+				</div>
+
 				<div class="row" <?php if ($type_app){ echo "style=display:none;"; } ?>>
 					<div class="form-group">
 						<label style="font-weight:normal" class="col-xs-3 control-label"><?php echo getLabel("label.manage_bp.display"); ?></label>
