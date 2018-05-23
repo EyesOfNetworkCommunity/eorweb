@@ -92,7 +92,7 @@ $(document).ready(function() {
 						$('#name_step_group').html(name['NAME']+'  <span class="caret"></span></button>');
 					},
 					'json'
-                );
+				);
 			},
 			'json'
 		);
@@ -152,13 +152,18 @@ $(document).ready(function() {
 		function ReturnName(values){
 			if(values.length == 0){
 				$counter = $counter + 1;
-			}
-
-			else{
+			} else {
+				$.get(
+					'./php/get_name_id.php',
+					{
+						table_name:'kpi',
+						id: 'ID_KPI'
+					}
+				);
 				$.each(values, function(v, k){
 					$step_group_name = k['NAME'];
 					$id = k['ID_STEP_GROUP'];
-					$('#ul_step_group').append('<li><a class="dropdown-item" id="step_group_-_'+$step_group_name+'_-_'+$id+'"href="javascript:void(0);" onclick="ChangeValue(id);">' + $step_group_name + '</a></li>');
+					$('#ul_step_group').append('<li><a class="dropdown-item" id="seuil_-_'+$step_group_name+'_-_'+$id+'"href="javascript:void(0);" onclick="ChangeValue(id);">' + $step_group_name + '</a></li>');
 				});
 			}
 		},
@@ -261,6 +266,7 @@ function ChangeValue(value){
 	else if($object_name == "kpi"){
 		$('#name_kpi').html($name+'  <span class="caret"></span></button>');
 		$('#id_kpi').val($id);
+		$('#ul_step_group').empty();
 
 		$.get(
 			'./php/get_info_step_group.php',
@@ -271,7 +277,9 @@ function ChangeValue(value){
 				$.each(values, function(v, k){
 					$step_group_name = k['NAME'];
 					$id = k['ID_STEP_GROUP'];
+					$('#name_step_group').html($step_group_name + '  <span class="caret"></span></button>');
 					$('#ul_step_group').append('<li><a class="dropdown-item" id="seuil_-_'+$step_group_name+'_-_'+$id+'"href="javascript:void(0);" onclick="ChangeValue(id);">' + $step_group_name + '</a></li>');
+					$('#id_step_group').val($id);
 				});
 			},
 			'json'
@@ -285,5 +293,17 @@ function ChangeValue(value){
 	else if($object_name == "seuil"){
 		$('#name_step_group').html($name+'  <span class="caret"></span></button>');
 		$('#id_step_group').val($id);
+		
+		$.get(
+			'./php/get_kpi_name.php',
+			{
+				id: $id
+			},
+			function return_name(name){
+				$('#name_kpi').html(name[0]['NAME']+'  <span class="caret"></span></button>');
+				$('#id_kpi').val(name[0]['ID_KPI']);
+			},
+		  'json'
+		);
 	}
 }
