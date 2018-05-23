@@ -33,65 +33,65 @@ $(document).ready(function() {
 				$('#id_time_period').val(values['ID_TIME_PERIOD']);
 				$('#id_kpi').val(values['ID_KPI']);
 				$('#id_step_group').val(values['ID_STEP_GROUP']);
-                                                       
+
 				$.get(
-				  './php/select_name_by_id.php',
-				  {
-					table_name: 'contract',
-					id_number: values['ID_CONTRACT']
-				  },
-				  function return_name(name){
-					$('#name_contract').html(name['NAME']+'  <span class="caret"></span></button>');
-				  },
+					'./php/select_name_by_id.php',
+					{
+						table_name: 'contract',
+						id_number: values['ID_CONTRACT']
+					},
+					function return_name(name){
+						$('#name_contract').html(name['NAME']+'  <span class="caret"></span></button>');
+					},
+				'json'
+				);
+
+				$.get(
+				 	'./php/view_entry.php',
+					{
+						table_name: 'contract_context',
+						id_number: values['ID_CONTRACT_CONTEXT']
+					},
+					function return_name(name){
+						$('#desc').val(name['ALIAS']);
+					},
+				'json'
+				);
+
+				$.get(
+					'./php/select_name_by_id.php',
+					{
+						table_name: 'time_period',
+						id_number: values['ID_TIME_PERIOD']
+					},
+					function return_name(name){
+						$('#name_time_period').html(name['NAME']+'  <span class="caret"></span></button>');
+					},
+					'json'
+				);
+
+				$.get(
+					'./php/select_name_by_id.php',
+					{
+						table_name: 'kpi',
+						id_number: values['ID_KPI']
+					},
+					function return_name(name){
+						$('#name_kpi').html(name['NAME']+'  <span class="caret"></span></button>');
+					},
 				  'json'
 				);
 
 				$.get(
-				  './php/view_entry.php',
-				  {
-					table_name: 'contract_context',
-					id_number: values['ID_CONTRACT_CONTEXT']
-				  },
-				  function return_name(name){
-					$('#desc').val(name['ALIAS']);
-				  },
-				  'json'
-				);
-
-				$.get(
-				  './php/select_name_by_id.php',
-				  {
-					table_name: 'time_period',
-					id_number: values['ID_TIME_PERIOD']
-				  },
-				  function return_name(name){
-					$('#name_time_period').html(name['NAME']+'  <span class="caret"></span></button>');
-				  },
-				  'json'
-				);
-		
-				$.get(
-				  './php/select_name_by_id.php',
-				  {
-					table_name: 'kpi',
-					id_number: values['ID_KPI']
-				  },
-				  function return_name(name){
-					$('#name_kpi').html(name['NAME']+'  <span class="caret"></span></button>');
-				  },
-				  'json'
-				);
-
-				$.get(
-                  './php/select_name_by_id.php',
-                  {
-                        table_name: 'step_group',
-                        id_number: values['ID_STEP_GROUP']
-                  },
-                  function return_name(name){
-                        $('#name_step_group').html(name['NAME']+'  <span class="caret"></span></button>');
-                  },
-                  'json'
+					'./php/select_name_by_id.php',
+					{
+						table_name: 'step_group',
+						id_number: values['ID_STEP_GROUP']
+					},
+					function return_name(name){
+						$('#name_step_group').html(name['NAME']+'  <span class="caret"></span></button>');
+					},
+					'json'
                 );
 			},
 			'json'
@@ -146,22 +146,38 @@ $(document).ready(function() {
 	$.get(
 		'./php/get_name_id.php',
 		{
+			table_name:'step_group',
+			id: 'ID_STEP_GROUP'
+		},
+		function ReturnName(values){
+			if(values.length == 0){
+				$counter = $counter + 1;
+			}
+
+			else{
+				$.each(values, function(v, k){
+					$step_group_name = k['NAME'];
+					$id = k['ID_STEP_GROUP'];
+					$('#ul_step_group').append('<li><a class="dropdown-item" id="kpi_-_'+$step_group_name+'_-_'+$id+'"href="javascript:void(0);" onclick="ChangeValue(id);">' + $step_group_name + '</a></li>');
+				});
+			}
+		},
+		'json'
+	);
+
+	$.get(
+		'./php/get_name_id.php',
+		{
 			table_name:'time_period',
 			id: 'ID_TIME_PERIOD'
 		},
 		function ReturnName(values){
-			// if(values.length == 0 || $counter > 0){
-			// 	DisplayAlertMissing("Vous devez créer au moins un Indicateur, une période de temps et un contrat</br>avant de pouvoir créer un contexte de contrat");
-			// }
-
-			// else{
-				$('#global_form').css("display", "block");
-				$.each(values, function(v, k){
-					$time_name = k['NAME'];
-					$id = k['ID_TIME_PERIOD'];
-					$('#ul_time').append('<li><a class="dropdown-item" id="time_-_'+$time_name+'_-_'+$id+'"href="javascript:void(0);" onclick="ChangeValue(id);">' + $time_name + '</a></li>');
-				});
-			// }
+			$('#global_form').css("display", "block");
+			$.each(values, function(v, k){
+				$time_name = k['NAME'];
+				$id = k['ID_TIME_PERIOD'];
+				$('#ul_time').append('<li><a class="dropdown-item" id="time_-_'+$time_name+'_-_'+$id+'"href="javascript:void(0);" onclick="ChangeValue(id);">' + $time_name + '</a></li>');
+			});
 		},
 		'json'
 	);
@@ -243,7 +259,6 @@ function ChangeValue(value){
 		$('#id_contract').val($id);
 	}
 	else if($object_name == "kpi"){
-		$('#display_step_group').css('display', 'block');
 		$('#name_kpi').html($name+'  <span class="caret"></span></button>');
 		$('#id_kpi').val($id);
 
