@@ -158,7 +158,7 @@ $(document).ready(function() {
 				$.each(values, function(v, k){
 					$step_group_name = k['NAME'];
 					$id = k['ID_STEP_GROUP'];
-					$('#ul_step_group').append('<li><a class="dropdown-item" id="kpi_-_'+$step_group_name+'_-_'+$id+'"href="javascript:void(0);" onclick="ChangeValue(id);">' + $step_group_name + '</a></li>');
+					$('#ul_step_group').append('<li><a class="dropdown-item" id="step_group_-_'+$step_group_name+'_-_'+$id+'"href="javascript:void(0);" onclick="ChangeValue(id);">' + $step_group_name + '</a></li>');
 				});
 			}
 		},
