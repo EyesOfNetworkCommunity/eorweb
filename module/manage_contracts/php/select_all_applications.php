@@ -6,7 +6,7 @@
 		exit('Impossible de se connecter à la base de données.');
 	}
  
-	$sql = "select distinct SUBSTRING(bp_name,1,CHAR_LENGTH(bp_name)-3) as name from bp_category order by name";
+	$sql = "SELECT DISTINCT name FROM bp  WHERE name NOT IN (SELECT bp_name FROM bp_category) ORDER BY name";
   
 	$req = $bdd->query($sql);
 	$values = $req->fetchall();
