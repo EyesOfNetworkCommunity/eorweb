@@ -30,7 +30,7 @@ global $database_thruk;
 $action=null;
 if(isset($_GET["action"])) {
 	$action=$_GET["action"];
-} ?> 
+} ?>
 
 <div id="page-wrapper">
 	<?php
@@ -42,9 +42,11 @@ if(isset($_GET["action"])) {
 	
 	$remediation_action_selected = retrieve_form_data("remediation_action_selected",null);
 	$remediation_selected = retrieve_form_data("remediation_selected",null);
-	?>
+	
 
-	<?php
+	//select ....
+
+	
 	if($action == null or $action == "remediation") {
 	?>
 		<div class="row">
@@ -308,11 +310,12 @@ if(isset($_GET["action"])) {
 	*************** REMEDIATION_ACTION 
 	*/
 	} elseif($action == "remediation_action") {
-		$rules_sql = "SELECT remediation_action.*, remediation.name, remediation.state, remediation.user_id, DATE_FORMAT(DateDebut, '%d-%m-%Y %Hh%i') AS DateDebut, DATE_FORMAT(DateFin, '%d-%m-%Y %Hh%i') AS DateFin
-						FROM remediation_action
-						LEFT JOIN remediation ON remediation.id =remediation_action.remediationID
-						GROUP BY description
-						ORDER BY remediation.id DESC";
+		// $rules_sql = "SELECT remediation_action.*, remediation.name, remediation.state, remediation.user_id, DATE_FORMAT(DateDebut, '%d-%m-%Y %Hh%i') AS DateDebut, DATE_FORMAT(DateFin, '%d-%m-%Y %Hh%i') AS DateFin
+		// 				FROM remediation_action
+		// 				LEFT JOIN remediation ON remediation.id =remediation_action.remediationID
+		// 				GROUP BY description
+		// 				ORDER BY remediation.id DESC";
+		$rules_sql = " SELECT remediation_action.*, remediation_group.description, remediation.state, remediation.user_id, DATE_FORMAT(DateDebut, '%d-%m-%Y %Hh%i') AS DateDebut, DATE_FORMAT(DateFin, '%d-%m-%Y %Hh%i') AS DateFin FROM remediation_action LEFT JOIN remediation ON remediation.id=remediation_action.remediationID LEFT JOIN remediation_group ON remediation_group.id=remediation_action.id_group GROUP BY remediation_group.description ORDER BY remediation.id DESC";
 	?>
 	
 	<form action="./index.php?action=remediation_action" method="POST">

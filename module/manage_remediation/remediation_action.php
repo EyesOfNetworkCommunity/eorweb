@@ -23,6 +23,9 @@
 include("../../header.php");
 include("../../side.php");
 
+global $database_host;
+global $database_username;
+global $database_password;
 global $database_eorweb;
 ?>
 
@@ -39,9 +42,10 @@ global $database_eorweb;
 	$invalid=false;
 	
 	if(isset($_GET["id"]) && $_GET["id"] != null){
-		$sql = "SELECT remediation_action.*, remediation.state
+		$sql = "SELECT remediation_action.*, remediation.state, remediation_group.description as group_name
 				FROM remediation_action
-				LEFT JOIN remediation ON remediation.id =remediation_action.remediationID
+				LEFT JOIN remediation ON remediation.id = remediation_action.remediationID
+				LEFT JOIN remediation_group ON remediation_action.id_group = remediation_group.id
 				WHERE remediation_action.id=?";
 
 		$user_infos=sqlrequest($database_eorweb, $sql, false, array("i",(int)$remediation_id));
@@ -49,13 +53,14 @@ global $database_eorweb;
 		// Retrieve Information from database
 		$remediation_name=mysqli_result($user_infos,0,"description");
 		$remediation_host=mysqli_result($user_infos,0,"host");
-		$remediation_service=mysqli_result($user_infos,0,"service_id");
+		$remediation_service=mysqli_result($user_infos,0,"service");
 		$remediation_type=mysqli_result($user_infos,0,"type");
 		$remediation_dateDebut=mysqli_result($user_infos,0,"DateDebut");
 		$remediation_dateFin=mysqli_result($user_infos,0,"DateFin");
 		$remediation_action=mysqli_result($user_infos,0,"Action");
 		$remediation_source=mysqli_result($user_infos,0,"source");
 		$remediation_statut=mysqli_result($user_infos,0,"state");
+		$remediation_group=mysqli_result($user_infos,0,"group_name");
 	} else {	
 		$remediation_name=retrieve_form_data("name",null);
 		$remediation_host=retrieve_form_data("host",null);
@@ -65,8 +70,9 @@ global $database_eorweb;
 		$remediation_dateFin=retrieve_form_data("end",null);
 		$remediation_source=retrieve_form_data("source",null);
 		$remediation_action=retrieve_form_data("action",null);
+		$remediation_group=retrieve_form_data("group_name",null);
 	}
-	
+
 	$remediation_creation_validate = false;
 	$remediation_update_validate = false;
 
@@ -83,6 +89,12 @@ global $database_eorweb;
 		elseif(!$remediation_host || $remediation_host==""){
 			message(7," : ".getLabel("message.error.remediation_action_host"),'warning');
 		} else {
+			if(isset($_POST["add"])){
+				$connexion = mysqli_connect($database_host, $database_username, $database_password, $database_eorweb);
+				$query = "INSERT INTO remediation_group (description) VALUES('".$remediation_name."')";
+				mysqli_query($connexion, $query);
+				$id_group = mysqli_insert_id($connexion);
+			}
 			if (isset($remediation_service)) {
 				for ($i=0; $i < sizeof($remediation_service) ; $i++) {
 					if ($remediation_source != "none" && $remediation_source != "") {
@@ -117,15 +129,13 @@ global $database_eorweb;
 						
 						if(!$invalid){
 							// insert values for add
-							$sql_add = "INSERT INTO remediation_action (description,type,DateDebut,DateFin,Action,host,service,source) VALUES('".$remediation_name." ".$remediation_service[$i]."','".$remediation_type."','".$remediation_dateDebut."','".$remediation_dateFin."', '".$remediation_action."','".$remediation_host."','".$remediation_service[$i]."','".$remediation_source."')";
+							$sql_add = "INSERT INTO remediation_action (description,type,DateDebut,DateFin,Action,host,service,source,id_group) VALUES('".$remediation_name." - ".$remediation_service[$i]."','".$remediation_type."','".$remediation_dateDebut."','".$remediation_dateFin."', '".$remediation_action."','".$remediation_host."','".$remediation_service[$i]."','".$remediation_source."','".$id_group."')";
 							$remediation_id = sqlrequest($database_eorweb,$sql_add,true);
-							
 							$remediation_creation_validate = true;
 						}
 					}
 					elseif(isset($_POST["update"])){
-						$sql_add = sqlrequest($database_eorweb,"UPDATE remediation_action SET description='".$remediation_name." ".$remediation_service[$i]."', type='".$remediation_type."', DateDebut='".$remediation_dateDebut."', DateFin='".$remediation_dateFin."', source='".$remediation_source."', host='".$remediation_host."', service='".$remediation_service[$i]."', Action='".$remediation_action."' WHERE id='".$remediation_id."'");
-						
+						$sql_add = sqlrequest($database_eorweb,"UPDATE remediation_action SET description='".$remediation_name." - ".$remediation_service[$i]."', type='".$remediation_type."', DateDebut='".$remediation_dateDebut."', DateFin='".$remediation_dateFin."', source='".$remediation_source."', host='".$remediation_host."', service='".$remediation_service[$i]."', Action='".$remediation_action."' WHERE id='".$remediation_id."','".$id_group."'");
 						$remediation_update_validate = true;
 					}
 				}
@@ -141,13 +151,39 @@ global $database_eorweb;
 	
 	?>
 	<form id="form_user" action='./remediation_action.php' method='POST' name='form_user'>
+		
 		<div class="row form-group">
-			<label class="col-md-3"><?php echo getLabel("label.manage_remediation.remediation_action_name"); ?></label>
+			<label class="col-md-3"><?php echo getLabel("label.manage_remediation.group_name"); ?></label>
 			<div class="col-md-9">
 				<input class="form-control hidden" type='text' name='id'  value='<?php if(isset($remediation_id)){echo $remediation_id; }?>'>
-				<input class="form-control" type='text' name='name'  value='<?php echo $remediation_name?>' maxlength="50">
+				<input class="form-control" type='text' name='name'  value='<?php echo $remediation_group?>' maxlength="50">
 			</div>
 		</div>
+
+		<?php
+		if (isset($_GET["id"])) { ?>
+			<div class="row form-group">
+				<label class="col-md-3"><?php echo getLabel("label.manage_remediation.remediation_action_name"); ?></label>
+				<div class="col-md-9">
+					<select class="form-control" id="group_name">
+						<?php
+
+							$request="SELECT remediation_action.description
+								FROM remediation_action
+								INNER JOIN remediation_group ON remediation_action.id_group=remediation_group.id
+								AND remediation_group.description='".$remediation_group."'";
+
+							$result=sqlrequest($database_eorweb,$request);
+							while ($line = mysqli_fetch_array($result)){
+								echo "<option>".$line["description"]."</option>";
+							}
+						?>
+					</select>
+				</div>
+			</div>
+		<?php }
+		?>
+
 		<div class="row form-group">
 			<label class="col-md-3"><?php echo getLabel("label.manage_remediation.remediation_action.source"); ?></label>
 			<div class="col-md-9">
@@ -179,18 +215,28 @@ global $database_eorweb;
 			</div>
 		</div>
 		
-		<div class="row form-group">
-			<label class="col-md-3"><?php echo getLabel("label.service"); ?></label>
-			<div class="col-md-9">
-				<div class="form-group input-group">
-					<input class="form-control" type='text' id='service' name='service'>
-					<span class="input-group-btn">	
-							<input class="btn btn-danger" id="service_button_del" type="button" value="<?php echo getLabel("action.delete");?>">
-					</span>
+		<?php if (isset($_GET["id"])) { ?>
+			<div class="row form-group">
+				<label class="col-md-3"><?php echo getLabel("label.service"); ?></label>
+				<div class="col-md-9">
+					<input class="form-control" id="service_update" disabled value="<?php echo $remediation_service; ?>"></input>
 				</div>
-				<select class="form-control" id="service_id" name="service_id[]" multiple></select>
 			</div>
-		</div>
+		<?php
+		} else  { ?>
+			<div class="row form-group">
+				<label class="col-md-3"><?php echo getLabel("label.service"); ?></label>
+				<div class="col-md-9">
+					<div class="form-group input-group">
+						<input class="form-control" type='text' id='service' name='service'>
+						<span class="input-group-btn">	
+								<input class="btn btn-danger" id="service_button_del" type="button" value="<?php echo getLabel("action.delete");?>">
+						</span>
+					</div>
+					<select class="form-control" id="service_id" name="service_id[]" multiple></select>
+				</div>
+			</div>
+		<?php } ?>
 
 		<div class="row form-group">
 			<label class="col-md-3"><?php echo getLabel("label.manage_remediation.type"); ?></label>
@@ -263,4 +309,3 @@ global $database_eorweb;
 </div>
 
 <?php include("../../footer.php"); ?>
-

@@ -37,7 +37,13 @@ $(document).ready(function() {
 	$('#source').on('change', function() {
 	  source_name = this.value;
 	})
-		
+	
+	$('#group_name').on('click', function() {
+		temp = this.value;
+		service_name = temp.split(" - ");
+		$('#service_update').val(service_name[1]);
+	})
+
 	// autocomplete for the host in remediation_action
 	$("#host").on('focusin',function () {
 		if (source_name != 'none'){
