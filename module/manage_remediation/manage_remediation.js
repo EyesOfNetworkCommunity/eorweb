@@ -21,10 +21,16 @@
 
 $(document).ready(function() {
 	
+	var service_tab = [];
 	// Delete
 	$('#rule_host_button_del').on('click',function(){
 		$("#remediation_actions_id").find('option:selected').remove();
 		$("#remediation_actions_id").find("option").attr('selected','selected');
+	});
+	$('#service_button_del').on('click',function(){
+		$("#service_id").find('option:selected').remove();
+		$("#service_id").find("option").attr('selected','selected');
+		service_tab = [];
 	});
 	
 	source_name = $('#source').val();
@@ -49,18 +55,27 @@ $(document).ready(function() {
 		}
 		// if host is change, service is reset 
 		if ($("#host").val() != "") {
-			$("#service").val("");
+			$("#service_id").find('option:selected').remove();
+			$("#service_id").find("option").attr('selected','selected');
+			service_tab = [];
 		}
 	});
 	
-	// autocomplete for the service in remdiation_action
+	// autocomplete for the service in remediation_action
 	$("#service").on('focusin',function () {
 		val = $("#host").val();
 		if (val != ""){
 			$('#service').autocomplete({ 
 				source: './php/auto_completion.php?source_host='+val+'&source_type=services&source_name='+source_name,
-				minLength: 0
-
+				minLength: 0,
+				select: function(event, ui) {
+					var o = new Option(ui.item.value,ui.item.value,true,true);
+					if (!($.inArray(o.value, service_tab) >= 0)) {
+					$("#service_id:last").append(o);
+						service_tab.push(o.value);
+					}
+					return false;
+				}
 			});
 		} else {
 			$('#service').autocomplete({source: [""]});
@@ -97,7 +112,7 @@ $(document).ready(function() {
 		if($('input[name=name]').val() != ""){
 			$("#rule_host1").autocomplete("search","");
 		}
-	});
+	});	
 });
 
 		
