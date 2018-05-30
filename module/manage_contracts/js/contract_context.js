@@ -277,9 +277,9 @@ function ChangeValue(value){
 				$.each(values, function(v, k){
 					$step_group_name = k['NAME'];
 					$id = k['ID_STEP_GROUP'];
-					$('#name_step_group').html($step_group_name + '  <span class="caret"></span></button>');
+					$('#name_step_group').html(dictionnary["label.manage_contracts.sla_selection"] + '  <span class="caret"></span></button>');
 					$('#ul_step_group').append('<li><a class="dropdown-item" id="seuil_-_'+$step_group_name+'_-_'+$id+'"href="javascript:void(0);" onclick="ChangeValue(id);">' + $step_group_name + '</a></li>');
-					$('#id_step_group').val($id);
+					$('#id_step_group').val("");
 				});
 			},
 			'json'
