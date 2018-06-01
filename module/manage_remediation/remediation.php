@@ -35,14 +35,14 @@ global $database_eorweb;
 	
 	<?php 	
 	$user_infos2=array();
-	$remediation_action_id="";
+	$remediation_group_id="";
 	
 	// concatenation of actions send by post
-	if(!empty($_POST['remediation_actions_id'])){
-		foreach($_POST['remediation_actions_id'] as $selected){
-			$remediation_action_id .= $selected.",";
+	if(!empty($_POST['remediation_group_id'])){
+		foreach($_POST['remediation_group_id'] as $selected){
+			$remediation_group_id .= $selected.",";
 		}
-		$remediation_action_id=rtrim($remediation_action_id,",");
+		$remediation_group_id=rtrim($remediation_group_id,",");
 	}
 	
 	// General data
@@ -58,23 +58,25 @@ global $database_eorweb;
 	
 	if($remediation_id != null && !isset($_POST['add']) && !isset($_POST['update'])){
 		$user_infos = sqlrequest($database_eorweb, "SELECT * FROM remediation WHERE id='".$remediation_id."'");
-		$user_infos2 = sqlrequest($database_eorweb, "SELECT description FROM remediation_action WHERE remediationID='".$remediation_id."'");
+		//$user_infos2 = sqlrequest($database_eorweb, "SELECT description FROM remediation_action WHERE remediationID='".$remediation_id."'");
+		$user_infos3 = sqlrequest($database_eorweb, "SELECT DISTINCT remediation_group.description FROM remediation_group INNER JOIN remediation_action ON remediation_group.id = id_group AND remediationID='".$remediation_id."'");
+
 		
 		// Retrieve Information from database
 		$remediation_name = mysqli_result($user_infos,0,"name");
 		$remediation_statut = mysqli_result($user_infos,0,"state");
 		
-		while ($line = mysqli_fetch_array($user_infos2)){
-			$remediation_action_id .= $line[0].",";
+		while ($line = mysqli_fetch_array($user_infos3)){
+			$remediation_group_id .= $line[0].",";
 		}
-		$remediation_action_id = substr($remediation_action_id, 0, -1);
+		$remediation_group_id = substr($remediation_group_id, 0, -1);
 	}
 
 	if(isset($_POST["add"]) || isset($_POST["update"])) {
 		if(!$remediation_name || $remediation_name == ""){
 			message(7," : ".getLabel("message.error.remediation_request_name"),'warning');
 		}
-		elseif(empty($remediation_action_id) || $remediation_action_id == null) {
+		elseif(empty($remediation_group_id) || $remediation_group_id == null) {
 			message(7," : ".getLabel("message.error.remediation_request_action"),'warning');
 		}
 		elseif(isset($_POST["add"])){
@@ -82,10 +84,12 @@ global $database_eorweb;
 			$sql_add = "INSERT INTO remediation (name,user_id,date_demand) VALUES('".$remediation_name."','".$user_id."','".$date_demand."')";
 			$remediation_statut = "inactive";
 			$remediation_id = sqlrequest($database_eorweb,$sql_add,true);
-			$remediation_ids=explode(",",$remediation_action_id);
-		
+			$remediation_ids=explode(",",$remediation_group_id);
+
 			foreach($remediation_ids as $selected){
-				sqlrequest($database_eorweb,"UPDATE remediation_action SET remediationID = '".$remediation_id."' WHERE description='".$selected."'");
+				$sql_temp = sqlrequest($database_eorweb, "SELECT id FROM remediation_group WHERE description = '".$selected."'");
+				$id_temp = mysqli_result($sql_temp);
+				sqlrequest($database_eorweb,"UPDATE remediation_action SET remediationID = '".$remediation_id."' WHERE id_group = '".$id_temp."'");
 			}
 			message(6," : ".getLabel("message.manage_remediation.request_created"),'ok');		
 		}
@@ -95,10 +99,13 @@ global $database_eorweb;
 			$sql_modify = "UPDATE remediation SET name='".$remediation_name."' WHERE id='".$remediation_id."'";
 			sqlrequest($database_eorweb,$sql_modify);
 			
-			$Infos=explode(",", $remediation_action_id);	
-			for($i=0; $i<count($Infos);$i++){
-				$value = mysqli_result(sqlrequest($database_eorweb, "SELECT id FROM remediation_action WHERE description='".$Infos[$i]."'"), 0,"id");
-				array_push($user_infos2,$value);
+			$Infos=explode(",", $remediation_group_id);
+
+			for ($i=0; $i < sizeof($Infos) ; $i++) { 
+				$result = sqlrequest($database_eorweb,"SELECT remediation_action.id as id FROM remediation_action INNER JOIN remediation_group ON remediation_group.id = id_group AND remediation_group.description = '".$Infos[$i]."'");
+				while ($line = $result->fetch_assoc()) {
+					array_push($user_infos2,$line["id"]);
+				}
 			}
 
 			sqlrequest($database_eorweb,"UPDATE remediation_action SET remediationID = '0' WHERE remediationID='".$remediation_id."'",true);
@@ -135,10 +142,10 @@ global $database_eorweb;
 						<?php } ?>
 					</span>
 				</div>
-				<select class="form-control" id="remediation_actions_id" name="remediation_actions_id[]" multiple size=4>
+				<select class="form-control" id="remediation_group_id" name="remediation_group_id[]" multiple size=4>
 				<?php 
-					if($remediation_action_id != ""){
-						$division = explode(",", $remediation_action_id);
+					if($remediation_group_id != ""){
+						$division = explode(",", $remediation_group_id);
 						for($i=0; $i<sizeof($division);$i++){
 							echo "<option selected='selected' value='".$division[$i]."'>".$division[$i]."</option> ";
 						}

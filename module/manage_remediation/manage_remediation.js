@@ -22,14 +22,20 @@
 $(document).ready(function() {
 	
 	var service_tab = [];
+	var group_tab = [];
+
+	$('#remediation_group_id option').each(function() {
+		group_tab.push($(this).val())
+	});
+
 	// Delete
 	$('#rule_host_button_del').on('click',function(){
-		$("#remediation_actions_id").find('option:selected').remove();
-		$("#remediation_actions_id").find("option").attr('selected','selected');
+		$("#remediation_group_id").find('option:selected').remove();
+		$("#remediation_group_id").find("option").attr('selected','selected');
+		group_tab = [];
 	});
 	$('#service_button_del').on('click',function(){
-		$("#service_id").find('option:selected').remove();
-		$("#service_id").find("option").attr('selected','selected');
+		$("#service_id").find('option').remove();
 		service_tab = [];
 	});
 	
@@ -38,16 +44,16 @@ $(document).ready(function() {
 	  source_name = this.value;
 	})
 	
-	$('#group_name').on('click', function() {
+	$('#action_name').on('click', function() {
 		temp = this.value;
 		service_name = temp.split(" - ");
-		$('#service_update').val(service_name[1]);
+		$('input[name=service]').val(service_name[1]);
 	})
 
 	// autocomplete for the host in remediation_action
 	$("#host").on('focusin',function () {
 		if (source_name != 'none'){
-			$('#host').autocomplete({ 				
+			$('#host').autocomplete({
 				source: './php/auto_completion.php?source_type=hosts&source_name='+source_name,
 				minLength: 0
 			});
@@ -61,8 +67,7 @@ $(document).ready(function() {
 		}
 		// if host is change, service is reset 
 		if ($("#host").val() != "") {
-			$("#service_id").find('option:selected').remove();
-			$("#service_id").find("option").attr('selected','selected');
+			$("#service_id").find('option').remove();
 			service_tab = [];
 		}
 	});
@@ -106,7 +111,10 @@ $(document).ready(function() {
 				minLength: 0,
 				select: function(event, ui) {
 					var o = new Option(ui.item.value,ui.item.value,true,true);
-					$("#remediation_actions_id").append(o);
+					if (!($.inArray(o.value, group_tab) >= 0)) {
+					$("#remediation_group_id").append(o);
+					group_tab.push(o.value);
+					}
 					return false;
 				}
 			});

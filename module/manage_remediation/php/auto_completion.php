@@ -48,9 +48,9 @@ elseif ($source_type == "hosts") {
 } 
 else {
 	if (isset($id)) {
-		$requests = "SELECT description FROM remediation_action WHERE remediationID NOT IN (SELECT id FROM remediation WHERE id != ".$id.") AND description like ?";
+		$requests = "SELECT description FROM remediation_group WHERE id NOT IN (SELECT id_group FROM remediation_action INNER JOIN remediation ON remediation.id = remediationID AND remediationID != ".$id.") AND description like ?";
 	} else {
-		$requests = "SELECT description FROM remediation_action WHERE remediationID NOT IN (SELECT id FROM remediation) AND description like ?";
+		$requests = "SELECT description FROM remediation_group WHERE id NOT IN (SELECT id_group FROM remediation_action INNER JOIN remediation ON remediation.id = remediationID) AND description like ?";
 	}
 	$result = sqlrequest($database_eorweb,$requests,false,array("s","%$term%"));
 }
