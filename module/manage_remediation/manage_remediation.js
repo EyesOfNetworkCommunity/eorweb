@@ -46,8 +46,31 @@ $(document).ready(function() {
 	
 	$('#action_name').on('click', function() {
 		temp = this.value;
-		service_name = temp.split(" - ");
-		$('input[name=service]').val(service_name[1]);
+		$.ajax({
+			url: "./php/get_values.php",
+			type : 'POST',
+			dataType:'json',
+			data: {
+				"remediation_action_name" : temp
+			},
+			success: function(data){
+				$('#service').val(data[0][0]);
+				$('select[name=type]').val(data[0][1]);
+				$('select[name=action]').val(data[0][2]);
+				var temp_date = data[0][3].split(" ");
+				var day = temp_date[0].split("-");
+				var hour = temp_date[1].split(":");
+				var date_start = new Date(day[0],day[1],day[2],hour[0],hour[1]);
+				$('#validity_date').data('daterangepicker').setStartDate(date_start);
+				$('#datepickerStart').val(date_start);
+				var temp_date = data[0][4].split(" ");
+				var day = temp_date[0].split("-");
+				var hour = temp_date[1].split(":");
+				var date_end = new Date(day[0],day[1],day[2],hour[0],hour[1]);
+				$('#validity_date').data('daterangepicker').setEndDate(date_end);
+				$('#datepickerEnd').val(date_end);
+			}
+		})
 	})
 
 	// autocomplete for the host in remediation_action

@@ -62,7 +62,7 @@ global $database_eorweb;
 		$remediation_source=retrieve_form_data("source",null);
 		$remediation_host=retrieve_form_data("host",null);
 		$remediation_service=retrieve_form_data("service_id",null);
-		if (!isset($remediation_service)) {
+		if ($remediation_service == null) {
 			$remediation_service=retrieve_form_data("service",null);
 		}
 		$remediation_type=retrieve_form_data("type",null);
@@ -143,8 +143,9 @@ global $database_eorweb;
 		}
 		$id_group = sqlrequest($database_eorweb, "SELECT id_group FROM remediation_action WHERE description='".$remediation_name."'");
 		$remediation_group_id = mysqli_result($id_group,0,"id_group");
+
 		sqlrequest($database_eorweb, "UPDATE remediation_group SET description='".$remediation_group."' WHERE id ='".$remediation_group_id."'");
-		sqlrequest($database_eorweb,"UPDATE remediation_action SET type='".$remediation_type."', DateDebut='".$remediation_dateDebut."', DateFin='".$remediation_dateFin."', service='".$remediation_service."', Action='".$remediation_action."' WHERE id_group ='".$remediation_group_id."' AND description='".$$remediation_name."'");
+		sqlrequest($database_eorweb,"UPDATE remediation_action SET type='".$remediation_type."', DateDebut='".$remediation_dateDebut."', DateFin='".$remediation_dateFin."', service='".$remediation_service."', Action='".$remediation_action."' WHERE id_group ='".$remediation_group_id."' AND description='".$remediation_name."'");
 
 		message(6," : ".getLabel("message.manage_remediation.action_update"),'ok');
 	}
@@ -223,47 +224,13 @@ global $database_eorweb;
 					<input class="form-control" type='text' id='host' name='host' value='<?php echo $remediation_host?>'>
 				</div>
 			</div>
-		
-		<?php /*if (isset($_POST["update"]) || isset($_GET["id"])) { ?>
-			<div class="row form-group">
-		<?php } else { ?>
-			<div class="row form-group" style="display: none">
-		<?php } ?>
-				<label class="col-md-3"><?php echo getLabel("label.service"); ?></label>
-				<div class="col-md-9">
-					<input class="form-control" id="service_update" name="service_update" disabled value="<?php echo $remediation_service; ?>"></input>
-				</div>
-			</div>
-		
-		<?php if (isset($_POST["update"]) || isset($_GET["id"])) { ?>
-			<div class="row form-group">
-				<label class="col-md-3"><?php echo getLabel("label.service"); ?></label>
-				<div class="col-md-9">
-					<select class="form-control" id="service_id" name="service_id[]" multiple></select>
-				</div>
-			</div>
-		<?php } else { ?>
-			<div class="row form-group">
-				<label class="col-md-3"><?php echo getLabel("label.service"); ?></label>
-				<div class="col-md-9">
-					<div class="form-group input-group">
-						<input class="form-control" type='text' id='service' name='service'>
-						<span class="input-group-btn">	
-								<input class="btn btn-danger" id="service_button_del" type="button" value="<?php echo getLabel("action.delete");?>">
-						</span>
-					</div>
-					<select class="form-control" id="service_id" name="service_id[]" multiple></select>
-				</div>
-			</div>
-		<?php } */?>
-
 
 		<div class="row form-group">
 			<label class="col-md-3"><?php echo getLabel("label.service"); ?></label>
 			<div class="col-md-9">
 				<?php if (isset($_GET["id"]) || isset($_POST["update"])) { ?>
 					<div>
-						<input class="form-control" disabled type='text' id='service' name='service' value="<?php echo $remediation_service; ?>">
+						<input class="form-control" readonly type='text' id='service' name='service' value="<?php echo $remediation_service; ?>">
 					</div>			
 				<?php } else { ?>
 					<div class="form-group input-group">

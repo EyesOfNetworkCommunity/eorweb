@@ -329,9 +329,6 @@ if(isset($_GET["action"])) {
 					<tr>
 						<th class="text-center"> <?php echo getLabel("label.admin_group.select"); ?> </th>
 						<th> <?php echo getLabel("label.manage_remediation.desc"); ?> </th>
-						<th> <?php echo getLabel("label.manage_remediation.type"); ?> </th>
-						<th> <?php echo getLabel("label.manage_remediation.date_beginning"); ?> </th>
-						<th> <?php echo getLabel("label.manage_remediation.date_ending"); ?> </th>
 						<th> <?php echo getLabel("label.manage_remediation.remediation_name"); ?> </th>
 						<th> <?php echo getLabel("label.manage_remediation.status"); ?> </th>
 					</tr>
@@ -348,9 +345,6 @@ if(isset($_GET["action"])) {
 							<tr>
 								<td class="text-center"><label><input type="checkbox" class="checkbox" name="remediation_action_selected[]" value="<?php echo $line["id_group"]; ?>"></label></td>
 								<td><a href="remediation_action.php?id=<?php echo $line["id"]; ?>"><?php echo $line["description"]; ?></a></td>
-								<td><?php echo getLabel("label.manage_remediation.type_".$line["type"]); ?></td>
-								<td><?php echo $line["DateDebut"]; ?></td>
-								<td><?php echo $line["DateFin"]; ?></td>
 								<td><a href="remediation.php?id=<?php echo $line["remediationID"]; ?>"><?php echo $line["name"]; ?></a></td>
 								<td><?php if ($line["state"]) { echo getLabel("label.manage_remediation.state_".$line["state"]); } ?></td>
 							</tr>
