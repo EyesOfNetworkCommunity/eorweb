@@ -111,8 +111,13 @@ $(document).ready(function() {
 			$('#application_name').html(dictionnary["label.manage_contracts.contract_context_select_application"] +' <span class="caret"></span>');
 		}
 	});
-
 });
+
+
+$("#name_contract_context").click(function(event){
+	$('#body_table').children().remove();
+});
+
 
 function ChangeValue(value){
 	$array_name_id = value.split("_-_");
