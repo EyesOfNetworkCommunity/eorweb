@@ -78,10 +78,12 @@ $(document).ready(function () {
 	});
 });
 
-$('#FindIt').on('click', findIt());
+$('#FindIt').on('click', function(){
+	findIt();
+});
 
 function findIt(){
-	HideAll()
+	HideAll();
 	$search_text = $('#SearchFor').val();
 	$('.tree-toggle').unmark();
     $('.tree-toggle').mark($search_text,{ "className": "highlight" });
