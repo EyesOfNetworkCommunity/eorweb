@@ -124,6 +124,7 @@ function ChangeValue(value){
 	$name = $array_name_id[0];
 	$id = $array_name_id[1];
 
+	$("#application_list").show();
 	$("#name_contract_context").html($name+'  <span class="caret"></span></button>');
 	$("#id_contract_context").val($id);
 	$.get(
