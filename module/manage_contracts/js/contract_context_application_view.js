@@ -37,13 +37,12 @@ $(document).ready(function() {
 				$counter++;
 			});
 
-			$count = 0;
-			for(var i = 0; i < $counter; i++){
+			$.each($global_array, function(element, value) {
 				$.get(
 					'./php/get_values_contract_context_application_view.php',
 					{
 						table_name: 'contract_context',
-						id_number: $global_array[i+''][0]
+						id_number: value[0]
 					},
 					function return_names(names){
 						$contract_name = names['contract'];
@@ -52,24 +51,20 @@ $(document).ready(function() {
 						$step_group_name = names['step_group'];
 						$contract_context = names['contract_context'];
 						$id_context = names['context_id'];
-						
-						$id = $global_array[$count+''][0];
-						$name_application = $global_array[$count+''][1];
+
+						$id = value[0];
+						$name_application = value[1];
 
 						$('#body_table').append('<tr><td><span class="glyphicon glyphicon-share-alt text-warning"></span>\
 							</td><td>' + $name_application + '</td><td>' + $contract_name + '</td><td>' + $time_period_name + '</td>\
 							<td>' + $kpi_name + '</td><td>' + $step_group_name + '</td>\
 							<td><a class="btn btn-primary" href="./contract_context_application.php?context_name='+ $contract_context + '_-_' + $id_context + '" role="button"><span class="glyphicon glyphicon-pencil"></span></a></td>\
 							<td><button type="button" class="btn btn-danger" id="'+$name_application+'" onclick=RemoveSelection(id)><span class="glyphicon glyphicon-trash"></span></button></td></tr>');
-						$count++;
 					},
 					'json'
 				);
 			}
-			$timer_update_table = ($counter /30) *1000
-			if ($timer_update_table < 100){
-				$timer_update_table = 100;
-			}
+			);
 		},
 		'json'
 	);

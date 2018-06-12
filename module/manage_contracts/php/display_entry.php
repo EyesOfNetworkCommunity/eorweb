@@ -8,7 +8,7 @@
 		exit('Impossible de se connecter à la base de données.');
 	}
  
-	$sql = "SELECT * FROM " . $table_name;
+	$sql = "SELECT * FROM " . $table_name . " ORDER BY application_name";
   
 	$req = $bdd->query($sql);
 	$values = $req->fetchall();
