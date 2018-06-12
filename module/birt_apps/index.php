@@ -55,7 +55,7 @@ if($db->connect_errno > 0){
                     while($row2 = $result2->fetch_assoc()){
                         $selReport=$row['report_rptfile'];
                         $srvname= $_SERVER['SERVER_NAME'];
-                        echo "<a href=\"http://".$srvname."/birt/run?__report=".$selReport."&__format=".$row2['type']."\" target=\"_blank\">".$row2['type']."</a> ";
+                        echo "<a href=\"http://".$srvname."/birt/run?__report=".$selReport."&__format=".strtolower($row2['type'])."\" target=\"_blank\">".$row2['type']."</a> ";
                     }"</td>
                     </tr>";
                 }
