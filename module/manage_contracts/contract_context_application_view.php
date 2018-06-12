@@ -42,6 +42,7 @@ include("../../side.php");
 					<th><?php echo getLabel("label.time_period"); ?></th>
 					<th><?php echo getLabel("label.contracts_menu.indicator"); ?></th>
 					<th><?php echo getLabel("label.sla"); ?></th>
+					<th class="radius_th"><?php echo getLabel("action.edit"); ?></th>
 					<th class="radius_th"><?php echo getLabel("action.delete"); ?></th>
 				</tr>
 			</thead>
