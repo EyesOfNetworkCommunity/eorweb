@@ -40,31 +40,26 @@ $(document).ready(function() {
 				$counter++;
 			});
 
-			$count = 0;
-			for(var i = 0; i < $counter; i++){
+			$.each($global_array, function(element, value) {
 				$.get(
 					'./php/select_name_by_id.php',
 					{
 						table_name: 'company',
-						id_number: $global_array[i+''][2]
+						id_number: value[2]
 					},
 					function return_name(name){
-						$id = $global_array[$count+''][0];
-						$contract_name = $global_array[$count+''][1];
-						$alias = $global_array[$count+''][3];
-						$date = $global_array[$count+''][4];
+						$id = value[0];
+						$contract_name = value[1];
+						$alias = value[3];
+						$date = value[4];
 						$company = name['NAME'];
 						$('#body_table').append('<tr id="tr_'+$id+'"><td><span class="glyphicon glyphicon-share-alt text-warning"></span></td><td>' + $contract_name + '</td><td>'+ $alias + '</td><td>'+ $company + '</td><td>'+ $date + '</td><td><button type="button" class="btn btn-primary" id="'+$id+'" onclick=EditSelection(id)><span class="glyphicon glyphicon-pencil"></span></button>  <button type="button" class="btn btn-danger" id="'+$id+'" onclick=RemoveSelection(id)><span class="glyphicon glyphicon-trash"></span></button></td></tr>');
-						$count++;
 
 					},
 					'json'
 				);
-			}
-			$timer_update_table = ($counter /30) *1000
-                        if ($timer_update_table < 200){
-                                $timer_update_table = 200;
-                        }
+			});
+			
 		},
 		'json'
 	);
