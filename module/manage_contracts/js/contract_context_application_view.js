@@ -59,7 +59,7 @@ $(document).ready(function() {
 							</td><td>' + $name_application + '</td><td>' + $contract_name + '</td><td>' + $time_period_name + '</td>\
 							<td>' + $kpi_name + '</td><td>' + $step_group_name + '</td>\
 							<td><a class="btn btn-primary" href="./contract_context_application.php?context_name='+ $contract_context + '_-_' + $id_context + '" role="button"><span class="glyphicon glyphicon-pencil"></span></a></td>\
-							<td><button type="button" class="btn btn-danger" id="'+$name_application+'" onclick=RemoveSelection(id)><span class="glyphicon glyphicon-trash"></span></button></td></tr>');
+							<td><button type="button" class="btn btn-danger" name="'+$name_application+'" id="'+$id+'" onclick=RemoveSelection(name,id)><span class="glyphicon glyphicon-trash"></span></button></td></tr>');
 					},
 					'json'
 				);
@@ -70,6 +70,6 @@ $(document).ready(function() {
 	);
 });
 
-function RemoveSelection(application_name){
-	DisplayPopupRemove(dictionnary["message.manage_contracts.contract_context_application_suppress"], "contract_context_application", application_name, dictionnary["action.delete"],dictionnary["label.yes"],dictionnary["label.no"]);
+function RemoveSelection(application_name, id){
+	DisplayPopupRemove(dictionnary["message.manage_contracts.contract_context_application_suppress"], "contract_context_application", application_name, dictionnary["action.delete"],dictionnary["label.yes"],dictionnary["label.no"], id);
 }

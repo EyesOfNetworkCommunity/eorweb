@@ -6,12 +6,15 @@
   $id_name = "id_" . $table_name;
 
 	if ($table_name == "contract_context_application"){
-		$id_name = "application_name";
+		$id = $_GET['id_context'];
+		$sql = "DELETE FROM " . $table_name . " WHERE APPLICATION_NAME = '" . $id_number . "' AND ID_CONTRACT_CONTEXT = ". $id;
+		error_log($sql);
+	}else{
+
+		$id_name = strtoupper($id_name);
+
+		$sql = "DELETE FROM " . $table_name . " WHERE " . $id_name . " = '" . $id_number . "'";
 	}
-
-	$id_name = strtoupper($id_name);
-
-	$sql = "DELETE FROM " . $table_name . " WHERE " . $id_name . " = '" . $id_number . "'";
 	try {
         $bdd = new PDO("mysql:host=$database_host;dbname=$database_vanillabp", $database_username, $database_password);
     } catch(Exception $e) {
