@@ -33,10 +33,10 @@ if($db->connect_errno > 0){
                 $grp_id= $_COOKIE['group_id'];
                 if(isset($_GET["etl"])) {
                     $sql ="SELECT * FROM join_report_cred INNER JOIN reports ON reports.report_id = join_report_cred.report_id 
-                    WHERE group_id='".$grp_id."' AND reports.type = 'technic';";
+                    WHERE group_id='".$grp_id."' AND reports.type = 'technic' ORDER BY report_name;";
                 } else {
                     $sql ="SELECT * FROM join_report_cred INNER JOIN reports ON reports.report_id = join_report_cred.report_id 
-                    WHERE group_id='".$grp_id."' AND reports.type != 'technic';";
+                    WHERE group_id='".$grp_id."' AND reports.type != 'technic' ORDER BY report_name;";
                 }
                 if(!$result = $db->query($sql)){
                     die("echo getLabel(\"label.manage_report.query_error\")". $db->error . ']');
@@ -45,7 +45,7 @@ if($db->connect_errno > 0){
                     $sql2 ="SELECT report_name,output_format.type FROM join_report_format 
                     INNER JOIN reports ON reports.report_id = join_report_format.report_id 
                     INNER JOIN output_format ON join_report_format.output_format_id = output_format.format_id 
-                    WHERE reports.report_name='".$row['report_name']."';";
+                    WHERE reports.report_name='".$row['report_name']."' ORDER BY report_name;";
                     if(!$result2 = $db->query($sql2)){
                         die("echo getLabel(\"label.manage_report.query_error\")". $db->error . ']');
                     }
