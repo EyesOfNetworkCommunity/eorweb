@@ -58,8 +58,8 @@ $(document).ready(function() {
 						$('#body_table').append('<tr><td><span class="glyphicon glyphicon-share-alt text-warning"></span>\
 							</td><td>' + $name_application + '</td><td>' + $contract_name + '</td><td>' + $time_period_name + '</td>\
 							<td>' + $kpi_name + '</td><td>' + $step_group_name + '</td>\
-							<td><a class="btn btn-primary" href="./contract_context_application.php?context_name='+ $contract_context + '_-_' + $id_context + '" role="button"><span class="glyphicon glyphicon-pencil"></span></a></td>\
-							<td><button type="button" class="btn btn-danger" name="'+$name_application+'" id="'+$id+'" onclick=RemoveSelection(name,id)><span class="glyphicon glyphicon-trash"></span></button></td></tr>');
+							<td><a class="btn btn-primary" href="./contract_context_application.php?context_name='+ $contract_context + '_-_' + $id_context + '" role="button"><span class="glyphicon glyphicon-pencil"></span></a>\
+							<button type="button" class="btn btn-danger" name="'+$name_application+'" id="'+$id+'" onclick=RemoveSelection(name,id)><span class="glyphicon glyphicon-trash"></span></button></td></tr>');
 					},
 					'json'
 				);
