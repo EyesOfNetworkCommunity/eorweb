@@ -52,7 +52,6 @@ $(document).ready(function() {
 						$id = value[0];
 
 						$('#body_table').append('<tr id="'+$id+'"><td><span class="glyphicon glyphicon-share-alt text-warning"></span></td><td>' + $name_context + '</td><td>'+ $alias + '</td><td>' + $name_contract + '</td><td>' + $name_time_period + '</td><td>' + $name_kpi + '</td><td>' + $name_step_group + '</td><td><button type="button" class="btn btn-primary" id="'+$id+'" onclick=EditSelection(id)><span class="glyphicon glyphicon-pencil"></span></button>  <button type="button" class="btn btn-danger" id="'+$id+'" onclick=RemoveSelection(id)><span class="glyphicon glyphicon-trash"></span></button></td></tr>');
-						$count++;
 					},
 					'json'
 				);
