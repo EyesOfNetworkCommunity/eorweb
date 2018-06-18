@@ -45,6 +45,29 @@ include("../../side.php");
 				</tr>
 			</thead>
 			<tbody id="body_table">
+				<?php
+				$sql = "SELECT id_contract, name, alias, validity_date, id_company FROM contract order by name";
+				$ccv = sqlrequest($database_vanillabp,$sql);
+				if($ccv) {
+					while ($line = mysqli_fetch_array($ccv)) {
+						$sql2 = "SELECT name FROM company where ID_COMPANY=".$line["id_company"];
+						$ccv2 = mysqli_fetch_array(sqlrequest($database_vanillabp,$sql2));
+						?>
+						<tr <?php echo $line["id_contract"]; ?> >
+							<td><span class="glyphicon glyphicon-share-alt text-warning"></span></td>
+							<td> <?php echo $line["name"]; ?> </td>
+							<td> <?php echo $line["alias"]; ?> </td>
+							<td> <?php echo $ccv2["name"]; ?> </td>
+							<td> <?php echo $line["validity_date"]; ?> </td>
+							<td>
+								<button type="button" class="btn btn-primary" id="<?php echo $line["id_contract"]; ?>" onclick=EditSelection(id)><span class="glyphicon glyphicon-pencil"></span></button> 
+								<button type="button" class="btn btn-danger" id="<?php echo $line["id_contract"]; ?>" onclick=RemoveSelection(id)><span class="glyphicon glyphicon-trash"></span></button>
+							</td>
+						</tr>
+					<?php
+					}
+				}
+				?>
 			</tbody>
 		</table>
 	</div>

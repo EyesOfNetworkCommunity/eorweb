@@ -19,52 +19,6 @@
 #########################################
 */
 
-$(document).ready(function() {
-	$global_array = {};
-	$counter = 0;
-
-	$.get(
-		'./php/display_entry.php',
-		{
-			table_name: 'contract'
-		},
-		function return_values(values){
-			$.each(values, function(v, k){
-				$id = k['ID_CONTRACT'];
-				$contract_name = k['NAME'];
-				$id_company = k['ID_COMPANY'];
-				$alias = k['ALIAS'];
-				$date = k['VALIDITY_DATE'];
-
-				$global_array[$counter] = [$id,$contract_name,$id_company,$alias,$date];
-				$counter++;
-			});
-
-			$.each($global_array, function(element, value) {
-				$.get(
-					'./php/select_name_by_id.php',
-					{
-						table_name: 'company',
-						id_number: value[2]
-					},
-					function return_name(name){
-						$id = value[0];
-						$contract_name = value[1];
-						$alias = value[3];
-						$date = value[4];
-						$company = name['NAME'];
-						$('#body_table').append('<tr id="tr_'+$id+'"><td><span class="glyphicon glyphicon-share-alt text-warning"></span></td><td>' + $contract_name + '</td><td>'+ $alias + '</td><td>'+ $company + '</td><td>'+ $date + '</td><td><button type="button" class="btn btn-primary" id="'+$id+'" onclick=EditSelection(id)><span class="glyphicon glyphicon-pencil"></span></button>  <button type="button" class="btn btn-danger" id="'+$id+'" onclick=RemoveSelection(id)><span class="glyphicon glyphicon-trash"></span></button></td></tr>');
-
-					},
-					'json'
-				);
-			});
-			
-		},
-		'json'
-	);
-});
-
 function EditSelection(id){
 	$(location).attr('href',"contract.php?id_number=" + id + "");
 }

@@ -42,6 +42,27 @@ include("../../side.php");
 				</tr>
 			</thead>
 			<tbody id="body_table">
+				<?php
+				$sql = "SELECT id_kpi, name, id_unit_comput FROM kpi order by name";
+				$ccv = sqlrequest($database_vanillabp,$sql);
+				if($ccv) {
+					while ($line = mysqli_fetch_array($ccv)) {
+						$sql2 = "SELECT id_unit, name FROM unit where id_unit=".$line["id_unit_comput"];
+						$ccv2 = mysqli_fetch_array(sqlrequest($database_vanillabp,$sql2));
+						?>
+						<tr>
+							<td><span class="glyphicon glyphicon-share-alt text-warning"></span></td>
+							<td> <?php echo $line["name"]; ?> </td>
+							<td> <?php echo $ccv2["name"]; ?> </td>
+							<td>
+								<button type="button" class="btn btn-primary" id="<?php echo $line["id_kpi"]; ?>" onclick=EditSelection(id)><span class="glyphicon glyphicon-pencil"></span></button>
+								<button type="button" class="btn btn-danger" id="<?php echo $line["id_kpi"]; ?>" onclick=RemoveSelection(id)><span class="glyphicon glyphicon-trash"></span></button>
+							</td>
+						</tr>
+						<?php
+					}
+				}
+				?>
 			</tbody>
 		</table>
 	</div>
