@@ -58,10 +58,10 @@ include("../../side.php");
 								<td><span class="glyphicon glyphicon-share-alt text-warning"></span></td>
 								<td><?php echo $line["application_name"]; ?></td>
 								<td><?php echo $ccv2["contract"]; ?></td>
-								<td><?php echo $ccv2["time_period"]; ?></td>\
+								<td><?php echo $ccv2["time_period"]; ?></td>
 								<td><?php echo $ccv2["kpi"]; ?></td>
-								<td><?php echo $ccv2["step_group"]; ?></td>\
-								<td><a class="btn btn-primary" href="./contract_context_application.php?context_name='+<?php echo $ccv2["contract"]; ?>+ '_-_' + <?php echo $line["id_contract_context"]; ?> + '" role="button"><span class="glyphicon glyphicon-pencil"></span></a>\
+								<td><?php echo $ccv2["step_group"]; ?></td>
+								<td><a class="btn btn-primary" href="./contract_context_application.php?context_name='+<?php echo $ccv2["contract"]; ?>+ '_-_' + <?php echo $line["id_contract_context"]; ?> + '" role="button"><span class="glyphicon glyphicon-pencil"></span></a>
 									<button type="button" class="btn btn-danger" name="<?php echo $line["application_name"]; ?>" id="<?php echo $line["id_contract_context"]; ?>" onclick=RemoveSelection(name,id)><span class="glyphicon glyphicon-trash"></span></button>
 								</td>
 							</tr>
