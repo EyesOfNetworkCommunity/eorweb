@@ -8,7 +8,6 @@
 	if ($table_name == "contract_context_application"){
 		$id = $_GET['id_context'];
 		$sql = "DELETE FROM " . $table_name . " WHERE APPLICATION_NAME = '" . $id_number . "' AND ID_CONTRACT_CONTEXT = ". $id;
-		error_log($sql);
 	}else{
 
 		$id_name = strtoupper($id_name);

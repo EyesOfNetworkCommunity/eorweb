@@ -120,6 +120,10 @@ $(document).ready(function() {
 
 $("#name_contract_context").click(function(event){
 	$('#body_table').children().remove();
+	$global_array = {};
+	$counter=0;
+	
+	
 });
 
 
