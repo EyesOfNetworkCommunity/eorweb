@@ -27,7 +27,7 @@ $(document).ready(function() {
 		$.get(
 			'./php/select_name_by_id.php',
 			{
-				table_name: 'contract',
+				table_name: 'contract_context',
 				id_name: 'id_contract_context',
 				id_number: $("#id_contract_context").val()
 			},
