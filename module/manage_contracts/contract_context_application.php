@@ -24,8 +24,9 @@ include("../../header.php");
 include("../../side.php");
 
 $context_name="";
-if (isset($_GET["context_name"])) {
+if (isset($_GET["context_name"]) && isset($_GET["id"])) {
 	$context_name = htmlspecialchars(html_entity_decode($_GET["context_name"])); 
+	$context_id = htmlspecialchars(html_entity_decode($_GET["id"])); 
 } 
 
 ?>
@@ -100,7 +101,7 @@ if (isset($_GET["context_name"])) {
 			</div>
 		</div>
 		<div class="col-md-6" style="display:none">
-			<input type="text" class="form-control" id="id_contract_context">
+			<input type="text" class="form-control" id="id_contract_context" value=<?php echo $context_id; ?>>
 		</div>
 		<div class="col-md-6" style="display:none">
 			<input type="text" class="form-control" id="application_name_hide">
