@@ -1,6 +1,6 @@
 <?php include('../../../include/config.php');
 	$table_name = $_GET['table_name'];
-  $id_number = $_GET['id_number'];
+	$id_number = $_GET['id_number'];
 	$id_name = "id_" . $table_name;
 	$id_name = strtoupper($id_name);
 

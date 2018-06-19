@@ -64,7 +64,7 @@ include("../../side.php");
 								<?php 
 								$context_name = $ccv2["contract"];
 								$context_id = $line["id_contract_context"];
-								echo "<td><a class='btn btn-primary' href='./contract_context_application.php?context_name=".$context_name."&id=".$context_id."' role='button'><span class='glyphicon glyphicon-pencil'></span></a>"; ?>
+								echo "<td><a class='btn btn-primary' href='./contract_context_application.php?id=".$context_id."' role='button'><span class='glyphicon glyphicon-pencil'></span></a>"; ?>
 									<button type="button" class="btn btn-danger" name="<?php echo $line["application_name"]; ?>" id="<?php echo $line["id_contract_context"]; ?>" onclick=RemoveSelection(name,id)><span class="glyphicon glyphicon-trash"></span></button>
 								</td>
 							</tr>

@@ -24,8 +24,7 @@ include("../../header.php");
 include("../../side.php");
 
 $context_name="";
-if (isset($_GET["context_name"]) && isset($_GET["id"])) {
-	$context_name = htmlspecialchars(html_entity_decode($_GET["context_name"])); 
+if (isset($_GET["id"])) { 
 	$context_id = htmlspecialchars(html_entity_decode($_GET["id"])); 
 } 
 
@@ -46,7 +45,7 @@ if (isset($_GET["context_name"]) && isset($_GET["id"])) {
 				<div class="has-feedback div-context">
 					<label for="name_contract_context"><?php echo getLabel("label.contract_context"); ?></label>
 					<div class="input-context">
-						<button class="btn btn-default btn-block dropdown-toggle" type="button" data-toggle="dropdown" id="name_contract_context" value="<?php echo $context_name; ?>"><?php echo getLabel("label.manage_contracts.contract_context_view_title"); ?>
+						<button class="btn btn-default btn-block dropdown-toggle" type="button" data-toggle="dropdown" id="name_contract_context"><?php echo getLabel("label.manage_contracts.contract_context_view_title"); ?>
 						<span class="caret"></span></button>
 						<ul class="dropdown-menu btn-block" id="ul_context"></ul>
 					</div>

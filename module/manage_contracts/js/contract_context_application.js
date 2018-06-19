@@ -23,8 +23,20 @@ $(document).ready(function() {
 	$global_array = {};
 	$counter = 0;
 
-	if ($("#name_contract_context").val() != "") {
-		ChangeValue($("#name_contract_context").val(), $("#id_contract_context").val());
+	if ($("#id_contract_context").val() != "") {
+		$.get(
+			'./php/select_name_by_id.php',
+			{
+				table_name: 'contract',
+				id_name: 'id_contract_context',
+				id_number: $("#id_contract_context").val()
+			},
+			function return_name(name){
+				$('#name_contract_context').val(name["NAME"]);
+				ChangeValue($("#name_contract_context").val(), $("#id_contract_context").val());
+			},
+		'json'
+		);
 	}
 
 	$.get(
