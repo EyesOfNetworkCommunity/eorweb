@@ -69,10 +69,10 @@ include("../../side.php");
 						<td><?php echo $line["kpi"]; ?></td>
 						<td><?php echo $line["step_group"]; ?></td>
 						<td>
-							<button type="button" class="btn btn-primary" id="<?php echo $line["id"]; ?>" onclick="EditSelection(<?php echo $line["id"]; ?>)">
+							<button type="button" class="btn btn-primary" id="<?php echo $line["id"]; ?>" onclick=EditSelection(id)>
 								<span class="glyphicon glyphicon-pencil"></span>
 							</button>
-							<button type="button" class="btn btn-danger" id="<?php echo $line["id"]; ?>" onclick="RemoveSelection(<?php echo $line["id"]; ?>">
+							<button type="button" class="btn btn-danger" id="<?php echo $line["id"]; ?>" onclick=RemoveSelection(id)>
 								<span class="glyphicon glyphicon-trash"></span>
 							</button>
 						</td>
