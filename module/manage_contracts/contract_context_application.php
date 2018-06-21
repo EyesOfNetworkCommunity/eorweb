@@ -23,9 +23,9 @@
 include("../../header.php");
 include("../../side.php");
 
-$context_name="";
+$context_id="";
 if (isset($_GET["id"])) { 
-	$context_id = htmlspecialchars(html_entity_decode($_GET["id"])); 
+	$context_id = $_GET["id"]; 
 } 
 
 ?>
