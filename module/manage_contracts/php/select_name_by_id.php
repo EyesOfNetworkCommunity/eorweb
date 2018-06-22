@@ -1,6 +1,6 @@
 <?php include('../../../include/config.php');
 	$table_name = $_GET['table_name'];
-  $id_number = $_GET['id_number'];
+	$id_number = $_GET['id_number'];
 	$id_name = "id_" . $table_name;
 	$id_name = strtoupper($id_name);
 
@@ -11,7 +11,7 @@
         exit('Impossible de se connecter à la base de données.');
     }
 
-    $sql = "SELECT NAME FROM " . $table_name . " WHERE " . $id_name . " = " . $id_number;
+    $sql = "SELECT NAME FROM " . $table_name . " WHERE " . $id_name . " = " . $id_number . " ORDER BY name";
 
 	$req = $bdd->query($sql);
 	$name = $req->fetch();

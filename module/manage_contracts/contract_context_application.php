@@ -22,6 +22,12 @@
 
 include("../../header.php");
 include("../../side.php");
+
+$context_id="";
+if (isset($_GET["id"])) { 
+	$context_id = $_GET["id"]; 
+} 
+
 ?>
 
 <div id="page-wrapper">
@@ -94,7 +100,7 @@ include("../../side.php");
 			</div>
 		</div>
 		<div class="col-md-6" style="display:none">
-			<input type="text" class="form-control" id="id_contract_context">
+			<input type="text" class="form-control" id="id_contract_context" value=<?php echo $context_id; ?>>
 		</div>
 		<div class="col-md-6" style="display:none">
 			<input type="text" class="form-control" id="application_name_hide">

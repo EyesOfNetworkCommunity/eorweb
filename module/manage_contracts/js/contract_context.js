@@ -293,17 +293,5 @@ function ChangeValue(value){
 	else if($object_name == "seuil"){
 		$('#name_step_group').html($name+'  <span class="caret"></span></button>');
 		$('#id_step_group').val($id);
-		
-		$.get(
-			'./php/get_kpi_name.php',
-			{
-				id: $id
-			},
-			function return_name(name){
-				$('#name_kpi').html(name[0]['NAME']+'  <span class="caret"></span></button>');
-				$('#id_kpi').val(name[0]['ID_KPI']);
-			},
-		  'json'
-		);
 	}
 }

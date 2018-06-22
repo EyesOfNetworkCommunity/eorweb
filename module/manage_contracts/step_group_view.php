@@ -44,6 +44,43 @@ include("../../side.php");
 				</tr>
 			</thead>
 			<tbody id="body_table">
+				<?php
+				$sql = "SELECT id_step_group, type, id_kpi, name, step_number, step_1_min, step_1_max, step_2_min, step_2_max, step_3_min, step_3_max, step_4_min, step_4_max, step_5_min, step_5_max, step_6_min, step_6_max, step_7_min, step_7_max, step_8_min, step_8_max,  step_9_min, step_9_max, step_10_min, step_10_max 
+				FROM step_group";
+				$ccv = sqlrequest($database_vanillabp,$sql);
+				if($ccv) {
+					while ($line = mysqli_fetch_array($ccv)) {
+						$step_array = "";
+						$sql2 = "SELECT name FROM kpi where id_kpi=".$line["id_kpi"];
+						$ccv2 = mysqli_fetch_array(sqlrequest($database_vanillabp,$sql2));
+						
+						$type=$line["type"];
+						
+						for ($i = 0; $i < $line["step_number"]; $i++){
+							$number = $i +1;
+							$step_min = $line['step_' .$number. '_min'];
+							$step_max = $line['step_' .$number. '_max'];
+							if($i == 4){
+								$step_array .= '    <span class="glyphicon glyphicon-option-horizontal" style="vertical-align:bottom"></span>';
+								break;
+							}
+							$step_array .= '  <button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-tag"></span> ' .$step_min. $type .' ; ' .$step_max . $type .'</button>';
+						}
+						?>
+						<tr>
+							<td><span class="glyphicon glyphicon-share-alt text-warning"></span></td>
+							<td> <?php echo $line["name"]; ?> </td>
+							<td> <?php echo $ccv2["name"]; ?> </td>
+							<td> <?php echo $step_array; ?> </td>
+							<td>
+								<button type="button" class="btn btn-primary" id="<?php echo $line["id_step_group"]; ?> " onclick=EditSelection(id)><span class="glyphicon glyphicon-pencil"></span></button>
+								<button type="button" class="btn btn-danger" id="<?php echo $line["id_step_group"]; ?> " onclick=RemoveSelection(id)><span class="glyphicon glyphicon-trash"></span></button>
+							</td>
+						</tr>
+						<?php
+					}
+				}
+				?>
 			</tbody>
 		</table>
 	</div>

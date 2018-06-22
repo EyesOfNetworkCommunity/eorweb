@@ -47,6 +47,40 @@ include("../../side.php");
 				</tr>
 			</thead>
 			<tbody id="body_table">
+			<?php
+			$sql = "select contract_context.ID_CONTRACT_CONTEXT as id,contract_context.name,contract_context.alias,
+					contract.name as contract,time_period.name as time_period,kpi.name as kpi,step_group.name as step_group
+					from contract_context
+					inner join contract on contract_context.id_contract = contract.id_contract
+					inner join time_period on contract_context.id_time_period = time_period.id_time_period
+					inner join kpi on contract_context.id_kpi = kpi.id_kpi
+					inner join step_group on contract_context.id_step_group = step_group.id_step_group
+					order by contract_context.name";
+			$ccv = sqlrequest($database_vanillabp,$sql);
+			if($ccv) {
+				while ($line = mysqli_fetch_array($ccv)) {
+					?>
+					<tr id="<?php echo $line["id"]; ?>">
+						<td><span class="glyphicon glyphicon-share-alt text-warning"></span>
+						<td><?php echo $line["name"]; ?></td>
+						<td><?php echo $line["alias"]; ?></td>
+						<td><?php echo $line["contract"]; ?></td>
+						<td><?php echo $line["time_period"]; ?></td>
+						<td><?php echo $line["kpi"]; ?></td>
+						<td><?php echo $line["step_group"]; ?></td>
+						<td>
+							<button type="button" class="btn btn-primary" id="<?php echo $line["id"]; ?>" onclick=EditSelection(id)>
+								<span class="glyphicon glyphicon-pencil"></span>
+							</button>
+							<button type="button" class="btn btn-danger" id="<?php echo $line["id"]; ?>" onclick=RemoveSelection(id)>
+								<span class="glyphicon glyphicon-trash"></span>
+							</button>
+						</td>
+					</tr> 
+					<?php
+				}
+			}
+			?>
 			</tbody>
 		</table>
 	</div>

@@ -19,7 +19,7 @@
 #########################################
 */
 
-function DisplayPopupRemove(text, tablename, number, title,Yes,No){
+function DisplayPopupRemove(text, tablename, number, title,Yes,No, id=false){
 	$('body').append('<div id="popup_confirmation" title="' + title + '"></div>');
 	$("#popup_confirmation").html(text);
 	$("#popup_confirmation").dialog({
@@ -28,7 +28,7 @@ function DisplayPopupRemove(text, tablename, number, title,Yes,No){
 			{
 				text: Yes,
 				click: function(){
-					ClickOnYes(tablename, number);
+					ClickOnYes(tablename, number, id);
 				}
 			},
 			{
@@ -41,12 +41,13 @@ function DisplayPopupRemove(text, tablename, number, title,Yes,No){
 	}).dialog("open");
 }
 
-function ClickOnYes(tablename, number){
+function ClickOnYes(tablename, number, id=false){
 	$.get(
 		'./php/delete_entry.php',
 		{
 			table_name: tablename,
-			id_number: number
+			id_number: number,
+			id_context: id
 		}
 	);
 	$("#popup_confirmation").dialog("close");

@@ -23,6 +23,22 @@ $(document).ready(function() {
 	$global_array = {};
 	$counter = 0;
 
+	if ($("#id_contract_context").val() != "") {
+		$.get(
+			'./php/select_name_by_id.php',
+			{
+				table_name: 'contract_context',
+				id_name: 'id_contract_context',
+				id_number: $("#id_contract_context").val()
+			},
+			function return_name(name){
+				$('#name_contract_context').val(name["NAME"]);
+				ChangeValue($("#name_contract_context").val(), $("#id_contract_context").val());
+			},
+		'json'
+		);
+	}
+
 	$.get(
 		'./php/get_name_id.php',
 		{
@@ -36,7 +52,7 @@ $(document).ready(function() {
 				$.each(values, function(v, k){
 					$name = k['NAME'];
 					$id = k['ID_CONTRACT_CONTEXT'];
-					$("#ul_context").append('<li><a class="dropdown-item" id="'+$name+'_-_'+$id+'"href="javascript:void(0);" onclick="ChangeValue(id);">' + $name + '</a></li>');
+					$("#ul_context").append('<li><a class="dropdown-item" name="'+$name+'" id="'+$id+'"href="javascript:void(0);" onclick="ChangeValue(name,id);">' + $name + '</a></li>');
 				});
 			}
 		},
@@ -111,14 +127,23 @@ $(document).ready(function() {
 			$('#application_name').html(dictionnary["label.manage_contracts.contract_context_select_application"] +' <span class="caret"></span>');
 		}
 	});
-
 });
 
-function ChangeValue(value){
-	$array_name_id = value.split("_-_");
-	$name = $array_name_id[0];
-	$id = $array_name_id[1];
 
+$("#name_contract_context").click(function(event){
+	$('#body_table').children().remove();
+	$global_array = {};
+	$counter=0;
+	
+	
+});
+
+
+function ChangeValue(value, id){
+	$name = value;
+	$id = id;
+
+	$("#application_list").show();	
 	$("#name_contract_context").html($name+'  <span class="caret"></span></button>');
 	$("#id_contract_context").val($id);
 	$.get(
