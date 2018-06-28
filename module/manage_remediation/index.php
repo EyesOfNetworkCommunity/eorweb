@@ -80,7 +80,7 @@ if(isset($_GET["action"])) {
 					$total_remediation .= $remediation.", ";
 
 					// Delete group
-					$group = sqlrequest($database_eorweb, "SELECT id_group FROM remediation_action WHERE remediationID = '$remediation_selected[$i]' LIMIT 1");
+					$group = sqlrequest($database_eorweb, "SELECT id_group FROM remediation_action WHERE remediationID = '$remediation_selected[$i]'");
 					$id_group = mysqli_result($group,0,"id_group");
 					sqlrequest($database_eorweb, "DELETE FROM remediation_group WHERE id = '$id_group'");
 
