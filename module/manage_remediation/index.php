@@ -81,9 +81,10 @@ if(isset($_GET["action"])) {
 
 					// Delete group
 					$group = sqlrequest($database_eorweb, "SELECT id_group FROM remediation_action WHERE remediationID = '$remediation_selected[$i]'");
-					$id_group = mysqli_result($group,0,"id_group");
-					sqlrequest($database_eorweb, "DELETE FROM remediation_group WHERE id = '$id_group'");
-
+					while ($line = mysqli_fetch_array($group)){
+						sqlrequest($database_eorweb, "DELETE FROM remediation_group WHERE id = '$line[0]'");
+					}
+					
 					// Delete 
 					sqlrequest($database_eorweb,"DELETE FROM remediation WHERE id = '$remediation_selected[$i]'");
 					sqlrequest($database_eorweb,"DELETE FROM remediation_action WHERE remediationID = '$remediation_selected[$i]'");
