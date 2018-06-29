@@ -169,34 +169,31 @@ if(isset($_GET["action"])) {
 					
 					$RemediationExec = sqlrequest($database_eorweb,"SELECT * FROM remediation_action WHERE remediationID='$remediation_selected[$i]' ORDER BY id_group");
 					
+					//Remediation group get file name
+					$RemediationGroupExec = sqlrequest($database_eorweb,"SELECT distinct id_group FROM remediation_action WHERE remediationID='$remediation_selected[$i]'");
+					
+					$ids = "";
+					while($line = mysqli_fetch_array($RemediationGroupExec)) {
+						$ids .= $line["id_group"]." or id=";
+					}
+					$ids = substr($ids, 0, -7);
+					
+					//remediation group file exist test
+					$remediation_group = sqlrequest($database_eorweb, "SELECT description FROM remediation_group WHERE id=".$ids);
+					while($line = mysqli_fetch_array($remediation_group)) {
+						if(file_exists("/srv/eyesofreport/etl/injection/Inject".$line["description"].".csv")){
+							exec("rm -rf /srv/eyesofreport/etl/injection/Inject".$line["description"].".csv");
+						}
+					}
+					
 					while($line = mysqli_fetch_array($RemediationExec)) {
 						
 						if($line['Action'] == "add") {
+							$lignes = array();
+							$exist = true;
+							
 							$remediation_group = sqlrequest($database_eorweb, "SELECT description FROM remediation_group WHERE id='$line[id_group]'");
 							$result_remediation_group = mysqli_fetch_all($remediation_group,MYSQLI_ASSOC);
-							
-							if(isset($old_remediation_group)){
-								if($old_remediation_group != $result_remediation_group[0]["description"]){
-									// Paramétrage de l'écriture du futur fichier CSV
-									$chemin = "/srv/eyesofreport/etl/injection/Inject".(string)$result_remediation_group[0]["description"].".csv";
-									
-									error_log($result_remediation_group[0]["description"]);
-									// Création du fichier csv
-									$fichier_csv = fopen($chemin, 'w+');
-									
-									fputs($fichier_csv, implode($array, $delimiteur)."\n");
-									foreach($lignes as $ligne){
-										fputcsv($fichier_csv, $ligne, $delimiteur);
-									}
-									fclose($fichier_csv);
-									exec("/srv/eyesofreport/etl/scripts/massive_inject_HOST_downtime-or-outage.sh root root66 ".$source." ".$type." ".$chemin, $output);
-									$file='/tmp/Inject'.(string)$old_remediation_group.'.log';
-									file_put_contents($file, "/srv/eyesofreport/etl/scripts/massive_inject_HOST_downtime-or-outage.sh root root66 ".$source." ".$type." ".$chemin."\n");
-									foreach($output as $output_val) {
-										file_put_contents($file, $output_val."\n", FILE_APPEND);
-									}
-								}
-							}
 
 							$delimiteur = ';';
 							if($line["type"] == "maintenance"){
@@ -206,11 +203,34 @@ if(isset($_GET["action"])) {
 							}
 							$dateDebut = explode(" ", date('d/m/Y H:i:s', strtotime($line["DateDebut"])));
 							$dateFin = explode(" ", date('d/m/Y H:i:s', strtotime($line["DateFin"])));
+							$source = $line['source'];
 							
 							$lignes[] = array('O', $dateDebut[0], $dateDebut[1], $dateFin[0], $dateFin[1], $line["type"], $line["host"], $line["service"]);
+						
+							// Paramétrage de l'écriture du futur fichier CSV
+							$chemin = "/srv/eyesofreport/etl/injection/Inject".$result_remediation_group[0]["description"].".csv";
 							
-							$old_remediation_group = (string)$result_remediation_group[0]["description"];
-							$source = $line['source'];
+							// Création du fichier csv
+							if(!file_exists($chemin)){
+								$exist = false;
+							}
+							
+							//ouverture du fichier et éciture
+							$fichier_csv = fopen($chemin, 'a+');
+							if(!$exist){
+								fputs($fichier_csv, implode($array, $delimiteur)."\n");
+							}
+							foreach($lignes as $ligne){
+								fputcsv($fichier_csv, $ligne, $delimiteur);
+							}
+							fclose($fichier_csv);
+							exec("/srv/eyesofreport/etl/scripts/massive_inject_HOST_downtime-or-outage.sh root root66 ".$source." ".$type." ".$chemin, $output);
+							
+							$file='/tmp/Inject'.$result_remediation_group[0]["description"].'.log';
+							file_put_contents($file, "/srv/eyesofreport/etl/scripts/massive_inject_HOST_downtime-or-outage.sh root root66 ".$source." ".$type." ".$chemin."\n");
+							foreach($output as $output_val) {
+								file_put_contents($file, $output_val."\n", FILE_APPEND);
+							}
 						}
 						
 						// si delete incident, faire requete	
