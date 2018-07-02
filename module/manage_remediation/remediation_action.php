@@ -76,15 +76,19 @@ global $database_eorweb;
 	if (isset($_POST["add"])) {
 		if(!$remediation_group || $remediation_group==""){
 			message(7," : ".getLabel("message.error.remediation_action_name"),'warning');
+			$invalid=true;
 		}
 		elseif(!$remediation_type || $remediation_type==""){
 			message(7," : ".getLabel("message.error.remediation_action_type"),'warning');
+			$invalid=true;
 		}
 		elseif(!$remediation_source || $remediation_source=="" || $remediation_source=="none"){
 			message(7," : ".getLabel("message.error.remediation_action_source"),'warning');
+			$invalid=true;
 		}
 		elseif(!$remediation_host || $remediation_host==""){
 			message(7," : ".getLabel("message.error.remediation_action_host"),'warning');
+			$invalid=true;
 		} else {
 			$connexion = mysqli_connect($database_host, $database_username, $database_password, $database_eorweb);
 			$query = "INSERT INTO remediation_group (description) VALUES('".$remediation_group."')";
@@ -105,12 +109,15 @@ global $database_eorweb;
 					}
 					if($remediation_host != $array_host[0]){
 						message(7," : ".getLabel("message.error.remediation_action_host_name"),'warning');
+						$invalid=true;
 					}
 					elseif(!$remediation_service[$i] || $remediation_service[$i]==""){
 						message(7," : ".getLabel("message.error.remediation_action_service"),'warning');
+						$invalid=true;
 					}
 					elseif($remediation_service[$i] != $array_service[0]){
 						message(7," : ".getLabel("message.error.remediation_action_service_description"),'warning');
+						$invalid=true;
 					}
 					$desciptionExist = sqlrequest($database_eorweb,"SELECT description FROM remediation_action");
 					while ($line = mysqli_fetch_array($desciptionExist)){
