@@ -162,6 +162,7 @@ if(isset($_GET["action"])) {
 				$array = array('Valid','"Date debut"','"Heure debut"','"Date fin"','"Heure fin"','Type','Host','Service');
 				$array = str_replace('"', '', $array);
 				$total_execute = "";
+				$execute = array();
 
 				for ($i = 0; $i < sizeof($remediation_selected); $i++) {
 					$remediation_request_name = sqlrequest($database_eorweb, "SELECT name FROM remediation WHERE id = '$remediation_selected[$i]'");
@@ -203,12 +204,20 @@ if(isset($_GET["action"])) {
 							}
 							$dateDebut = explode(" ", date('d/m/Y H:i:s', strtotime($line["DateDebut"])));
 							$dateFin = explode(" ", date('d/m/Y H:i:s', strtotime($line["DateFin"])));
-							$source = $line['source'];
 							
 							$lignes[] = array('O', $dateDebut[0], $dateDebut[1], $dateFin[0], $dateFin[1], $line["type"], $line["host"], $line["service"]);
 						
 							// Paramétrage de l'écriture du futur fichier CSV
 							$chemin = "/srv/eyesofreport/etl/injection/Inject".$result_remediation_group[0]["description"].".csv";
+							
+							if(!isset($oldchemin) || $oldchemin != $chemin){
+								$remdem = array();
+								$remdem[0]= $chemin;
+								$remdem[1]= $line['source'];
+								$remdem[2]= $type;
+								
+								$execute[]= $remdem;
+							}
 							
 							// Création du fichier csv
 							if(!file_exists($chemin)){
@@ -224,13 +233,7 @@ if(isset($_GET["action"])) {
 								fputcsv($fichier_csv, $ligne, $delimiteur);
 							}
 							fclose($fichier_csv);
-							exec("/srv/eyesofreport/etl/scripts/massive_inject_HOST_downtime-or-outage.sh root root66 ".$source." ".$type." ".$chemin, $output);
-							
-							$file='/tmp/Inject'.$result_remediation_group[0]["description"].'.log';
-							file_put_contents($file, "/srv/eyesofreport/etl/scripts/massive_inject_HOST_downtime-or-outage.sh root root66 ".$source." ".$type." ".$chemin."\n");
-							foreach($output as $output_val) {
-								file_put_contents($file, $output_val."\n", FILE_APPEND);
-							}
+							$oldchemin = $chemin;
 						}
 						
 						// si delete incident, faire requete	
@@ -266,6 +269,18 @@ if(isset($_GET["action"])) {
 							}
 						}
 						$old_remediation_group = $remediation_group;
+					}
+					
+					if(isset($execute[0])){
+						foreach($execute as $value){
+							exec("/srv/eyesofreport/etl/scripts/massive_inject_HOST_downtime-or-outage.sh root root66 ".$value[1]." ".$value[2]." ".$value[0], $output);
+							echo "/srv/eyesofreport/etl/scripts/massive_inject_HOST_downtime-or-outage.sh root root66 ".$value[1]." ".$value[2]." ".$value[0]."\n";
+							$file='/tmp/Inject'.$result_remediation_group[0]["description"].'.log';
+							file_put_contents($file, "/srv/eyesofreport/etl/scripts/massive_inject_HOST_downtime-or-outage.sh root root66 ".$value[1]." ".$value[2]." ".$value[0]."\n");
+							foreach($output as $output_val) {
+								file_put_contents($file, $output_val."\n", FILE_APPEND);
+							}
+						}
 					}
 					
 					// Update remediations state
