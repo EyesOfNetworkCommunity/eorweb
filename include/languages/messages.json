@@ -490,6 +490,7 @@
 	"label.manage_remediation.date_ending": "End date",
 	"label.manage_remediation.date_validation": "Validation date",
 	"label.manage_remediation.desc": "Description",
+	"label.manage_remediation.group_name": "Group name",
 	"label.manage_remediation.list_accepted_remediations": "Accepted remediations requests",
 	"label.manage_remediation.list_remediations": "Remediations requests list",
 	"label.manage_remediation.list_remediations_action": "Remediations actions list",

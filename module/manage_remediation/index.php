@@ -30,7 +30,7 @@ global $database_thruk;
 $action=null;
 if(isset($_GET["action"])) {
 	$action=$_GET["action"];
-} ?> 
+} ?>
 
 <div id="page-wrapper">
 	<?php
@@ -42,9 +42,7 @@ if(isset($_GET["action"])) {
 	
 	$remediation_action_selected = retrieve_form_data("remediation_action_selected",null);
 	$remediation_selected = retrieve_form_data("remediation_selected",null);
-	?>
-
-	<?php
+	
 	if($action == null or $action == "remediation") {
 	?>
 		<div class="row">
@@ -81,6 +79,12 @@ if(isset($_GET["action"])) {
 					$remediation = mysqli_result($user_res,0,"name");
 					$total_remediation .= $remediation.", ";
 
+					// Delete group
+					$group = sqlrequest($database_eorweb, "SELECT id_group FROM remediation_action WHERE remediationID = '$remediation_selected[$i]'");
+					while ($line = mysqli_fetch_array($group)){
+						sqlrequest($database_eorweb, "DELETE FROM remediation_group WHERE id = '$line[0]'");
+					}
+					
 					// Delete 
 					sqlrequest($database_eorweb,"DELETE FROM remediation WHERE id = '$remediation_selected[$i]'");
 					sqlrequest($database_eorweb,"DELETE FROM remediation_action WHERE remediationID = '$remediation_selected[$i]'");
@@ -97,11 +101,14 @@ if(isset($_GET["action"])) {
 				$total_remediation_action = "";
 				for ($i = 0; $i < sizeof($remediation_action_selected); $i++) {
 					// Get remediation_action name
-					$user_res = sqlrequest($database_eorweb,"SELECT description FROM remediation_action WHERE id='$remediation_action_selected[$i]'");
+					$user_res = sqlrequest($database_eorweb,"SELECT description FROM remediation_action WHERE id_group='$remediation_action_selected[$i]'");
 					$remediation_action = mysqli_result($user_res,0,"description");
 					
 					// Delete remediation action
-					sqlrequest($database_eorweb,"DELETE FROM remediation_action WHERE id='$remediation_action_selected[$i]'");
+					sqlrequest($database_eorweb,"DELETE FROM remediation_action WHERE id_group = '$remediation_action_selected[$i]'");
+					$sql_group = sqlrequest($database_eorweb, "SELECT description FROM remediation_group WHERE id = '$remediation_action_selected[$i]'");
+					$remediation_group_name = mysqli_result($sql_group,0,"description");
+					sqlrequest($database_eorweb,"DELETE FROM remediation_group WHERE id = '$remediation_action_selected[$i]'");
 					
 					// Logging action
 					logging("manage_remediation","DELETE : $remediation_action_selected[$i]");
@@ -285,7 +292,7 @@ if(isset($_GET["action"])) {
 				<a href="./remediation.php" class="btn btn-success" role="button"><?php echo getLabel("action.add");?></a>
 				<button class="btn btn-danger" type="submit" name="actions" value="del_method"><?php echo getLabel("action.delete");?></button>
 				
-				<!-- Si les droits de remediation de l'utilisateur sont limités -->
+				<!-- if the remediation rights are limited -->
 				<?php 
 				$req = "SELECT validator FROM groups WHERE group_id = ?";
 				$validator_bool = sqlrequest($database_eorweb,$req,false,array("i",(int)$_COOKIE['group_id']));
@@ -295,7 +302,7 @@ if(isset($_GET["action"])) {
 					<button class="btn btn-default" type="submit" name="actions" value="demand"><?php echo getLabel("action.submit");?></button>
 				<?php
 				} else { ?>
-					<!-- Si l'utilisateur a tous les droits de remediation -->
+					<!-- if the user have the remediation rights -->
 					<button class="btn btn-default" type="submit" name="actions" value="validation"><?php echo getLabel("action.validate");?></button>
 					<button class="btn btn-danger" type="submit" name="actions" value="refus"><?php echo getLabel("action.refuse");?></button>
 				<?php } ?>
@@ -308,11 +315,12 @@ if(isset($_GET["action"])) {
 	*************** REMEDIATION_ACTION 
 	*/
 	} elseif($action == "remediation_action") {
-		$rules_sql = "SELECT remediation_action.*, remediation.name, remediation.state, remediation.user_id, DATE_FORMAT(DateDebut, '%d-%m-%Y %Hh%i') AS DateDebut, DATE_FORMAT(DateFin, '%d-%m-%Y %Hh%i') AS DateFin
-						FROM remediation_action
-						LEFT JOIN remediation ON remediation.id =remediation_action.remediationID
-						GROUP BY description
-						ORDER BY remediation.id DESC";
+		// $rules_sql = "SELECT remediation_action.*, remediation.name, remediation.state, remediation.user_id, DATE_FORMAT(DateDebut, '%d-%m-%Y %Hh%i') AS DateDebut, DATE_FORMAT(DateFin, '%d-%m-%Y %Hh%i') AS DateFin
+		// 				FROM remediation_action
+		// 				LEFT JOIN remediation ON remediation.id =remediation_action.remediationID
+		// 				GROUP BY description
+		// 				ORDER BY remediation.id DESC";
+		$rules_sql = " SELECT remediation_action.*, remediation.name, remediation_group.description, remediation.state, remediation.user_id, DATE_FORMAT(DateDebut, '%d-%m-%Y %Hh%i') AS DateDebut, DATE_FORMAT(DateFin, '%d-%m-%Y %Hh%i') AS DateFin FROM remediation_action LEFT JOIN remediation ON remediation.id=remediation_action.remediationID LEFT JOIN remediation_group ON remediation_group.id=remediation_action.id_group GROUP BY remediation_group.description ORDER BY remediation.id DESC";
 	?>
 	
 	<form action="./index.php?action=remediation_action" method="POST">
@@ -322,9 +330,6 @@ if(isset($_GET["action"])) {
 					<tr>
 						<th class="text-center"> <?php echo getLabel("label.admin_group.select"); ?> </th>
 						<th> <?php echo getLabel("label.manage_remediation.desc"); ?> </th>
-						<th> <?php echo getLabel("label.manage_remediation.type"); ?> </th>
-						<th> <?php echo getLabel("label.manage_remediation.date_beginning"); ?> </th>
-						<th> <?php echo getLabel("label.manage_remediation.date_ending"); ?> </th>
 						<th> <?php echo getLabel("label.manage_remediation.remediation_name"); ?> </th>
 						<th> <?php echo getLabel("label.manage_remediation.status"); ?> </th>
 					</tr>
@@ -339,11 +344,8 @@ if(isset($_GET["action"])) {
 						if ( !($line["user_id"] != $_COOKIE["user_id"] && $line["state"] == "inactive") ) {
 						?>
 							<tr>
-								<td class="text-center"><label><input type="checkbox" class="checkbox" name="remediation_action_selected[]" value="<?php echo $line["id"]; ?>"></label></td>
+								<td class="text-center"><label><input type="checkbox" class="checkbox" name="remediation_action_selected[]" value="<?php echo $line["id_group"]; ?>"></label></td>
 								<td><a href="remediation_action.php?id=<?php echo $line["id"]; ?>"><?php echo $line["description"]; ?></a></td>
-								<td><?php echo getLabel("label.manage_remediation.type_".$line["type"]); ?></td>
-								<td><?php echo $line["DateDebut"]; ?></td>
-								<td><?php echo $line["DateFin"]; ?></td>
 								<td><a href="remediation.php?id=<?php echo $line["remediationID"]; ?>"><?php echo $line["name"]; ?></a></td>
 								<td><?php if ($line["state"]) { echo getLabel("label.manage_remediation.state_".$line["state"]); } ?></td>
 							</tr>
