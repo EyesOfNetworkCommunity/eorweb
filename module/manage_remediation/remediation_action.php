@@ -214,14 +214,14 @@ global $database_eorweb;
 				</div>
 			</div>
 
-		<?php if (!isset($_POST["update"]) && !isset($_GET["id"])) { ?>
 			<div class="row form-group">
-		<?php } else { ?>
-			<div class="row form-group" style="display: none">
-		<?php } ?>
 				<label class="col-md-3"><?php echo getLabel("label.host"); ?></label>
 				<div class="col-md-9">
-					<input class="form-control" type='text' id='host' name='host' value='<?php echo $remediation_host?>'>
+					<?php if (!isset($_POST["update"]) && !isset($_GET["id"])) { ?>
+						<input class="form-control" type='text' id='host' name='host' value='<?php echo $remediation_host?>'>
+					<?php } else { ?>
+						<input class="form-control" type='text' readonly id='host' name='host' value='<?php echo $remediation_host?>'>
+					<?php } ?>
 				</div>
 			</div>
 
