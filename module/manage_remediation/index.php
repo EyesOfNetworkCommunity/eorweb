@@ -348,7 +348,7 @@ if(isset($_GET["action"])) {
 			<!-- group of buttons -->
 			<div class="form-group">
 				<div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
-					<div class="btn-group mr-2" role="group" aria-label="First group">
+					<div class="btn-group mr-2 form-group" role="group" aria-label="First group">
 						<a href="./remediation.php" class="btn btn-success" role="button"><?php echo getLabel("action.add");?></a>
 						<button class="btn btn-danger" type="submit" name="actions" value="del_method"><?php echo getLabel("action.delete");?></button>
 						<?php if (!$result) { ?>
