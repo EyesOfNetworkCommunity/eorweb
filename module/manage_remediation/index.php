@@ -337,28 +337,40 @@ if(isset($_GET["action"])) {
 				?>
 				</tbody>
 			</table>
+
+			<!-- define if the user is validator or not -->
+			<?php 
+			$req = "SELECT validator FROM groups WHERE group_id = ?";
+			$validator_bool = sqlrequest($database_eorweb,$req,false,array("i",(int)$_COOKIE['group_id']));
+			$result = mysqli_result($validator_bool,0,"validator");
+			?>
+
+			<!-- group of buttons -->
 			<div class="form-group">
-				<a href="./remediation.php" class="btn btn-success" role="button"><?php echo getLabel("action.add");?></a>
-				<button class="btn btn-danger" type="submit" name="actions" value="del_method"><?php echo getLabel("action.delete");?></button>
-				
-				<!-- if the remediation rights are limited -->
-				<?php 
-				$req = "SELECT validator FROM groups WHERE group_id = ?";
-				$validator_bool = sqlrequest($database_eorweb,$req,false,array("i",(int)$_COOKIE['group_id']));
-				$result = mysqli_result($validator_bool,0,"validator");
-				if (!$result) {
-				?>
-					<button class="btn btn-default" type="submit" name="actions" value="demand"><?php echo getLabel("action.submit");?></button>
-				<?php
-				} else { ?>
-					<!-- if the user have the remediation rights -->
-					<button class="btn btn-default" type="submit" name="actions" value="validation"><?php echo getLabel("action.validate");?></button>
-					<button class="btn btn-danger" type="submit" name="actions" value="refus"><?php echo getLabel("action.refuse");?></button>
-				<?php } ?>
+				<div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+					<div class="btn-group mr-2" role="group" aria-label="First group">
+						<a href="./remediation.php" class="btn btn-success" role="button"><?php echo getLabel("action.add");?></a>
+						<button class="btn btn-danger" type="submit" name="actions" value="del_method"><?php echo getLabel("action.delete");?></button>
+						<?php if (!$result) { ?>
+						<!-- if user is not limited -->
+						<button class="btn btn-success" type="submit" name="actions" value="demand"><?php echo getLabel("action.submit");?></button>
+						<?php } else { ?>
+						<!-- if the user have the remediation rights -->
+						<button class="btn btn-success" type="submit" name="actions" value="validation"><?php echo getLabel("action.validate");?></button>
+						<button class="btn btn-danger" type="submit" name="actions" value="refus"><?php echo getLabel("action.refuse");?></button>
+					</div>
+					<div class="btn-group mr-2" role="group" aria-label="Second group">
+						<button class="btn btn-primary" type="submit" name="actions" value="execution"><?php echo getLabel("action.apply"); ?></button>
+					</div>
+					<?php } ?>
+				</div>
 			</div>
 		</div>
 	</form>
-	
+
+
+
+
 	<?php
 	/*
 	*************** REMEDIATION_ACTION 
@@ -412,54 +424,7 @@ if(isset($_GET["action"])) {
 		</div>	
 	</form>
 
-	<?php
-	/*
-	*************** Apply remediation 
-	*/
-	} elseif($action == "apply_pack") {
-		$rules_sql = "SELECT *, DATE_FORMAT(date_demand, '%d-%m-%Y %Hh%i') AS date_demand, DATE_FORMAT(date_validation, '%d-%m-%Y %Hh%i') AS date_validation FROM remediation WHERE state = 'approved' OR state = 'executed' ORDER BY id DESC";
-	?>
-	
-	<form action="./index.php?action=apply_pack" method="POST">
-		<div class="dataTable_wrapper">
-			<table class="table table-striped datatable-eorweb table-condensed">
-				<thead>
-					<tr>
-						<th class="text-center"> <?php echo getLabel("label.admin_group.select"); ?> </th>
-						<th> <?php echo getLabel("label.manage_remediation.name"); ?> </th>
-						<th> <?php echo getLabel("label.manage_remediation.user"); ?> </th>
-						<th> <?php echo getLabel("label.manage_remediation.date_demand"); ?> </th>
-						<th> <?php echo getLabel("label.manage_remediation.date_validation"); ?> </th>
-					</tr>
-				</thead>
-				<tbody>
-				<?php
-				// Get remediation_pack
-				$methods=sqlrequest($database_eorweb,$rules_sql);
-				if($methods) {
-					while ($line = mysqli_fetch_array($methods)) {
-					?>
-						<tr>
-							<td class="text-center"><label><input type="checkbox" class="checkbox" name="remediation_selected[]" value="<?php echo $line["id"]; ?>"></label></td>
-							<td><a href="remediation.php?id=<?php echo $line["id"]; ?>"><?php echo $line["name"]; ?></a></td>
-							<td><?php echo mysqli_result(sqlrequest($database_eorweb,"SELECT user_name FROM users WHERE user_id='".$line["user_id"]."'"),0,"user_name"); ?></td>
-							<td><?php echo $line["date_demand"]; ?></td>
-							<td><?php echo $line["date_validation"]; ?></td>
-						</tr>
-					<?php
-					}
-				}
-				?>
-				</tbody>
-			</table>
-			<div class="form-group">
-				<button class="btn btn-success" type="submit" name="actions" value="execution"><?php echo getLabel("action.apply"); ?></button>
-			</div>
-		</div>
-	</form>
-	<?php
-	}
-	?>
+	<?php } ?>
 	
 </div>
 
