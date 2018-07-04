@@ -1,35 +1,13 @@
 {
 	"name":"remediation",
-	"navbarsubtab":[
+	"navbarlink":[
 		{
 			"name":"label.manage_remediation.remediations_request",
-			"link":[
-				{
-					"name":"action.list",
-					"url":"/module/manage_remediation/index.php"
-				},
-				{
-					"name":"action.add",
-					"url":"/module/manage_remediation/remediation.php"
-				},
-				{
-					"name":"label.manage_remediation.remediations_apply_request.menu",
-					"url":"/module/manage_remediation/index.php?action=apply_pack"
-				}
-			]
+			"url":"/module/manage_remediation/index.php"
 		},
 		{
 			"name":"label.manage_remediation.remediations_action",
-			"link":[
-				{
-					"name":"action.list",
-					"url":"/module/manage_remediation/index.php?action=remediation_action"
-				},
-				{
-					"name":"action.add",
-					"url":"/module/manage_remediation/remediation_action.php"
-				}
-			]
+			"url":"/module/manage_remediation/index.php?action=remediation_action"
 		}
 	]
 }
