@@ -179,11 +179,12 @@ if(isset($_GET["action"])) {
 					}
 					$ids = substr($ids, 0, -7);
 					
+					$description = str_replace(' ', '_', $line["description"]);
 					//remediation group file exist test
 					$remediation_group = sqlrequest($database_eorweb, "SELECT description FROM remediation_group WHERE id=".$ids);
 					while($line = mysqli_fetch_array($remediation_group)) {
-						if(file_exists("/srv/eyesofreport/etl/injection/Inject".$line["description"].".csv")){
-							exec("rm -rf /srv/eyesofreport/etl/injection/Inject".$line["description"].".csv");
+						if(file_exists("/srv/eyesofreport/etl/injection/Inject".$description.".csv")){
+							exec("rm -rf /srv/eyesofreport/etl/injection/Inject".$description.".csv");
 						}
 					}
 					
@@ -208,8 +209,7 @@ if(isset($_GET["action"])) {
 							$lignes[] = array('O', $dateDebut[0], $dateDebut[1], $dateFin[0], $dateFin[1], $line["type"], $line["host"], $line["service"]);
 						
 							// Paramétrage de l'écriture du futur fichier CSV
-							$chemin = "/srv/eyesofreport/etl/injection/Inject".$result_remediation_group[0]["description"].".csv";
-							
+							$chemin = "Inject".str_replace(' ', '_', $result_remediation_group[0]["description"]).".csv";
 							if(!isset($oldchemin) || $oldchemin != $chemin){
 								$remdem = array();
 								$remdem[0]= $chemin;
@@ -220,12 +220,12 @@ if(isset($_GET["action"])) {
 							}
 							
 							// Création du fichier csv
-							if(!file_exists($chemin)){
+							if(!file_exists("/srv/eyesofreport/etl/injection/".$chemin)){
 								$exist = false;
 							}
 							
 							//ouverture du fichier et éciture
-							$fichier_csv = fopen($chemin, 'a+');
+							$fichier_csv = fopen("/srv/eyesofreport/etl/injection/".$chemin, 'a+');
 							if(!$exist){
 								fputs($fichier_csv, implode($array, $delimiteur)."\n");
 							}
@@ -241,7 +241,7 @@ if(isset($_GET["action"])) {
 							$host_id = mysqli_result(sqlrequest($database_thruk, "SELECT host_id FROM ".$line['source']."_host WHERE host_name = '".$line['host']."'"),0,"host_id");
 							$service_id = mysqli_result(sqlrequest($database_thruk, "SELECT service_id FROM ".$line['source']."_service WHERE service_description = '".$line['service']."' AND host_id = '".$host_id."'"),0,"service_id");
 							$output_id = mysqli_result(sqlrequest($database_thruk,"SELECT output_id from ".$line['source']."_plugin_output where output ='OK;HARD;4;' limit 1"),0,"output_id");
-
+							
 							// delete outage service
 							if($line['service'] != "Hoststatus") {
 								sqlrequest($database_thruk,"UPDATE ".$line['source']."_log SET message = $output_id WHERE  time BETWEEN ".strtotime($line['DateDebut'])." AND ".strtotime($line['DateFin'])." AND state_type ='HARD' AND host_id =".$host_id." AND service_id = ".$service_id);
@@ -274,8 +274,8 @@ if(isset($_GET["action"])) {
 					if(isset($execute[0])){
 						foreach($execute as $value){
 							exec("/srv/eyesofreport/etl/scripts/massive_inject_HOST_downtime-or-outage.sh root root66 ".$value[1]." ".$value[2]." ".$value[0], $output);
-							echo "/srv/eyesofreport/etl/scripts/massive_inject_HOST_downtime-or-outage.sh root root66 ".$value[1]." ".$value[2]." ".$value[0]."\n";
-							$file='/tmp/Inject'.$result_remediation_group[0]["description"].'.log';
+							//echo "/srv/eyesofreport/etl/scripts/massive_inject_HOST_downtime-or-outage.sh root root66 ".$value[1]." ".$value[2]." ".$value[0]."\n";
+							$file='/tmp/Inject'.str_replace(' ', '_', $result_remediation_group[0]["description"]).'.log';
 							file_put_contents($file, "/srv/eyesofreport/etl/scripts/massive_inject_HOST_downtime-or-outage.sh root root66 ".$value[1]." ".$value[2]." ".$value[0]."\n");
 							foreach($output as $output_val) {
 								file_put_contents($file, $output_val."\n", FILE_APPEND);
