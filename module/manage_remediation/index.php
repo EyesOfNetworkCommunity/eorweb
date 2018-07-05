@@ -137,11 +137,11 @@ if(isset($_GET["action"])) {
 				}
 				if ($validate) {
 					$total_validate = substr($total_validate,0,-2);
-					message(6," : ".getLabel("message.manage_remediation.request_validate")." ( $total_validate )",'ok');
+					message(6," : ".getLabel("message.manage_remediation.validate")." $total_validate ",'ok');
 				}
 				if ($not_validate) {
 					$total_not_validate = substr($total_not_validate,0,-2);
-					message(6," : ".getLabel("message.manage_remediation.request_validate_fail")." ( $total_not_validate )",'critical');
+					message(6," : ".getLabel("message.manage_remediation.validate_fail")." $total_not_validate ",'critical');
 				}
 			}
 			break;
@@ -172,11 +172,11 @@ if(isset($_GET["action"])) {
 				// display message if a request_remdiation has been updated
 				if ($refuse) {
 					$total_refuse = substr($total_refuse,0,-2);
-					message(6," : ".getLabel("message.manage_remediation.request_refused")." ( $total_refuse )",'ok');
+					message(6," : ".getLabel("message.manage_remediation.refuse")." $total_refuse ",'ok');
 				} 
 				if ($not_refuse) {
 					$total_not_refuse = substr($total_not_refuse,0,-2);
-					message(12," : ".getLabel("message.manage_remediation.request_not_refused")." ( $total_not_refuse )",'critical');
+					message(12," : ".getLabel("message.manage_remediation.not_refuse")." $total_not_refuse ",'critical');
 				}
 			}
 			break;
@@ -207,11 +207,11 @@ if(isset($_GET["action"])) {
 				// display message if a request_remdiation has been updated
 				if ($demand) {
 					$total_demand = substr($total_demand,0,-2);
-					message(6," : ".getLabel("message.manage_remediation.request_demand")." ( $total_demand )",'ok');
+					message(6," : ".getLabel("message.manage_remediation.demand")." $total_demand ",'ok');
 				} 
 				if ($not_demand) {
 					$total_not_demand = substr($total_not_demand,0,-2);
-					message(12," : ".getLabel("message.manage_remediation.request_not_demand")." ( $total_not_demand )",'critical');
+					message(12," : ".getLabel("message.manage_remediation.not_demand")." $total_not_demand ",'critical');
 				}
 			}
 			break;
@@ -355,11 +355,11 @@ if(isset($_GET["action"])) {
 				}
 				if ($success_execution) {
 					$total_execute = substr($total_execute,0,-2);
-					message(6," : ".getLabel("message.manage_remediation.request_execute")." ( $total_execute )",'ok');
+					message(6," : ".getLabel("message.manage_remediation.execute")." $total_execute ",'ok');
 				}
 				if ($fail_execution) {
 					$total_fail = substr($total_fail,0,-2);
-					message(12," ".getLabel("message.manage_remediation.fail_execution")." ( $total_fail )",'critical');
+					message(12," ".getLabel("message.manage_remediation.fail_execution")." $total_fail ",'critical');
 				}
 			}
 			break;
