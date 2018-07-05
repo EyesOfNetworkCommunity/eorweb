@@ -31,12 +31,19 @@ $(document).ready(function() {
 	// Delete
 	$('#rule_host_button_del').on('click',function(){
 		$("#remediation_group_id").find('option:selected').remove();
-		$("#remediation_group_id").find("option").attr('selected','selected');
+		$("#remediation_group_id").find("option").prop('selected',true);
 		group_tab = [];
+		$("#remediation_group_id option").each(function() {
+			group_tab.push(this.value);
+		});
 	});
 	$('#service_button_del').on('click',function(){
-		$("#service_id").find('option').remove();
+		$("#service_id").find('option:selected').remove();
+		$("#service_id").find("option").prop('selected',true);
 		service_tab = [];
+		$("#service_id option").each(function() {
+		  service_tab.push(this.value);
+		});
 	});
 	
 	source_name = $('#source').val();

@@ -42,23 +42,31 @@ global $database_eorweb;
 	$invalid=false;
 	
 	if(isset($_GET["id"]) && $_GET["id"] != null){
-		$sql = "SELECT remediation_action.*, remediation.state, remediation_group.description as group_name FROM remediation_action LEFT JOIN remediation ON remediation.id = remediation_action.remediationID LEFT JOIN remediation_group ON remediation_action.id_group = remediation_group.id WHERE remediation_action.id=?";
+		$sql = "SELECT remediation_action.*, remediation.state, remediation_group.description as group_name, remediation_group.id as group_id FROM remediation_action LEFT JOIN remediation ON remediation.id = remediation_action.remediationID LEFT JOIN remediation_group ON remediation_action.id_group = remediation_group.id WHERE remediation_action.id=?";
 
 		$user_infos=sqlrequest($database_eorweb, $sql, false, array("i",(int)$remediation_id));
 		
 		// Retrieve Information from database
 		$remediation_group=mysqli_result($user_infos,0,"group_name");
-		$remediation_name=mysqli_result($user_infos,0,"description");
+		$old_remediation_group=mysqli_result($user_infos,0,"group_name");
 		$remediation_source=mysqli_result($user_infos,0,"source");
 		$remediation_host=mysqli_result($user_infos,0,"host");
-		$remediation_service=mysqli_result($user_infos,0,"service");
+		
+		// Retrieve services on remediation action
+		$sql = "SELECT service FROM remediation_action WHERE id_group=?";
+		$services=sqlrequest($database_eorweb, $sql, false, array("i",(int)mysqli_result($user_infos,0,"group_id")));
+		
+		while ($line = mysqli_fetch_array($services)){
+			$remediation_service[] = $line[0];
+		}
+		
 		$remediation_type=mysqli_result($user_infos,0,"type");
 		$remediation_action=mysqli_result($user_infos,0,"Action");
 		$remediation_dateDebut=mysqli_result($user_infos,0,"DateDebut");
 		$remediation_dateFin=mysqli_result($user_infos,0,"DateFin");
 	} else {
 		$remediation_group=retrieve_form_data("group_name",null);
-		$remediation_name=retrieve_form_data("action_name",null);
+		$old_remediation_group=retrieve_form_data("old_group_name",null);
 		$remediation_source=retrieve_form_data("source",null);
 		$remediation_host=retrieve_form_data("host",null);
 		$remediation_service=retrieve_form_data("service_id",null);
@@ -69,6 +77,7 @@ global $database_eorweb;
 		$remediation_action=retrieve_form_data("action",null);
 		$remediation_dateDebut=retrieve_form_data("start",null);
 		$remediation_dateFin=retrieve_form_data("end",null);
+		$remediation_create =retrieve_form_data("request",null);
 	}
 
 	$remediation_creation_validate = false;
@@ -120,12 +129,6 @@ global $database_eorweb;
 						$invalid=true;
 					}
 					$desciptionExist = sqlrequest($database_eorweb,"SELECT description FROM remediation_action");
-					while ($line = mysqli_fetch_array($desciptionExist)){
-						if($line[0] == $remediation_name){
-							message(7," : ".getLabel("message.error.remediation_action_descr"),'warning');
-							$invalid=true;
-						}
-					}
 					if(!$invalid){
 						// insert values for add
 						$sql_add = "INSERT INTO remediation_action (description,type,DateDebut,DateFin,Action,host,service,source,id_group) VALUES('".$remediation_group." - ".$remediation_service[$i]."','".$remediation_type."','".$remediation_dateDebut."','".$remediation_dateFin."', '".$remediation_action."','".$remediation_host."','".$remediation_service[$i]."','".$remediation_source."','".$id_group."')";
@@ -147,14 +150,61 @@ global $database_eorweb;
 		}
 		elseif(!$remediation_type || $remediation_type==""){
 			message(7," : ".getLabel("message.error.remediation_action_type"),'warning');
+		}elseif(!$remediation_source || $remediation_source=="" || $remediation_source=="none"){
+			message(7," : ".getLabel("message.error.remediation_action_source"),'warning');
+			$invalid=true;
 		}
-		$id_group = sqlrequest($database_eorweb, "SELECT id_group FROM remediation_action WHERE description='".$remediation_name."'");
-		$remediation_group_id = mysqli_result($id_group,0,"id_group");
+		elseif(!$remediation_host || $remediation_host==""){
+			message(7," : ".getLabel("message.error.remediation_action_host"),'warning');
+			$invalid=true;
+		}
+		$id_group = sqlrequest($database_eorweb, "SELECT id FROM remediation_group WHERE description='".$old_remediation_group."'");
+		$remediation_group_id = mysqli_result($id_group,0,"id");
 
 		sqlrequest($database_eorweb, "UPDATE remediation_group SET description='".$remediation_group."' WHERE id ='".$remediation_group_id."'");
-		sqlrequest($database_eorweb,"UPDATE remediation_action SET type='".$remediation_type."', DateDebut='".$remediation_dateDebut."', DateFin='".$remediation_dateFin."', service='".$remediation_service."', Action='".$remediation_action."' WHERE id_group ='".$remediation_group_id."' AND description='".$remediation_name."'");
-
-		message(6," : ".getLabel("message.manage_remediation.action_update"),'ok');
+		
+		$old_remediation_services = sqlrequest($database_eorweb, "SELECT id FROM remediation_action WHERE description LIKE '%".$old_remediation_group." -%'");
+		while ($line = mysqli_fetch_array($old_remediation_services)){
+			sqlrequest($database_eorweb, "DELETE FROM remediation_action WHERE id=".$line[0]);
+		}
+		
+		if (isset($remediation_service)) {
+			for ($i=0; $i < sizeof($remediation_service) ; $i++) {
+				if ($remediation_source != "none" && $remediation_source != "") {
+					$result = sqlrequest($database_thruk, "SELECT host_name,host_id FROM ".$remediation_source."_host WHERE host_name=?",false,array("s",(string)$remediation_host));
+					$array_host=mysqli_fetch_row($result);
+					
+					if($array_host && $remediation_service[$i]!="Hoststatus") {
+						$result = sqlrequest($database_thruk, "SELECT service_description FROM ".$remediation_source."_service WHERE host_id=? and service_description=?",false,array("is",(int)$array_host[1],(string)$remediation_service[$i]));
+						$array_service=mysqli_fetch_row($result);
+					} elseif($remediation_service[$i]=="Hoststatus") {
+						$array_service[0]="Hoststatus";
+					}
+				}
+				if($remediation_host != $array_host[0]){
+					message(7," : ".getLabel("message.error.remediation_action_host_name"),'warning');
+					$invalid=true;
+				}
+				elseif(!$remediation_service[$i] || $remediation_service[$i]==""){
+					message(7," : ".getLabel("message.error.remediation_action_service"),'warning');
+					$invalid=true;
+				}
+				elseif($remediation_service[$i] != $array_service[0]){
+					message(7," : ".getLabel("message.error.remediation_action_service_description"),'warning');
+					$invalid=true;
+				}
+				$desciptionExist = sqlrequest($database_eorweb,"SELECT description FROM remediation_action");
+				if(!$invalid){
+					// insert values for add
+					$sql_add = "INSERT INTO remediation_action (description,type,DateDebut,DateFin,Action,host,service,source,id_group) VALUES('".$remediation_group." - ".$remediation_service[$i]."','".$remediation_type."','".$remediation_dateDebut."','".$remediation_dateFin."', '".$remediation_action."','".$remediation_host."','".$remediation_service[$i]."','".$remediation_source."','".$remediation_group_id."')";
+					$remediation_id = sqlrequest($database_eorweb,$sql_add,true);
+					$remediation_creation_validate = true;
+				}
+			}
+			if ($remediation_creation_validate){
+				message(6," : ".getLabel("message.manage_remediation.action_update"),'ok');
+			}
+		}
 	}
 	
 	?>
@@ -164,90 +214,57 @@ global $database_eorweb;
 			<label class="col-md-3"><?php echo getLabel("label.manage_remediation.group_name"); ?></label>
 			<div class="col-md-9">
 				<input class="form-control" type='text' name='group_name'  value='<?php echo $remediation_group?>' maxlength="50">
+				<input class="form-control" type='hidden' name='old_group_name'  value='<?php if(isset($old_remediation_group)){echo $old_remediation_group;}?>' maxlength="50">
+			</div>
+		</div>
+		
+		<div class="row form-group">
+			<label class="col-md-3"><?php echo getLabel("label.manage_remediation.remediation_action.source"); ?></label>
+			<div class="col-md-9">
+				<select class="form-control" id='source' name='source' size=1>
+					<?php
+						$request="SELECT distinct thruk_idx,nick_name FROM bp_sources";
+						$result=sqlrequest($database_vanillabp,$request);
+						echo "<option value='none'>".getLabel("label.manage_remediation.remediation_action.source_select")."</option>";
+						while ($line = mysqli_fetch_array($result)){
+							if($line[0] != "NR"){
+								if(isset($remediation_source) && $remediation_source == $line[0]){
+									echo "<option value='$line[0]' SELECTED>$line[1]</option>";
+								}else{
+									echo "<option value='$line[0]'>$line[1]</option>";
+								}
+							}
+						}
+					?>
+				</select>
 			</div>
 		</div>
 
-		<?php
-		if (isset($_POST["update"]) || isset($_GET["id"])) { ?>
-			<div class="row form-group">
-		<?php } else { ?>
-			<div class="row form-group" style="display: none">
-		<?php } ?>
-				<label class="col-md-3"><?php echo getLabel("label.manage_remediation.remediation_action_name"); ?></label>
-				<div class="col-md-9">
-					<input class="form-control hidden" type='text' name='id' value='<?php if(isset($remediation_id)){echo $remediation_id; }?>'>
-					<select class="form-control" id="action_name" name="action_name">
-						<?php
-
-							$request="SELECT remediation_action.description
-								FROM remediation_action
-								INNER JOIN remediation_group ON remediation_action.id_group=remediation_group.id
-								AND remediation_group.description='".$remediation_group."'";
-
-							$result=sqlrequest($database_eorweb,$request);
-							while ($line = mysqli_fetch_array($result)){
-								echo "<option>".$line["description"]."</option>";
-							}
-						?>
-					</select>
-				</div>
+		<div class="row form-group">
+			<label class="col-md-3"><?php echo getLabel("label.host"); ?></label>
+			<div class="col-md-9">
+				<input class="form-control" type='text' id='host' name='host' value='<?php echo $remediation_host?>'>
 			</div>
-		
-
-		<?php
-		if (!isset($_POST["update"]) && !isset($_GET["id"])) { ?>
-			<div class="row form-group">
-		<?php } else { ?>
-			<div class="row form-group" style="display: none">
-		<?php } ?>
-				<label class="col-md-3"><?php echo getLabel("label.manage_remediation.remediation_action.source"); ?></label>
-				<div class="col-md-9">
-					<select class="form-control" id='source' name='source' size=1>
-						<?php
-							$request="SELECT distinct thruk_idx,nick_name FROM bp_sources";
-							$result=sqlrequest($database_vanillabp,$request);
-							echo "<option value='none'>".getLabel("label.manage_remediation.remediation_action.source_select")."</option>";
-							while ($line = mysqli_fetch_array($result)){
-								if($line[0] != "NR"){
-									if(isset($remediation_source) && $remediation_source == $line[0]){
-										echo "<option value='$line[0]' SELECTED>$line[1]</option>";
-									}else{
-										echo "<option value='$line[0]'>$line[1]</option>";
-									}
-								}
-							}
-						?>
-					</select>
-				</div>
-			</div>
-
-			<div class="row form-group">
-				<label class="col-md-3"><?php echo getLabel("label.host"); ?></label>
-				<div class="col-md-9">
-					<?php if (!isset($_POST["update"]) && !isset($_GET["id"])) { ?>
-						<input class="form-control" type='text' id='host' name='host' value='<?php echo $remediation_host?>'>
-					<?php } else { ?>
-						<input class="form-control" type='text' readonly id='host' name='host' value='<?php echo $remediation_host?>'>
-					<?php } ?>
-				</div>
-			</div>
+		</div>
 
 		<div class="row form-group">
 			<label class="col-md-3"><?php echo getLabel("label.service"); ?></label>
 			<div class="col-md-9">
-				<?php if (isset($_GET["id"]) || isset($_POST["update"])) { ?>
-					<div>
-						<input class="form-control" readonly type='text' id='service' name='service' value="<?php echo $remediation_service; ?>">
-					</div>			
-				<?php } else { ?>
-					<div class="form-group input-group">
-						<input class="form-control" type='text' id='service' name='service'>
-						<span class="input-group-btn">
-							<input class="btn btn-danger" id="service_button_del" type="button" value="<?php echo getLabel("action.delete");?>">
-						</span>
-					</div>
-					<select class="form-control" id="service_id" name="service_id[]" multiple></select>
-				<?php } ?>
+				<div class="form-group input-group">
+					<input class="form-control" type='text' id='service' name='service'>
+					<span class="input-group-btn">
+						<input class="btn btn-danger" id="service_button_del" type="button" value="<?php echo getLabel("action.delete");?>">
+					</span>
+				</div>
+				<select class="form-control" id="service_id" name="service_id[]" multiple>
+					<?php 
+						if($remediation_service[0] != ""){
+							for($i=0; $i<sizeof($remediation_service);$i++){
+								echo "<option selected='selected' value='".$remediation_service[$i]."'>".$remediation_service[$i]."</option> ";
+							}
+						}
+					?>
+				</select>
 			</div>
 		</div>
 
@@ -298,6 +315,17 @@ global $database_eorweb;
 				</div>
 			</div>
 		</div>
+		
+		<?php if(!isset($_GET["id"]) || $_GET["id"] == ""){ ?>
+		<div class="row">
+			<label class="col-md-3"><?php echo getLabel("label.manage_remediation.request"); ?></label>
+			<div class="col-md-9">
+				<?php
+					echo "<input type='checkbox' class='checkbox' name='request' value='1'>";
+				?>
+			</div>
+		</div>
+		<?php } ?>
 
 		<div class="form-group">
 			<?php
