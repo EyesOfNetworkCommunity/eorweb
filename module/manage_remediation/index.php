@@ -480,7 +480,7 @@ if(isset($_GET["action"])) {
 				?>
 				</tbody>
 			</table>
-			<div class="form-group">
+			<div class="btn-group mr-2 form-group" role="group" aria-label="First group">
 				<a href="./remediation_action.php" class="btn btn-success" role="button"><?php echo getLabel("action.add");?></a>
 				<button class="btn btn-danger" type="submit" name="actions" value="del_method_remediation"><?php echo getLabel("action.delete");?></button>
 			</div>
