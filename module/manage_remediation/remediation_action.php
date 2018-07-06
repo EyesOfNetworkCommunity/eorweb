@@ -218,6 +218,7 @@ global $database_eorweb;
 							$sql_add = "INSERT INTO remediation_action (description,type,DateDebut,DateFin,Action,host,service,source,id_group) VALUES('".$remediation_group." - ".$remediation_service[$i]."','".$remediation_type."','".$remediation_dateDebut."','".$remediation_dateFin."', '".$remediation_action."','".$remediation_host."','".$remediation_service[$i]."','".$remediation_source."','".$remediation_group_id."')";
 						}else{
 							$sql_add = "INSERT INTO remediation_action (remediationID,description,type,DateDebut,DateFin,Action,host,service,source,id_group) VALUES(".$remediation_id.",'".$remediation_group." - ".$remediation_service[$i]."','".$remediation_type."','".$remediation_dateDebut."','".$remediation_dateFin."', '".$remediation_action."','".$remediation_host."','".$remediation_service[$i]."','".$remediation_source."','".$remediation_group_id."')";
+							sqlrequest($database_eorweb,"UPDATE remediation SET state='inactive' WHERE id='$remediation_id'");
 						}
 						$remediation_action_id = sqlrequest($database_eorweb,$sql_add,true);
 						$remediation_creation_validate = true;
