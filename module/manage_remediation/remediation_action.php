@@ -38,17 +38,18 @@ global $database_eorweb;
 
 	<?php
 	// get infos for updates
-	$remediation_id = retrieve_form_data("id",null);
+	$remediation_action_id = retrieve_form_data("id",null);
 	$invalid=false;
 	
 	if(isset($_GET["id"]) && $_GET["id"] != null){
 		$sql = "SELECT remediation_action.*, remediation.state, remediation_group.description as group_name, remediation_group.id as group_id FROM remediation_action LEFT JOIN remediation ON remediation.id = remediation_action.remediationID LEFT JOIN remediation_group ON remediation_action.id_group = remediation_group.id WHERE remediation_action.id=?";
 
-		$user_infos=sqlrequest($database_eorweb, $sql, false, array("i",(int)$remediation_id));
+		$user_infos=sqlrequest($database_eorweb, $sql, false, array("i",(int)$remediation_action_id));
 		
 		// Retrieve Information from database
 		$remediation_group=mysqli_result($user_infos,0,"group_name");
 		$old_remediation_group=mysqli_result($user_infos,0,"group_name");
+		$remediation_id =mysqli_result($user_infos,0,"remediationID");
 		$remediation_source=mysqli_result($user_infos,0,"source");
 		$remediation_host=mysqli_result($user_infos,0,"host");
 		
@@ -78,11 +79,14 @@ global $database_eorweb;
 		$remediation_dateDebut=retrieve_form_data("start",null);
 		$remediation_dateFin=retrieve_form_data("end",null);
 		$remediation_create =retrieve_form_data("request",null);
+		$remediation_id=retrieve_form_data("remediationID",0);
 	}
-
-	$remediation_creation_validate = false;
+	
+	$validate_creation_action=false;
 
 	if (isset($_POST["add"])) {
+		$user_id = $_COOKIE['user_id'];
+		$date_demand = date("Y-m-d G:i");
 		if(!$remediation_group || $remediation_group==""){
 			message(7," : ".getLabel("message.error.remediation_action_name"),'warning');
 			$invalid=true;
@@ -101,6 +105,10 @@ global $database_eorweb;
 		} else {
 			$connexion = mysqli_connect($database_host, $database_username, $database_password, $database_eorweb);
 			$query = "INSERT INTO remediation_group (description) VALUES('".$remediation_group."')";
+			if(isset($remediation_create) && $remediation_create == 1){
+				$sql_add = "INSERT INTO remediation (name,user_id,date_demand) VALUES('".$remediation_group."-request','".$user_id."','".$date_demand."')";
+				$remediation_id = sqlrequest($database_eorweb,$sql_add,true);
+			}
 			mysqli_query($connexion, $query);
 			$id_group = mysqli_insert_id($connexion);
 			if (isset($remediation_service)) {
@@ -130,13 +138,17 @@ global $database_eorweb;
 					}
 					$desciptionExist = sqlrequest($database_eorweb,"SELECT description FROM remediation_action");
 					if(!$invalid){
-						// insert values for add
-						$sql_add = "INSERT INTO remediation_action (description,type,DateDebut,DateFin,Action,host,service,source,id_group) VALUES('".$remediation_group." - ".$remediation_service[$i]."','".$remediation_type."','".$remediation_dateDebut."','".$remediation_dateFin."', '".$remediation_action."','".$remediation_host."','".$remediation_service[$i]."','".$remediation_source."','".$id_group."')";
-						$remediation_id = sqlrequest($database_eorweb,$sql_add,true);
-						$remediation_creation_validate = true;
+						if(!isset($remediation_id)){
+							// insert values for add
+							$sql_add = "INSERT INTO remediation_action (description,type,DateDebut,DateFin,Action,host,service,source,id_group) VALUES('".$remediation_group." - ".$remediation_service[$i]."','".$remediation_type."','".$remediation_dateDebut."','".$remediation_dateFin."', '".$remediation_action."','".$remediation_host."','".$remediation_service[$i]."','".$remediation_source."','".$id_group."')";
+						}else{
+							$sql_add = "INSERT INTO remediation_action (remediationID,description,type,DateDebut,DateFin,Action,host,service,source,id_group) VALUES('".$remediation_id."','".$remediation_group." - ".$remediation_service[$i]."','".$remediation_type."','".$remediation_dateDebut."','".$remediation_dateFin."', '".$remediation_action."','".$remediation_host."','".$remediation_service[$i]."','".$remediation_source."','".$id_group."')";
+						}
+						$remediation_action_id = sqlrequest($database_eorweb,$sql_add,true);
+						$validate_creation_action=true;
 					}
 				}
-				if ($remediation_creation_validate){
+				if($validate_creation_action){
 					message(6," : ".getLabel("message.manage_remediation.action_create"),'ok');
 				}
 			}
@@ -195,9 +207,13 @@ global $database_eorweb;
 				}
 				$desciptionExist = sqlrequest($database_eorweb,"SELECT description FROM remediation_action");
 				if(!$invalid){
-					// insert values for add
-					$sql_add = "INSERT INTO remediation_action (description,type,DateDebut,DateFin,Action,host,service,source,id_group) VALUES('".$remediation_group." - ".$remediation_service[$i]."','".$remediation_type."','".$remediation_dateDebut."','".$remediation_dateFin."', '".$remediation_action."','".$remediation_host."','".$remediation_service[$i]."','".$remediation_source."','".$remediation_group_id."')";
-					$remediation_id = sqlrequest($database_eorweb,$sql_add,true);
+					if(!isset($remediation_id)){
+						// insert values for add
+						$sql_add = "INSERT INTO remediation_action (description,type,DateDebut,DateFin,Action,host,service,source,id_group) VALUES('".$remediation_group." - ".$remediation_service[$i]."','".$remediation_type."','".$remediation_dateDebut."','".$remediation_dateFin."', '".$remediation_action."','".$remediation_host."','".$remediation_service[$i]."','".$remediation_source."','".$remediation_group_id."')";
+					}else{
+						$sql_add = "INSERT INTO remediation_action (remediationID,description,type,DateDebut,DateFin,Action,host,service,source,id_group) VALUES(".$remediation_id.",'".$remediation_group." - ".$remediation_service[$i]."','".$remediation_type."','".$remediation_dateDebut."','".$remediation_dateFin."', '".$remediation_action."','".$remediation_host."','".$remediation_service[$i]."','".$remediation_source."','".$remediation_group_id."')";
+					}
+					$remediation_action_id = sqlrequest($database_eorweb,$sql_add,true);
 					$remediation_creation_validate = true;
 				}
 			}
@@ -214,10 +230,11 @@ global $database_eorweb;
 			<label class="col-md-3"><?php echo getLabel("label.manage_remediation.group_name"); ?></label>
 			<div class="col-md-9">
 				<input class="form-control" type='text' name='group_name'  value='<?php echo $remediation_group?>' maxlength="50">
-				<input class="form-control" type='hidden' name='old_group_name'  value='<?php if(isset($old_remediation_group)){echo $old_remediation_group;}?>' maxlength="50">
+				<input class="form-control" type='hidden' name='old_group_name'  value='<?php if(isset($old_remediation_group)){echo $old_remediation_group;}?>'>
+				<input class="form-control" type='hidden' name='remediationID'  value='<?php if(isset($remediation_id)){echo $remediation_id;}?>'>
 			</div>
 		</div>
-		
+
 		<div class="row form-group">
 			<label class="col-md-3"><?php echo getLabel("label.manage_remediation.remediation_action.source"); ?></label>
 			<div class="col-md-9">
@@ -316,8 +333,8 @@ global $database_eorweb;
 			</div>
 		</div>
 		
-		<?php if(!isset($_GET["id"]) || $_GET["id"] == ""){ ?>
-		<div class="row">
+		<?php if($remediation_id == 0){ ?>
+		<div class="row form-group">
 			<label class="col-md-3"><?php echo getLabel("label.manage_remediation.request"); ?></label>
 			<div class="col-md-9">
 				<?php
@@ -329,7 +346,7 @@ global $database_eorweb;
 
 		<div class="form-group">
 			<?php
-				if (isset($remediation_id) && $remediation_id != null) {
+				if (isset($remediation_action_id) && $remediation_action_id != null) {
 					if(isset($remediation_statut)){
 						if($remediation_statut == "executed" || $remediation_statut == "approved" || $remediation_statut == "waiting") {
 							echo "<input disabled class='btn btn-primary' type='submit' name='update' value=".getLabel('action.update').">";
