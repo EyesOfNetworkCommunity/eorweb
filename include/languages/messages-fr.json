@@ -511,6 +511,7 @@
 	"label.manage_remediation.remediations_apply_action.menu": "Application des remédiations",
 	"label.manage_remediation.remediations_apply_request.menu": "Exécuter",
 	"label.manage_remediation.remediations_request": "Demandes de remédiations",
+	"label.manage_remediation.request": "Créer la requête affiliée",
 	"label.manage_remediation.state_approved": "Validé",
 	"label.manage_remediation.state_executed": "Executé",
 	"label.manage_remediation.state_inactive": "Inactif",
