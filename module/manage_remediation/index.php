@@ -126,7 +126,7 @@ if(isset($_GET["action"])) {
 					$name = mysqli_result($req,0,"name");
 
 					// Update remediations state
-					if ($validator && ($state == "waiting" || $state == "refused" || $state == "approved")) {
+					if ($validator && ($state == "inactive" || $state == "waiting" || $state == "refused" || $state == "approved")) {
 						$validate = true;
 						sqlrequest($database_eorweb,"UPDATE remediation SET state='approved', date_validation='".date("Y-m-d G:i")."' WHERE id='$remediation_selected[$i]'");
 						$total_validate .= $name.", ";
@@ -137,11 +137,11 @@ if(isset($_GET["action"])) {
 				}
 				if ($validate) {
 					$total_validate = substr($total_validate,0,-2);
-					message(6," : ".getLabel("message.manage_remediation.validate")." $total_validate ",'ok');
+					message(6," : ".getLabel("message.manage_remediation.validate")." ( $total_validate )",'ok');
 				}
 				if ($not_validate) {
 					$total_not_validate = substr($total_not_validate,0,-2);
-					message(6," : ".getLabel("message.manage_remediation.validate_fail")." $total_not_validate ",'critical');
+					message(0," : ".getLabel("message.manage_remediation.validate_fail")." ( $total_not_validate )",'critical');
 				}
 			}
 			break;
@@ -172,11 +172,11 @@ if(isset($_GET["action"])) {
 				// display message if a request_remdiation has been updated
 				if ($refuse) {
 					$total_refuse = substr($total_refuse,0,-2);
-					message(6," : ".getLabel("message.manage_remediation.refuse")." $total_refuse ",'ok');
+					message(6," : ".getLabel("message.manage_remediation.refuse")." ( $total_refuse )",'ok');
 				} 
 				if ($not_refuse) {
 					$total_not_refuse = substr($total_not_refuse,0,-2);
-					message(12," : ".getLabel("message.manage_remediation.not_refuse")." $total_not_refuse ",'critical');
+					message(0," : ".getLabel("message.manage_remediation.not_refuse")." ( $total_not_refuse )",'critical');
 				}
 			}
 			break;
@@ -207,11 +207,11 @@ if(isset($_GET["action"])) {
 				// display message if a request_remdiation has been updated
 				if ($demand) {
 					$total_demand = substr($total_demand,0,-2);
-					message(6," : ".getLabel("message.manage_remediation.demand")." $total_demand ",'ok');
+					message(6," : ".getLabel("message.manage_remediation.demand")." ( $total_demand )",'ok');
 				} 
 				if ($not_demand) {
 					$total_not_demand = substr($total_not_demand,0,-2);
-					message(12," : ".getLabel("message.manage_remediation.not_demand")." $total_not_demand ",'critical');
+					message(0," : ".getLabel("message.manage_remediation.not_demand")." ( $total_not_demand )",'critical');
 				}
 			}
 			break;
@@ -224,6 +224,8 @@ if(isset($_GET["action"])) {
 				$execute = array();
 				$total_execute = "";
 				$total_fail = "";
+				$total_executed = "";
+				$executed=false;
 				$success_execution = false;
 				$fail_execution = false;
 
@@ -348,18 +350,26 @@ if(isset($_GET["action"])) {
 						
 						$total_execute .= $name.", ";
 						// If the selected remediation is not approved 
-					} else {
+					} elseif($state == "executed"){
+						$executed = true;
+						$total_executed = $name.", ";
+					}
+					else{
 						$fail_execution = true;
 						$total_fail .= $name.", ";
 					}
 				}
 				if ($success_execution) {
 					$total_execute = substr($total_execute,0,-2);
-					message(6," : ".getLabel("message.manage_remediation.execute")." $total_execute ",'ok');
+					message(6," : ".getLabel("message.manage_remediation.execute")." ( $total_execute )",'ok');
 				}
 				if ($fail_execution) {
 					$total_fail = substr($total_fail,0,-2);
-					message(12," ".getLabel("message.manage_remediation.fail_execution")." $total_fail ",'critical');
+					message(0," : ".getLabel("message.manage_remediation.fail_execution")." ( $total_fail )",'critical');
+				}
+				if($executed){
+					$total_executed = substr($total_executed,0,-2);
+					message(0," : ".getLabel("message.manage_remediation.fail_execution")." ( $total_executed )",'warning');
 				}
 			}
 			break;

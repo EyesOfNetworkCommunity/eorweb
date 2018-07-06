@@ -83,10 +83,11 @@ global $database_eorweb;
 	}
 	
 	$validate_creation_action=false;
+	
+	$user_id = $_COOKIE['user_id'];
+	$date_demand = date("Y-m-d G:i");
 
 	if (isset($_POST["add"])) {
-		$user_id = $_COOKIE['user_id'];
-		$date_demand = date("Y-m-d G:i");
 		if(!$remediation_group || $remediation_group==""){
 			message(7," : ".getLabel("message.error.remediation_action_name"),'warning');
 			$invalid=true;
@@ -169,56 +170,62 @@ global $database_eorweb;
 		elseif(!$remediation_host || $remediation_host==""){
 			message(7," : ".getLabel("message.error.remediation_action_host"),'warning');
 			$invalid=true;
-		}
-		$id_group = sqlrequest($database_eorweb, "SELECT id FROM remediation_group WHERE description='".$old_remediation_group."'");
-		$remediation_group_id = mysqli_result($id_group,0,"id");
+		}else{
+			$id_group = sqlrequest($database_eorweb, "SELECT id FROM remediation_group WHERE description='".$old_remediation_group."'");
+			$remediation_group_id = mysqli_result($id_group,0,"id");
 
-		sqlrequest($database_eorweb, "UPDATE remediation_group SET description='".$remediation_group."' WHERE id ='".$remediation_group_id."'");
-		
-		$old_remediation_services = sqlrequest($database_eorweb, "SELECT id FROM remediation_action WHERE description LIKE '%".$old_remediation_group." -%'");
-		while ($line = mysqli_fetch_array($old_remediation_services)){
-			sqlrequest($database_eorweb, "DELETE FROM remediation_action WHERE id=".$line[0]);
-		}
-		
-		if (isset($remediation_service)) {
-			for ($i=0; $i < sizeof($remediation_service) ; $i++) {
-				if ($remediation_source != "none" && $remediation_source != "") {
-					$result = sqlrequest($database_thruk, "SELECT host_name,host_id FROM ".$remediation_source."_host WHERE host_name=?",false,array("s",(string)$remediation_host));
-					$array_host=mysqli_fetch_row($result);
-					
-					if($array_host && $remediation_service[$i]!="Hoststatus") {
-						$result = sqlrequest($database_thruk, "SELECT service_description FROM ".$remediation_source."_service WHERE host_id=? and service_description=?",false,array("is",(int)$array_host[1],(string)$remediation_service[$i]));
-						$array_service=mysqli_fetch_row($result);
-					} elseif($remediation_service[$i]=="Hoststatus") {
-						$array_service[0]="Hoststatus";
-					}
-				}
-				if($remediation_host != $array_host[0]){
-					message(7," : ".getLabel("message.error.remediation_action_host_name"),'warning');
-					$invalid=true;
-				}
-				elseif(!$remediation_service[$i] || $remediation_service[$i]==""){
-					message(7," : ".getLabel("message.error.remediation_action_service"),'warning');
-					$invalid=true;
-				}
-				elseif($remediation_service[$i] != $array_service[0]){
-					message(7," : ".getLabel("message.error.remediation_action_service_description"),'warning');
-					$invalid=true;
-				}
-				$desciptionExist = sqlrequest($database_eorweb,"SELECT description FROM remediation_action");
-				if(!$invalid){
-					if(!isset($remediation_id)){
-						// insert values for add
-						$sql_add = "INSERT INTO remediation_action (description,type,DateDebut,DateFin,Action,host,service,source,id_group) VALUES('".$remediation_group." - ".$remediation_service[$i]."','".$remediation_type."','".$remediation_dateDebut."','".$remediation_dateFin."', '".$remediation_action."','".$remediation_host."','".$remediation_service[$i]."','".$remediation_source."','".$remediation_group_id."')";
-					}else{
-						$sql_add = "INSERT INTO remediation_action (remediationID,description,type,DateDebut,DateFin,Action,host,service,source,id_group) VALUES(".$remediation_id.",'".$remediation_group." - ".$remediation_service[$i]."','".$remediation_type."','".$remediation_dateDebut."','".$remediation_dateFin."', '".$remediation_action."','".$remediation_host."','".$remediation_service[$i]."','".$remediation_source."','".$remediation_group_id."')";
-					}
-					$remediation_action_id = sqlrequest($database_eorweb,$sql_add,true);
-					$remediation_creation_validate = true;
-				}
+			sqlrequest($database_eorweb, "UPDATE remediation_group SET description='".$remediation_group."' WHERE id ='".$remediation_group_id."'");
+			
+			if(isset($remediation_create) && $remediation_create == 1){
+				$sql_add = "INSERT INTO remediation (name,user_id,date_demand) VALUES('".$remediation_group."-request','".$user_id."','".$date_demand."')";
+				$remediation_id = sqlrequest($database_eorweb,$sql_add,true);
 			}
-			if ($remediation_creation_validate){
-				message(6," : ".getLabel("message.manage_remediation.action_update"),'ok');
+			
+			$old_remediation_services = sqlrequest($database_eorweb, "SELECT id FROM remediation_action WHERE description LIKE '%".$old_remediation_group." -%'");
+			while ($line = mysqli_fetch_array($old_remediation_services)){
+				sqlrequest($database_eorweb, "DELETE FROM remediation_action WHERE id=".$line[0]);
+			}
+			
+			if (isset($remediation_service)) {
+				for ($i=0; $i < sizeof($remediation_service) ; $i++) {
+					if ($remediation_source != "none" && $remediation_source != "") {
+						$result = sqlrequest($database_thruk, "SELECT host_name,host_id FROM ".$remediation_source."_host WHERE host_name=?",false,array("s",(string)$remediation_host));
+						$array_host=mysqli_fetch_row($result);
+						
+						if($array_host && $remediation_service[$i]!="Hoststatus") {
+							$result = sqlrequest($database_thruk, "SELECT service_description FROM ".$remediation_source."_service WHERE host_id=? and service_description=?",false,array("is",(int)$array_host[1],(string)$remediation_service[$i]));
+							$array_service=mysqli_fetch_row($result);
+						} elseif($remediation_service[$i]=="Hoststatus") {
+							$array_service[0]="Hoststatus";
+						}
+					}
+					if($remediation_host != $array_host[0]){
+						message(7," : ".getLabel("message.error.remediation_action_host_name"),'warning');
+						$invalid=true;
+					}
+					elseif(!$remediation_service[$i] || $remediation_service[$i]==""){
+						message(7," : ".getLabel("message.error.remediation_action_service"),'warning');
+						$invalid=true;
+					}
+					elseif($remediation_service[$i] != $array_service[0]){
+						message(7," : ".getLabel("message.error.remediation_action_service_description"),'warning');
+						$invalid=true;
+					}
+					$desciptionExist = sqlrequest($database_eorweb,"SELECT description FROM remediation_action");
+					if(!$invalid){
+						if(!isset($remediation_id)){
+							// insert values for add
+							$sql_add = "INSERT INTO remediation_action (description,type,DateDebut,DateFin,Action,host,service,source,id_group) VALUES('".$remediation_group." - ".$remediation_service[$i]."','".$remediation_type."','".$remediation_dateDebut."','".$remediation_dateFin."', '".$remediation_action."','".$remediation_host."','".$remediation_service[$i]."','".$remediation_source."','".$remediation_group_id."')";
+						}else{
+							$sql_add = "INSERT INTO remediation_action (remediationID,description,type,DateDebut,DateFin,Action,host,service,source,id_group) VALUES(".$remediation_id.",'".$remediation_group." - ".$remediation_service[$i]."','".$remediation_type."','".$remediation_dateDebut."','".$remediation_dateFin."', '".$remediation_action."','".$remediation_host."','".$remediation_service[$i]."','".$remediation_source."','".$remediation_group_id."')";
+						}
+						$remediation_action_id = sqlrequest($database_eorweb,$sql_add,true);
+						$remediation_creation_validate = true;
+					}
+				}
+				if ($remediation_creation_validate){
+					message(6," : ".getLabel("message.manage_remediation.action_update"),'ok');
+				}
 			}
 		}
 	}
@@ -338,7 +345,11 @@ global $database_eorweb;
 			<label class="col-md-3"><?php echo getLabel("label.manage_remediation.request"); ?></label>
 			<div class="col-md-9">
 				<?php
-					echo "<input type='checkbox' class='checkbox' name='request' value='1'>";
+					if($remediation_create == 1){
+						echo "<input type='checkbox' class='checkbox' name='request' checked value='1'>";
+					}else{
+						echo "<input type='checkbox' class='checkbox' name='request' value='1'>";
+					}
 				?>
 			</div>
 		</div>
