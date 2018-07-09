@@ -99,6 +99,12 @@ function generatePIN($digits = 4){
 		$remediation_id=retrieve_form_data("remediationID",0);
 	}
 	
+	if(isset($_GET["host"]) && $_GET["host"] != null){
+		$remediation_group="deleteIncident-".$remediation_host."-".$remediation_service;
+		$remediation_type="incident";
+		$remediation_action="delete";
+	}
+	
 	$validate_creation_action=false;
 	
 	$user_id = $_COOKIE['user_id'];
