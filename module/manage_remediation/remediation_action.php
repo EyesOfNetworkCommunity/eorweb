@@ -27,6 +27,17 @@ global $database_host;
 global $database_username;
 global $database_password;
 global $database_eorweb;
+
+function generatePIN($digits = 4){
+    $i = 0; //counter
+    $pin = ""; //our default pin is blank.
+    while($i < $digits){
+        //generate a random number between 0 and 9.
+        $pin .= mt_rand(0, 9);
+        $i++;
+    }
+    return $pin;
+}
 ?>
 
 <div id="page-wrapper">
@@ -107,7 +118,8 @@ global $database_eorweb;
 			$connexion = mysqli_connect($database_host, $database_username, $database_password, $database_eorweb);
 			$query = "INSERT INTO remediation_group (description) VALUES('".$remediation_group."')";
 			if(isset($remediation_create) && $remediation_create == 1){
-				$sql_add = "INSERT INTO remediation (name,user_id,date_demand) VALUES('".$remediation_group."-request','".$user_id."','".$date_demand."')";
+				$rand = generatePIN(4);
+				$sql_add = "INSERT INTO remediation (name,user_id,date_demand) VALUES('".$remediation_group."-request-".$rand."','".$user_id."','".$date_demand."')";
 				$remediation_id = sqlrequest($database_eorweb,$sql_add,true);
 			}
 			mysqli_query($connexion, $query);
