@@ -392,7 +392,7 @@ if(isset($_GET["action"])) {
 				$methods = sqlrequest($database_eorweb,$rules_sql);
 				if($methods) {
 					while ($line = mysqli_fetch_array($methods)) {
-						if ( !($line["user_id"] != $_COOKIE["user_id"] && $line["state"] == "inactive") ) {
+						if ( ($line["user_id"] == $_COOKIE["user_id"] && !$validator) || $validator ) {
 						?>
 							<tr>
 								<td class="text-center"><label><input type="checkbox" class="checkbox" name="remediation_selected[]" value="<?php echo $line["id"]; ?>"></label></td>
@@ -466,7 +466,7 @@ if(isset($_GET["action"])) {
 				
 				if($methods) {
 					while ($line = mysqli_fetch_array($methods)) {
-						if ( !($line["user_id"] != $_COOKIE["user_id"] && $line["state"] == "inactive") ) {
+						if ( ($line["user_id"] == $_COOKIE["user_id"] && !$validator) || $validator ) {
 						?>
 							<tr>
 								<td class="text-center"><label><input type="checkbox" class="checkbox" name="remediation_action_selected[]" value="<?php echo $line["id_group"]; ?>"></label></td>
