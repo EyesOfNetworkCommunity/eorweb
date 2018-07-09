@@ -45,6 +45,11 @@ global $database_eorweb;
 		$remediation_group_id=rtrim($remediation_group_id,",");
 	}
 	
+	// define if the user is validator or not 
+	$req = "SELECT validator FROM groups WHERE group_id = ?";
+	$validator_bool = sqlrequest($database_eorweb,$req,false,array("i",(int)$_COOKIE['group_id']));
+	$validator = mysqli_result($validator_bool,0,"validator");
+	
 	// General data
 	$user_id = $_COOKIE['user_id'];
 	if(isset($_POST["add"])){
@@ -96,7 +101,7 @@ global $database_eorweb;
 		elseif(isset($_POST["update"])){
 			$user_infos = sqlrequest($database_eorweb, "SELECT * FROM remediation WHERE id='".$remediation_id."'");
 			$remediation_statut = mysqli_result($user_infos,0,"state");
-			$sql_modify = "UPDATE remediation SET name='".$remediation_name."' WHERE id='".$remediation_id."'";
+			$sql_modify = "UPDATE remediation SET name='".$remediation_name."', state='inactive' WHERE id='".$remediation_id."'";
 			sqlrequest($database_eorweb,$sql_modify);
 			
 			$Infos=explode(",", $remediation_group_id);
@@ -135,7 +140,7 @@ global $database_eorweb;
 					<input class="form-control" id="rule_host1" type="text" name="rule_host">
 					<span class="input-group-btn">
 						<?php  
-						if(isset($remediation_statut) && ($remediation_statut == "executed" || $remediation_statut == "approved" || $remediation_statut == "waiting") ) { ?>
+						if(isset($remediation_statut) && ((!$validator && ($remediation_statut == "executed" || $remediation_statut == "waiting")) || ($remediation_statut == "executed" && $validator) )) { ?>
 							<input class="btn btn-danger" disabled id="rule_host_button_del" type="button" value="<?php echo getLabel("action.delete");?>">
 						<?php } else { ?>
 							<input class="btn btn-danger" id="rule_host_button_del" type="button" value="<?php echo getLabel("action.delete");?>">
@@ -158,7 +163,7 @@ global $database_eorweb;
 		<div class="form-group">
 			<?php
 				if (isset($remediation_id) && $remediation_id != null) { ?>
-					<?php if(isset($remediation_statut) && ($remediation_statut == "executed" || $remediation_statut == "approved" || $remediation_statut == "waiting") ) { ?>
+					<?php if(isset($remediation_statut) && ((!$validator && ($remediation_statut == "executed" || $remediation_statut == "waiting")) || ($remediation_statut == "executed" && $validator) )) { ?>
 						<input class="btn btn-primary" type="submit" name="update" value="<?php echo getLabel('action.update'); ?>" disabled>
 					<?php } else { ?>
 						<input class="btn btn-primary" type="submit" name="update" value="<?php echo getLabel('action.update'); ?>">

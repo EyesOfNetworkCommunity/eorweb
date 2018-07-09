@@ -52,6 +52,11 @@ function generatePIN($digits = 4){
 	$remediation_action_id = retrieve_form_data("id",null);
 	$invalid=false;
 	
+	// define if the user is validator or not 
+	$req = "SELECT validator FROM groups WHERE group_id = ?";
+	$validator_bool = sqlrequest($database_eorweb,$req,false,array("i",(int)$_COOKIE['group_id']));
+	$validator = mysqli_result($validator_bool,0,"validator");
+	
 	if(isset($_GET["id"]) && $_GET["id"] != null){
 		$sql = "SELECT remediation_action.*, remediation.state, remediation_group.description as group_name, remediation_group.id as group_id FROM remediation_action LEFT JOIN remediation ON remediation.id = remediation_action.remediationID LEFT JOIN remediation_group ON remediation_action.id_group = remediation_group.id WHERE remediation_action.id=?";
 
@@ -63,6 +68,7 @@ function generatePIN($digits = 4){
 		$remediation_id =mysqli_result($user_infos,0,"remediationID");
 		$remediation_source=mysqli_result($user_infos,0,"source");
 		$remediation_host=mysqli_result($user_infos,0,"host");
+		$remediation_state=mysqli_result($user_infos,0,"state");
 		
 		// Retrieve services on remediation action
 		$sql = "SELECT service FROM remediation_action WHERE id_group=?";
@@ -243,13 +249,18 @@ function generatePIN($digits = 4){
 		}
 	}
 	
+	$disable="";
+	if(isset($remediation_state) && ((!$validator && ($remediation_state == "executed" || $remediation_state == "waiting")) || ($remediation_state == "executed" && $validator) )){
+		$disable="disabled";
+	}
+	
 	?>
 	<form id="form_user" action='./remediation_action.php' method='POST' name='form_user'>
 		
 		<div class="row form-group">
 			<label class="col-md-3"><?php echo getLabel("label.manage_remediation.group_name"); ?></label>
 			<div class="col-md-9">
-				<input class="form-control" type='text' name='group_name'  value='<?php echo $remediation_group?>' maxlength="50">
+				<input class="form-control" <?php echo $disable; ?> type='text' name='group_name'  value='<?php echo $remediation_group?>' maxlength="50">
 				<input class="form-control" type='hidden' name='old_group_name'  value='<?php if(isset($old_remediation_group)){echo $old_remediation_group;}?>'>
 				<input class="form-control" type='hidden' name='remediationID'  value='<?php if(isset($remediation_id)){echo $remediation_id;}?>'>
 			</div>
@@ -258,7 +269,7 @@ function generatePIN($digits = 4){
 		<div class="row form-group">
 			<label class="col-md-3"><?php echo getLabel("label.manage_remediation.remediation_action.source"); ?></label>
 			<div class="col-md-9">
-				<select class="form-control" id='source' name='source' size=1>
+				<select class="form-control"  <?php echo $disable; ?>  id='source' name='source' size=1>
 					<?php
 						$request="SELECT distinct thruk_idx,nick_name FROM bp_sources";
 						$result=sqlrequest($database_vanillabp,$request);
@@ -280,7 +291,7 @@ function generatePIN($digits = 4){
 		<div class="row form-group">
 			<label class="col-md-3"><?php echo getLabel("label.host"); ?></label>
 			<div class="col-md-9">
-				<input class="form-control" type='text' id='host' name='host' value='<?php echo $remediation_host?>'>
+				<input class="form-control"  <?php echo $disable; ?>  type='text' id='host' name='host' value='<?php echo $remediation_host?>'>
 			</div>
 		</div>
 
@@ -288,12 +299,12 @@ function generatePIN($digits = 4){
 			<label class="col-md-3"><?php echo getLabel("label.service"); ?></label>
 			<div class="col-md-9">
 				<div class="form-group input-group">
-					<input class="form-control" type='text' id='service' name='service'>
+					<input class="form-control"  <?php echo $disable; ?> type='text' id='service' name='service'>
 					<span class="input-group-btn">
-						<input class="btn btn-danger" id="service_button_del" type="button" value="<?php echo getLabel("action.delete");?>">
+						<input class="btn btn-danger"  <?php echo $disable; ?>  id="service_button_del" type="button" value="<?php echo getLabel("action.delete");?>">
 					</span>
 				</div>
-				<select class="form-control" id="service_id" name="service_id[]" multiple>
+				<select class="form-control"  <?php echo $disable; ?>  id="service_id" name="service_id[]" multiple>
 					<?php 
 						if($remediation_service[0] != ""){
 							for($i=0; $i<sizeof($remediation_service);$i++){
@@ -308,7 +319,7 @@ function generatePIN($digits = 4){
 		<div class="row form-group">
 			<label class="col-md-3"><?php echo getLabel("label.manage_remediation.type"); ?></label>
 			<div class="col-md-9">
-				<select class="form-control" name='type' size=1>
+				<select class="form-control"  <?php echo $disable; ?>  name='type' size=1>
 					<?php
 						if ($remediation_type == "incident"){
 							echo "<option value='maintenance'>".getLabel("label.manage_remediation.remediation_action.downtime")."</option>";
@@ -325,7 +336,7 @@ function generatePIN($digits = 4){
 		<div class="row form-group">
 			<label class="col-md-3"><?php echo getLabel("label.manage_remediation.action"); ?></label>
 			<div class="col-md-9">
-				<select class="form-control" name='action' size=1>
+				<select class="form-control"  <?php echo $disable; ?>  name='action' size=1>
 					<?php
 						if ($remediation_action == "delete"){
 							echo "<option value='add'>".getLabel("action.add")."</option>";
@@ -343,7 +354,7 @@ function generatePIN($digits = 4){
 			<label class="col-md-3"><?php echo getLabel("label.kettle_apps.time_period_select"); ?></label>
 			<div class="col-md-9">
 				<div class="input-group input-validity-date">
-					<input type="text" class="form-control" readonly id="validity_date">
+					<input type="text" <?php echo $disable; ?> class="form-control" readonly id="validity_date">
 					<span class="input-group-addon">
 						<span class="glyphicon glyphicon-calendar"></span>
 					</span>
@@ -371,8 +382,8 @@ function generatePIN($digits = 4){
 		<div class="form-group">
 			<?php
 				if (isset($remediation_action_id) && $remediation_action_id != null) {
-					if(isset($remediation_statut)){
-						if($remediation_statut == "executed" || $remediation_statut == "approved" || $remediation_statut == "waiting") {
+					if(isset($remediation_state)){
+						if((!$validator && ($remediation_state == "executed" || $remediation_state == "waiting")) || ($remediation_state == "executed" && $validator) ) {
 							echo "<input disabled class='btn btn-primary' type='submit' name='update' value=".getLabel('action.update').">";
 						}else{
 							echo "<input class='btn btn-primary' type='submit' name='update' value=".getLabel('action.update').">";

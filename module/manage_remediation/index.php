@@ -126,7 +126,7 @@ if(isset($_GET["action"])) {
 					$name = mysqli_result($req,0,"name");
 
 					// Update remediations state
-					if ($validator && ($state == "inactive" || $state == "waiting" || $state == "refused" || $state == "approved")) {
+					if ($validator) {
 						$validate = true;
 						sqlrequest($database_eorweb,"UPDATE remediation SET state='approved', date_validation='".date("Y-m-d G:i")."' WHERE id='$remediation_selected[$i]'");
 						$total_validate .= $name.", ";
@@ -224,8 +224,6 @@ if(isset($_GET["action"])) {
 				$execute = array();
 				$total_execute = "";
 				$total_fail = "";
-				$total_executed = "";
-				$executed=false;
 				$success_execution = false;
 				$fail_execution = false;
 
@@ -235,7 +233,7 @@ if(isset($_GET["action"])) {
 					$name = mysqli_result($req,0,"name");
 					
 					// execution if validator or approved
-					if ( ($validator  && $state != "executed") || $state == "approved") {
+					if ( $validator || $state == "executed" || $state == "approved" ) {
 						$success_execution=true;
 						$RemediationExec = sqlrequest($database_eorweb,"SELECT * FROM remediation_action WHERE remediationID='$remediation_selected[$i]' ORDER BY id_group");
 	
@@ -350,9 +348,6 @@ if(isset($_GET["action"])) {
 						
 						$total_execute .= $name.", ";
 						// If the selected remediation is not approved 
-					} elseif($state == "executed"){
-						$executed = true;
-						$total_executed = $name.", ";
 					}
 					else{
 						$fail_execution = true;
@@ -366,10 +361,6 @@ if(isset($_GET["action"])) {
 				if ($fail_execution) {
 					$total_fail = substr($total_fail,0,-2);
 					message(0," : ".getLabel("message.manage_remediation.fail_execution")." ( $total_fail )",'critical');
-				}
-				if($executed){
-					$total_executed = substr($total_executed,0,-2);
-					message(0," : ".getLabel("message.manage_remediation.fail_execution")." ( $total_executed )",'warning');
 				}
 			}
 			break;
