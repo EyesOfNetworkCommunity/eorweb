@@ -99,10 +99,6 @@ function generatePIN($digits = 4){
 		$remediation_id=retrieve_form_data("remediationID",0);
 	}
 	
-	if(isset($_GET["service"]) && $_GET["service"] != null){
-		$remediation_service=$_GET["service"];
-	}
-	
 	$validate_creation_action=false;
 	
 	$user_id = $_COOKIE['user_id'];
@@ -310,7 +306,9 @@ function generatePIN($digits = 4){
 				</div>
 				<select class="form-control"  <?php echo $disable; ?>  id="service_id" name="service_id[]" multiple>
 					<?php 
-						if($remediation_service[0] != ""){
+						if(isset($_GET["service"]) && $_GET["service"] != null){
+							echo "<option selected='selected' value='".$remediation_service."'>".$remediation_service."</option> ";
+						}else if($remediation_service[0] != ""){
 							for($i=0; $i<sizeof($remediation_service);$i++){
 								echo "<option selected='selected' value='".$remediation_service[$i]."'>".$remediation_service[$i]."</option> ";
 							}
