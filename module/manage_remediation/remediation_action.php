@@ -99,6 +99,10 @@ function generatePIN($digits = 4){
 		$remediation_id=retrieve_form_data("remediationID",0);
 	}
 	
+	if(isset($_GET["service"]) && $_GET["service"] != null){
+		$remediation_service=$_GET["service"];
+	}
+	
 	$validate_creation_action=false;
 	
 	$user_id = $_COOKIE['user_id'];
