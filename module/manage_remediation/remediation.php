@@ -78,7 +78,16 @@ global $database_eorweb;
 	}
 
 	if(isset($_POST["add"]) || isset($_POST["update"])) {
-		if(!$remediation_name || $remediation_name == ""){
+		$user_infos = sqlrequest($database_eorweb, "SELECT name FROM remediation");
+		$sameName=false;
+		while ($line = mysqli_fetch_array($user_infos)){
+			if($line[0] == $remediation_name){
+				$sameName=true;
+			}
+		}
+		if($sameName){
+			message(7," : ".getLabel("message.error.remediation_request_name_exist"),'warning');
+		}elseif(!$remediation_name || $remediation_name == ""){
 			message(7," : ".getLabel("message.error.remediation_request_name"),'warning');
 		}
 		elseif(empty($remediation_group_id) || $remediation_group_id == null) {

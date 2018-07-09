@@ -822,6 +822,7 @@
 	"message.error.remediation_action_type": "L'action de remédiation n'a pas de type",
 	"message.error.remediation_request_action": "Il faut au moins une action pour la demande de remédiation",
 	"message.error.remediation_request_name": "La demande de remédiation n'a pas de nom",
+	"message.error.remediation_request_name_exist": "Ce nom existe déjà",
 	"message.error.required_fields": "Veuillez entrez les champs obligatoires",
 	"message.error.snmp_community": "Impossible de déterminer la communauté snmp",
 	"message.error.snmp_login": "Impossible de déterminer l'identifiant et mot de passe",
