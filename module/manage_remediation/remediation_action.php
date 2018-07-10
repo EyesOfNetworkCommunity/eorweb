@@ -100,9 +100,10 @@ function generatePIN($digits = 4){
 	}
 	
 	if(isset($_GET["host"]) && $_GET["host"] != null){
-		$remediation_group="deleteIncident-".$remediation_host."-".$remediation_service;
+		$remediation_group="delete_Incident_".$remediation_host."_".$remediation_service;
 		$remediation_type="incident";
 		$remediation_action="delete";
+		$remediation_create = 1;
 	}
 	
 	$validate_creation_action=false;
