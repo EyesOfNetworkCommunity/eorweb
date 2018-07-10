@@ -60,6 +60,7 @@ global $database_eorweb;
 	// get infos for updates
 	$remediation_id = retrieve_form_data("id",null);
 	$remediation_name = retrieve_form_data("name",null);
+	$remediation_old_name = retrieve_form_data("old_name",null);
 	
 	if($remediation_id != null && !isset($_POST['add']) && !isset($_POST['update'])){
 		$user_infos = sqlrequest($database_eorweb, "SELECT * FROM remediation WHERE id='".$remediation_id."'");
@@ -70,6 +71,7 @@ global $database_eorweb;
 		// Retrieve Information from database
 		$remediation_name = mysqli_result($user_infos,0,"name");
 		$remediation_statut = mysqli_result($user_infos,0,"state");
+		$remediation_old_name = mysqli_result($user_infos,0,"name");
 		
 		while ($line = mysqli_fetch_array($user_infos3)){
 			$remediation_group_id .= $line[0].",";
@@ -81,7 +83,7 @@ global $database_eorweb;
 		$user_infos = sqlrequest($database_eorweb, "SELECT name FROM remediation");
 		$sameName=false;
 		while ($line = mysqli_fetch_array($user_infos)){
-			if($line[0] == $remediation_name){
+			if($line[0] == $remediation_name && $remediation_name != $remediation_old_name){
 				$sameName=true;
 			}
 		}
@@ -139,6 +141,7 @@ global $database_eorweb;
 			<label class="col-md-3"><?php echo getLabel("label.manage_remediation.remediation_name"); ?></label>
 			<div class="col-md-9">
 				<input class="form-control" type='text' name='name' value="<?php echo $remediation_name; ?>" maxlength="50" autofocus>
+				<input class="form-control" type='hidden' name='old_name' value="<?php echo $remediation_old_name; ?>">
 			</div>
 		</div>
 		
