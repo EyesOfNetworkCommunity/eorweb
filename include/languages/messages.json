@@ -861,7 +861,7 @@
 	"message.manage_remediation.executed_already": "The following group has already been executed",
 	"message.manage_remediation.fail_execution": "The following group has not been executed",
 	"message.manage_remediation.not_demand": "The following group has not been ask to the validator",
-	"message.manage_remediation.refuse": "The following group has not been refused",
+	"message.manage_remediation.not_refuse": "The following group has not been refused",
 	"message.manage_remediation.request_created": "Remediation request has been created",
 	"message.manage_remediation.refuse": "The following group has been refused",
 	"message.manage_remediation.request_delete": "Remediation request removed",
