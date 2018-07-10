@@ -111,9 +111,20 @@ function generatePIN($digits = 4){
 	$user_id = $_COOKIE['user_id'];
 	$date_demand = date("Y-m-d G:i");
 
+	$sql_group_name = sqlrequest($database_eorweb, "SELECT description FROM remediation_group");
+	$array_group_name = [];
+	while ($line = mysqli_fetch_array($sql_group_name)){
+		array_push($array_group_name, $line["description"]);
+	}
+	
+
 	if (isset($_POST["add"])) {
 		if(!$remediation_group || $remediation_group==""){
 			message(7," : ".getLabel("message.error.remediation_action_name"),'warning');
+			$invalid=true;
+		}
+		elseif(in_array($remediation_group, $array_group_name)){
+			message(7," : ".getLabel("message.error.remediation_request_name_exist"),'warning');
 			$invalid=true;
 		}
 		elseif(!$remediation_type || $remediation_type==""){
@@ -185,6 +196,10 @@ function generatePIN($digits = 4){
 	if(isset($_POST["update"])) {
 		if(!$remediation_group || $remediation_group==""){
 			message(7," : ".getLabel("message.error.remediation_action_name"),'warning');
+		}
+		elseif(in_array($remediation_group, $array_group_name) && $remediation_group != $old_remediation_group){
+			message(7," : ".getLabel("message.error.remediation_request_name_exist"),'warning');
+			$invalid=true;
 		}
 		elseif(!$remediation_type || $remediation_type==""){
 			message(7," : ".getLabel("message.error.remediation_action_type"),'warning');
