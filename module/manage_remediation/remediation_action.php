@@ -139,15 +139,6 @@ function generatePIN($digits = 4){
 			message(7," : ".getLabel("message.error.remediation_action_host"),'warning');
 			$invalid=true;
 		} else {
-			$connexion = mysqli_connect($database_host, $database_username, $database_password, $database_eorweb);
-			$query = "INSERT INTO remediation_group (description) VALUES('".$remediation_group."')";
-			if(isset($remediation_create) && $remediation_create == 1){
-				$rand = generatePIN(4);
-				$sql_add = "INSERT INTO remediation (name,user_id,date_demand) VALUES('".$remediation_group."-request-".$rand."','".$user_id."','".$date_demand."')";
-				$remediation_id = sqlrequest($database_eorweb,$sql_add,true);
-			}
-			mysqli_query($connexion, $query);
-			$id_group = mysqli_insert_id($connexion);
 			if (isset($remediation_service)) {
 				for ($i=0; $i < sizeof($remediation_service) ; $i++) {
 					if ($remediation_source != "none" && $remediation_source != "") {
@@ -175,6 +166,15 @@ function generatePIN($digits = 4){
 					}
 					$desciptionExist = sqlrequest($database_eorweb,"SELECT description FROM remediation_action");
 					if(!$invalid){
+						$connexion = mysqli_connect($database_host, $database_username, $database_password, $database_eorweb);
+						$query = "INSERT INTO remediation_group (description) VALUES('".$remediation_group."')";
+						if(isset($remediation_create) && $remediation_create == 1){
+							$rand = generatePIN(4);
+							$sql_add = "INSERT INTO remediation (name,user_id,date_demand) VALUES('".$remediation_group."-request-".$rand."','".$user_id."','".$date_demand."')";
+							$remediation_id = sqlrequest($database_eorweb,$sql_add,true);
+						}
+						mysqli_query($connexion, $query);
+						$id_group = mysqli_insert_id($connexion);
 						if(!isset($remediation_id)){
 							// insert values for add
 							$sql_add = "INSERT INTO remediation_action (description,type,DateDebut,DateFin,Action,host,service,source,id_group) VALUES('".$remediation_group." - ".$remediation_service[$i]."','".$remediation_type."','".$remediation_dateDebut."','".$remediation_dateFin."', '".$remediation_action."','".$remediation_host."','".$remediation_service[$i]."','".$remediation_source."','".$id_group."')";
