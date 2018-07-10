@@ -101,7 +101,9 @@ $(document).ready(function() {
 		}
 	});
 	
-	$("#host").on('change',function () {
+	$("#host").on('focusout',function () {
+		$("#host").autocomplete("search","");
+		
 		// if host is change, service is reset 
 		if ($("#host").val() != "") {
 			$("#service_id").find('option').remove();
