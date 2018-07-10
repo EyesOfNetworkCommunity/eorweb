@@ -95,8 +95,20 @@ $(document).ready(function() {
 		if (source_name != 'none'){
 			$("#host").autocomplete("search","");
 		}
+	});
+	
+	$("#host").on('change',function () {
 		// if host is change, service is reset 
 		if ($("#host").val() != "") {
+			$("#service_id").find('option').remove();
+			service_tab = [];
+		}
+	});
+	
+	$("#source").on('change',function () {
+		// if source is change, service is reset 
+		if ($("#source").val() != "") {
+			$("#host").val("");
 			$("#service_id").find('option').remove();
 			service_tab = [];
 		}
