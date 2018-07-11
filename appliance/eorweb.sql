@@ -455,6 +455,9 @@ UNLOCK TABLES;
 
 -- Dump completed on 2018-02-13 11:23:02
 
+DROP TABLE IF EXISTS `remediation`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `remediation` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(50) NOT NULL,
@@ -469,6 +472,9 @@ ENGINE=InnoDB
 AUTO_INCREMENT=42
 ;
 
+DROP TABLE IF EXISTS `remediation_action`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `remediation_action` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
   `remediationID` INT(11) NOT NULL,
