@@ -100,7 +100,7 @@ function generatePIN($digits = 4){
 	}
 	
 	if(isset($_GET["host"]) && $_GET["host"] != null){
-		$remediation_group="delete_Incident_".$remediation_host."_".$remediation_service;
+		$remediation_group="delete_".$remediation_host."_".$remediation_service;
 		$remediation_type="incident";
 		$remediation_action="delete";
 		$remediation_create = 1;
@@ -321,7 +321,7 @@ function generatePIN($digits = 4){
 			<label class="col-md-3"><?php echo getLabel("label.service"); ?></label>
 			<div class="col-md-9">
 				<div class="form-group input-group">
-					<input class="form-control"  <?php echo $disable; ?> type='text' id='service' name='service'>
+					<input class="form-control"  <?php echo $disable; ?> type='text' id='service' name='service' <?php if (isset($_GET["host"]) && $_GET["host"] != null) {echo "onclick='rename(\"$remediation_host\")'";}?> >
 					<span class="input-group-btn">
 						<input class="btn btn-danger"  <?php echo $disable; ?>  id="service_button_del" type="button" value="<?php echo getLabel("action.delete");?>">
 					</span>

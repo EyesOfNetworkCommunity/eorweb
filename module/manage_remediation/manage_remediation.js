@@ -157,6 +157,9 @@ $(document).ready(function() {
 			$("#rule_host1").autocomplete("search","");
 		}
 	});	
+
 });
 
-		
+function rename(host){
+	$("input[name=group_name]").val("delete_" + host);
+}
