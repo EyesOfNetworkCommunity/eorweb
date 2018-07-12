@@ -146,8 +146,7 @@ function generatePIN($digits = 4){
 				$sql_add = "INSERT INTO remediation (name,user_id,date_demand) VALUES('".$remediation_group."-request-".$rand."','".$user_id."','".$date_demand."')";
 				$remediation_id = sqlrequest($database_eorweb,$sql_add,true);
 			}
-			mysqli_query($connexion, $query);
-			$id_group = mysqli_insert_id($connexion);
+			//$id_group = mysqli_insert_id($connexion);
 			if (isset($remediation_service)) {
 				for ($i=0; $i < sizeof($remediation_service) ; $i++) {
 					if ($remediation_source != "none" && $remediation_source != "") {
@@ -175,6 +174,7 @@ function generatePIN($digits = 4){
 					}
 					$desciptionExist = sqlrequest($database_eorweb,"SELECT description FROM remediation_action");
 					if(!$invalid){
+						$id_group = sqlrequest($database_eorweb,$query,true);
 						if(!isset($remediation_id)){
 							// insert values for add
 							$sql_add = "INSERT INTO remediation_action (description,type,DateDebut,DateFin,Action,host,service,source,id_group) VALUES('".$remediation_group." - ".$remediation_service[$i]."','".$remediation_type."','".$remediation_dateDebut."','".$remediation_dateFin."', '".$remediation_action."','".$remediation_host."','".$remediation_service[$i]."','".$remediation_source."','".$id_group."')";
@@ -184,14 +184,6 @@ function generatePIN($digits = 4){
 						$remediation_action_id = sqlrequest($database_eorweb,$sql_add,true);
 						$validate_creation_action=true;
 					}
-				}
-				if($invalid){
-					$query = "DELETE FROM remediation_group WHERE description='".$remediation_group."'";
-					if(isset($remediation_create) && $remediation_create == 1){
-						$sql_delete = "DELETE FROM remediation WHERE id=".$remediation_id;
-						sqlrequest($database_eorweb,$sql_delete);
-					}
-					mysqli_query($connexion, $query);
 				}
 				if($validate_creation_action){
 					message(6," : ".getLabel("message.manage_remediation.action_create"),'ok');
@@ -290,7 +282,7 @@ function generatePIN($digits = 4){
 		<div class="row form-group">
 			<label class="col-md-3"><?php echo getLabel("label.manage_remediation.group_name"); ?></label>
 			<div class="col-md-9">
-				<input class="form-control" type='text' name='group_name'  value='<?php echo $remediation_group?>' maxlength="50">
+				<input class="form-control" <?php echo $disable; ?> type='text' name='group_name'  value='<?php echo $remediation_group?>' maxlength="50">
 				<input class="form-control" type='hidden' name='old_group_name'  value='<?php if(isset($old_remediation_group)){echo $old_remediation_group;}?>'>
 				<input class="form-control" type='hidden' name='remediationID'  value='<?php if(isset($remediation_id)){echo $remediation_id;}?>'>
 			</div>
@@ -299,7 +291,7 @@ function generatePIN($digits = 4){
 		<div class="row form-group">
 			<label class="col-md-3"><?php echo getLabel("label.manage_remediation.remediation_action.source"); ?></label>
 			<div class="col-md-9">
-				<select class="form-control" id='source' name='source' size=1>
+				<select class="form-control"  <?php echo $disable; ?>  id='source' name='source' size=1>
 					<?php
 						$request="SELECT distinct thruk_idx,nick_name FROM bp_sources";
 						$result=sqlrequest($database_vanillabp,$request);
@@ -321,7 +313,7 @@ function generatePIN($digits = 4){
 		<div class="row form-group">
 			<label class="col-md-3"><?php echo getLabel("label.host"); ?></label>
 			<div class="col-md-9">
-				<input class="form-control" type='text' id='host' name='host' value='<?php echo $remediation_host?>'>
+				<input class="form-control"  <?php echo $disable; ?>  type='text' id='host' name='host' value='<?php echo $remediation_host?>'>
 			</div>
 		</div>
 
@@ -329,12 +321,12 @@ function generatePIN($digits = 4){
 			<label class="col-md-3"><?php echo getLabel("label.service"); ?></label>
 			<div class="col-md-9">
 				<div class="form-group input-group">
-					<input class="form-control" type='text' id='service' name='service' <?php if (isset($_GET["host"]) && $_GET["host"] != null) {echo "onclick='rename(\"$remediation_host\")'";}?> >
+					<input class="form-control"  <?php echo $disable; ?> type='text' id='service' name='service' <?php if (isset($_GET["host"]) && $_GET["host"] != null) {echo "onclick='rename(\"$remediation_host\")'";}?> >
 					<span class="input-group-btn">
 						<input class="btn btn-danger"  <?php echo $disable; ?>  id="service_button_del" type="button" value="<?php echo getLabel("action.delete");?>">
 					</span>
 				</div>
-				<select class="form-control" id="service_id" name="service_id[]" multiple>
+				<select class="form-control"  <?php echo $disable; ?>  id="service_id" name="service_id[]" multiple>
 					<?php 
 						if(isset($_GET["service"]) && $_GET["service"] != null){
 							echo "<option selected='selected' value='".$remediation_service."'>".$remediation_service."</option> ";
@@ -351,7 +343,7 @@ function generatePIN($digits = 4){
 		<div class="row form-group">
 			<label class="col-md-3"><?php echo getLabel("label.manage_remediation.type"); ?></label>
 			<div class="col-md-9">
-				<select class="form-control" name='type' size=1>
+				<select class="form-control"  <?php echo $disable; ?>  name='type' size=1>
 					<?php
 						if ($remediation_type == "incident"){
 							echo "<option value='maintenance'>".getLabel("label.manage_remediation.remediation_action.downtime")."</option>";
@@ -368,7 +360,7 @@ function generatePIN($digits = 4){
 		<div class="row form-group">
 			<label class="col-md-3"><?php echo getLabel("label.manage_remediation.action"); ?></label>
 			<div class="col-md-9">
-				<select class="form-control" name='action' size=1>
+				<select class="form-control"  <?php echo $disable; ?>  name='action' size=1>
 					<?php
 						if ($remediation_action == "delete"){
 							echo "<option value='add'>".getLabel("action.add")."</option>";
@@ -386,7 +378,7 @@ function generatePIN($digits = 4){
 			<label class="col-md-3"><?php echo getLabel("label.kettle_apps.time_period_select"); ?></label>
 			<div class="col-md-9">
 				<div class="input-group input-validity-date">
-					<input type="text" class="form-control" readonly id="validity_date">
+					<input type="text" <?php echo $disable; ?> class="form-control" readonly id="validity_date">
 					<span class="input-group-addon">
 						<span class="glyphicon glyphicon-calendar"></span>
 					</span>
