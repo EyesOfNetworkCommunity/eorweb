@@ -49,8 +49,11 @@ if($db->connect_errno > 0){
                     if(!$result2 = $db->query($sql2)){
                         die("echo getLabel(\"label.manage_report.query_error\")". $db->error . ']');
                     }
+
+                    $report_name = str_replace(' ', '_', $row["report_name"]);
+
                     echo" <tr>
-                    <td>".$row['report_name']."</td>
+                    <td>".getLabel("label.manage_report.name_".$report_name)."</td>
                     <td>";
                     while($row2 = $result2->fetch_assoc()){
                         $selReport=$row['report_rptfile'];

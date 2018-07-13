@@ -48,19 +48,27 @@ include("../../side.php");
 						$sql = "SELECT * FROM reports ORDER BY report_rptfile;";
 						$result = sqlrequest($database_eorweb, $sql);
 						while($row = $result->fetch_assoc()){
-						?>
-						<tr>
-							<td><?php echo $row['report_name']; ?></td>
-							<td><?php echo $path_rptdesign."/".$row['report_rptfile']; ?></td>
-							<td>
-								<a class="btn btn-primary" href="form_edit_cred.php?report_id=<?php echo $row['report_id']; ?>" role="button">
-									<span class="glyphicon glyphicon-pencil"></span>
-								</a>
-								<button type="button" name="delete" class="btn btn-danger" id="<?php echo $row['report_id']; ?>">
-									<span class="glyphicon glyphicon-trash"></span>
-								</button>
-							</td>
-						</tr>
+							if ($row["report_name"] != "Analyse incidents serveurs mensuel" && $row["report_name"] != "Analyse erreurs chargements nocturne" && $row["report_name"] != "Disponibilite applicative avancee mensuel" && $row["report_name"] != "Disponibilite applicative mensuel" && $row["report_name"] != "Analyse incidents serveurs mensuel tableur" && $row["report_name"] != "Analyse incidents applicatif journalier" && $row["report_name"] != "Disponibilite portefeuille de service mensuel") {
+								?><tr>
+									<td><?php echo $row['report_name']; ?></td>
+								<?php
+							} else {
+								$report_name = str_replace(' ', '_', $row["report_name"]);
+								?>
+								<tr>
+									<td><?php echo getLabel("label.manage_report.name_".$report_name); ?></td>
+								<?php
+							} ?>
+								<td><?php echo $path_rptdesign."/".$row['report_rptfile']; ?></td>
+								<td>
+									<a class="btn btn-primary" href="form_edit_cred.php?report_id=<?php echo $row['report_id']; ?>" role="button">
+										<span class="glyphicon glyphicon-pencil"></span>
+									</a>
+									<button type="button" name="delete" class="btn btn-danger" id="<?php echo $row['report_id']; ?>">
+										<span class="glyphicon glyphicon-trash"></span>
+									</button>
+								</td>
+							</tr>
 						<?php } ?>
 					</tbody>
 				</table>
