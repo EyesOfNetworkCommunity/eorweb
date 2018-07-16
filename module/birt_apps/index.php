@@ -49,12 +49,20 @@ if($db->connect_errno > 0){
                     if(!$result2 = $db->query($sql2)){
                         die("echo getLabel(\"label.manage_report.query_error\")". $db->error . ']');
                     }
-
-                    $report_name = str_replace(' ', '_', $row["report_name"]);
-
-                    echo" <tr>
-                    <td>".getLabel("label.manage_report.name_".$report_name)."</td>
-                    <td>";
+             
+                    if ($row["report_name"] != "Analyse incidents serveurs mensuel" && $row["report_name"] != "Analyse erreurs chargements nocturne" && $row["report_name"] != "Disponibilite applicative avancee mensuel" && $row["report_name"] != "Disponibilite applicative mensuel" && $row["report_name"] != "Analyse incidents serveurs mensuel tableur" && $row["report_name"] != "Analyse incidents applicatif journalier" && $row["report_name"] != "Disponibilite portefeuille de service mensuel") {
+                        ?><tr>
+                            <td><?php echo $row['report_name']; ?></td>
+                        <?php
+                    } else {
+                        $report_name = str_replace(' ', '_', $row["report_name"]);
+                        ?>
+                        <tr>
+                            <td><?php echo getLabel("label.manage_report.name_".$report_name); ?></td>
+                        <?php
+                    }
+                    echo "<td>";
+                    
                     while($row2 = $result2->fetch_assoc()){
                         $selReport=$row['report_rptfile'];
                         $srvname= $_SERVER['SERVER_NAME'];
