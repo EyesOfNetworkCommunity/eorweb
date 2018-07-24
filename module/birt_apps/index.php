@@ -55,7 +55,7 @@ if($db->connect_errno > 0){
                             <td><?php echo $row['report_name']; ?></td>
                         <?php
                     } else {
-                        $report_name = str_replace(' ', '_', $row["report_name"]);
+                        $report_name = strtolower(str_replace(' ', '_', $row["report_name"]));
                         ?>
                         <tr>
                             <td><?php echo getLabel("label.manage_report.name_".$report_name); ?></td>
