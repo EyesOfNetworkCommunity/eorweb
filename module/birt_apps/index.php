@@ -49,13 +49,14 @@ if($db->connect_errno > 0){
                     if(!$result2 = $db->query($sql2)){
                         die("echo getLabel(\"label.manage_report.query_error\")". $db->error . ']');
                     }
-             
-                    if ($row["report_name"] != "Analyse incidents serveurs mensuel" && $row["report_name"] != "Analyse erreurs chargements nocturne" && $row["report_name"] != "Disponibilite applicative avancee mensuel" && $row["report_name"] != "Disponibilite applicative mensuel" && $row["report_name"] != "Analyse incidents serveurs mensuel tableur" && $row["report_name"] != "Analyse incidents applicatif journalier" && $row["report_name"] != "Disponibilite portefeuille de service mensuel") {
+					
+					$report_name = strtolower(str_replace(' ', '_', $row["report_name"]));
+                    if (strpos(getLabel("label.manage_report.name_".$report_name), 'label.manage_report.name_') === 0) {
                         ?><tr>
                             <td><?php echo $row['report_name']; ?></td>
                         <?php
                     } else {
-                        $report_name = strtolower(str_replace(' ', '_', $row["report_name"]));
+                       
                         ?>
                         <tr>
                             <td><?php echo getLabel("label.manage_report.name_".$report_name); ?></td>
