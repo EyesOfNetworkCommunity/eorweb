@@ -108,7 +108,7 @@ global $database_thruk;
 					while ($line = mysqli_fetch_array($methods)) { ?>
 						<tr>
 							<?php if ($remediation_right > 0) { ?>
-								<td class="text-center"><label><input type="checkbox" class="checkbox" name="remediation_selected[]" value="<?php echo $line["id"]; ?>"></label></td>"
+								<td class="text-center"><label><input type="checkbox" class="checkbox" name="remediation_selected[]" value="<?php echo $line["id"]; ?>"></label></td>
 							<?php
 							} ?>
 							<td><a href="remediation.php?id=<?php echo $line["id"]; ?>"><?php echo $line["name"]; ?></a></td>
