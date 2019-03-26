@@ -61,7 +61,7 @@ $result_action = sqlrequest($database_eorweb,"SELECT * FROM remediation INNER JO
 				if($result_action) {
 					while ($line = mysqli_fetch_array($result_action)) { ?>
 						<tr>
-							<td><?php echo $line["description"]; ?></td>
+							<td><a href="index.php"><?php echo $line["description"]; ?></a></td>
 							<td><?php echo getLabel("label.manage_remediation.type_".$line["type"]); ?></td>
 							<td><?php echo $line["DateDebut"]; ?></td>
 							<td><?php echo $line["DateFin"]; ?></td>
