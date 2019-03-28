@@ -53,7 +53,6 @@ $result_action = sqlrequest($database_eorweb,"SELECT * FROM remediation INNER JO
 					<th> <?php echo getLabel("label.manage_remediation.type"); ?> </th>
 					<th> <?php echo getLabel("label.manage_remediation.date_beginning"); ?> </th>
 					<th> <?php echo getLabel("label.manage_remediation.date_ending"); ?> </th>
-					<th> <?php echo getLabel("label.manage_remediation.status"); ?> </th>
 				</tr>
 			</thead>
 			<tbody>
@@ -65,7 +64,6 @@ $result_action = sqlrequest($database_eorweb,"SELECT * FROM remediation INNER JO
 							<td><?php echo getLabel("label.manage_remediation.type_".$line["type"]); ?></td>
 							<td><?php echo $line["DateDebut"]; ?></td>
 							<td><?php echo $line["DateFin"]; ?></td>
-							<td><?php if ($line["state"]) { echo getLabel("label.manage_remediation.state_".$line["state"]); } ?></td>
 						</tr>
 					<?php
 					}
