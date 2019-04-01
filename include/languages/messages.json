@@ -520,6 +520,8 @@
 	"label.manage_remediation.type_incident": "Incident",
 	"label.manage_remediation.type_maintenance": "Downtime",
 	"label.manage_remediation.user": "Requester",
+	"label.manage_remediation.user_list_remediations": "My remediations requests list",
+	"label.manage_remediation.user_list_remediations_action": "My remediations actions list",
 	"label.manage_remediation.validation": "Validation",
 	"label.manage_report.add_report": "Add a report",
 	"label.manage_report.available": "Available",

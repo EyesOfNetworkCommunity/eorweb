@@ -49,7 +49,7 @@ if(isset($_GET["action"])) {
 	?>
 		<div class="row">
 			<div class="col-lg-12">
-				<h1 class="page-header"><?php echo getLabel("label.manage_remediation.list_remediations"); ?></h1>
+				<h1 class="page-header"><?php echo getLabel("label.manage_remediation.user_list_remediations"); ?></h1>
 			</div>
 		</div>
 	<?php
@@ -57,7 +57,7 @@ if(isset($_GET["action"])) {
 	?>
 		<div class="row">
 			<div class="col-lg-12">
-				<h1 class="page-header"><?php echo getLabel("label.manage_remediation.list_remediations_action"); ?></h1>
+				<h1 class="page-header"><?php echo getLabel("label.manage_remediation.user_list_remediations_action"); ?></h1>
 			</div>
 		</div>
 	<?php 

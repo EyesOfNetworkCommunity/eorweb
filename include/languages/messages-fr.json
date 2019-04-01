@@ -520,6 +520,8 @@
 	"label.manage_remediation.type_incident": "Incident",
 	"label.manage_remediation.type_maintenance": "Maintenance",
 	"label.manage_remediation.user": "Demandeur",
+	"label.manage_remediation.user_list_remediations": "Liste de mes demandes de remédiations",
+	"label.manage_remediation.user_list_remediations_action": "Liste de mes actions de remédiation",
 	"label.manage_remediation.validation": "Validation",
 	"label.manage_report.add_report": "Ajouter un rapport",
 	"label.manage_report.available": "Disponible",
