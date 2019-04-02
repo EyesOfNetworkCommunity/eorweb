@@ -103,7 +103,7 @@ $remediation_right = mysqli_result($validator_right,0,"validator");
 				</thead>
 				<tbody>
 				<?php
-				$sql_remediation = "SELECT *, DATE_FORMAT(date_demand, '%d-%m-%Y %Hh%i') AS date_demand, DATE_FORMAT(date_validation, '%d-%m-%Y %Hh%i') AS date_validation FROM remediation ORDER BY date_demand DESC, name";
+				$sql_remediation = "SELECT *, DATE_FORMAT(date_demand, '%d-%m-%Y %Hh%i') AS date_demand, DATE_FORMAT(date_validation, '%d-%m-%Y %Hh%i') AS date_validation FROM remediation WHERE state!='inactive' ORDER BY date_demand DESC, name";
 				$method = sqlrequest($database_eorweb,$sql_remediation);
 				if($method) {
 					while ($line = mysqli_fetch_array($method)) { ?>
