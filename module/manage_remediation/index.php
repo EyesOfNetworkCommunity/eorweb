@@ -263,8 +263,12 @@ if(isset($_GET["action"])) {
 				// Get remediation_pack
 				$methods = sqlrequest($database_eorweb,$rules_sql);
 				if($methods) {
+          $req = "SELECT validator FROM groups WHERE group_id = ?";
+          $validator_bool = sqlrequest($database_eorweb,$req,false,array("i",(int)$_COOKIE['group_id']));
+          $is_validator = mysqli_result($validator_bool,0,"validator");
 					while ($line = mysqli_fetch_array($methods)) {
-						if ( !($line["user_id"] != $_COOKIE["user_id"] && $line["state"] == "inactive") ) {
+            if ( !($line["user_id"] != $_COOKIE["user_id"] && $line["state"] == "inactive") ) {
+              if ( $line["user_id"] == $_COOKIE["user_id"] || $is_validator ) {
 						?>
 							<tr>
 								<td class="text-center"><label><input type="checkbox" class="checkbox" name="remediation_selected[]" value="<?php echo $line["id"]; ?>"></label></td>
@@ -275,7 +279,8 @@ if(isset($_GET["action"])) {
 								<td><?php echo getLabel("label.manage_remediation.state_".$line["state"]); ?></td>
 							</tr>
 						<?php
-						}
+						  }
+            }
 					}
 				}
 				?>
@@ -296,6 +301,7 @@ if(isset($_GET["action"])) {
 				<?php
 				} else { ?>
 					<!-- Si l'utilisateur a tous les droits de remediation -->
+					<button class="btn btn-default" type="submit" name="actions" value="demand"><?php echo getLabel("action.submit");?></button>
 					<button class="btn btn-default" type="submit" name="actions" value="validation"><?php echo getLabel("action.validate");?></button>
 					<button class="btn btn-danger" type="submit" name="actions" value="refus"><?php echo getLabel("action.refuse");?></button>
 				<?php } ?>
