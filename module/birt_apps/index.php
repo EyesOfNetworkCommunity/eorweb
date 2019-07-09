@@ -2,16 +2,6 @@
 include("../../header.php");
 include("../../side.php");
 
-global $database_eorweb;
-global $database_host;
-global $database_username;
-global $database_password;
-
-$db = new mysqli($database_host, $database_username, $database_password, $database_eorweb);
-
-if($db->connect_errno > 0){
-    $response_array['status'] = getLabel("message.error");
-}
 ?>
 
 <div id="page-wrapper">
@@ -38,17 +28,13 @@ if($db->connect_errno > 0){
                     $sql ="SELECT * FROM join_report_cred INNER JOIN reports ON reports.report_id = join_report_cred.report_id 
                     WHERE group_id='".$grp_id."' AND reports.type != 'technic' ORDER BY report_name;";
                 }
-                if(!$result = $db->query($sql)){
-                    die("echo getLabel(\"label.manage_report.query_error\")". $db->error . ']');
-                }
+                $result = sqlrequest($database_eorweb,$sql);
                 while($row = $result->fetch_assoc()){
                     $sql2 ="SELECT report_name,output_format.type FROM join_report_format 
                     INNER JOIN reports ON reports.report_id = join_report_format.report_id 
                     INNER JOIN output_format ON join_report_format.output_format_id = output_format.format_id 
                     WHERE reports.report_name='".$row['report_name']."' ORDER BY report_name;";
-                    if(!$result2 = $db->query($sql2)){
-                        die("echo getLabel(\"label.manage_report.query_error\")". $db->error . ']');
-                    }
+                    $result2 = sqlrequest($database_eorweb,$sql2);
                     echo" <tr>
                     <td>".$row['report_name']."</td>
                     <td>";
