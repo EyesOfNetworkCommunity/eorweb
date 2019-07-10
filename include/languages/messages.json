@@ -706,6 +706,7 @@
 	"menu.link.equipments": "Equipments",
 	"menu.link.execution": "Executions",
 	"menu.link.exploit": "Exploitation",
+        "menu.link.export_reports": "Generated Reports",
 	"menu.link.external": "External",
 	"menu.link.eyesofreport": "EyesOfReport",
 	"menu.link.fusion_inventory": "FusionInventory",

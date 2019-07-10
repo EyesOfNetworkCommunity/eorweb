@@ -9,6 +9,11 @@
                     "name":"menu.link.reports",
                     "url":"/module/birt_apps/index.php",
                     "target":"main"
+                },
+                {
+                    "name":"menu.link.export_reports",
+                    "url":"/module/birt_reports/index.php",
+                    "target":"frame"
                 }
             ]
         },
