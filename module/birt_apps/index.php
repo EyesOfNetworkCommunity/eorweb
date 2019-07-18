@@ -49,6 +49,29 @@ include("../../side.php");
             </tbody>
         </table>
     </div>
+
+    <form id="global" method="post">
+        <h1><?php echo getLabel("label.manage_report.generate_reports");?></h1>
+        <div class="row form-group">
+            <div class="col-md-6">
+                <div class="input-group">
+                    <label>Entrez un mois</label>
+                    <input type="text" class="form-control" name="monthDate" id="monthDate" value="" placeholder="MM/YYYY">
+                </div>
+                    <span class="text-warning">
+                    <?php
+                      if (isset($_POST['generate'])) {
+                        echo "Regénération des rapports en cours pour la date du ".$_POST['monthDate'].", soyez patients!";
+                        shell_exec("/usr/bin/nohup /srv/eyesofreport/etl/scripts/script_generation_contract.sh ".$_POST['monthDate']." >/dev/null 2>&1 &");
+                        shell_exec("/usr/bin/nohup /srv/eyesofreport/etl/scripts/script_generation_application.sh ".$_POST['monthDate']." >/dev/null 2>&1 &");
+                        shell_exec("/usr/bin/nohup /srv/eyesofreport/etl/scripts/script_generation_incident_analysis.sh ".$_POST['monthDate']." >/dev/null 2>&1 &");
+                      }
+                    ?>
+                   </span>
+            </div>
+        </div>
+        <button type="submit" name="generate" class="btn btn-primary" id="generate"><?php echo getLabel("label.manage_report.generate_reports");?></button>
+    </form>
 </div>
 
 <?php 

@@ -522,6 +522,7 @@
 	"label.manage_remediation.user": "Demandeur",
 	"label.manage_remediation.validation": "Validation",
 	"label.manage_report.add_report": "Ajouter un rapport",
+        "label.manage_report.generate_reports": "Générer tous les rapports",
 	"label.manage_report.available": "Disponible",
 	"label.manage_report.column_filename": "Nom du fichier",
 	"label.manage_report.column_report_name": "Nom du rapport",
