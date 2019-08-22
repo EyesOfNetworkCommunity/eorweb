@@ -161,7 +161,7 @@ include("../../side.php");
 		$nagvis_role_id = retrieve_form_data("nagvis_group","");
 		$create_user_in_cacti = retrieve_form_data("create_user_in_cacti","");
 
-		/*if($user_type=="1"){
+		if($user_type=="1"){
 			$result = sqlrequest($database_eorweb,"select login from ldap_users_extended where dn='$user_location'");
 			$username = mysqli_result($result,0,"login");
 			$user_name = strtolower($username);
@@ -170,11 +170,11 @@ include("../../side.php");
 			$user_password1 = "abcdefghijklmnopqrstuvwxyz";
 			$user_password2 = "abcdefghijklmnopqrstuvwxyz";		
 		}
-		else{*/
+		else{
 			$user_name = retrieve_form_data("user_name",null);
 			$user_password1 = retrieve_form_data("user_password1","");
 			$user_password2 = retrieve_form_data("user_password2","");
-		//}
+		}
 
 		if ($user_id == null) 
 		{
